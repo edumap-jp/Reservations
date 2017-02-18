@@ -23,11 +23,11 @@ class ReservationsControllerTest extends ControllerTestCase {
  */
 	public $fixtures = array(
 		'plugin.reservations.reservation',
+		'plugin.reservations.language',
 		'plugin.reservations.user',
 		'plugin.reservations.role',
 		'plugin.reservations.user_role_setting',
-		'plugin.reservations.users_language',
-		'plugin.reservations.language'
+		'plugin.reservations.users_language'
 	);
 
 }
