@@ -1,0 +1,56 @@
+{
+    "name":        "netcommons/reservations",
+    "description": "Reservations for NetCommons Plugin",
+    "homepage":    "http://www.netcommons.org/",
+    "license":     "NetCommons License",
+    "authors": [
+        {
+            "name": "Toshihide Hashimoto(AllCreator Co., Ltd.)",
+            "email": "info@allcreator.net",
+            "homepage": "http://allcreator.net",
+            "role": "Developer"
+        },
+        {
+            "name": "Minori Kikuchihara(AllCreator Co., Ltd.)",
+            "email": "info@allcreator.net",
+            "homepage": "http://allcreator.net",
+            "role": "Developer"
+        },
+        {
+            "name": "Rika Fujiwara(AllCreator Co., Ltd.)",
+            "email": "info@allcreator.net",
+            "homepage": "http://allcreator.net",
+            "role": "Developer"
+        },
+        {
+            "name": "NetCommons Community",
+            "homepage": "http://www.netcommons.org"
+        }
+    ],
+    "extra": {
+        "installer-paths": {
+            "app/Plugin/{$name}": ["type:cakephp-plugin"]
+        }
+    },
+    "require": {
+        "cakedc/migrations":            "~2.2",
+        "netcommons/blocks":            "@dev",
+        "netcommons/frames":            "@dev",
+        "netcommons/groups":            "@dev",
+        "netcommons/holidays":          "@dev",
+        "netcommons/mails":             "@dev",
+        "netcommons/net-commons":       "@dev",
+        "netcommons/pages":             "@dev",
+        "netcommons/plugin-manager":    "@dev",
+        "netcommons/rooms":             "@dev",
+        "netcommons/topics":            "@dev",
+        "netcommons/users":             "@dev",
+        "netcommons/workflow":          "@dev",
+        "netcommons/wysiwyg":           "@dev"
+    },
+    "type":        "cakephp-plugin",
+    "keywords":    ["cakephp", "reservations"],
+    "config": {
+        "vendor-dir": "vendors"
+    }
+}
