@@ -13,6 +13,21 @@
  */
 echo $this->element('Calendars.scripts');
 ?>
+<?php if (Current::permission('content_creatable')) : ?>
+    <div class="pull-right">
+		<?php
+		$addUrl = array(
+			//'controller' => 'blog_entries_edit',
+			'action' => 'add',
+			'frame_id' => Current::read('Frame.id')
+		);
+		echo $this->Button->addLink('',
+			$addUrl,
+			array('tooltip' => __d('reservations', '予約')));
+		?>
+    </div>
+<?php endif ?>
+
 <article ng-controller="CalendarsDetailEdit" class="block-setting-body">
 	<?php
 	echo $this->element('Calendars.Calendars/calendar_tabs', array('active' => 'lmonthly', 'frameId' => $frameId, 'languageId' => $languageId));
