@@ -1,18 +1,19 @@
-<?php //echo $this->NetCommonsHtml->script([
-//	'/blogs/js/blogs.js',
-//	'/blogs/js/blogs_entry_edit.js',
-//	'/tags/js/tags.js',
-//]); ?>
+<?php echo $this->NetCommonsHtml->script([
+	'/reservations/js/reservations.js',
+	//'/blogs/js/blogs_entry_edit.js',
+	//'/tags/js/tags.js',
+]); ?>
 <?php
 //$dataJson = json_encode(
 //	$this->NetCommonsTime->toUserDatetimeArray($this->request->data, array('ReservationLocation.publish_start'))
 //);
+$dataJson = json_encode($this->request->data);
 ?>
 
 <?php echo $this->BlockTabs->main('location_settings'); ?>
 
-<!--<div class="reservationLocations form" ng-controller="Blogs" ng-init="init(<?php echo h
-($dataJson) ?>)"> -->
+<div class="reservationLocations form" ng-controller="ReservationLocation" ng-init="init(<?php
+echo h($dataJson) ?>)">
 <div class="reservationLocations form">
 	<article>
 		<div class="panel panel-default">
@@ -34,6 +35,7 @@
 			);
 			//$this->NetCommonsForm->unlockField('Tag');
 			?>
+			<?php echo $this->NetCommonsForm->hidden('id'); ?>
 			<?php echo $this->NetCommonsForm->hidden('key'); ?>
 			<?php echo $this->NetCommonsForm->hidden('Frame.id', array(
 				'value' => Current::read('Frame.id'),
@@ -68,6 +70,7 @@
                             'datetimepicker',
                             'datetimepicker-options' => json_encode(['format' => 'HH:mm']),
                             //'class' => 'form-inline'
+                            'ng-model' => 'data.ReservationLocation.start_time'
                         ]
                         );
                     echo ' - ';
@@ -75,6 +78,7 @@
 						[
 							'datetimepicker',
 							'datetimepicker-options' => json_encode(['format' => 'HH:mm']),
+							'ng-model' => 'data.ReservationLocation.end_time'
                             //'class' => 'form-inline'
 						]
 					);
@@ -118,7 +122,9 @@
 					echo $this->NetCommonsForm->wysiwyg('ReservationLocation.detail', array(
 						'label' => __d('reservations', '説明'),
 						'required' => true,
-						'rows' => 12
+						'rows' => 12,
+                        'ng-model' => 'data.ReservationLocation.detail'
+
 					));
 					?>
 				</fieldset>

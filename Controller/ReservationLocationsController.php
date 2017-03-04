@@ -101,7 +101,6 @@ class ReservationLocationsController extends ReservationsAppController {
 	public function index() {
 
 		$data = $this->ReservationLocation->findById(1);
-debug($data);
 		// FAQの並び替え参考にしよう
 		$query = array();
 
@@ -193,48 +192,51 @@ debug($data);
 
 		//  keyのis_latstを元に編集を開始
 		$this->ReservationLocation->recursive = 0;
-		$blogEntry = $this->ReservationLocation->getWorkflowContents('first', array(
-			'recursive' => 0,
-			'conditions' => array(
-				'ReservationLocation.key' => $key
-			)
-		));
-		if (empty($blogEntry)) {
+		$options = [
+			'conditions' => [
+				'ReservationLocation.key' => $key,
+				'ReservationLocation.language_id' => Current::read('Language.id')
+			]
+		];
+
+		$reservationLocation = $this->ReservationLocation->find('first', $options);
+
+		if (empty($reservationLocation)) {
 			return $this->throwBadRequest();
 		}
 
-		if ($this->ReservationLocation->canEditWorkflowContent($blogEntry) === false) {
-			return $this->throwBadRequest();
-		}
-		$this->_prepare();
+		//if ($this->ReservationLocation->canEditWorkflowContent($blogEntry) === false) {
+		//	return $this->throwBadRequest();
+		//}
+		//$this->_prepare();
 
 		if ($this->request->is(array('post', 'put'))) {
 
 			$this->ReservationLocation->create();
-			$this->request->data['ReservationLocation']['blog_key'] =
-				$this->_blogSetting['BlogSetting']['blog_key'];
+			//$this->request->data['ReservationLocation']['blog_key'] =
+			//	$this->_blogSetting['BlogSetting']['blog_key'];
 
 			// set status
-			$status = $this->Workflow->parseStatus();
-			$this->request->data['ReservationLocation']['status'] = $status;
+			//$status = $this->Workflow->parseStatus();
+			//$this->request->data['ReservationLocation']['status'] = $status;
 
 			// set block_id
-			$this->request->data['ReservationLocation']['block_id'] = Current::read('Block.id');
+			//$this->request->data['ReservationLocation']['block_id'] = Current::read('Block.id');
 			// set language_id
 			$this->request->data['ReservationLocation']['language_id'] = Current::read('Language.id');
 
 			$data = $this->request->data;
 
-			unset($data['ReservationLocation']['id']); // 常に新規保存
+			//unset($data['ReservationLocation']['id']); // 常に新規保存
 
-			if ($this->ReservationLocation->saveEntry($data)) {
+			if ($this->ReservationLocation->saveLocation($data)) {
 				$url = NetCommonsUrl::actionUrl(
 					array(
-						'controller' => 'blog_entries',
-						'action' => 'view',
+						'controller' => 'reservation_locations',
+						'action' => 'index',
 						'frame_id' => Current::read('Frame.id'),
-						'block_id' => Current::read('Block.id'),
-						'key' => $data['ReservationLocation']['key']
+						//'block_id' => Current::read('Block.id'),
+						//'key' => $data['ReservationLocation']['key']
 					)
 				);
 
@@ -245,15 +247,16 @@ debug($data);
 
 		} else {
 
-			$this->request->data = $blogEntry;
+			$this->request->data = $reservationLocation;
 
 		}
 
-		$this->set('blogEntry', $blogEntry);
-		$this->set('isDeletable', $this->ReservationLocation->canDeleteWorkflowContent($blogEntry));
+		$this->set('reservationLocation', $reservationLocation);
+		//$this->set('isDeletable', $this->ReservationLocation->canDeleteWorkflowContent($blogEntry));
+		$this->set('isDeletable', true);
 
-		$comments = $this->ReservationLocation->getCommentsByContentKey($blogEntry['ReservationLocation']['key']);
-		$this->set('comments', $comments);
+		//$comments = $this->ReservationLocation->getCommentsByContentKey($blogEntry['ReservationLocation']['key']);
+		//$this->set('comments', $comments);
 
 		$this->render('form');
 	}

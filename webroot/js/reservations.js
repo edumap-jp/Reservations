@@ -72,6 +72,12 @@ NetCommonsApp.filter('formatYyyymmdd', function() {
   }
 });
 
+NetCommonsApp.controller('ReservationLocation', ['$scope', function($scope) {
+  $scope.init = function(data) {
+    $scope.data = data;
+  };
+}]);
+
 NetCommonsApp.controller('ReservationSchedule', ['$scope', function($scope) {
   $scope.initialize = function(data) {
     $scope.isCollapsed = data.isCollapsed;
