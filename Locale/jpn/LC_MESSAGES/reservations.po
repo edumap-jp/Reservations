@@ -1202,3 +1202,6 @@ msgstr "メール通知タイミング"
 #: View/ReservationPlans/view.ctp:86
 msgid "End date and time"
 msgstr "終了日時"
+
+msgid "Location setting"
+msgstr "施設設定"

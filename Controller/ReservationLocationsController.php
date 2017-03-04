@@ -81,7 +81,7 @@ class ReservationLocationsController extends ReservationsAppController {
 			//画面上部のタブ設定
 			'mainTabs' => array(
 				'location_settings' => array(
-					'label' => ['reservations', 'Location list'],
+					'label' => ['reservations', 'Location setting'],
 					'url' => array('controller' => 'reservation_locations')
 				),
 				'frame_settings' => array(	//表示設定変更
@@ -99,6 +99,9 @@ class ReservationLocationsController extends ReservationsAppController {
 	);
 
 	public function index() {
+
+		$data = $this->ReservationLocation->findById(1);
+debug($data);
 		// FAQの並び替え参考にしよう
 		$query = array();
 

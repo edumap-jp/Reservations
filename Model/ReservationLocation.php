@@ -174,13 +174,30 @@ class ReservationLocation extends ReservationsAppModel {
 			'order' => ''
 		),
 		'Category' => array(
-			'className' => 'Category',
+			'className' => 'Categories.Category',
 			'foreignKey' => 'category_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)
+		),
 	);
+
+/**
+ * Called before each find operation. Return false if you want to halt the find
+ * call, otherwise return the (modified) query data.
+ *
+ * @param array $query Data used to execute this query, i.e. conditions, order, etc.
+ * @return mixed true if the operation should continue, false if it should abort; or, modified
+ *  $query to continue with new $query
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforefind
+ */
+	public function beforeFind($query) {
+		if (Hash::get($query, 'recursive') > -1 && ! $this->id) {
+			$belongsTo = $this->Category->bindModelCategoryLang('ReservationLocation.category_id');
+			$this->bindModel($belongsTo, true);
+		}
+		return true;
+	}
 
 /**
  * 記事の保存。タグも保存する
