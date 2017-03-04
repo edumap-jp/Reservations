@@ -12,7 +12,10 @@ echo $this->element('Reservations.scripts');
 ?>
 
 <article ng-controller='ReservationsDetailEdit' class='block-setting-body'
-	ng-init="initialize(<?php echo h(json_encode(array('frameId' => Current::read('Frame.id')))); ?>)">
+	ng-init="initialize(<?php echo h(json_encode(array(
+        'frameId' => Current::read('Frame.id'),
+        'locations' => $locations,
+        ))); ?>)">
 
 	<?php /* 画面見出し */ ?>
 	<?php echo $this->element('Reservations.ReservationPlans/detail_edit_heading'); ?>
@@ -113,6 +116,50 @@ echo $this->element('Reservations.scripts');
 					<?php echo $this->element('Reservations.ReservationPlans/detail_edit_datetime', array('useTime' => $useTime)); ?>
 				</div>
 			</div><!-- form-group name="inputStartEndDateTime"おわり -->
+
+
+            <div class='form-group' >
+                <div class='col-xs-12'>
+					<?php
+					echo $this->NetCommonsForm->label('', __d('reservations', '施設'), array(
+						'required' => true));
+					?>
+                    <div class='col-xs-11 col-xs-offset-1'>
+                        TODO
+                        <?php
+                        // TODO カテゴリ絞り込み
+                        $locationCategories = [
+                                0 => 'カテゴリ無し',
+                                1 => '会議室',
+                        ];
+                        ?>
+						<?php //echo $this->NetCommonsForm->input(
+						//	'location_category_id',
+						//	[
+						//		'label' => false,
+						//		'options' => $locationCategories
+						//	]
+						//);?>
+						<!--施設選択-->
+                        <?php $locationOptions = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservationLocation.location_name'); ?>
+						<?php echo $this->NetCommonsForm->input(
+							'ReservationActionPlan.location_key',
+							[
+								'label' => false,
+                                'type' => 'select',
+                                'ng-options' => 'location.ReservationLocation.location_name for location in data.locations track by location.ReservationLocation.key',
+                                'ng-model' => 'ReservationActionPlan.location_key',
+                                'options' => ['kagi1' => 'kaigi1'], // TODO optionsに選択肢ないとSecurityComponentにひっかかる
+                                'options' => $locationOptions,
+							]
+						);?>
+                    </div>
+                    <!--TODO 施設しよう時間と施設詳細ポップアップ-->
+                    TODO 施設使用時間　TODO　施設詳細
+                </div>
+            </div><!-- form-group name="inputStartEndDateTime"おわり -->
+
+			<?php //echo $this->element('Reservations.ReservationPlans/detail_edit_location') ?>
 
 			<?php /* 繰り返し設定 （この予定のみ変更のときは出さない）*/ ?>
 			<div class="form-group" data-reservation-name="inputRruleInfo" ng-hide="editRrule==0">

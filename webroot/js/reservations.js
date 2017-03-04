@@ -448,6 +448,7 @@ NetCommonsApp.controller('ReservationsDetailEdit',
 
        $scope.initialize = function(data) {
          $scope.data = angular.fromJson(data);
+         console.log($scope.data);
        };
 
        $scope.changeEditRrule = function(frameId, firstSibEditLink) {

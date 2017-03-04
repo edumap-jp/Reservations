@@ -65,6 +65,7 @@ class ReservationPlansController extends ReservationsAppController {
 		'Reservations.ReservationFrameSettingSelectRoom',
 		'Reservations.ReservationSetting',
 		'Reservations.ReservationWorkflow',
+		'Reservations.ReservationLocation',
 		'Holidays.Holiday',
 		'Rooms.Room',
 		'Reservations.ReservationActionPlan',	//予定追加変更action専用
@@ -292,6 +293,11 @@ class ReservationPlansController extends ReservationsAppController {
 		$this->_reservationGet(ReservationsComponent::PLAN_ADD);
 		// 表示画面CTPはdetail_edit
 		$this->view = 'detail_edit';
+
+		// 施設情報
+		$locations = $this->ReservationLocation->getLocations();
+		$this->set('locations', $locations);
+
 	}
 /**
  * edit
@@ -315,6 +321,11 @@ class ReservationPlansController extends ReservationsAppController {
 		$this->set('comments', $comments);
 		// 表示画面CTPはdetail_edit
 		$this->view = 'detail_edit';
+
+		// 施設情報
+		$locations = $this->ReservationLocation->getLocations();
+		$this->set('locations', $locations);
+
 	}
 
 /**

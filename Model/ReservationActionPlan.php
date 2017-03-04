@@ -677,6 +677,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 				'title', 'title_icon',		//FIXME: insert/update側に追加実装しないといけない項目
 				'location', 'contact', 'description',
 				'enable_email', 'email_send_timing', 'status',
+				'location_key',
 			);
 			foreach ($fields as $field) {
 				$planParam[$field] = $data[$this->alias][$field];
@@ -699,7 +700,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 			CakeLog::error($ex->getMessage());
 			throw($ex);	//再throw
 		}
-
+		CakeLog::debug(var_export($planParam, true));
 		return $planParam;
 	}
 

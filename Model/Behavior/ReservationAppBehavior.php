@@ -437,6 +437,7 @@ class ReservationAppBehavior extends ModelBehavior {
 
 			'linked_model' => '',
 			'linked_content_key' => '',
+			'location_key' => $planParams['location_key'],
 		);
 
 		$this->setPlanParams2Params($planParams, $params);
@@ -469,6 +470,9 @@ class ReservationAppBehavior extends ModelBehavior {
 
 		$eventData['ReservationEvent']['is_enable_mail'] = $params['enable_email']; //名違いに注意
 		$eventData['ReservationEvent']['email_send_timing'] = $params['email_send_timing'];
+
+		$eventData['ReservationEvent']['location_key'] = $params['location_key'];
+
 
 		//保存するモデルをここで替える
 		$eventData['ReservationEventContent']['linked_model'] = $params['linked_model'];

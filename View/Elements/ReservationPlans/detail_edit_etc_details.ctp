@@ -19,9 +19,10 @@
 
 		<?php /* 場所 */ ?>
 		<div class="form-group" data-reservation-name="inputLocation" ng-cloak>
+		<!--<div class="form-group" >-->
 			<div class="col-xs-12">
 				<?php echo $this->NetCommonsForm->input('ReservationActionPlan.location', array(
-				'type' => 'text',
+				'type' => 'hidden',
 				'label' => __d('reservations', 'Location'),
 				'div' => false,
 				)); ?>
@@ -33,7 +34,7 @@
 				<?php echo $this->NetCommonsForm->input('ReservationActionPlan.contact', array(
 				'type' => 'text',
 				'label' => __d('reservations', 'Contact'),
-				'div' => false,
+				'div' => false,se
 				)); ?>
 			</div>
 		</div>
