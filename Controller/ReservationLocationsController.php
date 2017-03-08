@@ -80,6 +80,10 @@ class ReservationLocationsController extends ReservationsAppController {
 		'Blocks.BlockTabs' => array(
 			//画面上部のタブ設定
 			'mainTabs' => array(
+				'block_settings' => [
+					'label' => ['reservations', 'Reservation setting'],
+					'url' => array('controller' => 'reservation_settings', 'action' => 'edit')
+				],
 				'location_settings' => array(
 					'label' => ['reservations', 'Location setting'],
 					'url' => array('controller' => 'reservation_locations', 'action' => 'index')

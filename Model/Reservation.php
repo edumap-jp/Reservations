@@ -35,6 +35,7 @@ class Reservation extends ReservationsAppModel {
 		'Blocks.BlockSetting' => array(
 			BlockSettingBehavior::FIELD_USE_WORKFLOW,
 		),
+		'Categories.Category'
 	);
 
 /**

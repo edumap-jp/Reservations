@@ -1205,3 +1205,6 @@ msgstr "終了日時"
 
 msgid "Location setting"
 msgstr "施設設定"
+
+msgid "Reservation setting"
+msgstr "施設予約設定"
