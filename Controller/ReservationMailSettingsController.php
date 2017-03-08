@@ -63,6 +63,10 @@ class ReservationMailSettingsController extends MailSettingsController {
 		'Blocks.BlockTabs' => array(
 			//画面上部のタブ設定
 			'mainTabs' => array(
+				'location_settings' => array(
+					'label' => ['reservations', 'Location setting'],
+					'url' => array('controller' => 'reservation_locations', 'action' => 'index')
+				),
 				'frame_settings' => array(
 					'url' => array(	//表示設定変>更
 						'controller' => 'reservation_frame_settings')
