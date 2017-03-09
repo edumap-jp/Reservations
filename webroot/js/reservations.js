@@ -75,6 +75,18 @@ NetCommonsApp.filter('formatYyyymmdd', function() {
 NetCommonsApp.controller('ReservationLocation', ['$scope', function($scope) {
   $scope.init = function(data) {
     $scope.data = data;
+
+    $scope.test = function() {
+      $scope.data.ReservationLocation.end_time = '24:00';
+      console.log($scope.data.ReservationLocation.end_time);
+    }
+    $scope.checkAllDay = function() {
+      if($scope.allDay){
+        $scope.data.ReservationLocation.start_time = '00:00';
+        $scope.data.ReservationLocation.end_time = '24:00';
+        console.log($scope.data.ReservationLocation.end_time);
+      }
+    }
   };
 }]);
 

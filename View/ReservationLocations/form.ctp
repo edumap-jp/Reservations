@@ -71,7 +71,8 @@ echo h($dataJson) ?>)">
 									'datetimepicker',
 									'datetimepicker-options' => json_encode(['format' => 'HH:mm']),
 									//'class' => 'form-inline'
-									'ng-model' => 'data.ReservationLocation.start_time'
+									'ng-model' => 'data.ReservationLocation.start_time',
+                                    'ng-readonly' => 'allDay',
 								]
 							);
 							echo ' - ';
@@ -79,16 +80,21 @@ echo h($dataJson) ?>)">
 								[
 									'datetimepicker',
 									'datetimepicker-options' => json_encode(['format' => 'HH:mm']),
-									'ng-model' => 'data.ReservationLocation.end_time'
+									'ng-model' => 'data.ReservationLocation.end_time',
+                                    'ng-readonly' => 'allDay',
 									//'class' => 'form-inline'
 								]
 							);
 							echo '&nbsp;';
 							// 利用時間の制限無しチェックボックス
 							// 特にカラムはなし。0:00-24:00まで利用可能とするだけ TODO AngularJS制御
+							//$this->NetCommonsForm->unlockField('ReservationLocation.allday_flag');
 							echo $this->NetCommonsForm->inlineCheckbox('ReservationLocation.allday_flag',
 								[
 									//'type' => 'checkbox',
+									'ng-model' => 'allDay',
+                                    'ng-click' => 'checkAllDay()',
+									'hiddenField' => false,
 									'label'
 									=> __d('reservations', '利用時間の制限無し')]);
 							?>

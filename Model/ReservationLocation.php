@@ -208,6 +208,11 @@ class ReservationLocation extends ReservationsAppModel {
  */
 	public function saveLocation($data) {
 		$data['ReservationLocation']['time_table'] = implode('|', $data['ReservationLocation']['time_table']);
+		// 全日フラグあったら00:00-24:00あつかいにする
+		if($data['ReservationLocation']['allday_flag']){
+			$data['ReservationLocation']['start_time'] = '00:00';
+			$data['ReservationLocation']['end_time'] = '24:00';
+		}
 		// category_id=0だったらnullにする。そうしないと空文字としてSQL発行される
 		if (empty($data[$this->alias]['category_id'])) {
 			$data[$this->alias]['category_id'] = null;
