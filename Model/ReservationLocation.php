@@ -86,16 +86,16 @@ class ReservationLocation extends ReservationsAppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'time_table' => array(
-			'notBlank' => array(
-				//'rule' => array('notBlank'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
+		//'time_table' => array(
+		//	'notBlank' => array(
+		//		//'rule' => array('notBlank'),
+		//		//'message' => 'Your custom message here',
+		//		//'allowEmpty' => false,
+		//		//'required' => false,
+		//		//'last' => false, // Stop validation after this rule
+		//		//'on' => 'create', // Limit validation to 'create' or 'update' operations
+		//	),
+		//),
 		//'start_time' => array(
 		//	'notBlank' => array(
 		//		//'rule' => array('notBlank'),
@@ -207,6 +207,7 @@ class ReservationLocation extends ReservationsAppModel {
  * @throws InternalErrorException
  */
 	public function saveLocation($data) {
+		$data['ReservationLocation']['time_table'] = implode('|', $data['ReservationLocation']['time_table']);
 		// category_id=0だったらnullにする。そうしないと空文字としてSQL発行される
 		if (empty($data[$this->alias]['category_id'])) {
 			$data[$this->alias]['category_id'] = null;
@@ -214,7 +215,7 @@ class ReservationLocation extends ReservationsAppModel {
 
 		$this->begin();
 		try {
-			$this->create(); // 常に新規登録
+			$this->create(); //
 			// 先にvalidate 失敗したらfalse返す
 			$this->set($data);
 			if (!$this->validates($data)) {

@@ -57,55 +57,66 @@ echo h($dataJson) ?>)">
 						)
 					);
 					?>
-                    <?php
-					echo $this->NetCommonsForm->label(__d('reservations', '利用時間'));
-                    ?>
-                    <div class="form-inline">
-                        <?php
+                    <div class="form-group">
+						<?php
+						echo $this->NetCommonsForm->label(__d('reservations', '利用時間'));
+						?>
+                        <div class="form-inline">
+							<?php
 
-					// 利用時間 時分〜　時分
-                    // TODO デフォルトは9:00-18:00かな
-                    echo $this->NetCommonsForm->input('ReservationLocation.start_time',
-                        [
-                            'datetimepicker',
-                            'datetimepicker-options' => json_encode(['format' => 'HH:mm']),
-                            //'class' => 'form-inline'
-                            'ng-model' => 'data.ReservationLocation.start_time'
-                        ]
-                        );
-                    echo ' - ';
-					echo $this->NetCommonsForm->input('ReservationLocation.end_time',
-						[
-							'datetimepicker',
-							'datetimepicker-options' => json_encode(['format' => 'HH:mm']),
-							'ng-model' => 'data.ReservationLocation.end_time'
-                            //'class' => 'form-inline'
-						]
-					);
-					echo '&nbsp;';
-						// 利用時間の制限無しチェックボックス
-                        // 特にカラムはなし。0:00-24:00まで利用可能とするだけ TODO AngularJS制御
-                        echo $this->NetCommonsForm->inlineCheckbox('ReservationLocation.allday_flag',
-                            [
-                                    //'type' => 'checkbox',
-                                    'label'
-                            => __d('reservations', '利用時間の制限無し')]);
-					?>
+							// 利用時間 時分〜　時分
+							// TODO デフォルトは9:00-18:00かな
+							echo $this->NetCommonsForm->input('ReservationLocation.start_time',
+								[
+									'datetimepicker',
+									'datetimepicker-options' => json_encode(['format' => 'HH:mm']),
+									//'class' => 'form-inline'
+									'ng-model' => 'data.ReservationLocation.start_time'
+								]
+							);
+							echo ' - ';
+							echo $this->NetCommonsForm->input('ReservationLocation.end_time',
+								[
+									'datetimepicker',
+									'datetimepicker-options' => json_encode(['format' => 'HH:mm']),
+									'ng-model' => 'data.ReservationLocation.end_time'
+									//'class' => 'form-inline'
+								]
+							);
+							echo '&nbsp;';
+							// 利用時間の制限無しチェックボックス
+							// 特にカラムはなし。0:00-24:00まで利用可能とするだけ TODO AngularJS制御
+							echo $this->NetCommonsForm->inlineCheckbox('ReservationLocation.allday_flag',
+								[
+									//'type' => 'checkbox',
+									'label'
+									=> __d('reservations', '利用時間の制限無し')]);
+							?>
+                        </div>
+						<?php
+						// TODO 利用時間曜日チェックボックス TODO カレンダの繰り返し設定からコピか？
+						$weekDaysOptions = [
+							'Sun' => __d('holidays', 'Sunday'),
+							'Mon' => __d('holidays', 'Monday'),
+							'Tue' => __d('holidays', 'Tuesday'),
+							'Wed' => __d('holidays', 'Wednesday'),
+							'Thu' => __d('holidays', 'Thursday'),
+							'Fri' => __d('holidays', 'Friday'),
+							'Sat' => __d('holidays', 'Saturday'),
+						];
+						// \
+						//echo $this->NetCommonsForm->checkbox('ReservationLocation.time_table', ['options' =>
+						//    $weekDaysOptions]);
+						echo $this->NetCommonsForm->input('ReservationLocation.time_table', [
+                            'options' => $weekDaysOptions,
+                            'type' => 'select',
+                            'multiple' => 'checkbox',
+                            'div' => 'form-inline'
+                        ]);
+						?>
                     </div>
-                    <?php
-                    // TODO 利用時間曜日チェックボックス TODO カレンダの繰り返し設定からコピか？
-                    $weekDaysOptions = [
-                            'Sun' => __d('holidays', 'Sunday'),
-                            'Mon' => __d('holidays', 'Monday'),
-                            'Tue' => __d('holidays', 'Tuesday'),
-                            'Wed' => __d('holidays', 'Wednesday'),
-                            'Thu' => __d('holidays', 'Thursday'),
-                            'Fri' => __d('holidays', 'Friday'),
-                            'Sat' => __d('holidays', 'Saturday'),
-                        ];
-                    // TODO カラム名セット
-                    echo $this->NetCommonsForm->checkbox('', ['options' => $weekDaysOptions]);
 
+                    <?php
                     // カテゴリ
 					echo $this->Category->select('ReservationLocation.category_id', array('empty' => true));
 					// TODO 予約できる権限

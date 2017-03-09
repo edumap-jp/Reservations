@@ -204,6 +204,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		];
 
 		$reservationLocation = $this->ReservationLocation->find('first', $options);
+		$reservationLocation['ReservationLocation']['time_table'] = explode('|', $reservationLocation['ReservationLocation']['time_table']);
 
 		if (empty($reservationLocation)) {
 			return $this->throwBadRequest();
