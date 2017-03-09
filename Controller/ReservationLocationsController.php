@@ -100,6 +100,7 @@ class ReservationLocationsController extends ReservationsAppController {
 			),
 		),
 		'Rooms.RoomsForm',
+		'Reservations.ReservationLocation',
 	);
 
 	public function index() {

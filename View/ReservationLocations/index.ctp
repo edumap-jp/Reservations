@@ -22,9 +22,7 @@
                     <th><?php echo $this->Paginator->sort('category_id'); ?></th>
                     <th colspan="2"><?php echo $this->Paginator->sort('location_name'); ?></th>
                     <!--<th>--><?php //echo $this->Paginator->sort('add_authority'); ?><!--</th>-->
-                    <th><?php echo $this->Paginator->sort('time_table'); ?></th>
-                    <th><?php echo $this->Paginator->sort('start_time'); ?></th>
-                    <th><?php echo $this->Paginator->sort('end_time'); ?></th>
+                    <th><?php __d('reservations', '利用可能日時') ?></th>
                     <!--<th>--><?php //echo $this->Paginator->sort('use_private'); ?><!--</th>-->
                     <!--<th>--><?php //echo $this->Paginator->sort('use_auth_flag'); ?><!--</th>-->
                     <!--<th>--><?php //echo $this->Paginator->sort('use_all_rooms'); ?><!--</th>-->
@@ -54,10 +52,10 @@
                                     ]);?>
                         </td>
                         <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['add_authority']); ?><!--&nbsp;</td>-->
-
-                        <td><?php echo h($reservationLocation['ReservationLocation']['time_table']); ?>&nbsp;</td>
-                        <td><?php echo h($reservationLocation['ReservationLocation']['start_time']); ?>&nbsp;</td>
-                        <td><?php echo h($reservationLocation['ReservationLocation']['end_time']); ?>&nbsp;</td>
+                        <td>
+                            <?php echo $this->ReservationLocation->openText($reservationLocation)
+                            ; ?>
+                        </td>
                         <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['use_private']); ?><!--&nbsp;</td>-->
                         <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['use_auth_flag']); ?><!--&nbsp;</td>-->
                         <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['use_all_rooms']); ?><!--&nbsp;</td>-->
