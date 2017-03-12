@@ -92,6 +92,15 @@ class ReservationEvent extends ReservationsAppModel {
 			'fields' => '',
 			'order' => ''
 		),
+		'ReservationLocation' => [
+			'className' => 'Reservations.ReservationLocation',
+			'foreignKey' => false,
+			'conditions' => [
+				'location_key = ReservationLocation.key',
+				'ReservationEvent.language_id = ReservationLocation.language_id'
+			],
+		],
+
 	);
 
 /**

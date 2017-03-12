@@ -49,7 +49,12 @@ echo $this->element('Reservations.scripts');
 	<div class="row">
 
 		<div class="col-xs-12">
-			<?php /* 日時 */ ?>
+            <div>
+                <h3><?php echo __d('reservations', '施設'); ?></h3>
+                <p><?php echo h($event['ReservationLocation']['location_name']); ?></p>
+            </div>
+
+            <?php /* 日時 */ ?>
 			<div data-reservation-name="showDatetime" class="reservation-eachplan-box">
 				<h3><?php echo __d('reservations', 'Date and time'); ?></h3>
 				<p>

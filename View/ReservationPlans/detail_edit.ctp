@@ -128,10 +128,28 @@ echo $this->element('Reservations.scripts');
                         TODO
                         <?php
                         // TODO カテゴリ絞り込み
-                        $locationCategories = [
-                                0 => 'カテゴリ無し',
-                                1 => '会議室',
-                        ];
+                        $locationCategories = Hash::combine($categories, '{n}.Category.id', '{n}.CategoriesLanguage.name');
+                        // 施設の絞り込み, カテゴリなし　を追加
+                        $locationCategories = Hash::merge(
+                            [
+                                'all' => __d('reservations', '--施設の絞り込み--'),
+                                '' => __d('reservations', 'カテゴリ無し')
+                            ],
+                            $locationCategories
+                        );
+                        //$locationCategories = [
+                        //        0 => 'カテゴリ無し',
+                        //        1 => '会議室',
+                        //];
+                        $this->NetCommonsForm->unlockField('ReservationLocation.category_id');
+                        $this->NetCommonsForm->unlockField('ReservationActionPlan.location_key');
+						echo $this->NetCommonsForm->input('ReservationLocation.category_id',
+                            [
+                                'label' => false,
+                                'options' => $locationCategories,
+                                'ng-change' => 'selectLocationCategory()',
+                                'ng-model' => 'locationCategory',
+                            ]);
                         ?>
 						<?php //echo $this->NetCommonsForm->input(
 						//	'location_category_id',
@@ -149,13 +167,23 @@ echo $this->element('Reservations.scripts');
                                 'type' => 'select',
                                 'ng-options' => 'location.ReservationLocation.location_name for location in data.locations track by location.ReservationLocation.key',
                                 'ng-model' => 'ReservationActionPlan.location_key',
-                                'options' => ['kagi1' => 'kaigi1'], // TODO optionsに選択肢ないとSecurityComponentにひっかかる
+								// optionsを指定しないとSecurityComponentでBlackHole送りになる
                                 'options' => $locationOptions,
+								'ng-options' => 'location.ReservationLocation.key as location.ReservationLocation.location_name for location in locationOptions',
+                                'ng-change' => 'changeLocation()',
+
 							]
 						);?>
+                        <?php echo __d('reservations', '【使用時間】 '); ?>
+                        {{selectLocation.ReservationLocation.openText}}
+                        <a href="" data-toggle="popover" data-placement="bottom" title="" data-content="
+                        <dl>
+                        <dt><?php echo __d('reservations', '利用時間'); ?></dt><dd>{{selectLocation.ReservationLocation.openText}}</dd>
+                        <dt><?php echo __d('reservations', '施設管理者'); ?></dt><dd>{{selectLocation.ReservationLocation.contact}}</dd>
+                        </dl>
+                        <p>{{selectLocation.ReservationLocation.description}}</p>
+" data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d('reservations', '詳細'); ?></a>
                     </div>
-                    <!--TODO 施設しよう時間と施設詳細ポップアップ-->
-                    TODO 施設使用時間　TODO　施設詳細
                 </div>
             </div><!-- form-group name="inputStartEndDateTime"おわり -->
 

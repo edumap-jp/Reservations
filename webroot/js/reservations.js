@@ -439,8 +439,8 @@ NetCommonsApp.controller('ReservationDetailEditWysiwyg',
     }]
 );
 NetCommonsApp.controller('ReservationsDetailEdit',
-    ['$scope', '$location', 'NetCommonsModal', '$http', 'NC3_URL',
-      function($scope, $location, NetCommonsModal, $http, NC3_URL) {
+    ['$scope', '$location', 'NetCommonsModal', '$http', 'NC3_URL','filterFilter',
+      function($scope, $location, NetCommonsModal, $http, NC3_URL, filterFilter) {
        $scope.repeatArray = [];  //key=Frame.id、value=T/F of checkbox
        //key=Frame.id,value=index number
        //of option elements
@@ -467,8 +467,30 @@ NetCommonsApp.controller('ReservationsDetailEdit',
        $scope.initialize = function(data) {
          $scope.data = angular.fromJson(data);
          console.log($scope.data);
+         $scope.locationOptions = $scope.data.locations;
+         console.log($scope.locationOptions);
        };
 
+       // 施設カテゴリ選択
+       $scope.locationOptions = [];
+       $scope.locationCategory = 'all';
+       $scope.selectLocationCategory = function() {
+         // all　絞り込み解除
+         // ''  -> nullだけに絞り込み
+         if ($scope.locationCategory == 'all'){
+           $scope.locationOptions = $scope.data.locations;
+         }else if($scope.locationCategory == ''){
+           $scope.locationOptions = filterFilter($scope.data.locations, {Category:{id:null}});
+         }else{
+           $scope.locationOptions = filterFilter($scope.data.locations, {Category:{id:$scope.locationCategory}});
+         }
+       };
+       $scope.changeLocation = function() {
+         $scope.selectLocation = filterFilter($scope.data.locations, {ReservationLocation:{key:$scope.ReservationActionPlan.location_key}})[0];
+         console.log($scope.selectLocation);
+
+       };
+       
        $scope.changeEditRrule = function(frameId, firstSibEditLink) {
          var nums = ['0', '1', '2'];
          for (var num in nums) {

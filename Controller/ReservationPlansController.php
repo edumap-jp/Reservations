@@ -98,7 +98,7 @@ class ReservationPlansController extends ReservationsAppController {
 		'Reservations.ReservationWorks',
 		'UserAttributes.UserAttributeLayout',	//グループ管理の初期値
 												//設定の時に必要
-
+		'Categories.Categories',
 	);
 
 /**
@@ -124,6 +124,7 @@ class ReservationPlansController extends ReservationsAppController {
 		'Reservations.ReservationPlanEditRepeatOption',
 		'Groups.GroupUserList',
 		'Users.UserSearch',
+		//'Categories.Category',
 	);
 
 /**
