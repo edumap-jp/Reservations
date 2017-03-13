@@ -14,7 +14,11 @@ echo $this->element('Reservations.scripts');
 	<?php
 		echo $this->element('Reservations.Reservations/reservation_tabs', array('active' => 'lmonthly', 'frameId' => $frameId, 'languageId' => $languageId));
 	?>
+
 	<?php echo $this->ReservationTurnReservation->getTurnReservationOperationsWrap('month', 'top', $vars);	?>
+
+
+
 	<div class="row"><!--全体枠-->
 		<div class="col-xs-12 col-sm-12">
 			<table class='reservation-monthly-table'>

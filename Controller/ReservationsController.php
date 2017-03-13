@@ -56,6 +56,7 @@ class ReservationsController extends ReservationsAppController {
 			),
 		),
 		'Paginator',
+		'Categories.Categories',
 	);
 
 /**

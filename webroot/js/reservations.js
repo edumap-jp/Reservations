@@ -438,8 +438,34 @@ NetCommonsApp.controller('ReservationDetailEditWysiwyg',
       $scope.tinymce = NetCommonsWysiwyg.new();
     }]
 );
+NetCommonsApp.controller('Reservations.selectLocation',
+    ['$scope', '$location', 'NetCommonsModal', '$http', 'NC3_URL', 'filterFilter', '$window',
+      function($scope, $location, NetCommonsModal, $http, NC3_URL, filterFilter, $window) {
+        $scope.initialize = function(data) {
+          // console.log(data);
+          $scope.frameId = data.frameId;
+          $scope.data = angular.fromJson(data);
+          $scope.selectedLocation = data.selectedLocation;
+          // console.log($scope.selectedLocation);
+          // $scope.locationOptions = $scope.data.locations;
+        };
+
+        $scope.changeLocation = function() {
+          $scope.selectLocation = filterFilter($scope.data.locations, {ReservationLocation: {key: $scope.selectedLocation}})[0];
+          //http://127.0.0.1:9090/reservations/reservations/index?year=2017&month=02&day=26&style=largemonthly&frame_id=42
+          var url = NC3_URL+'/reservations/reservations/index?style=largemonthly&frame_id='+$scope.frameId;
+          url = url + '&location_key='+$scope.selectLocation.ReservationLocation.key;
+          console.log(url);
+          // $location.path(url);
+          $window.location.href = url;
+
+          // console.log($scope.selectLocation);
+        };
+      }
+    ]);
+
 NetCommonsApp.controller('ReservationsDetailEdit',
-    ['$scope', '$location', 'NetCommonsModal', '$http', 'NC3_URL','filterFilter',
+    ['$scope', '$location', 'NetCommonsModal', '$http', 'NC3_URL' ,'filterFilter',
       function($scope, $location, NetCommonsModal, $http, NC3_URL, filterFilter) {
        $scope.repeatArray = [];  //key=Frame.id、value=T/F of checkbox
        //key=Frame.id,value=index number

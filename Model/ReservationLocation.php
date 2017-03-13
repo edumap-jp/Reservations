@@ -281,7 +281,9 @@ class ReservationLocation extends ReservationsAppModel {
 			$timeTable = explode('|', $timeTable);
 			$weekList = [];
 			foreach($timeTable as $weekday){
-				$weekList[] = $weekDaysOptions[$weekday];
+				if($weekday){
+					$weekList[] = $weekDaysOptions[$weekday];
+				}
 			}
 			$ret = implode(', ', $weekList);
 		}

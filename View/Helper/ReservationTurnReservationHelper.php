@@ -63,7 +63,13 @@ class ReservationTurnReservationHelper extends AppHelper {
 		$thisDayUrl = $this->_getUrl('now', $type, $vars);
 
 		$html = '';
-		$html .= '<div class="reservation-date-move-operations reservation-date-move-operations-' . $pos . '">';
+		if($pos == 'top'){
+			$html .= '<div class="reservation-date-move-operations reservation-date-move-operations-' . $pos . ' pull-left" style="margin-right:10px">';
+
+		}else{
+			$html .= '<div class="reservation-date-move-operations reservation-date-move-operations-' . $pos . '">';
+
+		}
 
 		if ($prevUrl) {
 			$html .= $this->NetCommonsHtml->link(
@@ -93,6 +99,9 @@ class ReservationTurnReservationHelper extends AppHelper {
 			$html .= '</div>';
 		}
 		$html .= '</div>';
+		if($pos == 'top'){
+			$html .= $this->_View->element('Reservations.Reservations/select_location');
+		}
 		return $html;
 	}
 /**

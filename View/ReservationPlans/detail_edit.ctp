@@ -125,9 +125,9 @@ echo $this->element('Reservations.scripts');
 						'required' => true));
 					?>
                     <div class='col-xs-11 col-xs-offset-1'>
-                        TODO
+
                         <?php
-                        // TODO カテゴリ絞り込み
+                        //  カテゴリ絞り込み
                         $locationCategories = Hash::combine($categories, '{n}.Category.id', '{n}.CategoriesLanguage.name');
                         // 施設の絞り込み, カテゴリなし　を追加
                         $locationCategories = Hash::merge(
@@ -176,13 +176,19 @@ echo $this->element('Reservations.scripts');
 						);?>
                         <?php echo __d('reservations', '【使用時間】 '); ?>
                         {{selectLocation.ReservationLocation.openText}}
-                        <a href="" data-toggle="popover" data-placement="bottom" title="" data-content="
+                        <a href="" data-toggle="popover" data-placement="bottom" title="" data-trigger="focus" data-content="
                         <dl>
                         <dt><?php echo __d('reservations', '利用時間'); ?></dt><dd>{{selectLocation.ReservationLocation.openText}}</dd>
                         <dt><?php echo __d('reservations', '施設管理者'); ?></dt><dd>{{selectLocation.ReservationLocation.contact}}</dd>
                         </dl>
                         <p>{{selectLocation.ReservationLocation.description}}</p>
 " data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d('reservations', '詳細'); ?></a>
+                        <?php
+                        $html = '<script type="text/javascript">' .
+                        '$(function () { $(\'[data-toggle="popover"]\').popover({html: true}) });</script>';
+                        echo $html;
+                        ?>
+
                     </div>
                 </div>
             </div><!-- form-group name="inputStartEndDateTime"おわり -->

@@ -221,6 +221,12 @@ class ReservationsAppController extends AppController {
 		//公開対象一覧のoptions配列と自分自身のroom_idとルーム毎空間名配列を取得
 		$this->__setExposeRoomOptionsEtc($vars);
 
+		// 施設で絞り込む
+		$locationKey = $this->request->query('location_key');
+		if($locationKey){
+			$planParams['location_key'] = $locationKey;
+		}
+
 		$vars['plans'] = $this->ReservationEvent->getPlans($vars, $planParams, $order);
 
 		//CakeLog::debug("DBGDBG: vars_plans[" . print_r($vars['plans'], true) . "]");
