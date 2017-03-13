@@ -18,27 +18,46 @@ echo $this->element('Reservations.scripts');
 
 	<?php echo $this->ReservationTurnReservation->getTurnReservationOperationsWrap('week', 'top', $vars); ?>
 
-	<div class="row"><!--全体枠-->
-		<div class="col-xs-12 col-sm-12 text-center table-responsive">
-			<table class='reservation-weekly-table'>
-				<tbody>
-					<?php /* -- 日付（見出し） -- */ ?>
-						<?php
-							echo $this->ReservationWeekly->makeWeeklyHeaderHtml($vars);
-						?>
-						<?php /*-- 予定の内容 --*/ ?>
-						<?php echo $this->ReservationWeekly->makeWeeklyBodyHtml($vars); ?>
-						<?php $reservationLinePlans = $this->ReservationWeekly->getLineData() ?>
-				</tbody>
-			</table>
-			<div ng-controller="ReservationsMonthlyLinePlan" ng-style="initialize(<?php echo h(json_encode(array('reservationLinePlans' => $reservationLinePlans))) ?>)" resize>
-			</div>
-		</div>
-	</div><!--全体枠END-->
+    <div class="row"><!--全体枠-->
+        <div class="col-xs-12 col-sm-12 text-center table-responsive">
+
+            <div class="reservation-daily-timeline-coordinate-origin" data-daily-start-time-idx="<?php echo $vars['ReservationFrameSetting']['timeline_base_time']; ?>"><?php /*-- overflow-yのdivの始まり --*/?>
+
+                <table class='reservation-daily-timeline-table'><?php /*-- overflow-yのscroll分5%考慮 --*/ ?>
+                    <tbody>
+					<?php
+					echo $this->ReservationWeekly->makeWeeklyHeaderHtml($vars);
+					?>
+
+                    <?php echo $this->element('Reservations.Reservations/weekly_timeline_element',
+                        array(
+                        'hour' => 0,
+                        'timeIndex' => '0000',
+                        'timeString' => '00:00',
+                        'needTimeSlit' => true
+                    )); ?>
+                    <?php for ($hour = 1; $hour < 24; $hour++): ?>
+                        <?php
+                        $timeIndex = sprintf('%02d00', $hour);
+                        $timeString = sprintf('%02d:00', $hour);
+                        ?>
+                        <?php echo $this->element('Reservations.Reservations/weekly_timeline_element', array(
+                            'hour' => $hour,
+                            'timeIndex' => $timeIndex,
+                            'timeString' => $timeString,
+                            'needTimeSlit' => false
+                        )); ?>
+                    <?php endfor; ?>
+                    </tbody>
+                </table>
+            </div><?php /*-- overflow-yのdivの終わり --*/ ?>
+
+
+
 
 	<?php /*-- 予定の内容 --*/ ?>
 	<?php
-		echo $this->ReservationLegend->getReservationLegend($vars);
+		//echo $this->ReservationLegend->getReservationLegend($vars);
 	?>
 	<div class="row text-center reservation-backto-btn">
 		<?php
