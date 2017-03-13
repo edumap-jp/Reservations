@@ -457,6 +457,8 @@ NetCommonsApp.controller('Reservations.selectLocation',
           url = url + '&location_key='+$scope.selectLocation.ReservationLocation.key;
           console.log(url);
           // $location.path(url);
+          // $location.html5Mode(true);
+          // console.log($location.search());
           $window.location.href = url;
 
           // console.log($scope.selectLocation);
