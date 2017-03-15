@@ -7,4 +7,4 @@ Reservations for NetCommons3
 
 | dependencies | status |
 | ------------ | ------ |
-| composer.json | [![Dependency Status](https://www.versioneye.com/user/projects/5732eaddfb70190010fad6a1/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5732eaddfb70190010fad6a1) |
+| composer.json | [![Dependency Status](https://www.versioneye.com/user/projects/58c97427e054530016372010/badge.svg?style=flat)](https://www.versioneye.com/user/projects/58c97427e054530016372010) |
