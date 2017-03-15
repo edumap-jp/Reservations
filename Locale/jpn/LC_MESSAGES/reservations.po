@@ -1,0 +1,1210 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: Reservations/Controller/ReservationFrameSettingsController.php:113
+msgid "Monthly Reservation (small)"
+msgstr "月表示（縮小）"
+
+#: Reservations/Controller/ReservationFrameSettingsController.php:115
+msgid "Monthly Reservation (large)"
+msgstr "月表示（拡大）"
+
+#: Reservations/Controller/ReservationFrameSettingsController.php:117
+msgid "Weekly Reservation"
+msgstr "週表示"
+
+#: Reservations/Controller/ReservationFrameSettingsController.php:119
+msgid "Day View"
+msgstr "日表示"
+
+#: Reservations/Controller/ReservationFrameSettingsController.php:121
+msgid "Schedule (ordered-by-time)"
+msgstr "スケジュール（時間順）"
+
+#: Reservations/Controller/ReservationFrameSettingsController.php:123
+msgid "Schedule (ordered-by-user)"
+msgstr "スケジュール（会員順）"
+
+#: Reservations/Controller/ReservationMailSettingsController.php:127
+#: Reservations/Model/Behavior/ReservationExposeRoomBehavior.php:82;85
+#: Reservations/Model/Behavior/ReservationMailBehavior.php:199
+#: Reservations/View/Elements/ReservationBlockRolePermissions/permission_all_members.ctp:17
+#: Reservations/View/Helper/ReservationCategoryHelper.php:42
+#: Reservations/View/Helper/ReservationDailyHelper.php:45
+#: Reservations/View/Helper/ReservationLegendHelper.php:130
+#: Reservations/View/Helper/ReservationPermissionHelper.php:43
+#: Reservations/View/Helper/ReservationRoomSelectHelper.php:54
+msgid "All the members"
+msgstr "全会員"
+
+#: Reservations/Controller/ReservationPlansController.php:233
+msgid "Delete failed."
+msgstr "削除に失敗しました"
+
+#: Reservations/Controller/ReservationPlansController.php:419
+#: Reservations/Test/Case/Controller/ReservationPlans/EditTest.php:547
+msgid "Cyclic rules using deadline specified exceeds the maximum number of %d"
+msgstr "指定期限まで繰返しルールを適用した場合、最大回数%dを超えます。"
+
+#: Reservations/Controller/ReservationPlansController.php:426
+msgid "An unknown error occurred."
+msgstr "不明なエラーが発生しました。"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:263
+msgid "(GMT-12:00) Eniwetok, Kwajalein"
+msgstr "(GMT-12:00) エニウェトク、クエジェリン"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:265
+msgid "(GMT-11:00) Midway Island, Samoa"
+msgstr "(GMT-11:00) ミッドウェー島、サモア"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:267
+msgid "(GMT-10:00) Hawaii"
+msgstr "(GMT-10:00) ハワイ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:269
+msgid "(GMT-9:00) Alaska"
+msgstr "(GMT-9:00) アラスカ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:271
+msgid "(GMT-8:00) Pacific Time (US & Canada)"
+msgstr "(GMT-8:00) 太平洋標準時（米国およびカナダ）、ティファナ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:273
+msgid "(GMT-7:00) Mountain Time (US & Canada)"
+msgstr "(GMT-7:00) 山地標準時（米国およびカナダ）"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:276
+msgid "(GMT-6:00) Central Time (US & Canada), Mexico City"
+msgstr "(GMT-6:00) 中部標準時（米国およびカナダ）、メキシコシティ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:279
+msgid "(GMT-5:00) Eastern Time (US & Canada), Bogota, Lima, Quito"
+msgstr "(GMT-5:00) 東部標準時（米国およびカナダ）、ボゴタ、リマ、キト"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:282
+msgid "(GMT-4:00) Atlantic Time (Canada), Caracas, La Paz"
+msgstr "(GMT-4:00) 大西洋標準時（カナダ）、カラカス、ラパス"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:285
+msgid "(GMT-3:30) Newfoundland"
+msgstr "(GMT-3:30) ニューファンドランド"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:287
+msgid "(GMT-3:00) Brasilia, Buenos Aires, Georgetown"
+msgstr "(GMT-3:00) ブラジリア、ブエノスアイレス、ジョージタウン"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:290
+msgid "(GMT-2:00) Mid-Atlantic"
+msgstr "(GMT-2:00) 中央大西洋"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:292
+msgid "(GMT-1:00) Azores, Cape Verde Islands"
+msgstr "(GMT-1:00) アゾレス諸島、カーボベルデ諸島"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:294
+msgid "(GMT) Greenwich Mean Time, London, Dublin, Lisbon, Casablanca, Monrovia"
+msgstr "(GMT) グリニッジ標準時、ダブリン、ロンドン、リスボン、エジンバラ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:297
+msgid "(GMT+1:00) Amsterdam, Berlin, Rome, Copenhagen, Brussels, Madrid, Paris"
+msgstr "(GMT+1:00) ブリュッセル、コペンハーゲン、マドリッド、パリ、アムステルダム"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:300
+msgid "(GMT+2:00) Athens, Istanbul, Minsk, Helsinki, Jerusalem, South Africa"
+msgstr "(GMT+2:00) アテネ、イスタンブール、エルサレム、カイロ、ヘルシンキ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:303
+msgid "(GMT+3:00) Baghdad, Kuwait, Riyadh, Moscow, St. Petersburg"
+msgstr "(GMT+3:00) バグダッド、ナイロビ、クウェート、リヤド、モスクワ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:305
+msgid "(GMT+3:30) Tehran"
+msgstr "(GMT+3:30) テヘラン"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:307
+msgid "(GMT+4:00) Abu Dhabi, Muscat, Baku, Tbilisi"
+msgstr "(GMT+4:00) アブダビ、マスカット、バク、トビリシ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:309
+msgid "(GMT+4:30) Kabul"
+msgstr "(GMT+4:30) カブール"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:311
+msgid "(GMT+5:00) Ekaterinburg, Islamabad, Karachi, Tashkent"
+msgstr "(GMT+5:00) イスラマバード、カラチ、タシケント、エカテリンバーグ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:314
+msgid "(GMT+5:30) Bombay, Calcutta, Madras, New Delhi"
+msgstr "(GMT+5:30) カルカッタ、チェンナイ、ムンバイ、ニューデリー"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:317
+msgid "(GMT+6:00) Almaty, Dhaka, Colombo"
+msgstr "(GMT+6:00) ダッカ、アルマティ、スリ・ジャヤワルダナプラ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:320
+msgid "(GMT+7:00) Bangkok, Hanoi, Jakarta"
+msgstr "(GMT+7:00) バンコク、ハノイ、ジャカルタ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:322
+msgid "(GMT+8:00) Beijing, Perth, Singapore, Hong Kong, Urumqi, Taipei"
+msgstr "(GMT+8:00) シンガポール、パース、台北、北京、重慶、香港、ウルムチ"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:325
+msgid "(GMT+9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk"
+msgstr "(GMT+9:00) 東京、大阪、札幌、ソウル、ヤクーツク"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:327
+msgid "(GMT+9:30) Adelaide, Darwin"
+msgstr "(GMT+9:30) アデレード、ダーウィン"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:329
+msgid "(GMT+10:00) Brisbane, Canberra, Melbourne, Sydney, Guam,Vlasdiostok"
+msgstr "(GMT+10:00) ウラジオストク、キャンベラ、メルボルン、シドニー、グアム"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:332
+msgid "(GMT+11:00) Magadan, Solomon Islands, New Caledonia"
+msgstr "(GMT+11:00) マガダン、ソロモン諸島、ニューカレドニア"
+
+#: Reservations/Controller/Component/ReservationsComponent.php:334
+msgid "(GMT+12:00) Auckland, Wellington, Fiji, Kamchatka, Marshall Island"
+msgstr "(GMT+12:00) オークランド、ウェリントン、フィジー、カムチャッカ"
+
+#: Reservations/Model/ReservationActionPlan.php:336
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:327
+msgid "Invalid input. (change of repetition)"
+msgstr "繰返しの変更指定が不正です。"
+
+#: Reservations/Model/ReservationActionPlan.php:343
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:329;331;333;338
+msgid "Invalid input. (repetition)"
+msgstr "予約の繰り返し指定が不正です。"
+
+#: Reservations/Model/ReservationActionPlan.php:370
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:296;299;301;305;307;309
+msgid "Invalid input. (time)"
+msgstr "時間の指定が不正です"
+
+#: Reservations/Model/ReservationActionPlan.php:378
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:303
+msgid "Invalid input. (year/month/day)"
+msgstr "予約（年月日）の指定が不正です"
+
+#: Reservations/Model/ReservationActionPlan.php:386
+msgid "Invalid input. (start time)(easy edit mode)"
+msgstr "予約（開始時間）の指定が不正です"
+
+#: Reservations/Model/ReservationActionPlan.php:390
+msgid "Invalid input. (start time and end time)(easy edit mode)"
+msgstr "開始時分と終了時分の並びが不正です"
+
+#: Reservations/Model/ReservationActionPlan.php:398
+msgid "Invalid input. (end time)"
+msgstr "予約（終了時間）の指定が不正です"
+
+#: Reservations/Model/ReservationActionPlan.php:404
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:320
+msgid "Invalid input. (start time)"
+msgstr "開始日（時）が不正です"
+
+#: Reservations/Model/ReservationActionPlan.php:408
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:322
+msgid "Invalid input. (start day (time) and end day (time))"
+msgstr "開始日(時)と終了日(時)の並びが不正です"
+
+#: Reservations/Model/ReservationActionPlan.php:414
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:324
+msgid "Invalid input. (end date)"
+msgstr "終了日（時）が不正です"
+
+#: Reservations/Model/ReservationActionPlan.php:434
+#: Reservations/Test/Case/Controller/ReservationPlans/AddTest.php:337
+#: Reservations/Test/Case/Controller/ReservationPlans/EditTest.php:540
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:286
+msgid "Invalid input. (plan title)"
+msgstr "件名が不正です。"
+
+#: Reservations/Model/ReservationActionPlan.php:438
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:288
+msgid "%d character limited. (plan title)"
+msgstr "件名は最大 %d 文字です。"
+
+#: Reservations/Model/ReservationActionPlan.php:447
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:291
+msgid "%d character limited. (title icon)"
+msgstr "タイトルアイコンは最大 %d 文字です。"
+
+#: Reservations/Model/ReservationActionPlan.php:477
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:270
+msgid "Invalid input. (authority)"
+msgstr "権限が不正です。"
+
+#: Reservations/Model/ReservationActionPlan.php:484
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:272
+msgid "Invalid input. (timezone)"
+msgstr "タイムゾーンが不正です。"
+
+#: Reservations/Model/ReservationActionPlan.php:491
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:274
+msgid "Invalid input. (detail)"
+msgstr "詳細表示の指定が不正です。"
+
+#: Reservations/Model/ReservationActionPlan.php:498
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:276
+msgid "%d character limited. (location)"
+msgstr "場所は最大 %d 文字です。"
+
+#: Reservations/Model/ReservationActionPlan.php:506
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:279
+msgid "%d character limited. (contact)"
+msgstr "連絡先は最大 %d 文字です。"
+
+#: Reservations/Model/ReservationActionPlan.php:515
+#: Reservations/Test/Case/Model/ReservationActionPlan/ValidateTest.php:282
+msgid "%d character limited. (detail)"
+msgstr "詳細は最大 %d 文字です。"
+
+#: Reservations/Model/ReservationDeleteActionPlan.php:147
+#: Reservations/Test/Case/Model/ReservationDeleteActionPlan/ValidateTest.php:103
+msgid "Invalid input. (edit rrule)"
+msgstr "rrule編集指定が不正です"
+
+#: Reservations/Model/ReservationDeleteActionPlan.php:157
+#: Reservations/Test/Case/Model/ReservationDeleteActionPlan/ValidateTest.php:105
+msgid "Invalid input. (repeat flag)"
+msgstr "イベントの繰り返しフラグが不正です"
+
+#: Reservations/Model/ReservationDeleteActionPlan.php:167
+#: Reservations/Test/Case/Model/ReservationDeleteActionPlan/ValidateTest.php:107
+msgid "Invalid input.  (first sib ebent id)"
+msgstr "先頭のイベントIDが不正です"
+
+#: Reservations/Model/ReservationDeleteActionPlan.php:175
+#: Reservations/Test/Case/Model/ReservationDeleteActionPlan/ValidateTest.php:109
+msgid "Invalid input. (origin event id)"
+msgstr "オリジナルのイベントIDが不正です"
+
+#: Reservations/Model/ReservationDeleteActionPlan.php:183
+#: Reservations/Test/Case/Model/ReservationDeleteActionPlan/ValidateTest.php:111
+msgid "Invalid input. (recurrence flag)"
+msgstr "イベントの置換フラグが不正です"
+
+#: Reservations/Model/ReservationEvent.php:222
+#: Reservations/Test/Case/Model/ReservationEvent/ValidateTest.php:88
+msgid "Please input title text."
+msgstr "タイトルを入力してください。"
+
+#: Reservations/Model/ReservationEvent.php:234;244;250;265;271
+#: Reservations/Test/Case/Model/ReservationEvent/ValidateTest.php:92;96;98;102;104;106
+msgid "Invalid value."
+msgstr "値が不正です。"
+
+#: Reservations/Model/ReservationEvent.php:238;254
+#: Reservations/Test/Case/Model/ReservationEvent/ValidateTest.php:94;100
+msgid "Out of range value."
+msgstr "範囲外です。"
+
+#: Reservations/Model/ReservationEvent.php:379;413
+msgid "There is no event. To continue the event in the blank."
+msgstr "対象eventがないのでeventを空にして下に流します。"
+
+#: Reservations/Model/ReservationEventContent.php:90
+#: Reservations/Test/Case/Model/ReservationEventContent/ValidateTest.php:80
+msgid "Model Name"
+msgstr "モデル名"
+
+#: Reservations/Model/ReservationEventContent.php:98
+#: Reservations/Test/Case/Model/ReservationEventContent/ValidateTest.php:82
+msgid "content key"
+msgstr "content key"
+
+#: Reservations/Model/ReservationEventContent.php:107
+#: Reservations/Test/Case/Model/ReservationEventContent/ValidateTest.php:84
+msgid "reservation_event id"
+msgstr "reservation_event id"
+
+#: Reservations/Model/ReservationMailSetting.php:82
+#: Reservations/Test/Case/Model/ReservationMailSetting/ValidateTest.php:77
+msgid "Mail Key"
+msgstr "Mail Key"
+
+#: Reservations/Model/ReservationMailSetting.php:90
+#: Reservations/Test/Case/Model/ReservationMailSetting/ValidateTest.php:79
+msgid "use mail"
+msgstr "メールを使う"
+
+#: Reservations/Model/Behavior/ReservationExposeRoomBehavior.php:285
+msgid "Unknown My Room"
+msgstr "不明なマイルーム"
+
+#: Reservations/Model/Behavior/ReservationMailBehavior.php:167
+msgid "nothing"
+msgstr "なし"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:33
+msgid "Before 0 minutes"
+msgstr "0分前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:34
+msgid "Before 5 minutes"
+msgstr "5分前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:35
+msgid "Before 10 minutes"
+msgstr "10分前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:36
+msgid "Before 15 minutes"
+msgstr "15分前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:37
+msgid "Before 20 minutes"
+msgstr "20分前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:38
+msgid "Before 25 minutes"
+msgstr "25分前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:39
+msgid "Before 30 minutes"
+msgstr "30分前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:40
+msgid "Before 45 minutes"
+msgstr "45分前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:41
+msgid "1 hour before"
+msgstr "1時間前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:42
+msgid "2 hours before"
+msgstr "2時間前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:43
+msgid "3 hours before"
+msgstr "3時間前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:44
+msgid "12 hours before"
+msgstr "12時間前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:45
+msgid "24 hours before"
+msgstr "24時間前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:46
+msgid "2 days before"
+msgstr "2日前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:47
+msgid "1 week before"
+msgstr "1週間前"
+
+#: Reservations/Model/Behavior/ReservationPlanOptionBehavior.php:48
+msgid "Right now"
+msgstr "今すぐ"
+
+#: Reservations/Model/Behavior/ReservationPlanRruleValidateBehavior.php:44
+msgid "Input required. (Times repeated)"
+msgstr "施設予約繰返し回数は必須です。"
+
+#: Reservations/Model/Behavior/ReservationPlanRruleValidateBehavior.php:51
+msgid "Only numbers can be entered."
+msgstr "施設予約繰返し回数は数字のみ可能です。"
+
+#: Reservations/Model/Behavior/ReservationPlanRruleValidateBehavior.php:61
+#: Reservations/Test/Case/Controller/ReservationPlans/AddTest.php:344
+msgid "The number of repetition is %d or more and %d or less."
+msgstr "施設予約繰返し回数は%d以上%d以下です。"
+
+#: Reservations/Model/Behavior/ReservationPlanRruleValidateBehavior.php:140
+msgid "It is not in the YYYY-MM-DD format."
+msgstr "日付形式がYYYY-MM-DD形式ではありません。"
+
+#: Reservations/Model/Behavior/ReservationPlanRruleValidateBehavior.php:144
+msgid "Invalid input. Day that does not exist has been specified."
+msgstr "実在しない日が指定されています。"
+
+#: Reservations/Model/Behavior/ReservationPlanRruleValidateBehavior.php:174
+msgid "Invalid input. Term end date is earlier than the start date."
+msgstr "繰返し期限日が開始日より前になっています。"
+
+#: Reservations/Model/Behavior/ReservationPlanRruleValidateBehavior.php:180
+msgid "date that can be specified is %s or more and %s or less."
+msgstr "指定できる日は%sから%sの間です。"
+
+#: Reservations/Model/Behavior/ReservationValidateAppBehavior.php:61
+msgid "Invalid input. (repeat interval. Please specify day/week/month/year)"
+msgstr "繰返し指定ありの単位が日、週、月、年のいずれでもありません。"
+
+#: Reservations/Model/Behavior/ReservationValidateAppBehavior.php:85
+msgid "Invalid input. (repeat interval: every day)"
+msgstr "繰返し指定ありの日単位の日ごとの値が不正です"
+
+#: Reservations/Model/Behavior/ReservationValidateAppBehavior.php:109
+msgid "Invalid input. (repeat interval: every week)"
+msgstr "繰返し指定ありの週単位の週ごとの値が不正です"
+
+#: Reservations/Model/Behavior/ReservationValidateAppBehavior.php:126
+msgid "Invalid input. (repeat interval:week)"
+msgstr "繰返し指定ありの週単位の曜日の指定が不正です"
+
+#: Reservations/Model/Behavior/ReservationValidateAppBehavior.php:150
+msgid "Invalid input. (repeat interbal:every month)"
+msgstr "繰返し指定ありの月単位の月ごとの値が不正です"
+
+#: Reservations/Model/Behavior/ReservationValidateAppBehavior.php:182
+msgid "Invalid input. (rrule error. day of the month or date)"
+msgstr "繰返し指定ありの月単位の曜日または日付指定の値が不正です"
+
+#: Reservations/Model/Behavior/ReservationValidateAppBehavior.php:207
+msgid "Invalid input. (rrule error. interval YEARLY)"
+msgstr "繰返し指定ありの年単位の年ごとの値が不正です"
+
+#: Reservations/Model/Behavior/ReservationValidateAppBehavior.php:217
+msgid "Invalid input. (rrule error. Interval of year. there is no specification of the month.)"
+msgstr "繰返し指定ありの年単位の月が１つも指定されていません"
+
+#: Reservations/Model/Behavior/ReservationValidateAppBehavior.php:236
+msgid "Invalid input. (rrule error. Interval of year, specified month.)"
+msgstr "繰返し指定ありの年単位の月の指定が不正です"
+
+#: Reservations/Model/Behavior/ReservationValidateAppBehavior.php:249
+msgid "Invalid input. (rrule error.  Interval of year. Week of the year unit,week value is invalid.)"
+msgstr "繰返し指定ありの年単位の週と曜日の値が不正です"
+
+#: Reservations/Test/Case/Controller/ReservationPlans/DeleteTest.php:129
+#: Reservations/Test/Case/Controller/ReservationPlans/EditTest.php:327;332;337;343;348;353
+#: Reservations/View/ReservationPlans/delete.ctp:65
+#: Reservations/View/Helper/ReservationPlanEditRepeatOptionHelper.php:97
+msgid "only this one"
+msgstr "この予約のみ"
+
+#: Reservations/Test/Case/Controller/Reservations/IndexTest.php:200;205;211;217
+#: Reservations/View/Helper/ReservationScheduleHelper.php:388
+msgid "yesterday"
+msgstr "昨日"
+
+#: Reservations/Utility/ReservationTime.php:509
+msgid "Sun|Mon|Tue|Wed|Thu|Fri|Sat"
+msgstr "日|月|火|水|木|金|土"
+
+#: Reservations/View/ReservationMailSettings/edit.ctp:27
+msgid "Please set from Select the room for which you want e-mail notification settings . It will be the setting of one room."
+msgstr "メール通知設定を行う対象のルームを選んでから設定してください。１ルームずつの設定となります。"
+
+#: Reservations/View/ReservationMailSettings/edit.ctp:28
+msgid "Target room"
+msgstr "対象のルーム"
+
+#: Reservations/View/ReservationMailSettings/edit.ctp:49
+msgid "MailSetting.mail_fixed_phrase_body.popover"
+msgstr "{X-SITE_NAME} : サイト名<br />{X-PLUGIN_NAME} : プラグイン名<br />{X-ROOM} : 公開対象<br />{X-SUBJECT} : 件名<br />{X-START_TIME} : 開始日時<br />{X-END_TIME} : 終了日時<br />{X-LOCATION} : 場所<br />{X-CONTACT} : 連絡先<br />{X-USER} : 記入者<br />{X-TO_DATE} : 記入日時<br />{X-RRULE} : 繰返し<br />{X-BODY} : 詳細<br />{X-URL} : この予約へのURL"
+
+#: Reservations/View/ReservationPlans/can_not_edit.ctp:14
+msgid "Registration and editing of the plan please go from correctly installed in the reservation on the screen ."
+msgstr "申し訳ありませんが、予約の登録・編集は画面に正しく設置された施設予約から行ってください。"
+
+#: Reservations/View/ReservationPlans/delete.ctp:14
+msgid "delete"
+msgstr "削除処理"
+
+#: Reservations/View/ReservationPlans/delete.ctp:61
+msgid "This plan has been repeatedly set. Select the plan that you want to remove from the following items, please press the delete button.<br />It can not be undone once you delete."
+msgstr "この予約は繰り返し設定されています。削除する予約を下記項目から選択し、削除ボタンを押してください。<br />一度削除すると元に戻せません。"
+
+#: Reservations/View/ReservationPlans/delete.ctp:67
+#: Reservations/View/Helper/ReservationPlanEditRepeatOptionHelper.php:100
+msgid "all after this one"
+msgstr "これ以降に指定した全ての予約"
+
+#: Reservations/View/ReservationPlans/delete.ctp:68
+#: Reservations/View/Helper/ReservationPlanEditRepeatOptionHelper.php:101
+msgid "all"
+msgstr "設定した全ての予約"
+
+#: Reservations/View/ReservationPlans/delete.ctp:78
+msgid "Delete event.<br />It can not be undone once you delete."
+msgstr "この予約を削除します。<br />一度削除すると元に戻せません。"
+
+#: Reservations/View/ReservationPlans/detail_edit.ctp:91
+msgid "Setting the date"
+msgstr "予約日の設定"
+
+#: Reservations/View/ReservationPlans/detail_edit.ctp:97
+msgid "Setting the time"
+msgstr "期間・時間の指定"
+
+#: Reservations/View/ReservationPlans/view.ctp:54
+msgid "Date and time"
+msgstr "日時"
+
+#: Reservations/View/ReservationPlans/view.ctp:62
+msgid " - "
+msgstr "－"
+
+#: Reservations/View/ReservationPlans/view.ctp:74
+msgid "Repeat the event:"
+msgstr "※繰返し予約："
+
+#: Reservations/View/ReservationPlans/view.ctp:82
+#: Reservations/View/Helper/ReservationExposeTargetHelper.php:87
+msgid "Category"
+msgstr "公開対象"
+
+#: Reservations/View/ReservationPlans/view.ctp:96
+#: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:25
+msgid "Location"
+msgstr "場所"
+
+#: Reservations/View/ReservationPlans/view.ctp:103
+#: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:35
+#: Reservations/View/Helper/ReservationDailyHelper.php:141
+msgid "Contact"
+msgstr "連絡先"
+
+#: Reservations/View/ReservationPlans/view.ctp:110
+#: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:45
+msgid "Details"
+msgstr "詳細"
+
+#: Reservations/View/ReservationPlans/view.ctp:117
+msgid "Author"
+msgstr "作成者"
+
+#: Reservations/View/ReservationPlans/view.ctp:122
+msgid "Date"
+msgstr "更新日時"
+
+#: Reservations/View/Reservations/lmonthly.ctp:24
+#: Reservations/View/Reservations/smonthly.ctp:36
+#: Reservations/View/Helper/ReservationCommonHelper.php:40;392
+msgid "Sun"
+msgstr "日"
+
+#: Reservations/View/Reservations/lmonthly.ctp:25
+#: Reservations/View/Reservations/smonthly.ctp:37
+#: Reservations/View/Helper/ReservationCommonHelper.php:40;393
+msgid "Mon"
+msgstr "月"
+
+#: Reservations/View/Reservations/lmonthly.ctp:26
+#: Reservations/View/Reservations/smonthly.ctp:38
+#: Reservations/View/Helper/ReservationCommonHelper.php:40;394
+msgid "Tue"
+msgstr "火"
+
+#: Reservations/View/Reservations/lmonthly.ctp:27
+#: Reservations/View/Reservations/smonthly.ctp:39
+#: Reservations/View/Helper/ReservationCommonHelper.php:41;395
+msgid "Wed"
+msgstr "水"
+
+#: Reservations/View/Reservations/lmonthly.ctp:28
+#: Reservations/View/Reservations/smonthly.ctp:40
+#: Reservations/View/Helper/ReservationCommonHelper.php:41;396
+msgid "Thu"
+msgstr "木"
+
+#: Reservations/View/Reservations/lmonthly.ctp:29
+#: Reservations/View/Reservations/smonthly.ctp:41
+#: Reservations/View/Helper/ReservationCommonHelper.php:41;397
+msgid "Fri"
+msgstr "金"
+
+#: Reservations/View/Reservations/lmonthly.ctp:30
+#: Reservations/View/Reservations/smonthly.ctp:42
+#: Reservations/View/Helper/ReservationCommonHelper.php:42;398
+msgid "Sat"
+msgstr "土"
+
+#: Reservations/View/Reservations/smonthly.ctp:21
+#: Reservations/View/Helper/ReservationTurnReservationHelper.php:128
+msgid "<small>%d/</small> %d"
+msgstr "<small>%d年</small> %d月"
+
+#: Reservations/View/Elements/ReservationBlockRolePermissions/edit_form.ctp:21
+msgid "Only you can create your private event."
+msgstr "予約を追加できるのは本人だけです。"
+
+#: Reservations/View/Elements/ReservationBlockRolePermissions/permission.ctp:31
+msgid "It does not exist yet Room."
+msgstr "まだルームが存在しません。"
+
+#: Reservations/View/Elements/ReservationBlockRolePermissions/permission_table_header.ctp:12
+msgid "Set the permissions that you can add an appointment to the reservation."
+msgstr "施設予約に予約を追加できる権限を設定します。"
+
+#: Reservations/View/Elements/ReservationFrameSettings/display_count.ctp:14
+msgid "Display days"
+msgstr "表示日数"
+
+#: Reservations/View/Elements/ReservationFrameSettings/display_count.ctp:19
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:200
+msgid "%dday(s)"
+msgstr "%d日"
+
+#: Reservations/View/Elements/ReservationFrameSettings/edit_form.ctp:32
+msgid "Display type"
+msgstr "表示方法"
+
+#: Reservations/View/Elements/ReservationFrameSettings/room_select.ctp:26
+msgid "Display only designated room"
+msgstr "指定したルームのみ表示する"
+
+#: Reservations/View/Elements/ReservationFrameSettings/room_select.ctp:33
+msgid "Select room for participation."
+msgstr "表示させるルームを選択してください。"
+
+#: Reservations/View/Elements/ReservationFrameSettings/start_pos.ctp:14
+msgid "Start point"
+msgstr "開始位置"
+
+#: Reservations/View/Elements/ReservationFrameSettings/start_pos.ctp:20
+#: Reservations/View/Helper/ReservationScheduleHelper.php:390
+msgid "today"
+msgstr "今日"
+
+#: Reservations/View/Elements/ReservationFrameSettings/start_pos.ctp:21
+msgid "Previous day"
+msgstr "前日"
+
+#: Reservations/View/Elements/ReservationFrameSettings/timeline_start.ctp:13
+msgid "Timeline start time"
+msgstr "タイムライン開始時刻"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_datetime.ctp:27
+msgid "From"
+msgstr "開始"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_datetime.ctp:39
+msgid "All day"
+msgstr "終日"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_datetime.ctp:50
+msgid "-"
+msgstr "-"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_datetime.ctp:63
+msgid "To"
+msgstr "終了"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:16
+msgid "detail information"
+msgstr "詳細な情報の入力"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:60
+#: Reservations/View/Elements/ReservationPlans/edit_timezone.ctp:15
+msgid "Time zone"
+msgstr "タイムゾーン"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_heading.ctp:14
+msgid "Form to edit schedule item"
+msgstr "予約の編集"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_heading.ctp:16
+msgid "Form to add schedule item"
+msgstr "予約の追加"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:39
+msgid "Event 5 minutes ago"
+msgstr "イベント5分前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:40
+msgid "Event 10 minutes ago"
+msgstr "イベント10分前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:41
+msgid "Event 15 minutes ago"
+msgstr "イベント15分前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:42
+msgid "Event 20 minutes ago"
+msgstr "イベント20分前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:43
+msgid "Event 25 minutes ago"
+msgstr "イベント25分前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:44
+msgid "Event 30 minutes ago"
+msgstr "イベント30分前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:45
+msgid "Event 45 minutes ago"
+msgstr "イベント45分前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:46
+msgid "Event 1 hour ago"
+msgstr "イベント1時間前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:47
+msgid "Event 2 hours ago"
+msgstr "イベント2時間前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:48
+msgid "Event 3 hours ago"
+msgstr "イベント3時間前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:49
+msgid "Event 12 hours ago"
+msgstr "イベント12時間前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:50
+msgid "Event 24 hours ago"
+msgstr "イベント24時間前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:51
+msgid "Event 2 days ago"
+msgstr "イベント2日前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_mail.ctp:52
+msgid "Event 1 week ago"
+msgstr "イベント1週間前"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:16
+msgid "Repeat the event"
+msgstr "予約を繰り返す"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:37
+msgid "Units of repeated"
+msgstr "繰り返しの単位"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:46
+#: Reservations/View/Elements/Reservations/reservation_tabs.ctp:58;61
+msgid "day"
+msgstr "日"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:47
+#: Reservations/View/Elements/Reservations/reservation_tabs.ctp:49;52
+#: Reservations/View/Helper/ReservationMonthlyHelper.php:374
+msgid "week"
+msgstr "週"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:48
+#: Reservations/View/Elements/Reservations/reservation_tabs.ctp:40;43
+msgid "month"
+msgstr "月"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:49
+msgid "year"
+msgstr "年"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:70
+msgid "every %dday(s)"
+msgstr "%d日ごと"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:75;103;149;224
+msgid "Repeating pattern"
+msgstr "繰り返しのパターン"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:109
+msgid "%dweek(s)"
+msgstr "%d週"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:154
+msgid "every %d month(s)"
+msgstr "%dヶ月ごと"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:170
+msgid "Please select either."
+msgstr "どちらかを選択してください。"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:176
+msgid "- select day of the week -"
+msgstr "-曜日指定-"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:192
+msgid "or"
+msgstr "または"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:198
+msgid "- select day of the month -"
+msgstr "-日付指定-"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:229
+msgid "every %d year(s)"
+msgstr "%d年ごと"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:247
+msgid "%d"
+msgstr "%d月"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:263
+msgid "Setting of repeat"
+msgstr "繰り返しの設定"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:266
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:196
+msgid "Start date"
+msgstr "開始日と同日"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:289
+msgid "End date"
+msgstr "繰返しの終了"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:294
+msgid "Times repeated"
+msgstr "繰返し回数を指定する"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:295
+msgid "Day repetition ended"
+msgstr "繰返しの終了日を指定する"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:335
+msgid "times"
+msgstr "回"
+
+#: Reservations/View/Elements/ReservationPlans/detail_edit_repeat_items.ctp:364
+msgid "until"
+msgstr "まで繰り返す"
+
+#: Reservations/View/Elements/ReservationPlans/edit_plan_share.ctp:20
+msgid "Please select a person to share the schedule."
+msgstr "予約を共有する人を選択してください。"
+
+#: Reservations/View/Elements/ReservationPlans/edit_title.ctp:12
+msgid "Title"
+msgstr "件名"
+
+#: Reservations/View/Elements/Reservations/change_sort.ctp:45
+msgid "Times"
+msgstr "時間順"
+
+#: Reservations/View/Elements/Reservations/change_sort.ctp:56
+msgid "User"
+msgstr "会員順"
+
+#: Reservations/View/Elements/Reservations/daily_tabs.ctp:49
+msgid "Plan list"
+msgstr "予約一覧"
+
+#: Reservations/View/Elements/Reservations/daily_tabs.ctp:58
+msgid "Timeline"
+msgstr "タイムライン"
+
+#: Reservations/View/Helper/ReservationCommonHelper.php:416
+#: Reservations/View/Helper/ReservationLegendHelper.php:180
+#: Reservations/View/Helper/ReservationWeeklyHelper.php:207
+msgid "Schedule of fellow"
+msgstr "仲間の予約"
+
+#: Reservations/View/Helper/ReservationDailyHelper.php:137
+#: Reservations/View/Helper/ReservationScheduleHelper.php:137;228
+msgid "Location details:"
+msgstr "場所の詳細:"
+
+#: Reservations/View/Helper/ReservationExposeTargetHelper.php:96
+msgid "You can not change the target space  after published."
+msgstr "あなたは公開された後の予約の対象空間を変更する権限がありません。"
+
+#: Reservations/View/Helper/ReservationLegendHelper.php:108
+msgid "Room"
+msgstr "ルーム"
+
+#: Reservations/View/Helper/ReservationLegendHelper.php:153
+msgid "Shared plan"
+msgstr "共有した予約"
+
+#: Reservations/View/Helper/ReservationPlanEditRepeatOptionHelper.php:112
+msgid "When you select the [all] will be re-set to the contents is repeated first plan."
+msgstr "「設定した全ての予約」を選択すると、現在の編集がキャンセルされ、繰返しの初回予約に再設定されます。"
+
+#: Reservations/View/Helper/ReservationPlanEditRepeatOptionHelper.php:115
+msgid "If you want to edit without changing the schedule key, select "all after this one" and edit."
+msgstr "予約のキーを替えずに編集されたい時は、「この予約のみ」を選択して編集してください。"
+
+#: Reservations/View/Helper/ReservationPlanEditRepeatOptionHelper.php:131
+msgid "This plan has been repeatedly set. Select the plan that you want to edit from the following items, Repetation of the plan [only this one] is not displayed."
+msgstr "この予約は繰り返し設定されています。変更した予約を下記項目から選択し、予約編集してください。なお「この予約のみ」の時は予約の繰返しは表示されません。"
+
+#: Reservations/View/Helper/ReservationPlanEditRepeatOptionHelper.php:137
+msgid "Because it was specified in the [only this one], repetation of the plan can not be specified."
+msgstr "「この予約のみ」指定で変更された予約なので、予約の繰返しは指定できません。"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:56;85
+msgid "%s/%s/%s"
+msgstr "%s年%s月%s日"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:61
+msgid "%s:%s"
+msgstr "%s:%s"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:239
+msgid "1st week"
+msgstr "第1週"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:241
+msgid "2nd week"
+msgstr "第2週"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:243
+msgid "3rd week"
+msgstr "第3週"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:245
+msgid "4th week"
+msgstr "第4週"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:247
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:324
+msgid "last week"
+msgstr "最終週"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:262
+msgid "Sunday"
+msgstr "日曜日"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:265
+msgid "Monday"
+msgstr "月曜日"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:268
+msgid "Tuesday"
+msgstr "火曜日"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:271
+msgid "Wednesday"
+msgstr "水曜日"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:274
+msgid "Thursday"
+msgstr "木曜日"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:277
+msgid "Friday"
+msgstr "金曜日"
+
+#: Reservations/View/Helper/ReservationPlanHelper.php:280
+msgid "Saturday"
+msgstr "土曜日"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:71
+msgid "none"
+msgstr "繰返しなし"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:109
+msgid "|January|February|March|April|May|June|July|August|September|October|November|December"
+msgstr "|1月|2月|3月|4月|5月|6月|7月|8月|9月|10月|11月|12月"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:134
+msgid "Day %s"
+msgstr "%s日"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:153
+msgid "Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday"
+msgstr "日曜日|月曜日|火曜日|水曜日|木曜日|金曜日|土曜日"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:190
+msgid "every year"
+msgstr "毎年"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:192
+msgid "every %s years"
+msgstr "%s年ごとに"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:217
+msgid "every month"
+msgstr "毎月"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:219
+msgid "every %s months"
+msgstr "%sヶ月ごとに"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:241
+msgid "every week"
+msgstr "毎週"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:243
+msgid "every %s weeks"
+msgstr "%s週ごとに"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:264
+msgid "every day"
+msgstr "毎日"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:266
+msgid "every %s days"
+msgstr "%s日ごとに"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:285
+msgid "Until Y/m/d"
+msgstr "Y年m月d日まで"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:288
+msgid "%s times"
+msgstr "%s回"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:312
+msgid "First week"
+msgstr "第1週"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:315
+msgid "Second week"
+msgstr "第2週"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:318
+msgid "Third week"
+msgstr "第3週"
+
+#: Reservations/View/Helper/ReservationPlanRruleHelper.php:321
+msgid "Forth week"
+msgstr "第4週"
+
+#: Reservations/View/Helper/ReservationScheduleHelper.php:141;233
+msgid "Contact:"
+msgstr "連絡先:"
+
+#: Reservations/View/Helper/ReservationScheduleHelper.php:247;291
+msgid "No plan."
+msgstr "予約はありません。"
+
+#: Reservations/View/Helper/ReservationScheduleHelper.php:392
+msgid "tomorrow"
+msgstr "明日"
+
+#: Reservations/View/Helper/ReservationShareUsersHelper.php:44
+msgid "People to share the schedule"
+msgstr "予約を共有する人"
+
+#: Reservations/View/Helper/ReservationShareUsersHelper.php:46
+msgid "Person who made the schedule"
+msgstr "予約を入れた人"
+
+#: Reservations/View/Helper/ReservationTurnReservationHelper.php:135
+msgid "<small>%d/</small>%d/%d<small class=\"%s\">(%s)&nbsp;<br class=\"visible-xs\" />%s</small>"
+msgstr "<small>%d年</small> %d月%d日<small class=\"%s\">(%s)&nbsp;<br class=\"visible-xs\" />%s</small>"
+
+#: Reservations/View/Helper/ReservationTurnReservationHelper.php:165
+msgid "This month"
+msgstr "今月へ"
+
+#: Reservations/View/Helper/ReservationTurnReservationHelper.php:168
+msgid "This week"
+msgstr "今週へ"
+
+#: Reservations/View/Helper/ReservationTurnReservationHelper.php:171
+msgid "Today"
+msgstr "今日へ"
+
+#: Reservations/View/Helper/ReservationUrlHelper.php:171
+msgid "Back"
+msgstr "戻る"
+
+
+
+####### 以下、使われてるか不明
+
+msgid "%d/%d (%s)"
+msgstr "%d月%d日(%s)"
+
+#: View/Helper/ReservationPlanHelper.php:132
+msgid "More details"
+msgstr "詳細な登録"
+
+#: View/Helper/ReservationPlanRruleHelper.php:111
+msgid "%s months"
+msgstr "%s月"
+
+#: View/Helper/ReservationPlanRruleHelper.php:131
+msgid "%s days"
+msgstr "%s日"
+
+#: View/Helper/ReservationTurnReservationHelper.php:160
+msgid "(%s)"
+msgstr "(%s)"
+
+#: View/Helper/ReservationUrlHelper.php:135
+msgid "Back to this month"
+msgstr "今月に戻る"
+
+#: View/Helper/ReservationUrlHelper.php:137
+msgid "Back to this week"
+msgstr "今週に戻る"
+
+#: View/Helper/ReservationUrlHelper.php:139
+msgid "Back to today"
+msgstr "今日に戻る"
+
+#: View/Helper/ReservationUrlHelper.php:141
+msgid "Back to First view"
+msgstr "最初の画面に戻る"
+
+msgid "An unknown error has occurred."
+msgstr "不明なエラーが発生しました。"
+
+#: Controller/ReservationPlansController.php:101
+msgid "There is no block ID. Display a blank page."
+msgstr "ブロックIDがないのでブランクページを表示します"
+
+#: Controller/ReservationPlansController.php:121
+msgid "There is no event. Display a blank page. 1"
+msgstr "対象eventの指定がないのでブランクページを表示します"
+
+#: Controller/ReservationPlansController.php:136;387
+msgid "There is no event. Display a blank page. 2"
+msgstr "対象eventがないのでブランクページを表示します"
+
+#: View/ReservationPlans/daylist.ctp:22
+msgid "back to reservation"
+msgstr "施設予約に戻る"
+
+#: View/ReservationPlans/detail_edit.ctp:990
+msgid "Notify by e-mail"
+msgstr "メール通知"
+
+#: View/ReservationPlans/detail_edit.ctp:1007
+msgid "e-mail notification before event"
+msgstr "イベント前にメール通知する"
+
+#: View/ReservationPlans/easy_edit.ctp:10
+#: View/ReservationPlans/view.ctp:10
+msgid "Reservation"
+msgstr "施設予約"
+
+#: View/ReservationPlans/easy_edit.ctp:54
+#: View/Elements/ReservationPlans/select_target_to_expose.ctp:68
+msgid "Plans(date)"
+msgstr "予約（年月日）"
+
+#: View/ReservationPlans/easy_edit.ctp:117
+#: View/Elements/ReservationPlans/select_target_to_expose.ctp:118
+msgid "To specify the start time and end time"
+msgstr "開始時間と終了時間の指定"
+
+#: View/ReservationPlans/easy_edit.ctp:128
+msgid "Plans(Start time - End time)"
+msgstr "予約（開始時間～終了時間） "
+
+#: View/ReservationPlans/easy_edit.ctp:200
+#: View/Elements/ReservationPlans/select_target_to_expose.ctp:200
+msgid "Notify by e-mail"
+msgstr "メールで通知"
+
+#: View/ReservationPlans/easy_edit.ctp:212
+#: View/Elements/ReservationPlans/select_target_to_expose.ctp:232
+msgid "E-mail notification timing"
+msgstr "メール通知タイミング"
+
+#: View/ReservationPlans/view.ctp:86
+msgid "End date and time"
+msgstr "終了日時"
+
+msgid "Location setting"
+msgstr "施設設定"
+
+msgid "Reservation setting"
+msgstr "施設予約設定"

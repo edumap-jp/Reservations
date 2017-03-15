@@ -1,0 +1,788 @@
+/* 施設予約戻るボタン */
+.reservation-back-to-button {
+ margin-top: 1em;
+}
+
+.reservation-inline {
+  	display:inline;
+}
+
+.reservation-table {
+  	display:table;
+	width: 100%;
+}
+
+.reservation-sun {
+	color: #d9534f; /* brand-danger: */
+}
+
+.reservation-sat {
+	color: #5bc0de; /* @brand-info: */
+}
+
+.reservation-tbl-td-pos {
+	vertical-align: top;
+}
+
+.reservation-col-week-head {
+	width: 4.1%;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #ddd;
+}
+
+.reservation-col-day-head {
+	width: 13.7%;
+	border-width: 1px 1px 1px 1px;
+	border-style: solid;
+	border-color: #ddd;
+	padding: 5px;
+	text-align:center;
+}
+
+/*-- 施設予約 カラム 月縮小　ヘッダー --*/
+.reservation-col-small-day-head {
+	width: 14.3%;
+	border-width: 0 0 1px 0;
+	border-style: solid;
+	border-color: #ddd;
+	/*padding: 5px;*/
+	padding: 0px 0px 5px;
+}
+
+/*-- 施設予約 カラム 月縮小 --*/
+.reservation-col-small-day {
+	width: 14.3%;
+	border-width: 1px 1px 1px 1px;
+	border-style: solid;
+	border-color: #ddd;
+	/*padding: 5px;*/
+	padding: 5px 0px;
+}
+
+.reservation-smonthly-div > table {
+	border-collapse: collapse;
+	margin: 0 auto;
+	width: 100%;
+	table-layout: fixed;
+}
+
+/*-- 施設予約 カラム 月縮小 (ホバー時) --*/
+.reservation-col-small-day:hover {
+	cursor: pointer;
+	background-color: #eee;
+}
+
+.reservation-col-week {
+	width: 4.1%;
+	border: 1px solid #ddd;
+	height: 10em;
+	text-align:center;
+	font-weight:normal;
+}
+
+.reservation-col-week:hover {
+	cursor: pointer;
+	background-color: #d9edf7;
+}
+
+.reservation-col-day {
+	width: 13.7%;
+	border: 1px solid #ddd;
+	/*border-left: 1px solid #ddd;*/
+	/*border-right: 1px solid #ddd;*/
+}
+.reservation-col-day > div {
+	/*padding: 3px;*/
+	position:relative !important;
+}
+
+.reservation-col-day-line > div {
+	/*padding: 3px;*/
+	position:relative !important;
+	padding-top:2px;
+}
+
+.reservation-col-day .reservation-day {
+	font-size:2.0em;
+	display:inline-block;
+	padding:0em 0.2em;
+	margin-bottom:-0.5em;
+}
+
+.reservation-plan-mark {
+	border-left-width: 3px;
+	border-left-style: solid;
+	padding: 0px 0px 0px 5px;
+	margin: 5px 0px 5px 3px;
+}
+
+/*-- 単一日施設予約　非タイムライン　時間帯 装飾 --*/
+.reservation-daily-nontimeline-periodtime-deco {
+	padding: 0 5px 0 0;
+}
+
+.reservation-plan-mark-public {
+	border-left-color: #428bca;
+}
+
+.reservation-plan-mark-group {
+	border-left-color: #5cb85c;
+}
+
+.reservation-plan-mark-private {
+	border-left-color: #f0ad4e;
+}
+
+.reservation-plan-mark-member {
+	border-left-color: #d9534f;
+}
+
+
+.reservation-plan-mark-share {
+	border-left-color: #e888ec;
+}
+
+.glyphicon-edit:hover, .glyphicon-plus:hover, .glyphicon-eye-open:hover, .glyphicon-eye-close:hover {
+	cursor: pointer;
+	background-color: #eee;
+}
+
+.reservation-plan-clickable:hover {
+	cursor: pointer;
+	background-color: #eee;
+}
+
+.reservation-day:hover {
+	cursor: pointer;
+	background-color: #e6eff6;
+}
+
+/* 施設予約表示切替タブ */
+.nav-tabs.reservation-date-move-tablist {
+
+}
+.nav-tabs.reservation-date-move-tablist > li > a {
+	font-size: 1.5em;
+	padding-left: 1.2em;
+	padding-right: 1.2em;
+}
+/* 施設予約先頭の年月移動リンク入れ物 */
+.reservation-date-move-operations {
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+}
+.reservation-date-move-operations-top {
+	margin-bottom:1em;
+}
+.reservation-date-move-operations-bottom {
+	margin-top:1em;
+	justify-content: flex-end;
+}
+
+.reservation-date-move-operations > a {
+	display:block;
+	padding: 5px 14px;
+}
+.reservation-date-move-operations > label {
+	display:block;
+	margin: 0;
+	cursor: pointer;
+}
+.reservation-date-move-operations > label > h2 {
+	margin:0;
+}
+@media screen and (max-width:767px) {
+	.reservation-date-move-operations {
+		margin-top:0.5em;
+	}
+	.reservation-date-move-operations > label > h2 {
+		font-size:20px;
+	}
+}
+.reservation-date-move-operations > label small {
+	color:inherit;
+	margin-left:0.25em;
+	margin-right:0.25em;
+}
+/* 今月へボタン */
+.reservation-this-month {
+}
+.reservation-this-month a {
+	display: inline-block;
+	padding: 5px 14px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 15px;
+}
+.reservation-this-month a:hover, .reservation-this-month a:focus {
+	text-decoration: none;
+	background-color: #e6eff6;
+}
+.reservation_event_target_year {
+	margin-bottom: 0px;
+	cursor: pointer;
+}
+.reservation-date-move-operations-top .reservation_event_target_title {
+	font-size: 26px !important;
+	margin: 0px !important;
+}
+.reservation-date-move-operations-bottom .reservation_event_target_title {
+	font-size: 18px !important;
+	margin: 0px !important;
+}
+	/* 年月移動DateTimePickerInputのCSS 隠れて見えないようにしている */
+.reservation-datetimepicker-hide-input {
+	margin: 0;
+	width: 0;
+	height : 0;
+	opacity: 0;
+	display: block;
+}
+/*-- 施設予約　予定共有 人情報 --*/
+.reservation-share-person {
+	margin-right: 1em;
+}
+
+/*-- 施設予約 予定共有　人情報 （ホバー時)--*/
+.reservation-share-person:hover {
+	cursor: pointer;
+	background-color: #eee;
+}
+
+/*-- マージン左調整 --*/
+.reservation-margin-left-adjust {
+	margin-left: 1em;
+}
+
+.reservation-monthly-table {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.reservation-weekly-table {
+	width: 100%;
+	table-layout: fixed;
+}
+
+/*-- 週施設予約 のルーム名のヘッダ--*/
+.reservation-weekly-col-room-name-head {
+	min-width:6em;
+	width: 16%;
+	border-width: 1px 1px 1px 1px;
+	border-style: solid;
+	border-color: #ddd;
+	padding-bottom:10px;
+	/*background-color:#f5f5f5;*/
+}
+
+.reservation-weekly-col-day-head {
+	width: 12%;
+	border-width: 1px 1px 0px 1px;
+	border-style: solid;
+	border-color: #ddd;
+	padding: 0.2em;
+	vertical-align:top;
+}
+.reservation-weekly-col-day-head .reservation-day {
+	font-size: 1.8em;
+	display: inline-block;
+	padding: 0em 0.1em;
+}
+.reservation-weekly-col-day-head .reservation-day small {
+	font-size:55%;
+}
+.reservation-weekly-col-day-head-bottom {
+	width: 12%;
+	border-width: 0px 1px 0px 1px;
+	border-style: solid;
+	border-color: #ddd;
+	min-height:1.2em;
+}
+.reservation-weekly-holiday {
+	min-height:1.5em;
+	display: block;
+}
+/*-- 週施設予約のルーム名のセル --*/
+.reservation-weekly-col-room-name {
+	width: 16%;
+	border: 1px solid #ddd;
+	height: 2em;
+	padding: 3px;
+	background-color:#f5f5f5;
+	text-align:left;
+}
+
+/*-- 単一日施設予約 タイムライン カラム 時間帯 --*/
+.reservation-daily-timeline-col-periodtime {
+	width: 10%;
+	border-width: 0 1px 1px 1px;
+	border-style: solid;
+	border-color: #ddd;
+	height: 2em;
+	padding: 5px;
+}
+/*-- 単一日施設予約のタイムラインのスリット --*/
+.reservation-daily-timeline-col-slit {
+	width: 90%;
+	border-width: 0 1px 1px 1px;
+	border-style: solid;
+	border-color: #ddd;
+	padding: 0px;
+}
+/*-- 単一日施設予約の予定 --*/
+.reservation-daily-nontimeline-col-plan {
+	/* border: 1px solid #ddd; */
+	height: 1em;
+	padding: 10px 5px 0px 5px;
+}
+
+/*-- 単一日施設予約のタイムラインのスリット --*/
+.reservation-weekly-timeline-col-slit {
+	/*width: 90%;*/
+	border-width: 0 1px 1px 1px;
+	border-style: solid;
+	border-color: #ddd;
+	padding: 0px;
+}
+
+
+.reservation-weekly-col-day {
+	width: 12%;
+	border: 1px solid #ddd;
+	padding: 3px 3px 3px 0px;
+	text-align:left;
+}
+.reservation-weekly-col-day > div {
+	position:relative !important;
+}
+
+.reservation-weekly-subroom, .reservation-schedule-row-title {
+	margin-left: 10px;
+	padding-bottom: 10px;
+	padding-top: 5px;
+}
+
+.reservation-schedule-row-title{
+	border-bottom:2px solid #ddd;
+}
+
+/*-- 施設予約 スケジュール行の予定 --*/
+.reservation-schedule-row-plan {
+	margin-left: 35px;
+	margin-bottom:30px;
+	margin-top:10px;
+}
+
+/*-- 単一日施設予約 非タイムライン --*/
+.reservation-daily-nontimeline-table {
+	width:100%;
+	height:1em;
+	border: 1px solid #ddd;
+	padding: 5px;
+}
+
+/*-- 単一日施設予約 タイムライン スリット装飾 --*/
+.reservation-daily-timeline-slit-deco {
+	position: absolute;
+	margin: 0;
+	padding: 0;
+	background-color: #eee;
+	text-align: left;
+	width: 6em;
+	border-left-width: 5px;
+	border-left-style: solid;
+	margin: 0 0 0 5px;
+	padding: 5px;
+	overflow: hidden;
+}
+
+/*-- 共通マージン・パディング(0) --*/
+.reservation-common-margin-padding {
+	margin: 0;
+	padding: 0;
+}
+
+.reservation-schedule-badge {
+	margin-left:10px;
+}
+
+/*-- 施設予約 範囲外 --*/
+.reservation-out-of-range {
+	background-color: #F5F5F5;
+}
+td.reservation-col-day .reservation-out-of-range  .reservation-day {
+	font-size:1.4em;
+	margin-top:0.2em;
+}
+
+/*-- 施設予約 セル 今日--*/
+.reservation-tbl-td-today {
+	background-color: #ffffcf;
+	border: 1px solid #f0d946 !important;
+}
+
+/*-- 施設予約 セル 今日--*/
+.reservation-weekly-tbl-td-today {
+	background-color: #ffffcf;
+	border: 2px solid #f0d946;
+	border-bottom-style: inherit;
+	border-left-color: #f0d946;
+	border-left-width: 2px;
+	border-right-color: #f0d946;
+	border-right-width: 2px;
+	border-top-color: #ddd;
+	border-top-width: 1px;
+	border-bottom-color: #ddd;
+}
+
+.reservation-weekly-tbl-td-today-head-top {
+	background-color: #ffffcf;
+	border-left-color: #f0d946;
+	border-left-width: 2px;
+	border-right-color: #f0d946;
+	border-right-width: 2px;
+	border-top-color: #f0d946;
+	border-top-width: 2px;
+}
+
+.reservation-weekly-tbl-td-today-head-bottom {
+	background-color: #ffffcf;
+	border-left-color: #f0d946;
+	border-left-width: 2px;
+	border-right-color: #f0d946;
+	border-right-width: 2px;
+}
+
+.reservation-weekly-tbl-td-today-last {
+	background-color: #ffffcf;
+	border-left-color: #f0d946;
+	border-left-width: 2px;
+	border-right-color: #f0d946;
+	border-right-width: 2px;
+	border-top-color: #ddd;
+	border-top-width: 1px;
+	border-bottom-color: #f0d946;
+	border-bottom-width: 2px;
+}
+
+/*-- 施設予約 対象の回転表示 --*/
+.reservation-rotate-right-90deg {
+	transform: rotate(90deg);
+}
+
+/*-- 施設予約 予定追加・編集 詳細（添え文字）2016.3.2  --*/
+.reservation-detailedit-addchar {
+	padding-top:1em;
+	padding-left:0px;
+}
+
+/*-- 施設予約 特定予定の情報（間隔）2016.3.3  --*/
+.reservation-eachplan-box {
+	padding-top:10px;
+/*	padding-bottom:10px;
+	margin-top:10px;*/
+}
+
+
+/*  施設予約 月拡大表示の画面サイズxsの場合  */
+@media screen and (max-width:767px) {
+	table.reservation-monthly-table td.reservation-col-day{
+		width:100%;
+		height:auto;
+		display:block !important;
+	}
+	table.reservation-monthly-table td.reservation-col-day.reservation-out-of-range{
+		display:none !important;
+	}
+
+	/*-- 施設予約 詳細編集フィールド(max-width:767px) --*/
+	.reservation-detailedit-detail {
+		adding-left:0px;
+	}
+
+	/* 施設予約 週表示 2016.03.03 */
+	.reservation-weekly-table {
+		font-size: 75%;
+	}
+
+	/* 施設予約 管理系 表示変更(タブ)  2016.03.04 */
+	.reservation-change-nav-tabs > li > a {
+		padding:10px 10px !important;
+		font-size:88%;
+	}
+
+	/* 予約簡易編集（幅狭用input-group）*/
+	.reservation-widecase-input-group {
+		/* 明示的に空にするクラス */
+	}
+
+	/* 予約簡易編集（幅狭用 via（minus）マーク）*/
+	.reservation-widecase-via-mark {
+		display: inline-block;
+		margin-left:40%;
+		width: 3em;
+	}
+
+}
+
+/* 施設予約フレームセッティング */
+.reservation-panel-not-select>.panel-heading {
+	background-color: white;
+}
+
+.nc-checkbox-toggle-btn {
+	position: absolute;
+	clip: rect(0,0,0,0);
+	pointer-events: none;
+}
+
+/* 予約簡易編集（通常幅用input-group）2016.03.26 */
+.reservation-widecase-input-group {
+	position: relative;
+	display: table;
+	border-collapse: separate;
+}
+
+/* 予約簡易編集（通常幅用 via（minus）マーク）2016.03.26 */
+.reservation-widecase-via-mark {
+	/* 明示的に空にするクラス */
+}
+
+.reservation-sunday {
+  color:#cc3333;
+}
+
+.reservation-saturday {
+  color:#3366cc;
+}
+
+.reservation-month {
+  vertical-align:middle;
+  color:#333;
+}
+
+.reservation-smonthly-div{
+  width:100%;
+  text-align:center;
+}
+
+.reservation-smonthly-div div{
+  width:100%;
+  margin:0 auto;
+
+}
+
+/* 施設予約 ルーム凡例 */
+.panel.reservation-room-legend {
+	margin-top:25px;
+}
+.reservation-room-legend {
+	margin-bottom: 0px;
+	padding-bottom:0px;
+}
+.reservation-room-legend .reservation-plan-mark {
+	border-left-width: 3px;
+	border-left-style: solid;
+	padding: 0px 0px 0px 5px;
+	margin: 0px 5px 5px 3px;
+}
+
+/* 施設予約の時間 */
+p.reservation-plan-time {
+	font-weight: normal;
+	margin: 1px 0px 1px 0px;
+	float: left;
+	max-width:100%;
+	word-wrap: break-word;
+}
+
+/* 施設予約のスペース名 */
+.reservation-plan-spacename {
+	margin: 0px;
+	padding-top:1px;
+	padding-left:5px;
+	font-weight: normal;
+	float: left;
+}
+
+/* 施設予約のタイトル */
+.reservation-plan-tittle {
+	margin: 0px !important;
+	padding-bottom:4px;
+	clear: left;
+	font-size: 1.07em !important;
+	word-break: break-all;
+}
+
+/* 施設予約の場所 */
+.reservation-plan-place {
+	margin: 0px;
+	padding-top:1px;
+	font-weight: normal;
+}
+
+/* 施設予約の住所 */
+.reservation-plan-address {
+	margin: 0px;
+	padding-top:1px;
+	font-weight: normal;
+}
+/* 施設予約＋アイコン */
+a.reservation-edit-plus-icon {
+	padding: 0.1em 0.3em;
+	display: inline-block;
+	font-size: 1.6em;
+	color: #bbb;
+	position:absolute;
+	right:0;
+	z-index:100;
+}
+.reservation-weekly-col-day-head-bottom a.reservation-edit-plus-icon,
+.reservation-daily-timeline-col-periodtime a.reservation-edit-plus-icon {
+	position:static;
+	right:0;
+}
+.reservation-schedule-row-title a.reservation-edit-plus-icon {
+	padding: 0.1em 1em;
+}
+a.reservation-edit-plus-icon:hover {
+	text-decoration:none;
+	background-color:#dff0d8;
+	color:#3c763d;
+}
+
+.reservation-space0 {
+margin: 0;
+padding: 0;
+}
+
+.reservation-small-title{
+	padding:10px;
+}
+.reservation-small-title .h2 {
+	font-size: 22px !important;
+	margin: 0px !important;
+}
+
+/* スケジュール */
+
+.reservation-schedule-membername {
+	font-size: 1.20em;
+	margin: 0px;
+	padding:0.5em 0 0.3em 0;
+	word-break: break-all;
+}
+
+.reservation-tablestyle {
+	margin-bottom: 0px;
+}
+
+.reservation-tablestyle tbody tr:first-child td {
+	border-top: none;
+}
+
+.reservation-tablecontainer {
+	border-bottom: 1px solid #DDD;
+	margin-bottom: 30px;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+.reservation-tablestyle {
+	margin-bottom: 0px;
+}
+.reservation-tablestyle > tbody > tr > td,
+.reservation-tablestyle > tbody > tr > th,
+.reservation-tablestyle > tfoot > tr > td,
+.reservation-tablestyle > tfoot > tr > th,
+.reservation-tablestyle > thead > tr > td,
+.reservation-tablestyle > thead > tr > th {
+	padding: 0px 0px 0px 10px;
+
+}
+
+.schedule-openclose {
+	padding-right:10px;
+	padding-top:10px;
+
+}
+
+.reservation-backto-btn {
+	padding:10px;
+}
+
+.reservation-plan-rrule-freq-select-one {
+	margin-bottom: 0.8em;
+	margin-top:1.2em;
+}
+
+/* 施設予約日跨ぎ予定ライン */
+.reservation-plan-line {
+	/*background-color:#f0ad4e;  dummy #e4f7f8 */
+	white-space: nowrap;
+	/*height: 1.5em;*/
+	height:20px;
+	/*width:183px;  dummy */
+	border-radius:5px;
+	z-index:2;
+	padding-left:3px;
+}
+
+a.reservation-line-link {
+	color:#fff !important;
+}
+
+
+.reservation-lineplan-public {
+	background-color: #428bca;
+}
+
+.reservation-lineplan-group {
+	background-color: #5cb85c;
+}
+
+.reservation-lineplan-private {
+	background-color: #f0ad4e;
+}
+
+.reservation-lineplan-member {
+	background-color: #d9534f;
+}
+
+
+.reservation-lineplan-share {
+	background-color: #e888ec;
+}
+
+.reservation-day-num {
+padding:3px;
+}
+
+.reservation-plan-noline {
+/*padding:3px;*/
+/*
+padding-left:3px;
+padding-top:3px;
+padding-bottom:3px;
+padding-right:3px;
+*/
+}
+
+.reservation-list-wrapper {
+	max-height: 450px;
+	overflow-y:scroll;
+}
+.reservation-daily-timeline-coordinate-origin {
+	height: 568px;
+	overflow-y: scroll;
+	border-width: 1px 1px 1px 1px;
+	border-style: solid;
+	border-color: #ddd;
+}
+.reservation-daily-timeline-table {
+	width: 95%;
+}
