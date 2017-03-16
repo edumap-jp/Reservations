@@ -94,7 +94,7 @@ echo h($dataJson) ?>)">
 									//'type' => 'checkbox',
 									'ng-model' => 'allDay',
                                     'ng-click' => 'checkAllDay()',
-									'hiddenField' => false,
+									//'hiddenField' => false,
 									'label'
 									=> __d('reservations', '利用時間の制限無し')]);
 							?>
