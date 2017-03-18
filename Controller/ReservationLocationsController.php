@@ -80,8 +80,8 @@ class ReservationLocationsController extends ReservationsAppController {
 		'Blocks.BlockTabs' => array(
 			//画面上部のタブ設定
 			'mainTabs' => array(
-				'block_settings' => [
-					'label' => ['reservations', 'Reservation setting'],
+				'category_settings' => [
+					'label' => ['reservations', 'Location category setting'],
 					'url' => array('controller' => 'reservation_settings', 'action' => 'edit')
 				],
 				'location_settings' => array(
@@ -91,13 +91,16 @@ class ReservationLocationsController extends ReservationsAppController {
 				'frame_settings' => array(	//表示設定変更
 					'url' => array('controller' => 'reservation_frame_settings')
 				),
-				'role_permissions' => array(
-					'url' => array('controller' => 'reservation_block_role_permissions'),
-				),
+				//'role_permissions' => array(
+				//	'url' => array('controller' => 'reservation_block_role_permissions'),
+				//),
 				'mail_settings' => array(
 					'url' => array('controller' => 'reservation_mail_settings'),
 				),
 			),
+			'mainTabsOrder' => [
+				'frame_settings', 'location_settings', 'category_settings', 'mail_settings',
+			],
 		),
 		'Rooms.RoomsForm',
 		'Reservations.ReservationLocation',
