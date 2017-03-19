@@ -9,7 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<tr>
+<tr class="reservations-weekly-timeline-row">
 	<td class="reservation-daily-timeline-col-periodtime reservation-tbl-td-pos reservation-daily-timeline-<?php echo $timeIndex; ?>">
 		<div class="row">
 			<div class="col-xs-12">
@@ -29,15 +29,28 @@
 		</div>
 	</td>
 	<!-- timeline-slit -->
-    <?php for ($weekday = 1; $weekday <= 7; $weekday++): ?>
+
+    <?php for ($weekday = 0; $weekday <= 6; $weekday++): ?>
         <td class="reservation-weekly-timeline-col-slit reservation-tbl-td-pos">
             <?php if ($needTimeSlit): ?>
             <div class="reservation-timeline-data-area"><?php /*-- 位置調整用 --*/ ?>
                 <?php
-                    echo $this->ReservationDailyTimeline->makeDailyBodyHtml($vars);
-                    $reservationPlans = $this->ReservationDailyTimeline->getTimelineData();
+                $currentDay = strtotime(sprintf('%d-%d-%d +%d day',
+                    $this->ReservationWeekly->weekFirst['firstYear'],
+                    $this->ReservationWeekly->weekFirst['firstMonth'],
+                    $this->ReservationWeekly->weekFirst['firstDay'],
+                    $weekday
+                    ));
+                $currentDayVars = $vars;
+                $currentDayVars['year'] = date('Y', $currentDay);
+                $currentDayVars['month'] = date('n', $currentDay);
+                $currentDayVars['day'] = date('j', $currentDay);
+
+                echo $this->ReservationWeeklyTimeline->makeDailyBodyHtml($currentDayVars);
+                $reservationPlans = $this->ReservationWeeklyTimeline->getTimelineData();
                 ?>
-                <div ng-controller="ReservationsTimelinePlan" ng-init="initialize(<?php echo h(json_encode(array('reservationPlans' => $reservationPlans))) ?>)"></div>
+                <div ng-controller="ReservationsWeeklyTimelinePlan" ng-init="initialize(<?php echo h
+                (json_encode(array('reservationPlans' => $reservationPlans))) ?>)"></div>
             </div>
             <?php endif; ?>
         </td>

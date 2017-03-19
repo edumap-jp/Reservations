@@ -786,3 +786,7 @@ padding-right:3px;
 .reservation-daily-timeline-table {
 	width: 95%;
 }
+
+.reservations-weekly-timeline-row{
+	height:50px;
+}

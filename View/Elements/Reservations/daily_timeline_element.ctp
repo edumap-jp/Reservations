@@ -33,8 +33,9 @@
 		<?php if ($needTimeSlit): ?>
 		<div class="reservation-timeline-data-area"><?php /*-- 位置調整用 --*/ ?>
 			<?php
-				echo $this->ReservationDailyTimeline->makeDailyBodyHtml($vars);
-				$reservationPlans = $this->ReservationDailyTimeline->getTimelineData();
+				echo $this->ReservationDailyTimeline->makeDailyBodyHtml($vars); // ここでもIDセット
+				$reservationPlans = $this->ReservationDailyTimeline->getTimelineData(); //
+            // ここでplanのIDいれたらいいんでは？
 			?>
 			<div ng-controller="ReservationsTimelinePlan" ng-init="initialize(<?php echo h(json_encode(array('reservationPlans' => $reservationPlans))) ?>)"></div>
 		</div>

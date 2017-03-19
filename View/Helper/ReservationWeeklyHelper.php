@@ -145,6 +145,8 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 		$vars['weekFirst']['firstMonth'] = $firstMonth;
 		$vars['weekFirst']['firstDay'] = $firstDay;
 
+		$this->weekFirst = $vars['weekFirst'];
+
 		/* 日（曜日）(指定日を開始日) */
 		$days = array();
 		$wDay = array();

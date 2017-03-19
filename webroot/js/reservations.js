@@ -126,8 +126,7 @@ NetCommonsApp.controller('ReservationsTimeline', ['$scope', function($scope) {
   $scope.rowHeight = rowHeight;
 
   //0:00高さ固定
-  var dataArea = $('.reservation-timeline-data-area');
-  dataArea[0].style.height = String(rowHeight) + 'px'; //固定にしないと伸びてしまう
+  $('.reservation-timeline-data-area').height(rowHeight);
 
   var row1Width = row1[0].getBoundingClientRect().width;
   $scope.rowWidth = row1Width;
@@ -217,6 +216,110 @@ NetCommonsApp.controller('ReservationsTimelinePlan', ['$scope', function($scope)
     for (var i = 0; i < $scope.Column[checkColumn].length; i++) {
       if ($scope.checkOverlap($scope.Column[checkColumn][i].
           x, $scope.Column[checkColumn][i].y, x, y) == true) {
+        return true;
+      }
+    }
+    return false; //重なりなし
+  };
+
+  $scope.checkOverlap = function(x1, y1, x2, y2) {
+
+    //線分1と線分2の重なりチェック
+    if (x1 >= x2 && x1 >= y2 &&
+        y1 >= x2 && y1 >= x2) {
+      return false;
+    }
+    if (x2 >= x1 && x2 >= y1 &&
+        y2 >= x1 && y2 >= y1) {
+      return false;
+    }
+    return true; //重なりあり
+  };
+
+}]);
+
+// 週間表示タイムライン
+NetCommonsApp.controller('ReservationsWeeklyTimelinePlan', ['$scope', function($scope) {
+  // $scope.reservationPlans = [];
+
+  $scope.initialize = function(data) {
+    // 曜日毎に繰り返し呼び出されることは想定されてない
+    // $scope.reservationPlans = data.reservationPlans;
+console.log($scope.reservationPlans);
+    //位置情報を設定
+    for (var i = 0; i < data.reservationPlans.length;
+         i++) {
+      // $scope.setTimelinePos(i, $scope.reservationPlans[i].
+      //     fromTime, $scope.reservationPlans[i].toTime);
+      $scope.setTimelinePos(data.reservationPlans[i].element_id, data.reservationPlans[i].
+          fromTime, data.reservationPlans[i].toTime);
+    }
+  };
+
+  $scope.setTimelinePos = function(elementId, fromTime, toTime) {
+    // var planObj = document.getElementById('plan' + String(id));
+    var planObj = document.getElementById(elementId);
+
+    var start = fromTime.split(':');
+    var end = toTime.split(':');
+
+    var startHour = parseInt(start[0]);
+    var startMin = parseInt(start[1]);
+
+    var endHour = parseInt(end[0]);
+    var endMin = parseInt(end[1]);
+
+    if (endHour < startHour) {
+      endHour = 24;
+    }
+    //高さ
+    var height = endHour - startHour;
+    height = (height + ((endMin - startMin) / 60)) * $scope.rowHeight;
+
+    //開始位置
+    var top = (startHour + (startMin / 60)) * $scope.rowHeight;
+
+    //タイムライン重ならない列数を取得
+    var lineNum = $scope.getLineNum(top, (height + top));
+
+    //位置決定
+    planObj.style.height = String(height) + 'px';
+    planObj.style.top = String(top - $scope.prevMargin) + 'px'; //(調整)
+
+    //前回の位置が蓄積されてくる※位置調整のため
+    $scope.prevMargin = $scope.prevMargin + height;
+
+    //次回の重なりチェックのため、値保持
+    var data = {x: top, y: (height + top)};
+    $scope.Column[lineNum].push(data);
+
+    //左からの位置
+    planObj.style.left = String((lineNum * ($scope.rowWidth + 15)) + 5) + 'px';
+    planObj.style.position = 'relative';
+  };
+
+  $scope.getLineNum = function(x, y) {
+    // weeklyは1列表示なので。
+    return 0;
+
+    //0列目からチェック
+    for (var i = 0; i <= $scope.maxLineNum; i++) {
+      if ($scope.checkColumn(i, x, y) == false) {
+        return i; //重なりの無い列を返却
+      }
+    }
+
+    $scope.maxLineNum++; //新しい列
+    $scope.Column[$scope.maxLineNum] = [];
+    return $scope.maxLineNum;
+  };
+
+  $scope.checkColumn = function(checkColumn, x, y) {
+
+    //指定列の重なりチェック
+    for (var i = 0; i < $scope.Column[checkColumn].length; i++) {
+      if ($scope.checkOverlap($scope.Column[checkColumn][i].
+              x, $scope.Column[checkColumn][i].y, x, y) == true) {
         return true;
       }
     }

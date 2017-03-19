@@ -8,17 +8,22 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+/**
+ * @var $this View
+ * @var ReservationWeeklyHelper
+ */
 echo $this->element('Reservations.scripts');
+
 ?>
 <article ng-controller="ReservationsDetailEdit" class="block-setting-body">
-
 	<?php
 		echo $this->element('Reservations.Reservations/reservation_tabs', array('active' => 'weekly', 'frameId' => $frameId, 'languageId' => $languageId));
 	?>
 
 	<?php echo $this->ReservationTurnReservation->getTurnReservationOperationsWrap('week', 'top', $vars); ?>
 
-    <div class="row"><!--全体枠-->
+    <div class="row" ng-controller="ReservationsTimeline"><!--全体枠-->
         <div class="col-xs-12 col-sm-12 text-center table-responsive">
 
             <div class="reservation-daily-timeline-coordinate-origin" data-daily-start-time-idx="<?php echo $vars['ReservationFrameSetting']['timeline_base_time']; ?>"><?php /*-- overflow-yのdivの始まり --*/?>

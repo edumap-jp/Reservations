@@ -73,6 +73,7 @@ class ReservationsController extends ReservationsAppController {
 		'Reservations.ReservationTurnReservation',
 		'Reservations.ReservationLegend',
 		'Reservations.ReservationButton',
+		'Reservations.ReservationWeeklyTimeline',
 	);
 
 /**
