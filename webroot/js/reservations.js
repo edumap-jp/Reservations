@@ -553,10 +553,10 @@ NetCommonsApp.controller('Reservations.selectLocation',
           // $scope.locationOptions = $scope.data.locations;
         };
 
-        $scope.changeLocation = function() {
+        $scope.changeLocation = function(displayStyle = 'largemonthly') {
           $scope.selectLocation = filterFilter($scope.data.locations, {ReservationLocation: {key: $scope.selectedLocation}})[0];
           //http://127.0.0.1:9090/reservations/reservations/index?year=2017&month=02&day=26&style=largemonthly&frame_id=42
-          var url = NC3_URL+'/reservations/reservations/index?style=largemonthly&frame_id='+$scope.frameId;
+          var url = NC3_URL+'/reservations/reservations/index?style=' + displayStyle + '&frame_id='+$scope.frameId;
           url = url + '&location_key='+$scope.selectLocation.ReservationLocation.key;
           console.log(url);
           // $location.path(url);

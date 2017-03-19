@@ -28,13 +28,14 @@ $location_key = $this->request->query('location_key');
 ))); ?>)">
 	<?php
     //debug($location_key);
+    $displayStyle = $this->request->query('style');
 	echo $this->NetCommonsForm->input('location_key', [
 		'type' => 'select',
         //'class' => 'form-inline',
 		'options' => $locationsOptions,
         'ng-model' => 'selectedLocation',
         //'selected' => $location_key,
-		'ng-change' => 'changeLocation()',
+		'ng-change' => 'changeLocation(\'' . $displayStyle . '\')',
 	]);
 	?>
 <a href="" data-toggle="popover" data-placement="bottom" title="" data-trigger="focus" data-content="
