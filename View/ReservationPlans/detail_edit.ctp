@@ -151,13 +151,6 @@ echo $this->element('Reservations.scripts');
                                 'ng-model' => 'locationCategory',
                             ]);
                         ?>
-						<?php //echo $this->NetCommonsForm->input(
-						//	'location_category_id',
-						//	[
-						//		'label' => false,
-						//		'options' => $locationCategories
-						//	]
-						//);?>
 						<!--施設選択-->
                         <?php $locationOptions = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservationLocation.location_name'); ?>
 						<?php echo $this->NetCommonsForm->input(
@@ -165,11 +158,18 @@ echo $this->element('Reservations.scripts');
 							[
 								'label' => false,
                                 'type' => 'select',
-                                'ng-options' => 'location.ReservationLocation.location_name for location in data.locations track by location.ReservationLocation.key',
-                                'ng-model' => 'ReservationActionPlan.location_key',
+                                //'ng-options' => 'location.ReservationLocation.location_name for location in data.locations track by location.ReservationLocation.key',
+								'ng-options' => 'location.ReservationLocation.location_name for location in locationOptions track by location.ReservationLocation.key',
+								//'ng-init' => 'ReservationActionPlan.location_key = \'' .
+								//	$this->request->data['ReservationActionPlan']['location_key']
+								//	. '\'',
+								'ng-init' => 'setLocationKey(\'' .
+									$this->request->data['ReservationActionPlan']['location_key']
+									. '\')',
+								//'ng-model' => 'ReservationActionPlan.location_key',
+                                'ng-model' => 'selectLocation',
 								// optionsを指定しないとSecurityComponentでBlackHole送りになる
                                 'options' => $locationOptions,
-								'ng-options' => 'location.ReservationLocation.key as location.ReservationLocation.location_name for location in locationOptions',
                                 'ng-change' => 'changeLocation()',
 
 							]

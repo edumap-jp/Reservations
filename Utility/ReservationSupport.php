@@ -427,6 +427,7 @@ class ReservationSupport {
 				'TERM' => $this->__getInitailTerm(substr($userStartDatetime, 0, 10)),
 				'enable_email' => intval($event['ReservationEvent']['is_enable_mail']), //名違いに注意
 				'email_send_timing' => intval($event['ReservationEvent']['email_send_timing']),
+				'location_key' => $event['ReservationEvent']['location_key']
 			),
 		);
 		return $capForView;

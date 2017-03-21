@@ -597,10 +597,19 @@ NetCommonsApp.controller('ReservationsDetailEdit',
 
        $scope.initialize = function(data) {
          $scope.data = angular.fromJson(data);
-         console.log($scope.data);
+         // console.log($scope.data);
          $scope.locationOptions = $scope.data.locations;
-         console.log($scope.locationOptions);
+         // console.log($scope.locationOptions);
+
+         $scope.ReservationActionPlan = {
+           location_key: null
+         };
+
        };
+       $scope.setLocationKey = function(locationKey) {
+         $scope.selectLocation = filterFilter($scope.data.locations, {ReservationLocation:{key:locationKey}})[0];
+       };
+
 
        // 施設カテゴリ選択
        $scope.locationOptions = [];
@@ -617,8 +626,10 @@ NetCommonsApp.controller('ReservationsDetailEdit',
          }
        };
        $scope.changeLocation = function() {
-         $scope.selectLocation = filterFilter($scope.data.locations, {ReservationLocation:{key:$scope.ReservationActionPlan.location_key}})[0];
-         console.log($scope.selectLocation);
+         // console.log($scope.current);
+         // $scope.selectLocation = filterFilter($scope.data.locations, {ReservationLocation:{key:$scope.ReservationActionPlan.location_key}})[0];
+         // console.log($scope.ReservationActionPlan.location_key);
+         // console.log($scope.selectLocation);
 
        };
        
