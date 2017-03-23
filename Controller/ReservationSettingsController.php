@@ -107,48 +107,48 @@ class ReservationSettingsController extends ReservationsAppController {
 		}
 	}
 
-///**
-// * index
-// *
-// * @return void
-// */
-//	public function index() {
-//		$this->Paginator->settings = array(
-//			'Reservation' => $this->Reservation->getBlockIndexSettings()
-//		);
-//
-//		$blogs = $this->Paginator->paginate('Reservation');
-//		if (! $blogs) {
-//			$this->view = 'Blocks.Blocks/not_found';
-//			return;
-//		}
-//		$this->set('blogs', $blogs);
-//		$this->request->data['Frame'] = Current::read('Frame');
-//	}
-//
-///**
-// * add
-// *
-// * @return void
-// */
-//	public function add() {
-//		$this->view = 'edit';
-//
-//		if ($this->request->is('post')) {
-//			//登録処理
-//			if ($this->Reservation->saveReservation($this->data)) {
-//				$this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
-//			}
-//			$this->NetCommons->handleValidationError($this->Reservation->validationErrors);
-//
-//		} else {
-//			//表示処理(初期データセット)
-//			$this->request->data = $this->Reservation->createReservation();
-//			$frameSetting = $this->ReservationFrameSetting->getReservationFrameSetting();
-//			$this->request->data = Hash::merge($this->request->data, $frameSetting);
-//			$this->request->data['Frame'] = Current::read('Frame');
-//		}
-//	}
+/**
+ * index
+ *
+ * @return void
+ */
+	//public function index() {
+	//	$this->Paginator->settings = array(
+	//		'Reservation' => $this->Reservation->getBlockIndexSettings()
+	//	);
+	//
+	//	$blogs = $this->Paginator->paginate('Reservation');
+	//	if (! $blogs) {
+	//		$this->view = 'Blocks.Blocks/not_found';
+	//		return;
+	//	}
+	//	$this->set('blogs', $blogs);
+	//	$this->request->data['Frame'] = Current::read('Frame');
+	//}
+
+/**
+ * add
+ *
+ * @return void
+ */
+	//public function add() {
+	//	$this->view = 'edit';
+	//
+	//	if ($this->request->is('post')) {
+	//		//登録処理
+	//		if ($this->Reservation->saveReservation($this->data)) {
+	//			$this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
+	//		}
+	//		$this->NetCommons->handleValidationError($this->Reservation->validationErrors);
+	//
+	//	} else {
+	//		//表示処理(初期データセット)
+	//		$this->request->data = $this->Reservation->createReservation();
+	//		$frameSetting = $this->ReservationFrameSetting->getReservationFrameSetting();
+	//		$this->request->data = Hash::merge($this->request->data, $frameSetting);
+	//		$this->request->data['Frame'] = Current::read('Frame');
+	//	}
+	//}
 
 /**
  * edit
@@ -176,18 +176,18 @@ class ReservationSettingsController extends ReservationsAppController {
 		}
 	}
 
-///**
-// * delete
-// *
-// * @return void
-// */
-//	public function delete() {
-//		if ($this->request->is('delete')) {
-//			if ($this->Reservation->deleteReservation($this->data)) {
-//				return $this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
-//			}
-//		}
-//
-//		return $this->throwBadRequest();
-//	}
+/**
+ * delete
+ *
+ * @return void
+ */
+	//public function delete() {
+	//	if ($this->request->is('delete')) {
+	//		if ($this->Reservation->deleteReservation($this->data)) {
+	//			return $this->redirect(NetCommonsUrl::backToIndexUrl('default_setting_action'));
+	//		}
+	//	}
+	//
+	//	return $this->throwBadRequest();
+	//}
 }

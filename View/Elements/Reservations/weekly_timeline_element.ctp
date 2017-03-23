@@ -35,22 +35,23 @@
             <?php if ($needTimeSlit): ?>
             <div class="reservation-timeline-data-area"><?php /*-- 位置調整用 --*/ ?>
                 <?php
-                $currentDay = strtotime(sprintf('%d-%d-%d +%d day',
-                    $this->ReservationWeekly->weekFirst['firstYear'],
-                    $this->ReservationWeekly->weekFirst['firstMonth'],
-                    $this->ReservationWeekly->weekFirst['firstDay'],
-                    $weekday
-                    ));
-                $currentDayVars = $vars;
-                $currentDayVars['year'] = date('Y', $currentDay);
-                $currentDayVars['month'] = date('n', $currentDay);
-                $currentDayVars['day'] = date('j', $currentDay);
+					$currentDay = strtotime(sprintf('%d-%d-%d +%d day',
+						$this->ReservationWeekly->weekFirst['firstYear'],
+						$this->ReservationWeekly->weekFirst['firstMonth'],
+						$this->ReservationWeekly->weekFirst['firstDay'],
+						$weekday
+						));
+					$currentDayVars = $vars;
+					$currentDayVars['year'] = date('Y', $currentDay);
+					$currentDayVars['month'] = date('n', $currentDay);
+					$currentDayVars['day'] = date('j', $currentDay);
 
-                echo $this->ReservationWeeklyTimeline->makeDailyBodyHtml($currentDayVars);
-                $reservationPlans = $this->ReservationWeeklyTimeline->getTimelineData();
-                ?>
-                <div ng-controller="ReservationsWeeklyTimelinePlan" ng-init="initialize(<?php echo h
-                (json_encode(array('reservationPlans' => $reservationPlans))) ?>)"></div>
+					echo $this->ReservationWeeklyTimeline->makeDailyBodyHtml($currentDayVars);
+					$reservationPlans = $this->ReservationWeeklyTimeline->getTimelineData();
+				?>
+                <div ng-controller="ReservationsWeeklyTimelinePlan"
+					ng-init="initialize(<?php echo h(json_encode(array('reservationPlans' => $reservationPlans))) ?>)">
+				</div>
             </div>
             <?php endif; ?>
         </td>

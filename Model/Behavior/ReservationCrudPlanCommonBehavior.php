@@ -129,7 +129,8 @@ class ReservationCrudPlanCommonBehavior extends ReservationAppBehavior {
 		}
 		$params = array(
 			'conditions' => array(
-				'ReservationEvent.reservation_rrule_id' => $eventData['ReservationEvent']['reservation_rrule_id'],
+				'ReservationEvent.reservation_rrule_id' =>
+								$eventData['ReservationEvent']['reservation_rrule_id'],
 			),
 		);
 		$count = $model->ReservationEvent->find('count', $params);
@@ -140,7 +141,10 @@ class ReservationCrudPlanCommonBehavior extends ReservationAppBehavior {
 			//(2)-1. 今の親rruleDataは、子を一切持たなくなった。
 			//（自分の新しい親rruleDataをこの後つくるので）現在の親rruleDataは浮きリソースになるので、
 			// 消しておく。
-			if (!$model->ReservationRrule->delete($eventData['ReservationEvent']['reservation_rrule_id'], false)) {
+			$result = $model->ReservationRrule->delete(
+				$eventData['ReservationEvent']['reservation_rrule_id'], false
+			);
+			if (! $result) {
 				//delete失敗
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}

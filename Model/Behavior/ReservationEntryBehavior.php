@@ -149,7 +149,9 @@ class ReservationEntryBehavior extends ReservationAppBehavior {
  */
 	public function afterSave(Model $model, $created, $options = array()) {
 		$this->log("DBG : afterSave", LOG_DEBUG);
-		$this->log('DBG: reservationEntryIndicator is[' . $this->reservationEntryIndicator . ']', LOG_DEBUG);
+		$this->log(
+			'DBG: reservationEntryIndicator is[' . $this->reservationEntryIndicator . ']', LOG_DEBUG
+		);
 		//$this->log("DBG : All Current Props[" . print_r( Current::read(), true). "]", LOG_DEBUG);
 		return;
 

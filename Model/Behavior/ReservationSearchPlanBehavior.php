@@ -189,7 +189,9 @@ class ReservationSearchPlanBehavior extends ReservationAppBehavior {
 					'alias' => $model->ReservationEventShareUser->alias,
 					'type' => 'LEFT',
 					'conditions' => array(
-						$model->ReservationEventShareUser->alias . '.reservation_event_id' . ' = ' . $model->alias . '.id',
+						$model->ReservationEventShareUser->alias . '.reservation_event_id' .
+						' = ' .
+						$model->alias . '.id',
 					),
 				),
 			),

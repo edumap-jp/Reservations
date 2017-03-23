@@ -62,13 +62,15 @@ class ReservationMonthlyHelper extends AppHelper {
  * @var array
  */
 	protected $_linePlanCnt = 0; //この週の連続プランの数
+
 /**
  * line plan proceess data
- * 
+ * 処理中の予定
+ * (true:連続プランである/false連続プランではない）
+ *
  * @var array
  */
-	protected $_lineProcess = false; //処理中の予定
-									//(true:連続プランである/false連続プランではない）
+	protected $_lineProcess = false;
 
 /**
  * TimelineDataの取得
@@ -345,7 +347,7 @@ class ReservationMonthlyHelper extends AppHelper {
  * @param int $cnt 月施設予約開始日からの累積日数(0オリジン)
  * @param array $vars 施設予約情報
  * @param int &$week 週数 (0オリジン)
- * @return string HTML 
+ * @return string HTML
  */
 	protected function _makeStartTr($cnt, $vars, &$week) {
 		$html = '';
@@ -536,7 +538,9 @@ class ReservationMonthlyHelper extends AppHelper {
 
 		/* forLINE add */
 		$html .= "<div class='col-xs-9 col-sm-12'>";
-		$html .= "<div class='reservation-col-day-line reservation-period_" . $week . $this->_celCnt . "'>";
+
+		$htmlClass = 'reservation-col-day-line reservation-period_' . $week . $this->_celCnt;
+		$html .= '<div class="' . $htmlClass . '">';
 
 		$this->_lineProcess = true; //line予定の追加
 		//予定概要群
@@ -624,7 +628,8 @@ class ReservationMonthlyHelper extends AppHelper {
 			$html .= '<div class="col-xs-9 col-sm-12">';
 			//line start
 			$tdColor = '';
-			$html .= "<div class='reservation-col-day-line reservation-period_" . $week . $this->_celCnt . "'>";
+			$htmlClass = 'reservation-col-day-line reservation-period_' . $week . $this->_celCnt;
+			$html .= '<div class="' . $htmlClass . '">';
 			$this->_lineProcess = true; //line予定の追加
 			//予定概要群
 			$html .= $this->_makePlanSummariesHtml($vars, $nctm, $vars['mInfo']['year'],

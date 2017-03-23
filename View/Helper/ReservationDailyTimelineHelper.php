@@ -103,14 +103,14 @@ class ReservationDailyTimelineHelper extends ReservationMonthlyHelper {
 			$reservationPlanMark = $this->ReservationCommon->getPlanMarkClassName($vars, $plan);
 			$url = $this->ReservationUrl->makePlanShowUrl($year, $month, $day, $plan);
 
-			$html .= "<div class='reservation-daily-timeline-slit-deco {$reservationPlanMark}' id='" . $id . "'>";
+			$htmlClass = 'reservation-daily-timeline-slit-deco ' . $reservationPlanMark;
+			$html .= '<div class="' . $htmlClass . '" id="' . $id . '">';
 
-			$html .= "<div class='reservation-common-margin-padding'>";
+			$html .= '<div class="reservation-common-margin-padding">';
 
-			$html .= "<div><p class='reservation-plan-clickable text-left reservation-plan-show' ";
-			$html .= "data-url='" . $url . "'>";
-
-			$html .= "<small style='float:left'>";
+			$htmlClass = 'reservation-plan-clickable text-left reservation-plan-show';
+			$html .= '<div><p class="' . $htmlClass . '" "data-url="' . $url . '">';
+			$html .= '<small class="pull-left">';
 			$html .= h($plan['ReservationEvent']['fromTime']) . '-' . h($plan['ReservationEvent']['toTime']);
 			$html .= '</small>';
 

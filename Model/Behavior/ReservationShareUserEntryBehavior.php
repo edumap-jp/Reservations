@@ -43,7 +43,9 @@ class ReservationShareUserEntryBehavior extends ReservationAppBehavior {
 	public function insertShareUsers(Model &$model, $shareUsers, $eventId,
 		$createdUserWhenUpd = null) {
 		if (!(isset($model->ReservationEventShareUser))) {
-			$model->ReservationEventShareUser = ClassRegistry::init('Reservations.ReservationEventShareUser', true);
+			$model->ReservationEventShareUser = ClassRegistry::init(
+				'Reservations.ReservationEventShareUser', true
+			);
 			//$model->loadModels(['ReservationEventShareUser' => 'Reservation.ReservationEventShareUser']);
 		}
 		if (empty($shareUsers)) {
@@ -71,7 +73,9 @@ class ReservationShareUserEntryBehavior extends ReservationAppBehavior {
 
 		$shareUserData = array();
 		$shareUserData[$model->ReservationEventShareUser->alias] = array_map($func, $shareUsers);
-		$model->ReservationEventShareUser->saveAll($shareUserData[$model->ReservationEventShareUser->alias]);
+		$model->ReservationEventShareUser->saveAll(
+			$shareUserData[$model->ReservationEventShareUser->alias]
+		);
 	}
 
 /**

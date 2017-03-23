@@ -12,10 +12,7 @@ echo $this->element('Reservations.scripts');
 ?>
 
 <article ng-controller='ReservationsDetailEdit' class='block-setting-body'
-	ng-init="initialize(<?php echo h(json_encode(array(
-        'frameId' => Current::read('Frame.id'),
-        'locations' => $locations,
-        ))); ?>)">
+	ng-init="initialize(<?php echo h(json_encode(array('frameId' => Current::read('Frame.id'), 'locations' => $locations))); ?>)">
 
 	<?php /* 画面見出し */ ?>
 	<?php echo $this->element('Reservations.ReservationPlans/detail_edit_heading'); ?>
@@ -127,54 +124,56 @@ echo $this->element('Reservations.scripts');
                     <div class='col-xs-11 col-xs-offset-1'>
 
                         <?php
-                        //  カテゴリ絞り込み
-                        $locationCategories = Hash::combine($categories, '{n}.Category.id', '{n}.CategoriesLanguage.name');
-                        // 施設の絞り込み, カテゴリなし　を追加
-                        $locationCategories = Hash::merge(
-                            [
-                                'all' => __d('reservations', '--施設の絞り込み--'),
-                                '' => __d('reservations', 'カテゴリ無し')
-                            ],
-                            $locationCategories
-                        );
-                        //$locationCategories = [
-                        //        0 => 'カテゴリ無し',
-                        //        1 => '会議室',
-                        //];
-                        $this->NetCommonsForm->unlockField('ReservationLocation.category_id');
-                        $this->NetCommonsForm->unlockField('ReservationActionPlan.location_key');
-						echo $this->NetCommonsForm->input('ReservationLocation.category_id',
-                            [
-                                'label' => false,
-                                'options' => $locationCategories,
-                                'ng-change' => 'selectLocationCategory()',
-                                'ng-model' => 'locationCategory',
-                            ]);
-                        ?>
+							//  カテゴリ絞り込み
+							$locationCategories = Hash::combine($categories, '{n}.Category.id', '{n}.CategoriesLanguage.name');
+							// 施設の絞り込み, カテゴリなし　を追加
+							$locationCategories = Hash::merge(
+								[
+									'all' => __d('reservations', '--施設の絞り込み--'),
+									'' => __d('reservations', 'カテゴリ無し')
+								],
+								$locationCategories
+							);
+							//$locationCategories = [
+							//        0 => 'カテゴリ無し',
+							//        1 => '会議室',
+							//];
+							$this->NetCommonsForm->unlockField('ReservationLocation.category_id');
+							$this->NetCommonsForm->unlockField('ReservationActionPlan.location_key');
+							echo $this->NetCommonsForm->input('ReservationLocation.category_id',
+								[
+									'label' => false,
+									'options' => $locationCategories,
+									'ng-change' => 'selectLocationCategory()',
+									'ng-model' => 'locationCategory',
+								]
+							);
+						?>
 						<!--施設選択-->
                         <?php $locationOptions = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservationLocation.location_name'); ?>
-						<?php echo $this->NetCommonsForm->input(
-							'ReservationActionPlan.location_key',
-							[
-								'label' => false,
-                                'type' => 'select',
-                                //'ng-options' => 'location.ReservationLocation.location_name for location in data.locations track by location.ReservationLocation.key',
-								'ng-options' => 'location.ReservationLocation.location_name for location in locationOptions track by location.ReservationLocation.key',
-								//'ng-init' => 'ReservationActionPlan.location_key = \'' .
-								//	$this->request->data['ReservationActionPlan']['location_key']
-								//	. '\'',
-								'ng-init' => 'setLocationKey(\'' .
-									$this->request->data['ReservationActionPlan']['location_key']
-									. '\')',
-								//'ng-model' => 'ReservationActionPlan.location_key',
-                                'ng-model' => 'selectLocation',
-								// optionsを指定しないとSecurityComponentでBlackHole送りになる
-                                'options' => $locationOptions,
-                                'ng-change' => 'changeLocation()',
-
-							]
-						);?>
-                        <?php echo __d('reservations', '【使用時間】 '); ?>
+						<?php
+							echo $this->NetCommonsForm->input(
+								'ReservationActionPlan.location_key',
+								[
+									'label' => false,
+									'type' => 'select',
+									//'ng-options' =>
+											//'location.ReservationLocation.location_name for location in data.locations track by location.ReservationLocation.key',
+									'ng-options' =>
+											'location.ReservationLocation.location_name for location in locationOptions track by location.ReservationLocation.key',
+									//'ng-init' => 'ReservationActionPlan.location_key = \'' .
+									//	$this->request->data['ReservationActionPlan']['location_key']
+									//	. '\'',
+									'ng-init' => 'setLocationKey(\'' . $this->request->data['ReservationActionPlan']['location_key'] . '\')',
+									//'ng-model' => 'ReservationActionPlan.location_key',
+									'ng-model' => 'selectLocation',
+									// optionsを指定しないとSecurityComponentでBlackHole送りになる
+									'options' => $locationOptions,
+									'ng-change' => 'changeLocation()',
+								]
+							);
+						?>
+                        <?php echo __d('reservations', '【使用時間】'); ?>
                         {{selectLocation.ReservationLocation.openText}}
                         <a href="" data-toggle="popover" data-placement="bottom" title="" data-trigger="focus" data-content="
                         <dl>
@@ -184,11 +183,10 @@ echo $this->element('Reservations.scripts');
                         <p>{{selectLocation.ReservationLocation.description}}</p>
 " data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d('reservations', '詳細'); ?></a>
                         <?php
-                        $html = '<script type="text/javascript">' .
-                        '$(function () { $(\'[data-toggle="popover"]\').popover({html: true}) });</script>';
-                        echo $html;
-                        ?>
-
+							$html = '<script type="text/javascript">' .
+							'$(function () { $(\'[data-toggle="popover"]\').popover({html: true}) });</script>';
+							echo $html;
+						?>
                     </div>
                 </div>
             </div><!-- form-group name="inputStartEndDateTime"おわり -->

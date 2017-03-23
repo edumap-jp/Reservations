@@ -489,7 +489,8 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
 		$week = intval(substr($model->rrule['BYDAY'][0], 0, -2));	//-2で最後２文字をけずる。
 
 		//NC3は内部はサーバー系時刻なのでtimezoneDateはつかわない
-		$sTime = $eventData['ReservationEvent']['start_date'] . $eventData['ReservationEvent']['start_time'];
+		$sTime = $eventData['ReservationEvent']['start_date'] .
+				$eventData['ReservationEvent']['start_time'];
 		$eTime = $eventData['ReservationEvent']['end_date'] . $eventData['ReservationEvent']['end_time'];
 
 		//以下で使うmkdateの「1日00:00:00」とは、画面上（=ユーザー系）でのカレンダ
@@ -563,12 +564,13 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
  * @param int &$bymonthday bymonthday
  * @param int &$first first
  * @param int &$intervalDay intervalDay
- * @param string &$userTz userTz 
+ * @param string &$userTz userTz
  * @return void
  */
 	private function __setYearlyByMonthdayStartDtProc(&$eventData, &$userStartTime, &$startTimestamp,
 		&$currentDay, &$firstNumOfDaysOfMth, &$bymonthday, &$first, &$intervalDay, &$userTz) {
-		$sTime = $eventData['ReservationEvent']['start_date'] . $eventData['ReservationEvent']['start_time'];
+		$sTime = $eventData['ReservationEvent']['start_date'] .
+				$eventData['ReservationEvent']['start_time'];
 
 		//以下で使う時間系は「1日00:00:00」など、画面上（=ユーザー系）でのカレンダ
 		//日付時刻をさしているので、ユーザー系に直す。
@@ -611,7 +613,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
  * 年周期のbymonthdayでの終了日処理
  *
  * @param array &$eventData eventData
- * @param string &$userTz userTz 
+ * @param string &$userTz userTz
  * @param string &$userEndTime userEndTime
  * @param int &$endTimestamp endTimestamp
  * @return void

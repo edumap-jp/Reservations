@@ -106,8 +106,12 @@ class ReservationLocationsController extends ReservationsAppController {
 		'Reservations.ReservationLocation',
 	);
 
+/**
+ * index
+ *
+ * @return void
+ */
 	public function index() {
-
 		$data = $this->ReservationLocation->findById(1);
 		// FAQの並び替え参考にしよう
 		$query = array();
@@ -208,7 +212,8 @@ class ReservationLocationsController extends ReservationsAppController {
 		];
 
 		$reservationLocation = $this->ReservationLocation->find('first', $options);
-		$reservationLocation['ReservationLocation']['time_table'] = explode('|', $reservationLocation['ReservationLocation']['time_table']);
+		$timeTable = explode('|', $reservationLocation['ReservationLocation']['time_table']);
+		$reservationLocation['ReservationLocation']['time_table'] = $timeTable;
 
 		if (empty($reservationLocation)) {
 			return $this->throwBadRequest();

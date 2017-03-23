@@ -7,7 +7,9 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
 App::uses('AppHelper', 'View/Helper');
+
 /**
  * Reservation schedule Helper
  *
@@ -89,7 +91,8 @@ class ReservationScheduleHelper extends ReservationMonthlyHelper {
 					$html .= '</tbody></table></div></div>';
 				}
 
-				$html .= '<div class="row reservation-tablecontainer" uib-collapse="isCollapsed[' . $idx . ']">';
+				$html .=
+					'<div class="row reservation-tablecontainer" uib-collapse="isCollapsed[' . $idx . ']">';
 				$html .= '<div class="col-xs-12 col-sm-3">';
 				$html .= '<p class="reservation-schedule-membername">';
 				$html .= $this->DisplayUser->handleLink($plan, array('avatar' => false));
@@ -104,22 +107,24 @@ class ReservationScheduleHelper extends ReservationMonthlyHelper {
 			$reservationPlanMark = $this->ReservationCommon->getPlanMarkClassName($vars, $plan);
 
 			//予定
+			$reservationEvent = $plan['ReservationEvent'];
+
 			$html .= '<div class="col-xs-12">';
 			$html .= "<div class='reservation-plan-mark {$reservationPlanMark}'>";
 			$html .= '<div>';
 			// ワークフロー（一時保存/承認待ち、など）のマーク
-			$html .= $this->ReservationCommon->makeWorkFlowLabel($plan['ReservationEvent']['status']);
+			$html .= $this->ReservationCommon->makeWorkFlowLabel($reservationEvent['status']);
 			$html .= '</div>';
 
-			if ($fromTime !== $plan['ReservationEvent']['fromTime'] ||
-				$toTime !== $plan['ReservationEvent']['toTime']) {
-				$html .= "<span class='pull-left'><small class='reservation-daily-nontimeline-periodtime-deco'>";
-				$html .= h($plan['ReservationEvent']['fromTime']) . '-';
-				$html .= h($plan['ReservationEvent']['toTime']) . '</small></span>';
+			if ($fromTime !== $reservationEvent['fromTime'] || $toTime !== $reservationEvent['toTime']) {
+				$html .=
+					'<span class="pull-left"><small class="reservation-daily-nontimeline-periodtime-deco">';
+				$html .= h($reservationEvent['fromTime']) . '-';
+				$html .= h($reservationEvent['toTime']) . '</small></span>';
 			}
 			//スペース名
 			$spaceName = $this->ReservationDaily->getSpaceName($vars,
-				$plan['ReservationEvent']['room_id'], $plan['ReservationEvent']['language_id']);
+				$reservationEvent['room_id'], $reservationEvent['language_id']);
 			$spaceName = $this->ReservationCommon->decideRoomName($spaceName, $reservationPlanMark);
 
 			$html .= '<p class="reservation-plan-spacename small">' . h($spaceName) . '</p>';
@@ -127,19 +132,20 @@ class ReservationScheduleHelper extends ReservationMonthlyHelper {
 			$html .= '<h3 class="reservation-plan-tittle">';
 			//タイトルアイコン+タイトル
 			$html .= $this->NetCommonsHtml->link(
-				$this->TitleIcon->titleIcon($plan['ReservationEvent']['title_icon']) .
-				h($plan['ReservationEvent']['title']),
+				$this->TitleIcon->titleIcon($reservationEvent['title_icon']) .
+				h($reservationEvent['title']),
 				$url,
 				array('escape' => false)
 			);
 			$html .= '</h3>';
-			if ($plan['ReservationEvent']['location'] != '') {
-				$html .= '<p class="reservation-plan-place small">' . __d('reservations', 'Location details:');
-				$html .= h($plan['ReservationEvent']['location']) . '</p>';
+			if ($reservationEvent['location'] != '') {
+				$html .= '<p class="reservation-plan-place small">' .
+							__d('reservations', 'Location details:');
+				$html .= h($reservationEvent['location']) . '</p>';
 			}
-			if ($plan['ReservationEvent']['contact']) {
+			if ($reservationEvent['contact']) {
 				$html .= '<p class="reservation-plan-address small">' . __d('reservations', 'Contact:');
-				$html .= h($plan['ReservationEvent']['contact']) . '</p>';
+				$html .= h($reservationEvent['contact']) . '</p>';
 			}
 
 			$html .= '</div></div>';
@@ -193,45 +199,46 @@ class ReservationScheduleHelper extends ReservationMonthlyHelper {
 			$htmlPlan .= '</p></div>';
 
 			//予定
+			$reservationEvent = $plan['ReservationEvent'];
+
 			$htmlPlan .= '<div class="col-xs-12 col-sm-9 col-sm-pull-3">';
 			$htmlPlan .= "<div class='reservation-plan-mark {$reservationPlanMark}'>";
 			$htmlPlan .= '<div>';
 			// ワークフロー（一時保存/承認待ち、など）のマーク
-			$htmlPlan .= $this->ReservationCommon->makeWorkFlowLabel($plan['ReservationEvent']['status']);
+			$htmlPlan .= $this->ReservationCommon->makeWorkFlowLabel($reservationEvent['status']);
 			$htmlPlan .= '</div>';
 
-			if ($fromTime !== $plan['ReservationEvent']['fromTime'] ||
-				$toTime !== $plan['ReservationEvent']['toTime']) {
+			if ($fromTime !== $reservationEvent['fromTime'] || $toTime !== $reservationEvent['toTime']) {
 				$htmlPlan .= '<span class="pull-left">';
 				$htmlPlan .= '<small class="reservation-daily-nontimeline-periodtime-deco">';
-				$htmlPlan .= h($plan['ReservationEvent']['fromTime']) . '-';
-				$htmlPlan .= h($plan['ReservationEvent']['toTime']) . '</small></span>';
+				$htmlPlan .= h($reservationEvent['fromTime']) . '-';
+				$htmlPlan .= h($reservationEvent['toTime']) . '</small></span>';
 			}
 			//スペース名
 			$spaceName = $this->ReservationDaily->getSpaceName(
-				$vars, $plan['ReservationEvent']['room_id'], $plan['ReservationEvent']['language_id']);
+				$vars, $reservationEvent['room_id'], $reservationEvent['language_id']);
 			$spaceName = $this->ReservationCommon->decideRoomName($spaceName, $reservationPlanMark);
 			$htmlPlan .= '<p class="reservation-plan-spacename small">' . h($spaceName) . '</p>';
 
 			$htmlPlan .= '<h3 class="reservation-plan-tittle">';
 			//タイトルアイコン+タイトル
 			$htmlPlan .= $this->NetCommonsHtml->link(
-				$this->TitleIcon->titleIcon($plan['ReservationEvent']['title_icon']) .
-				h($plan['ReservationEvent']['title']),
+				$this->TitleIcon->titleIcon($reservationEvent['title_icon']) .
+				h($reservationEvent['title']),
 				$url,
 				array('escape' => false)
 			);
 			$htmlPlan .= '</h3>';
 
-			if ($plan['ReservationEvent']['location'] != '') {
+			if ($reservationEvent['location'] != '') {
 				$htmlPlan .= '<p class="reservation-plan-place small">';
 				$htmlPlan .= __d('reservations', 'Location details:');
-				$htmlPlan .= h($plan['ReservationEvent']['location']) . '</p>';
+				$htmlPlan .= h($reservationEvent['location']) . '</p>';
 			}
-			if ($plan['ReservationEvent']['contact']) {
+			if ($reservationEvent['contact']) {
 				$htmlPlan .= '<p class="reservation-plan-address small">';
 				$htmlPlan .= __d('reservations', 'Contact:');
-				$htmlPlan .= h($plan['ReservationEvent']['contact']) . '</p>';
+				$htmlPlan .= h($reservationEvent['contact']) . '</p>';
 			}
 			$htmlPlan .= '</div></div>';
 
@@ -362,7 +369,8 @@ class ReservationScheduleHelper extends ReservationMonthlyHelper {
 		////$wDay = ReservationTime::getWday($year, $month, $day);
 		//PHP施設予約関数を使用しないgetWdayAlt()に変更
 		$wDay = (new ReservationTime())->getWdayAlt($year, $month, $day);
-		$textColor = $this->ReservationCommon->makeTextColor($year, $month, $day, $vars['holidays'], $wDay);
+		$textColor =
+				$this->ReservationCommon->makeTextColor($year, $month, $day, $vars['holidays'], $wDay);
 		$month = (int)$month;
 		$day = (int)$day;
 
@@ -373,8 +381,10 @@ class ReservationScheduleHelper extends ReservationMonthlyHelper {
 
 		$html = '';
 		$html .= '<div class="row"><div class="col-xs-12">';
-		$html .= '<p ng-click="' . $ngClick . '" ';
-		$html .= 'class="reservation-schedule-disp reservation-plan-clickable reservation-schedule-row-title">';
+		$htmlClass = 'reservation-schedule-disp' .
+					' reservation-plan-clickable' .
+					' reservation-schedule-row-title';
+		$html .= '<p ng-click="' . $ngClick . '" class="' . $htmlClass . '">';
 
 		$html .= '<span class="glyphicon schedule-openclose" ng-class="{' . $ngClass . '}"></span>';
 		$html .= '<span class="h4">';

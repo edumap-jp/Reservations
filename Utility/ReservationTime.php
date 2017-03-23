@@ -463,7 +463,9 @@ class ReservationTime {
 			if ($insertFlag) {
 				//登録.ユーザー系toサーバー系YmdHis
 				$userDateTime = $time;
-				$svrDateTime = (new NetCommonsTime())->toServerDatetime(ReservationTime::calDt2dt($userDateTime));
+				$svrDateTime = (new NetCommonsTime())->toServerDatetime(
+					ReservationTime::calDt2dt($userDateTime)
+				);
 				$svrDateTime = ReservationTime::dt2calDt($svrDateTime);
 				$time = $svrDateTime;
 			} else {

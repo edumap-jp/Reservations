@@ -41,20 +41,22 @@
                         </td>
                         <td><?php echo h($reservationLocation['ReservationLocation']['location_name']); ?>&nbsp;</td>
                         <td>
-                            <?php echo $this->LinkButton->edit(
-                                    null,
-                                [
-                                    'action' => 'edit',
-                                    'key' => $reservationLocation['ReservationLocation']['key']
-                                ],
-                                [
-                                        'iconSize' => 'btn-xs'
-                                    ]);?>
+                            <?php
+								echo $this->LinkButton->edit(
+									null,
+									[
+										'action' => 'edit',
+										'key' => $reservationLocation['ReservationLocation']['key']
+									],
+									[
+										'iconSize' => 'btn-xs'
+									]
+								);
+							?>
                         </td>
                         <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['add_authority']); ?><!--&nbsp;</td>-->
                         <td>
-                            <?php echo $this->ReservationLocation->openText($reservationLocation)
-                            ; ?>
+							<?php echo $this->ReservationLocation->openText($reservationLocation); ?>
                         </td>
                         <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['use_private']); ?><!--&nbsp;</td>-->
                         <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['use_auth_flag']); ?><!--&nbsp;</td>-->
