@@ -156,12 +156,17 @@ class ReservationsSchema extends CakeSchema {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary', 'comment' => 'ID'),
 		'frame_key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'フレームKey', 'charset' => 'utf8'),
 		'display_type' => array('type' => 'integer', 'null' => false, 'default' => '0', 'length' => 4, 'unsigned' => false, 'comment' => '表示方法'),
+		'category_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'comment' => 'カテゴリ'),
+		'location_key' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '最初に表示する施設', 'charset' => 'utf8'),
+		'display_timeframe' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '時間枠表時'),
+		'display_start_time_type' => array('type' => 'integer', 'null' => true, 'default' => '0', 'length' => 4, 'unsigned' => false, 'comment' => '0:閲覧時刻により変動 1:固定'),
+		'timeline_base_time' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'comment' => '表示開始時'),
+		'display_interval' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'comment' => '表示幅（時間）'),
 		'start_pos' => array('type' => 'integer', 'null' => false, 'default' => '0', 'length' => 4, 'unsigned' => false, 'comment' => '開始位置'),
 		'display_count' => array('type' => 'integer', 'null' => false, 'default' => '0', 'length' => 4, 'unsigned' => false, 'comment' => '表示日数'),
 		'is_myroom' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => 'プライベートルームの施設予約コンポーネント（イベント等)を表示するかどうか 0:表示しない 1:表示する'),
 		'is_select_room' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => '指定したルームのみ表示するかどうか 0:表示しない 1:表示する'),
 		'room_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'comment' => 'ルームID'),
-		'timeline_base_time' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'comment' => '単一日タイムライン基準時'),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'comment' => '作成者'),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '作成日時'),
 		'modified_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'comment' => '更新者'),
@@ -194,7 +199,7 @@ class ReservationsSchema extends CakeSchema {
 		'use_private' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'use_auth_flag' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'use_all_rooms' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
-		'display_sequence' => array('type' => 'integer', 'null' => false, 'default' => '0', 'unsigned' => true),
+		'weight' => array('type' => 'integer', 'null' => false, 'default' => '0', 'unsigned' => true),
 		'contact' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
@@ -202,7 +207,7 @@ class ReservationsSchema extends CakeSchema {
 		'modified' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'category_id' => array('column' => array('category_id', 'display_sequence'), 'unique' => 0)
+			'category_id' => array('column' => array('category_id', 'weight'), 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
