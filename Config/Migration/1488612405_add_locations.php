@@ -1,5 +1,22 @@
 <?php
-class AddLocations extends CakeMigration {
+/**
+ * 施設追加
+ *
+ * @author Shohei Nakajima <nakajimashouhei@gmail.com>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
+ */
+
+App::uses('NetCommonsMigration', 'NetCommons.Config/Migration');
+
+/**
+ * 施設追加
+ *
+ * @author Shohei Nakajima <nakajimashouhei@gmail.com>
+ * @package NetCommons\Reservations\Config\Migration
+ */
+class AddLocations extends NetCommonsMigration {
 
 /**
  * Migration description
