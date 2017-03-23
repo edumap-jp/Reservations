@@ -9,6 +9,19 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
+<table>
+    <tr>
+        <td>左上</td>
+        <td>TODO rowspan接続タイムライン領域</td>
+    </tr>
+    <?php foreach($locations as $location): ?>
+        <tr>
+            <td>
+                <?php echo h($location['ReservationLocation']['location_name']) ?>
+            </td>
+        </tr>
+    <?php endforeach;?>
+</table>
 <div class="row" ng-controller="ReservationsTimeline">
 	<div class="col-xs-12 text-center">
 

@@ -29,10 +29,12 @@ echo $this->element('Reservations.scripts');
             <div class="reservation-daily-timeline-coordinate-origin" data-daily-start-time-idx="<?php echo $vars['ReservationFrameSetting']['timeline_base_time']; ?>"><?php /*-- overflow-yのdivの始まり --*/?>
 
                 <table class='reservation-daily-timeline-table'><?php /*-- overflow-yのscroll分5%考慮 --*/ ?>
-                    <tbody>
+                    <thead>
 					<?php
 					echo $this->ReservationWeekly->makeWeeklyHeaderHtml($vars);
 					?>
+                    </thead>
+                    <tbody>
 
                     <?php echo $this->element('Reservations.Reservations/weekly_timeline_element',
                         array(

@@ -128,7 +128,7 @@ echo h($dataJson) ?>)">
 					// TODO 予約できる権限
                     // TODO 予約を受け付けるルーム allroom_flagとreservation_locations_rooms
                     // TODO is_accept_all_roomカラムにしようか
-                    //echo $this->RoomsForm->checkboxRooms('ReservationLocationsRooms.room_id');
+                    echo $this->RoomsForm->checkboxRooms('ReservationLocationsRooms.room_id');
                     // 施設管理者
                     echo $this->NetCommonsForm->input('ReservationLocation.contact',
                         [
