@@ -72,7 +72,7 @@ echo h($dataJson) ?>)">
 									'datetimepicker-options' => json_encode(['format' => 'HH:mm']),
 									//'class' => 'form-inline'
 									'ng-model' => 'data.ReservationLocation.start_time',
-                                    'ng-readonly' => 'allDay',
+									'ng-readonly' => 'allDay',
 								]
 							);
 							echo ' - ';
@@ -81,7 +81,7 @@ echo h($dataJson) ?>)">
 									'datetimepicker',
 									'datetimepicker-options' => json_encode(['format' => 'HH:mm']),
 									'ng-model' => 'data.ReservationLocation.end_time',
-                                    'ng-readonly' => 'allDay',
+									'ng-readonly' => 'allDay',
 									//'class' => 'form-inline'
 								]
 							);
@@ -93,71 +93,69 @@ echo h($dataJson) ?>)">
 								[
 									//'type' => 'checkbox',
 									'ng-model' => 'allDay',
-                                    'ng-click' => 'checkAllDay()',
+									'ng-click' => 'checkAllDay()',
 									//'hiddenField' => false,
 									'label'
 									=> __d('reservations', '利用時間の制限無し')]);
 							?>
                         </div>
 						<?php
-						// TODO 利用時間曜日チェックボックス TODO カレンダの繰り返し設定からコピか？
-						$weekDaysOptions = [
-							'Sun' => __d('holidays', 'Sunday'),
-							'Mon' => __d('holidays', 'Monday'),
-							'Tue' => __d('holidays', 'Tuesday'),
-							'Wed' => __d('holidays', 'Wednesday'),
-							'Thu' => __d('holidays', 'Thursday'),
-							'Fri' => __d('holidays', 'Friday'),
-							'Sat' => __d('holidays', 'Saturday'),
-						];
-						// \
-						//echo $this->NetCommonsForm->checkbox('ReservationLocation.time_table', ['options' =>
-						//    $weekDaysOptions]);
-						echo $this->NetCommonsForm->input('ReservationLocation.time_table', [
-                            'options' => $weekDaysOptions,
-                            'type' => 'select',
-                            'multiple' => 'checkbox',
-                            'div' => 'form-inline'
-                        ]);
+							// TODO 利用時間曜日チェックボックス TODO カレンダの繰り返し設定からコピか？
+							$weekDaysOptions = [
+								'Sun' => __d('holidays', 'Sunday'),
+								'Mon' => __d('holidays', 'Monday'),
+								'Tue' => __d('holidays', 'Tuesday'),
+								'Wed' => __d('holidays', 'Wednesday'),
+								'Thu' => __d('holidays', 'Thursday'),
+								'Fri' => __d('holidays', 'Friday'),
+								'Sat' => __d('holidays', 'Saturday'),
+							];
+							// \
+							//echo $this->NetCommonsForm->checkbox('ReservationLocation.time_table', ['options' =>
+							//    $weekDaysOptions]);
+							echo $this->NetCommonsForm->input('ReservationLocation.time_table', [
+								'options' => $weekDaysOptions,
+								'type' => 'select',
+								'multiple' => 'checkbox',
+								'div' => 'form-inline'
+							]);
 						?>
                     </div>
 
                     <?php
-                    // カテゴリ
-					echo $this->Category->select('ReservationLocation.category_id', array('empty' => true));
-					// TODO 予約できる権限
-                    // TODO 予約を受け付けるルーム allroom_flagとreservation_locations_rooms
-                    // TODO is_accept_all_roomカラムにしようか
-                    echo $this->RoomsForm->checkboxRooms('ReservationLocationsRooms.room_id');
-                    // 施設管理者
-                    echo $this->NetCommonsForm->input('ReservationLocation.contact',
-                        [
-                            'label' => __d('reservations', '施設管理者')
-                        ]
-                        );
-                    // 施設説明 WYSIWYG
-					echo $this->NetCommonsForm->wysiwyg('ReservationLocation.detail', array(
-						'label' => __d('reservations', '説明'),
-						'required' => true,
-						'rows' => 12,
-                        'ng-model' => 'data.ReservationLocation.detail'
+						// カテゴリ
+						echo $this->Category->select('ReservationLocation.category_id', array('empty' => true));
+						// TODO 予約できる権限
+						// TODO 予約を受け付けるルーム allroom_flagとreservation_locations_rooms
+						// TODO is_accept_all_roomカラムにしようか
+						echo $this->RoomsForm->checkboxRooms('ReservationLocationsRooms.room_id');
+						// 施設管理者
+						echo $this->NetCommonsForm->input('ReservationLocation.contact',
+							[
+								'label' => __d('reservations', '施設管理者')
+							]
+						);
+						// 施設説明 WYSIWYG
+						echo $this->NetCommonsForm->wysiwyg('ReservationLocation.detail', array(
+							'label' => __d('reservations', '説明'),
+							'required' => true,
+							'rows' => 12,
+							'ng-model' => 'data.ReservationLocation.detail'
 
-					));
+						));
 					?>
 				</fieldset>
-
-
 			</div>
 
 			<?php //echo $this->Workflow->buttons('ReservationLocation.status'); ?>
             <?php
-			$cancelUrl = NetCommonsUrl::actionUrlAsArray(array(
-				'plugin' => 'reservations',
-				'controller' => 'reservation_locations',
-				'action' => 'index',
-				'frame_id' => Current::read('Frame.id'),
-			));
-            ?>
+				$cancelUrl = NetCommonsUrl::actionUrlAsArray(array(
+					'plugin' => 'reservations',
+					'controller' => 'reservation_locations',
+					'action' => 'index',
+					'frame_id' => Current::read('Frame.id'),
+				));
+			?>
             <div class="panel-footer text-center">
 				<?php echo $this->Button->cancelAndSave(__d('net_commons', 'Cancel'), __d('net_commons', 'OK'), $cancelUrl); ?>
             </div>

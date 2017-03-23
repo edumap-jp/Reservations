@@ -286,7 +286,10 @@ class ReservationFrameSetting extends ReservationsAppModel {
 				//ルーム指定あり処理.
 				$this->ReservationFrameSettingSelectRoom =
 					ClassRegistry::init('Reservations.ReservationFrameSettingSelectRoom');
-				if (! $this->ReservationFrameSettingSelectRoom->validateReservationFrameSettingSelectRoom($data)) {
+
+				//モデル名が長いため、一度変数にセットしてからvalidationメソッドを実行する(phpcs対策)
+				$Model = $this->ReservationFrameSettingSelectRoom;
+				if (! $Model->validateReservationFrameSettingSelectRoom($data)) {
 					CakeLog::error(serialize($this->ReservationFrameSettingSelectRoom->validationErrors));
 					$this->rollback();
 					return false;

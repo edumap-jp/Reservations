@@ -34,7 +34,7 @@
 				<?php echo $this->NetCommonsForm->input('ReservationActionPlan.contact', array(
 				'type' => 'text',
 				'label' => __d('reservations', 'Contact'),
-				'div' => false,se
+				'div' => false,
 				)); ?>
 			</div>
 		</div>

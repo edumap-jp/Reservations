@@ -111,7 +111,9 @@ class ReservationAppBehavior extends ModelBehavior {
 		$createdUserWhenUpd = null) {
 		$this->loadEventAndRruleModels($model);
 		$params = array(
-			'conditions' => array('ReservationRrule.id' => $eventData['ReservationEvent']['reservation_rrule_id']),
+			'conditions' => array(
+				'ReservationRrule.id' => $eventData['ReservationEvent']['reservation_rrule_id']
+			),
 			'recursive' => (-1),
 			'fields' => array('ReservationRrule.*'),
 			'callbacks' => false
@@ -216,7 +218,8 @@ class ReservationAppBehavior extends ModelBehavior {
 		}
 
 		if (isset($eventData['ReservationEvent']['modified_user'])) {
-			$rEventData['ReservationEvent']['modified_user'] = $eventData['ReservationEvent']['modified_user'];
+			$rEventData['ReservationEvent']['modified_user'] =
+											$eventData['ReservationEvent']['modified_user'];
 		}
 
 		if (isset($eventData['ReservationEvent']['modified'])) {
@@ -472,7 +475,6 @@ class ReservationAppBehavior extends ModelBehavior {
 		$eventData['ReservationEvent']['email_send_timing'] = $params['email_send_timing'];
 
 		$eventData['ReservationEvent']['location_key'] = $params['location_key'];
-
 
 		//保存するモデルをここで替える
 		$eventData['ReservationEventContent']['linked_model'] = $params['linked_model'];

@@ -63,12 +63,12 @@ class ReservationTurnReservationHelper extends AppHelper {
 		$thisDayUrl = $this->_getUrl('now', $type, $vars);
 
 		$html = '';
-		if($pos == 'top'){
-			$html .= '<div class="reservation-date-move-operations reservation-date-move-operations-' . $pos . ' pull-left" style="margin-right:10px">';
-
-		}else{
-			$html .= '<div class="reservation-date-move-operations reservation-date-move-operations-' . $pos . '">';
-
+		$htmlClass = 'reservation-date-move-operations reservation-date-move-operations-' . $pos;
+		if ($pos == 'top') {
+			$htmlClass .= ' pull-left';
+			$html .= '<div class="' . $htmlClass . '" style="margin-right:10px">';
+		} else {
+			$html .= '<div class="' . $htmlClass . '">';
 		}
 
 		if ($prevUrl) {
@@ -99,7 +99,7 @@ class ReservationTurnReservationHelper extends AppHelper {
 			$html .= '</div>';
 		}
 		$html .= '</div>';
-		if($pos == 'top'){
+		if ($pos == 'top') {
 			$html .= $this->_View->element('Reservations.Reservations/select_location');
 		}
 		return $html;

@@ -87,7 +87,9 @@ class ReservationEventContent extends ReservationsAppModel {
 			'model' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('reservations', 'Model Name')),
+					'message' => sprintf(
+						__d('net_commons', 'Please input %s.'), __d('reservations', 'Model Name')
+					),
 					'allowEmpty' => false,
 					'required' => true,
 				),
@@ -95,7 +97,9 @@ class ReservationEventContent extends ReservationsAppModel {
 			'content_key' => array(
 				'numeric' => array(
 					'rule' => array('notBlank'),
-					'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('reservations', 'content key')),
+					'message' => sprintf(
+						__d('net_commons', 'Please input %s.'), __d('reservations', 'content key')
+					),
 					'allowEmpty' => false,
 					'required' => true,
 				),

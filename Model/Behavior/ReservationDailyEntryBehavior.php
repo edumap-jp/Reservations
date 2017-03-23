@@ -54,7 +54,8 @@ class ReservationDailyEntryBehavior extends ReservationAppBehavior {
 		//
 		////NC3ではすでにサーバー系日付時刻になおっているから、timezoneDateは呼ばない.
 		//catしてYmdHisにする
-		$sTime = $eventData['ReservationEvent']['start_date'] . $eventData['ReservationEvent']['start_time'];
+		$sTime = $eventData['ReservationEvent']['start_date'] .
+				$eventData['ReservationEvent']['start_time'];
 
 		//以下で使う時間系は施設予約画面上（=ユーザー系）でのカレンダ
 		//日付時刻をさしているので、ユーザー系に直す。

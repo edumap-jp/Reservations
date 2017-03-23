@@ -223,7 +223,7 @@ class ReservationsAppController extends AppController {
 
 		// 施設で絞り込む
 		$locationKey = $this->request->query('location_key');
-		if($locationKey){
+		if ($locationKey) {
 			$planParams['location_key'] = $locationKey;
 		}
 

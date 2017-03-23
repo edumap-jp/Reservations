@@ -503,7 +503,9 @@ class ReservationUpdatePlanBehavior extends ReservationAppBehavior {
 			//eventのidではなく、keyで消さないといけない。（なぜなら同一キーをもつ過去世代が複数あり
 			//１つのidをけしても、同一keyの他のidのデータが拾われて表示されてしまうため。
 			////$eventIds = Hash::extract($newPlan['ReservationEvent'], '{n}[dtstart>=' . $baseDtstart . '].id');
-			$eventKeys = Hash::extract($newPlan['ReservationEvent'], '{n}[dtstart>=' . $baseDtstart . '].key');
+			$eventKeys = Hash::extract(
+				$newPlan['ReservationEvent'], '{n}[dtstart>=' . $baseDtstart . '].key'
+			);
 			$this->__deleteOrUpdateAllEvents($model, $status, $eventData, $eventKeys);
 
 			//////////////////////////////
@@ -729,7 +731,8 @@ class ReservationUpdatePlanBehavior extends ReservationAppBehavior {
 
 		//メール通知関連は編集画面の値を使う
 		$event['ReservationEvent']['is_enable_mail'] = $eventData['ReservationEvent']['is_enable_mail'];
-		$event['ReservationEvent']['email_send_timing'] = $eventData['ReservationEvent']['email_send_timing'];
+		$event['ReservationEvent']['email_send_timing'] =
+						$eventData['ReservationEvent']['email_send_timing'];
 
 		//作成日、作成者情報はnewPlanの値のまま
 		//$event['ReservationEvent']['created_user'] = 1

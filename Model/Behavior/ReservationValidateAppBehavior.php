@@ -53,13 +53,13 @@ class ReservationValidateAppBehavior extends ModelBehavior {
 				break;
 			default:
 				//不正種別の場合、右代表で、rrule_interval[DAILY]にエラーＭＳＧを代入する。
-				$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval'] = array();
-				$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval']['DAILY'] =
-					array();
-				//$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_byday']['DAILY'][] =
-				$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval']['DAILY'][] =
-					__d('reservations',
-						'Invalid input. (repeat interval. Please specify day/week/month/year)');
+				$validationErrors['rrule_interval'] = array();
+				$validationErrors['rrule_interval']['DAILY'] = array();
+				//$validationErrors['rrule_byday']['DAILY'][] =
+				$validationErrors['rrule_interval']['DAILY'][] = __d(
+					'reservations', 'Invalid input. (repeat interval. Please specify day/week/month/year)'
+				);
+				$model->ReservationActionPlan->reservationProofreadValidationErrors = $validationErrors;
 				return false;
 		}
 		return $ret;
@@ -75,14 +75,15 @@ class ReservationValidateAppBehavior extends ModelBehavior {
  * @return bool 成功時true, 失敗時false
  */
 	private function __checkDailyRepateFreq(Model &$model, &$check) {
-		if (!in_array($model->data[$model->alias]['rrule_interval']['DAILY'],
-				range(ReservationsComponent::CALENDAR_RRULE_INTERVAL_DAILY_MIN,
-					ReservationsComponent::CALENDAR_RRULE_INTERVAL_DAILY_MAX))) {
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval'] = array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval']['DAILY'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval']['DAILY'][] =
-				__d('reservations', 'Invalid input. (repeat interval: every day)');
+		$min = ReservationsComponent::CALENDAR_RRULE_INTERVAL_DAILY_MIN;
+		$max = ReservationsComponent::CALENDAR_RRULE_INTERVAL_DAILY_MAX;
+		if (! in_array($model->data[$model->alias]['rrule_interval']['DAILY'], range($min, $max))) {
+			$validationError['rrule_interval'] = array();
+			$validationError['rrule_interval']['DAILY'] = array();
+			$validationError['rrule_interval']['DAILY'][] = __d(
+				'reservations', 'Invalid input. (repeat interval: every day)'
+			);
+			$model->ReservationActionPlan->reservationProofreadValidationErrors = $validationError;
 			return false;
 		}
 		return true;
@@ -98,15 +99,15 @@ class ReservationValidateAppBehavior extends ModelBehavior {
  * @return bool 成功時true, 失敗時false
  */
 	private function __checkWeeklyRepateFreq(Model &$model, &$check) {
-		if (!in_array($model->data[$model->alias]['rrule_interval']['WEEKLY'],
-			range(ReservationsComponent::CALENDAR_RRULE_INTERVAL_WEEKLY_MIN,
-				ReservationsComponent::CALENDAR_RRULE_INTERVAL_WEEKLY_MAX))) {
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval']['WEEKLY'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval']['WEEKLY'][] =
-				__d('reservations', 'Invalid input. (repeat interval: every week)');
+		$min = ReservationsComponent::CALENDAR_RRULE_INTERVAL_WEEKLY_MIN;
+		$max = ReservationsComponent::CALENDAR_RRULE_INTERVAL_WEEKLY_MAX;
+		if (!in_array($model->data[$model->alias]['rrule_interval']['WEEKLY'], range($min, $max))) {
+			$validationError['rrule_interval'] = array();
+			$validationError['rrule_interval']['WEEKLY'] = array();
+			$validationError['rrule_interval']['WEEKLY'][] = __d(
+				'reservations', 'Invalid input. (repeat interval: every week)'
+			);
+			$model->ReservationActionPlan->reservationProofreadValidationErrors = $validationError;
 			return false;
 		}
 
@@ -119,11 +120,12 @@ class ReservationValidateAppBehavior extends ModelBehavior {
 			}
 		}
 		if (!($cnt > 0 && $cnt === count($model->data[$model->alias]['rrule_byday']['WEEKLY']))) {
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_byday'] = array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_byday']['WEEKLY'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_byday']['WEEKLY'][] =
-				__d('reservations', 'Invalid input. (repeat interval:week)');
+			$validationError['rrule_byday'] = array();
+			$validationError['rrule_byday']['WEEKLY'] = array();
+			$validationError['rrule_byday']['WEEKLY'][] = __d(
+				'reservations', 'Invalid input. (repeat interval:week)'
+			);
+			$model->ReservationActionPlan->reservationProofreadValidationErrors = $validationError;
 			return false;
 		}
 		return true;
@@ -139,22 +141,21 @@ class ReservationValidateAppBehavior extends ModelBehavior {
  * @return bool 成功時true, 失敗時false
  */
 	private function __checkMonthlyRepateFreq(Model &$model, &$check) {
-		if (!in_array($model->data[$model->alias]['rrule_interval']['MONTHLY'],
-			range(ReservationsComponent::CALENDAR_RRULE_INTERVAL_MONTHLY_MIN,
-				ReservationsComponent::CALENDAR_RRULE_INTERVAL_MONTHLY_MAX))) {
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval']['MONTHLY'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval']['MONTHLY'][] =
-				__d('reservations', 'Invalid input. (repeat interbal:every month)');
+		$min = ReservationsComponent::CALENDAR_RRULE_INTERVAL_MONTHLY_MIN;
+		$max = ReservationsComponent::CALENDAR_RRULE_INTERVAL_MONTHLY_MAX;
+		if (!in_array($model->data[$model->alias]['rrule_interval']['MONTHLY'], range($min, $max))) {
+			$validationError['rrule_interval'] = array();
+			$validationError['rrule_interval']['MONTHLY'] = array();
+			$validationError['rrule_interval']['MONTHLY'][] = __d(
+				'reservations', 'Invalid input. (repeat interbal:every month)'
+			);
+			$model->ReservationActionPlan->reservationProofreadValidationErrors = $validationError;
 			return false;
 		}
 
 		// rrule_byday[MONTHLY] inList => array('', '1SU', '1MO', '1TU', ... , '4FR, '4SA', '-1SU', '-2SU', ..., '-1SA')
 		// または
 		// rrule_bymonthday[MONTHLY] inList => array('', 1, 2, ..., 31 );
-
 		$bydayMonthly = $this->_makeArrayOfWdayInNthWeek();	//1SU, ... , -1SA の配列生成
 
 		$chkFlag = true;
@@ -175,12 +176,12 @@ class ReservationValidateAppBehavior extends ModelBehavior {
 
 		if (!$chkFlag) {
 			//曜日or日付のエラーをrrule_bydayのエラーとして扱う
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_byday'] = array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_byday']['MONTHLY'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_byday']['MONTHLY'][] =
-				__d('reservations',
-					'Invalid input. (rrule error. day of the month or date)');
+			$validationError['rrule_byday'] = array();
+			$validationError['rrule_byday']['MONTHLY'] = array();
+			$validationError['rrule_byday']['MONTHLY'][] = __d(
+				'reservations', 'Invalid input. (rrule error. day of the month or date)'
+			);
+			$model->ReservationActionPlan->reservationProofreadValidationErrors = $validationError;
 			return false;
 		}
 		return true;
@@ -196,26 +197,26 @@ class ReservationValidateAppBehavior extends ModelBehavior {
  * @return bool 成功時true, 失敗時false
  */
 	private function __checkYearlyRepateFreq(Model &$model, &$check) {
-		if (!in_array($model->data[$model->alias]['rrule_interval']['YEARLY'],
-			range(ReservationsComponent::CALENDAR_RRULE_INTERVAL_YEARLY_MIN,
-				ReservationsComponent::CALENDAR_RRULE_INTERVAL_YEARLY_MAX))) {
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval']['YEARLY'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_interval']['YEARLY'][] =
-				__d('reservations', 'Invalid input. (rrule error. interval YEARLY)');
+		$min = ReservationsComponent::CALENDAR_RRULE_INTERVAL_YEARLY_MIN;
+		$max = ReservationsComponent::CALENDAR_RRULE_INTERVAL_YEARLY_MAX;
+		if (!in_array($model->data[$model->alias]['rrule_interval']['YEARLY'], range($min, $max))) {
+			$validationError['rrule_interval'] = array();
+			$validationError['rrule_interval']['YEARLY'] = array();
+			$validationError['rrule_interval']['YEARLY'][] = __d(
+				'reservations', 'Invalid input. (rrule error. interval YEARLY)'
+			);
+			$model->ReservationActionPlan->reservationProofreadValidationErrors = $validationError;
 			return false;
 		}
 
 		if (empty($model->data[$model->alias]['rrule_bymonth']['YEARLY'])) {
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_bymonth'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_bymonth']['YEARLY'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_bymonth']['YEARLY'][] =
-				__d('reservations',
-					'Invalid input. (rrule error. Interval of year. there is no specification of the month.)');
+			$validationError['rrule_bymonth'] = array();
+			$validationError['rrule_bymonth']['YEARLY'] = array();
+			$validationError['rrule_bymonth']['YEARLY'][] = __d(
+				'reservations',
+				'Invalid input. (rrule error. Interval of year. there is no specification of the month.)'
+			);
+			$model->ReservationActionPlan->reservationProofreadValidationErrors = $validationError;
 			return false;
 		}
 
@@ -228,12 +229,12 @@ class ReservationValidateAppBehavior extends ModelBehavior {
 			}
 		}
 		if (!($cnt > 0 && $cnt === count($model->data[$model->alias]['rrule_bymonth']['YEARLY']))) {
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_bymonth'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_bymonth']['YEARLY'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_bymonth']['YEARLY'][] =
-				__d('reservations', 'Invalid input. (rrule error. Interval of year, specified month.)');
+			$validationError['rrule_bymonth'] = array();
+			$validationError['rrule_bymonth']['YEARLY'] = array();
+			$validationError['rrule_bymonth']['YEARLY'][] = __d(
+				'reservations', 'Invalid input. (rrule error. Interval of year, specified month.)'
+			);
+			$model->ReservationActionPlan->reservationProofreadValidationErrors = $validationError;
 			return false;
 		}
 
@@ -242,12 +243,13 @@ class ReservationValidateAppBehavior extends ModelBehavior {
 		//年単位の「開始日と同日」(value='')も選択肢の１つなので追加
 		$bydayYearly[] = '';
 		if (!in_array($model->data[$model->alias]['rrule_byday']['YEARLY'], $bydayYearly)) {
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_byday'] = array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_byday']['YEARLY'] =
-				array();
-			$model->ReservationActionPlan->reservationProofreadValidationErrors['rrule_byday']['YEARLY'][] =
-				__d('reservations', 'Invalid input. ' .
-					'(rrule error.  Interval of year. Week of the year unit,week value is invalid.)');
+			$validationError['rrule_byday'] = array();
+			$validationError['rrule_byday']['YEARLY'] = array();
+			$validationError['rrule_byday']['YEARLY'][] = __d(
+				'reservations',
+				'Invalid input. (rrule error.  Interval of year. Week of the year unit,week value is invalid.)'
+			);
+			$model->ReservationActionPlan->reservationProofreadValidationErrors = $validationError;
 			return false;
 		}
 		return true;

@@ -38,7 +38,8 @@ class ReservationRrule extends ReservationsAppModel {
 		'Reservations.ReservationUpdatePlan', //Update
 		'Reservations.ReservationDeletePlan', //Delete
 		'Blocks.Block' => array(
-			'name' => 'ReservationRrule.name',	//nameの値がBlockモデルの名称として登録される。
+			//nameの値がBlockモデルの名称として登録される。
+			'name' => 'ReservationRrule.name',
 			//'loadModels' => array(			//Blockと紐づく（アソシエーションのある）
 			//								//他のモデルがあれば、loadModelsで指定しておくと。
 			//								//ブロックデータ登録時、指定モデルのblock_id,block_key

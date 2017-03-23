@@ -298,8 +298,8 @@ class ReservationPlansController extends ReservationsAppController {
 		// 施設情報
 		$locations = $this->ReservationLocation->getLocations();
 		$this->set('locations', $locations);
-
 	}
+
 /**
  * edit
  *
@@ -326,7 +326,6 @@ class ReservationPlansController extends ReservationsAppController {
 		// 施設情報
 		$locations = $this->ReservationLocation->getLocations();
 		$this->set('locations', $locations);
-
 	}
 
 /**
@@ -392,7 +391,9 @@ class ReservationPlansController extends ReservationsAppController {
 		}
 		//追加・変更、元データ繰返し有無、及び時間・繰返し系変更タイプの判断処理
 		list($procMode, $isOriginRepeat, $isTimeMod, $isRepeatMod) =
-			$this->ReservationActionPlan->getProcModeOriginRepeatAndModType($this->request->data, $originEvent);
+			$this->ReservationActionPlan->getProcModeOriginRepeatAndModType(
+				$this->request->data, $originEvent
+			);
 
 		//変更時の生成者を勘案・取得する。
 		$createdUserWhenUpd = $this->__getCreatedUserWhenUpd(
@@ -402,7 +403,8 @@ class ReservationPlansController extends ReservationsAppController {
 		);
 
 		//公開対象のルームが、ログイン者（編集者・承認者）のプライベートルームかどうかを判断しておく。
-		$isMyPrivateRoom = ($this->request->data['ReservationActionPlan']['plan_room_id'] == $this->_myself);
+		$isMyPrivateRoom =
+				($this->request->data['ReservationActionPlan']['plan_room_id'] == $this->_myself);
 
 		if (! $isMyPrivateRoom) {
 			//CakeLog::debug("DBG: 予定のルームが、ログインの者のプライベートルーム以外の時");
@@ -474,7 +476,9 @@ class ReservationPlansController extends ReservationsAppController {
 				$this->eventData['ReservationEvent']['reservation_rrule_id']);
 
 			//自分もふくむので1件以上あることはまちがいない。
-			$capForViewOf1stSib = (new ReservationSupport())->getReservationActionPlanForView($eventSiblings[0]);
+			$capForViewOf1stSib = (new ReservationSupport())->getReservationActionPlanForView(
+				$eventSiblings[0]
+			);
 
 			$firstSibEventId = $eventSiblings[0]['ReservationEvent']['id'];
 			$firstSibEventKey = $eventSiblings[0]['ReservationEvent']['key'];
@@ -485,16 +489,20 @@ class ReservationPlansController extends ReservationsAppController {
 			$capForView = (new ReservationSupport())->getInitialReservationActionPlanForView(
 				$year, $month, $day, $hour, $minute, $second, $enableTime, $this->_exposeRoomOptions);
 
-			$eventSiblings = array(); //0件を意味する空配列を入れておく。
+			//0件を意味する空配列を入れておく。
+			$eventSiblings = array();
 
-			$capForViewOf1stSib = $capForView;	//eventが空なので、1stSibも初期値でFILLしておく
+			//eventが空なので、1stSibも初期値でFILLしておく
+			$capForViewOf1stSib = $capForView;
 
 			$firstSibEventId = 0;	//新規だからidは未設定をあらわす0
 			$firstSibEventKey = '';
 		}
-		$year1stSib = substr($capForViewOf1stSib['ReservationActionPlan']['detail_start_datetime'], 0, 4);
-		$month1stSib = substr($capForViewOf1stSib['ReservationActionPlan']['detail_start_datetime'], 5, 2);
-		$day1stSib = substr($capForViewOf1stSib['ReservationActionPlan']['detail_start_datetime'], 8, 2);
+
+		$startDatetime = $capForViewOf1stSib['ReservationActionPlan']['detail_start_datetime'];
+		$year1stSib = substr($startDatetime, 0, 4);
+		$month1stSib = substr($startDatetime, 5, 2);
+		$day1stSib = substr($startDatetime, 8, 2);
 
 		$firstSib = array(
 			'ReservationActionPlan' => array(

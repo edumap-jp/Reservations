@@ -66,10 +66,13 @@ class ReservationWeeklyEntryBehavior extends ReservationAppBehavior {
 		//setStartEndSundayDateAndTime()の中で、インターバル値を加算した サーバー系時刻
 		//start_date,start_time, end_date, end_timeを$eventData['ReservationEvent']の該当項目に
 		//代入しているので、そのまま、isRepeatable()の引数としてつかってOK.
-		//
-		if (!ReservationSupport::isRepeatable($model->rrule, ($eventData['ReservationEvent']['start_date'] .
-			$eventData['ReservationEvent']['start_time']),
-			$eventData['ReservationEvent']['timezone_offset'], $model->isOverMaxRruleIndex)) {
+		$result = ReservationSupport::isRepeatable(
+			$model->rrule,
+			($eventData['ReservationEvent']['start_date'] . $eventData['ReservationEvent']['start_time']),
+			$eventData['ReservationEvent']['timezone_offset'],
+			$model->isOverMaxRruleIndex
+		);
+		if (! $result) {
 			return true;
 		}
 
@@ -124,7 +127,8 @@ class ReservationWeeklyEntryBehavior extends ReservationAppBehavior {
 
 		//インターバル日数を加算した開始日の計算
 		//sTimeはサーバー系時刻
-		$sTime = $eventData['ReservationEvent']['start_date'] . $eventData['ReservationEvent']['start_time'];
+		$sTime = $eventData['ReservationEvent']['start_date'] .
+				$eventData['ReservationEvent']['start_time'];
 
 		//以下で使う時間系は、画面上（=ユーザー系）でのカレンダ日付時刻をさしているので、
 		//ユーザー系に直す。

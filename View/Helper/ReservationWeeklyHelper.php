@@ -206,7 +206,8 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 
 		//プライベートを表示することになって入るなら「仲間の予定」仮想ルーム情報を追記
 		if ($vars['ReservationFrameSetting']['is_myroom']) {
-			$rooms[ReservationsComponent::FRIEND_PLAN_VIRTUAL_ROOM_ID] = __d('reservations', 'Schedule of fellow');
+			$friendRoomId = ReservationsComponent::FRIEND_PLAN_VIRTUAL_ROOM_ID;
+			$rooms[$friendRoomId] = __d('reservations', 'Schedule of fellow');
 		}
 
 		//ルーム数分繰り返し

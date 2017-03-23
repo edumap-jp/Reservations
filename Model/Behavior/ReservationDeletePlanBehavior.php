@@ -214,7 +214,7 @@ class ReservationDeletePlanBehavior extends ReservationAppBehavior {
 /**
  * 予定データの全削除
  *
- * @param Model &$model モデル 
+ * @param Model &$model モデル
  * @param array $rruleData rruleData
  * @param array $eventData eventData(編集画面のevent)
  * @param array $curPlan 現世代予定データ
@@ -315,7 +315,9 @@ class ReservationDeletePlanBehavior extends ReservationAppBehavior {
 
 		//eventのidではなく、keyで消さないといけない。（なぜなら同一キーをもつ過去世代が複数あり
 		//１つのidをけしても、同一keyの他のidのデータが拾われて表示されてしまうため。
-		$eventKeys = Hash::extract($curPlan['ReservationEvent'], '{n}[dtstart>=' . $baseDtstart . '].key');
+		$eventKeys = Hash::extract(
+			$curPlan['ReservationEvent'], '{n}[dtstart>=' . $baseDtstart . '].key'
+		);
 
 		//(1)-1 実際に削除する。
 		$conditions = array(

@@ -35,7 +35,7 @@
 			<?php
 				echo $this->ReservationDailyTimeline->makeDailyBodyHtml($vars); // ここでもIDセット
 				$reservationPlans = $this->ReservationDailyTimeline->getTimelineData(); //
-            // ここでplanのIDいれたらいいんでは？
+				// ここでplanのIDいれたらいいんでは？
 			?>
 			<div ng-controller="ReservationsTimelinePlan" ng-init="initialize(<?php echo h(json_encode(array('reservationPlans' => $reservationPlans))) ?>)"></div>
 		</div>

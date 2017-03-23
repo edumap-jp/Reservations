@@ -5,11 +5,11 @@
  * @property Language $Language
  * @property Category $Category
  *
-* @author Noriko Arai <arai@nii.ac.jp>
-* @author Your Name <yourname@domain.com>
-* @link http://www.netcommons.org NetCommons Project
-* @license http://www.netcommons.org/license.txt NetCommons License
-* @copyright Copyright 2014, NetCommons Project
+ * @author Noriko Arai <arai@nii.ac.jp>
+ * @author Your Name <yourname@domain.com>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
  */
 
 App::uses('ReservationsAppModel', 'Reservations.Model');
@@ -39,8 +39,7 @@ class ReservationLocation extends ReservationsAppModel {
 		),
 	);
 
-
-	/**
+/**
  * Validation rules
  *
  * @var array
@@ -167,7 +166,7 @@ class ReservationLocation extends ReservationsAppModel {
  */
 	public $belongsTo = array(
 		'Language' => array(
-			'className' => 'Language',
+			'className' => 'M17n.Language',
 			'foreignKey' => 'language_id',
 			'conditions' => '',
 			'fields' => '',
@@ -200,16 +199,17 @@ class ReservationLocation extends ReservationsAppModel {
 	}
 
 /**
- * 記事の保存。タグも保存する
+ * 施設データの登録
  *
  * @param array $data 登録データ
  * @return bool
  * @throws InternalErrorException
  */
 	public function saveLocation($data) {
-		$data['ReservationLocation']['time_table'] = implode('|', $data['ReservationLocation']['time_table']);
+		$timeTable = implode('|', $data['ReservationLocation']['time_table']);
+		$data['ReservationLocation']['time_table'] = $timeTable;
 		// 全日フラグあったら00:00-24:00あつかいにする
-		if($data['ReservationLocation']['allday_flag']){
+		if ($data['ReservationLocation']['allday_flag']) {
 			$data['ReservationLocation']['start_time'] = '00:00';
 			$data['ReservationLocation']['end_time'] = '24:00';
 		}
@@ -244,21 +244,32 @@ class ReservationLocation extends ReservationsAppModel {
 		return $savedData;
 	}
 
+/**
+ * 施設データを取得する
+ *
+ * @return array
+ */
 	public function getLocations() {
 		$options = [
 			'conditions' => [
 				'language_id' => Current::read('Language.id'),
 			],
-			'order' => 'ReservationLocation.weight ASC'
+			//'order' => 'ReservationLocation.weight ASC'
 		];
 		$locations = $this->find('all', $options);
 		// openTextをセットする。
-		foreach ($locations as &$location){
+		foreach ($locations as &$location) {
 			$location['ReservationLocation']['openText'] = $this->openText($location);
 		}
 		return $locations;
 	}
 
+/**
+ * openTextを返す
+ *
+ * @param array $reservationLocation 施設データ
+ * @return string
+ */
 	public function openText($reservationLocation) {
 		$ret = '';
 		$weekDaysOptions = [
@@ -271,17 +282,17 @@ class ReservationLocation extends ReservationsAppModel {
 			'Sat' => __d('holidays', 'Saturday'),
 		];
 		$timeTable = $reservationLocation['ReservationLocation']['time_table'];
-		if($timeTable === 'Sun|Mon|Tue|Wed|Thu|Fri|Sat'){
+		if ($timeTable === 'Sun|Mon|Tue|Wed|Thu|Fri|Sat') {
 			//毎日
 			$ret = __d('reservations', '毎日');
-		}elseif ($timeTable === 'Mon|Tue|Wed|Thu|Fri') {
+		} elseif ($timeTable === 'Mon|Tue|Wed|Thu|Fri') {
 			// 平日
 			$ret = __d('reservations', '平日');
-		}else {
+		} else {
 			$timeTable = explode('|', $timeTable);
 			$weekList = [];
-			foreach($timeTable as $weekday){
-				if($weekday){
+			foreach ($timeTable as $weekday) {
+				if ($weekday) {
 					$weekList[] = $weekDaysOptions[$weekday];
 				}
 			}

@@ -108,7 +108,9 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
 			}
 			$effectiveEvents[] = $event;	//有効なeventだったので配列にappend
 		}
-		$plan['ReservationEvent'] = $effectiveEvents;	//有効なイベント集合配列に置き換える
+
+		//有効なイベント集合配列に置き換える
+		$plan['ReservationEvent'] = $effectiveEvents;
 
 		return $plan;
 	}
@@ -218,8 +220,8 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
 
 		//「status, is_active, is_latest, created, created_user について」
 		//statusは、元世代のstatus値を引き継ぐ。
-
-		$eventData['ReservationEvent']['modified_user'] = $eventData['ReservationEvent']['modified'] = null;
+		$eventData['ReservationEvent']['modified_user'] = null;
+		$eventData['ReservationEvent']['modified'] = null;
 
 		if (!isset($model->ReservationEvent)) {
 			$model->loadModels(['ReservationEvent' => 'Reservations.ReservationEvent']);
@@ -309,7 +311,8 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
  * @return int 生成成功時 新しい$contentを返す。失敗時 InternalErrorExceptionを投げる。
  * @throws InternalErrorException
  */
-	private function __copyEventContentData(&$model, $content, $reservationEventId, $createdUserWhenUpd) {
+	private function __copyEventContentData(&$model, $content,
+									$reservationEventId, $createdUserWhenUpd) {
 		//ReservationEventContentには、status, is_latest, is_activeはない
 
 		$contentData = array();
@@ -393,16 +396,20 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
 		if (!isset($model->ReservationEventShareUser)) {
 			$model->loadModels(['ReservationEventShareUser' => 'Reservations.ReservationEventShareUser']);
 		}
+
+		//ReservationEventShareUserのチェック
 		$model->ReservationEventShareUser->set($shareUserData);
-		if (!$model->ReservationEventShareUser->validates()) {	//ReservationEventShareUserのチェック
+		if (!$model->ReservationEventShareUser->validates()) {
 			$model->validationErrors = Hash::merge(
 				$model->validationErrors, $model->ReservationEventShareUser->validationErrors);
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 		$shareUserData = $model->ReservationEventShareUser->save($shareUserData, false);
 		if (!$shareUserData) { //保存のみ
-			CakeLog::error("変更時に指定された元共有ユーザ(reservation_event_share_user_id=[" .
-				$originShareUserId . "])のCOPYに失敗");
+			CakeLog::error(
+				'変更時に指定された元共有ユーザ' .
+					'(reservation_event_share_user_id=[' . $originShareUserId . '])' .
+				'のCOPYに失敗');
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 

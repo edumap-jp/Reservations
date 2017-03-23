@@ -220,12 +220,16 @@ class ReservationCommonHelper extends AppHelper {
  * @return mixed 指定日の開始時間、終了時間および指定日で表示すべき予定群の配列
  */
 	public function preparePlanSummaries(&$vars, &$nctm, $year, $month, $day) {
-		$beginOfDay = ReservationTime::dt2CalDt($nctm->toServerDatetime(
-			sprintf("%04d-%02d-%02d 00:00:00", $year, $month, $day)));
-		list($yearOfNextDay, $monthOfNextDay, $nextDay) = ReservationTime::getNextDay($year, $month, $day);
+		$beginOfDay = ReservationTime::dt2CalDt(
+			$nctm->toServerDatetime(sprintf("%04d-%02d-%02d 00:00:00", $year, $month, $day))
+		);
+		list($yearOfNextDay, $monthOfNextDay, $nextDay) =
+										ReservationTime::getNextDay($year, $month, $day);
 		$endOfDay = ReservationTime::dt2CalDt(
-			$nctm->toServerDatetime(sprintf("%04d-%02d-%02d 00:00:00", $yearOfNextDay,
-				$monthOfNextDay, $nextDay)));
+			$nctm->toServerDatetime(
+				sprintf("%04d-%02d-%02d 00:00:00", $yearOfNextDay, $monthOfNextDay, $nextDay)
+			)
+		);
 
 		$plansOfDay = array();
 		$fromTimeOfDay = ReservationTime::getHourColonMin($nctm->toUserDatetime($beginOfDay));

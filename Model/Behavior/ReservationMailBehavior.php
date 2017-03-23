@@ -54,10 +54,12 @@ class ReservationMailBehavior extends ReservationAppBehavior {
 		$this->_setRruleTags($model, $data);
 		$this->_setUrlTags($model, $data);
 		$this->_setRoomTags($model, $data);
-		$model->ReservationEvent->setAddEmbedTagValue('X-SUBJECT', $data['ReservationEvent']['title']);
-		$model->ReservationEvent->setAddEmbedTagValue('X-CONTACT', $data['ReservationEvent']['contact']);
-		$model->ReservationEvent->setAddEmbedTagValue('X-LOCATION', $data['ReservationEvent']['location']);
-		$model->ReservationEvent->setAddEmbedTagValue('X-BODY', $data['ReservationEvent']['description']);
+
+		$reservationEvent = $data['ReservationEvent'];
+		$model->ReservationEvent->setAddEmbedTagValue('X-SUBJECT', $reservationEvent['title']);
+		$model->ReservationEvent->setAddEmbedTagValue('X-CONTACT', $reservationEvent['contact']);
+		$model->ReservationEvent->setAddEmbedTagValue('X-LOCATION', $reservationEvent['location']);
+		$model->ReservationEvent->setAddEmbedTagValue('X-BODY', $reservationEvent['description']);
 
 		// すり替え前にオリジナルルームID,オリジナルのBlockID,オリジナルのBlockKeyを確保
 		$originalRoomId = Current::read('Room.id');
