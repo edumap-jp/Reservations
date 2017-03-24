@@ -24,6 +24,9 @@
 	$weeklyLinkArr = Hash::merge($baseLinkArr, array(
 		'?' => array('style' => 'weekly')
 	));
+    $weeklyAllLinkArr = Hash::merge($baseLinkArr, array(
+        '?' => array('style' => 'all_weekly')
+    ));
 
 	$lmonthlyLinkArr = Hash::merge($baseLinkArr, array(
 		'?' => array('style' => 'largemonthly')
@@ -33,33 +36,75 @@
 		'?' => array('style' => 'daily', 'tab' => 'list')
 	));
 ?>
+<?php
+if (in_array($active, ['lmonthly', 'weekly'])) {
+    // 施設別タブをアクティブ
+	$oneLocation = 'active';
+	$oneLocationLink = '#';
+	$allLocation = '';
+	$allLocationLink = $weeklyAllLinkArr;
+} else {
+    // 全施設タブをアクティブ
+	$oneLocation = '';
+	$oneLocationLink = $lmonthlyLinkArr;
+	$allLocation = 'active';
+	$allLocationLink = '#';
+}
+?>
+<div class="reservation-location-tabs btn-group btn-group-justified" role="group" aria-label="">
+    <div class="btn-group" role="group">
+		<?php echo $this->NetCommonsHtml->link(__d('reservations', '全施設'), $allLocationLink, [
+		        'class' => ['btn', 'btn-default', $allLocation]
+        ]); ?>
+    </div>
+    <div class="btn-group" role="group">
+		<?php echo $this->NetCommonsHtml->link(__d('reservations', '施設別'), $oneLocationLink, [
+			'class' => ['btn', 'btn-default', $oneLocation]
+		]); ?>
+    </div>
+</div>
 
 <ul role='tablist' class='nav nav-tabs reservation-date-move-tablist'>
-<?php if ($active === 'lmonthly'): ?>
+
+<?php if ($oneLocation == 'active'): ?>
+    <?php if ($active === 'lmonthly'): ?>
 		<li class='active'>
 		<a href="#"><?php echo __d('reservations', 'month'); ?></a>
-<?php else: ?>
+    <?php else: ?>
 		<li>
 		<?php echo $this->NetCommonsHtml->link(__d('reservations', 'month'), $lmonthlyLinkArr); ?>
-<?php endif; ?>
+    <?php endif; ?>
 		</li>
 
-<?php if ($active === 'weekly'): ?>
+    <?php if ($active === 'weekly'): ?>
 		<li class='active'>
 		<a href="#"><?php echo __d('reservations', 'week'); ?></a>
-<?php else: ?>
+    <?php else: ?>
 		<li>
 		<?php echo $this->NetCommonsHtml->link(__d('reservations', 'week'), $weeklyLinkArr); ?>
-<?php endif; ?>
+    <?php endif; ?>
 		</li>
+<?php endif ?>
 
-<?php if ($active === 'daily'): ?> 
+<?php if ($allLocation == 'active'): ?>
+
+    <?php if ($active === 'all_weekly'): ?>
+        <li class='active'>
+        <a href="#"><?php echo __d('reservations', 'week'); ?></a>
+    <?php else: ?>
+        <li>
+		<?php echo $this->NetCommonsHtml->link(__d('reservations', 'week'), $weeklyAllLinkArr); ?>
+	<?php endif; ?>
+    </li>
+
+    <?php if ($active === 'daily'): ?>
 		<li class='active'>
 		<a href="#"><?php echo __d('reservations', 'day'); ?></a>
-<?php else: ?>
+    <?php else: ?>
 		<li>
 		<?php echo $this->NetCommonsHtml->link(__d('reservations', 'day'), $dailyLinkArr); ?>
-<?php endif; ?>
+    <?php endif; ?>
 		</li>
+<?php endif; ?>
 </ul>
 <br>

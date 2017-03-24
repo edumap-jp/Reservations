@@ -335,6 +335,11 @@ class ReservationsController extends ReservationsAppController {
 				$vars = $this->getWeeklyVars($vars);
 				$vars['style'] = 'weekly';
 				break;
+			case 'all_weekly':
+				$ctpName = 'all_weekly';
+				$vars = $this->getWeeklyVars($vars);
+				$vars['style'] = 'all_weekly';
+				break;
 			case 'daily':
 				$ctpName = 'daily';
 				$vars = $this->getDailyVars($vars);
