@@ -59,13 +59,13 @@ echo h($dataJson) ?>)">
 					?>
                     <div class="form-group">
 						<?php
-						echo $this->NetCommonsForm->label(__d('reservations', '利用時間'));
+						echo $this->NetCommonsForm->label(null, __d('reservations', '利用時間'), ['required' => 'required']);
 						?>
                         <div class="form-inline">
 							<?php
 
 							// 利用時間 時分〜　時分
-							// TODO デフォルトは9:00-18:00かな
+							// デフォルトは9:00-18:00
 							echo $this->NetCommonsForm->input('ReservationLocation.start_time',
 								[
 									'datetimepicker',
@@ -87,7 +87,7 @@ echo h($dataJson) ?>)">
 							);
 							echo '&nbsp;';
 							// 利用時間の制限無しチェックボックス
-							// 特にカラムはなし。0:00-24:00まで利用可能とするだけ TODO AngularJS制御
+							// 特にカラムはなし。0:00-24:00まで利用可能とするだけ AngularJS制御
 							//$this->NetCommonsForm->unlockField('ReservationLocation.allday_flag');
 							echo $this->NetCommonsForm->inlineCheckbox('ReservationLocation.allday_flag',
 								[
@@ -100,7 +100,7 @@ echo h($dataJson) ?>)">
 							?>
                         </div>
 						<?php
-							// TODO 利用時間曜日チェックボックス TODO カレンダの繰り返し設定からコピか？
+							// 利用時間曜日チェックボックス
 							$weekDaysOptions = [
 								'Sun' => __d('holidays', 'Sunday'),
 								'Mon' => __d('holidays', 'Monday'),
@@ -138,7 +138,7 @@ echo h($dataJson) ?>)">
 						// 施設説明 WYSIWYG
 						echo $this->NetCommonsForm->wysiwyg('ReservationLocation.detail', array(
 							'label' => __d('reservations', '説明'),
-							'required' => true,
+							'required' => false,
 							'rows' => 12,
 							'ng-model' => 'data.ReservationLocation.detail'
 
