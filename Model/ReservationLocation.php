@@ -247,6 +247,9 @@ class ReservationLocation extends ReservationsAppModel {
 /**
  * 施設データを取得する
  *
+ * TODO: 後で自分が閲覧可のみ取得するように条件を追加する
+ * とりあえず、すべて取得する
+ *
  * @return array
  */
 	public function getLocations() {
@@ -254,7 +257,7 @@ class ReservationLocation extends ReservationsAppModel {
 			'conditions' => [
 				'language_id' => Current::read('Language.id'),
 			],
-			//'order' => 'ReservationLocation.weight ASC'
+			'order' => 'ReservationLocation.weight ASC'
 		];
 		$locations = $this->find('all', $options);
 		// openTextをセットする。

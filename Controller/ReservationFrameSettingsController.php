@@ -120,18 +120,26 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 		$this->_displayTypeOptions = array(
-			ReservationsComponent::CALENDAR_DISP_TYPE_SMALL_MONTHLY =>
-				__d('reservations', 'Monthly Reservation (small)'),
-			ReservationsComponent::CALENDAR_DISP_TYPE_LARGE_MONTHLY =>
-				__d('reservations', 'Monthly Reservation (large)'),
-			ReservationsComponent::CALENDAR_DISP_TYPE_WEEKLY =>
-				__d('reservations', 'Weekly Reservation'),
-			ReservationsComponent::CALENDAR_DISP_TYPE_DAILY =>
-				__d('reservations', 'Day View'),
-			ReservationsComponent::CALENDAR_DISP_TYPE_TSCHEDULE =>
-				__d('reservations', 'Schedule (ordered-by-time)'),
-			ReservationsComponent::CALENDAR_DISP_TYPE_MSCHEDULE =>
-				__d('reservations', 'Schedule (ordered-by-user)'),
+			ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_WEEKLY =>
+				__d('reservations', 'Weekly Reservation (Category)'),
+			ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_DAILY =>
+				__d('reservations', 'Daily Reservation (Category)'),
+			ReservationsComponent::RESERVATION_DISP_TYPE_LACATION_MONTHLY =>
+				__d('reservations', 'Monthly Reservation (Location)'),
+			ReservationsComponent::RESERVATION_DISP_TYPE_LACATION_WEEKLY =>
+				__d('reservations', 'Weekly Reservation (Location)'),
+			//ReservationsComponent::CALENDAR_DISP_TYPE_SMALL_MONTHLY =>
+			//	__d('reservations', 'Monthly Reservation (small)'),
+			//ReservationsComponent::CALENDAR_DISP_TYPE_LARGE_MONTHLY =>
+			//	__d('reservations', 'Monthly Reservation (large)'),
+			//ReservationsComponent::CALENDAR_DISP_TYPE_WEEKLY =>
+			//	__d('reservations', 'Weekly Reservation'),
+			//ReservationsComponent::CALENDAR_DISP_TYPE_DAILY =>
+			//	__d('reservations', 'Day View'),
+			//ReservationsComponent::CALENDAR_DISP_TYPE_TSCHEDULE =>
+			//	__d('reservations', 'Schedule (ordered-by-time)'),
+			//ReservationsComponent::CALENDAR_DISP_TYPE_MSCHEDULE =>
+			//	__d('reservations', 'Schedule (ordered-by-user)'),
 		);
 	}
 

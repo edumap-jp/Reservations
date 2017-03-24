@@ -13,6 +13,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+msgid "Weekly Reservation (Category)"
+msgstr "週表示(カテゴリー別)"
+
+msgid "Daily Reservation (Category)"
+msgstr "日表示(カテゴリー別)"
+
+msgid "Monthly Reservation (Location)"
+msgstr "月表示(施設別)"
+
+msgid "Weekly Reservation (Location)"
+msgstr "週表示(施設別)"
+
+
+
+#----- 以下後で整理
+
+
 #: Reservations/Controller/ReservationFrameSettingsController.php:113
 msgid "Monthly Reservation (small)"
 msgstr "月表示（縮小）"

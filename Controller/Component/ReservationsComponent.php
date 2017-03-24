@@ -30,6 +30,29 @@ class ReservationsComponent extends Component {
 	const	CALENDAR_DISP_TYPE_DAILY = 4;			//日表示
 	const	CALENDAR_DISP_TYPE_TSCHEDULE = 5;		//スケジュール（時間順）
 	const	CALENDAR_DISP_TYPE_MSCHEDULE = 6;		//スケジュール（会員順）
+	const RESERVATION_DISP_TYPE_CATEGORY_WEEKLY = 1;  //カテゴリー別 - 週表示
+	const RESERVATION_DISP_TYPE_CATEGORY_DAILY = 2;   //カテゴリー別 - 日表示
+	const RESERVATION_DISP_TYPE_LACATION_MONTHLY = 3; //施設別 - 月表示
+	const RESERVATION_DISP_TYPE_LACATION_WEEKLY = 4;  //施設別 - 週表示
+
+/**
+ * 表示方法のデフォルト
+ *
+ * @var int
+ */
+	const RESERVATION_DISP_TYPE_DEFAULT = self::RESERVATION_DISP_TYPE_CATEGORY_WEEKLY;
+
+/**
+ * 表示方法のリスト
+ *
+ * @var array
+ */
+	public static $reservationTypes = array(
+		self::RESERVATION_DISP_TYPE_CATEGORY_WEEKLY,
+		self::RESERVATION_DISP_TYPE_CATEGORY_DAILY,
+		self::RESERVATION_DISP_TYPE_LACATION_MONTHLY,
+		self::RESERVATION_DISP_TYPE_LACATION_WEEKLY,
+	);
 
 /**
  * 画面スタイル(文字列)
@@ -41,6 +64,17 @@ class ReservationsComponent extends Component {
 	const	CALENDAR_STYLE_WEEKLY = 'weekly';			//週表示
 	const	CALENDAR_STYLE_DAILY = 'daily';			//日表示
 	const	CALENDAR_STYLE_SCHEDULE = 'schedule';		//スケジュール
+	const RESERVATION_STYLE_CATEGORY_WEEKLY = 'multiweekly';    //カテゴリー別 - 週表示
+	const RESERVATION_STYLE_CATEGORY_DAILY = 'multidaily';      //カテゴリー別 - 日表示
+	const RESERVATION_STYLE_LACATION_MONTHLY = 'singlemonthly'; //施設別 - 月表示
+	const RESERVATION_STYLE_LACATION_WEEKLY = 'singleweekly';   //施設別 - 週表示
+
+/**
+ * 画面スタイルのデフォルト値
+ *
+ * @var string
+ */
+	const RESERVATION_STYLE_DEFAULT = self::RESERVATION_STYLE_CATEGORY_WEEKLY;
 
 /**
  * スケジュール画面ソート(文字列)
@@ -121,7 +155,7 @@ class ReservationsComponent extends Component {
 
 /**
  * xdebug.max_nesting_levelのカレンダ用上限値
- * 
+ *
  * @var int
  */
 	//xdebug.max_nesting_levelのカレンダ用上限値。但し、Xdebugが入っている環境の時だけ意味がある値。

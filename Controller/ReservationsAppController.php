@@ -36,6 +36,8 @@ class ReservationsAppController extends AppController {
  * @var array
  */
 	public $uses = array(
+		'Blocks.Block',
+		'Reservations.Reservation',
 		'Reservations.ReservationRrule',
 		'Reservations.ReservationEvent',
 		'Reservations.ReservationFrameSetting',
@@ -44,6 +46,31 @@ class ReservationsAppController extends AppController {
 		'Rooms.Room',
 		'Rooms.RoomsLanguages', //pending
 	);
+
+/**
+ * beforeRender
+ *
+ * @return void
+ */
+	public function beforeFilter() {
+		parent::beforeFilter();
+
+		//NC3の標準のカテゴリーを利用するために、
+		//roomId=パブリック、blockId=サイト全体(＝パブリック)でひとつ持つ
+		//Current::read('Block')を唯一のBlockに置き換える
+		$roomId = Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID);
+		$pluginKey = Inflector::underscore($this->plugin);
+
+		$this->Reservation->prepareBlock($roomId, '0', $pluginKey);
+		$block = $this->Block->find('first', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'Block.room_id' => $roomId,
+				'Block.plugin_key' => $pluginKey,
+			)
+		));
+		Current::write('Block', $block['Block']);
+	}
 
 /**
  * getQueryParam
@@ -287,8 +314,6 @@ class ReservationsAppController extends AppController {
 	}
 
 /**
- * storeRedirectPath
- *
  * リダイレクトURLの保存
  *
  * @param array &$vars 施設予約用共通変数
@@ -310,8 +335,9 @@ class ReservationsAppController extends AppController {
 		}
 		// リダイレクトURLを記録
 		$frameId = Current::read('Frame.id');
-		$this->Session->write(CakeSession::read('Config.userAgent') . 'reservations.' . $frameId,
-			$currentPath);
+		$this->Session->write(
+			CakeSession::read('Config.userAgent') . 'reservations.' . $frameId, $currentPath
+		);
 		$vars['returnUrl'] = $currentPath;
 	}
 
