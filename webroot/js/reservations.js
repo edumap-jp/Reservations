@@ -79,14 +79,14 @@ NetCommonsApp.controller('ReservationLocation', ['$scope', function($scope) {
     $scope.test = function() {
       $scope.data.ReservationLocation.end_time = '24:00';
       console.log($scope.data.ReservationLocation.end_time);
-    }
+    };
     $scope.checkAllDay = function() {
-      if($scope.allDay){
+      if ($scope.allDay) {
         $scope.data.ReservationLocation.start_time = '00:00';
         $scope.data.ReservationLocation.end_time = '24:00';
         console.log($scope.data.ReservationLocation.end_time);
       }
-    }
+    };
   };
 }]);
 
@@ -245,7 +245,7 @@ NetCommonsApp.controller('ReservationsWeeklyTimelinePlan', ['$scope', function($
   $scope.initialize = function(data) {
     // 曜日毎に繰り返し呼び出されることは想定されてない
     // $scope.reservationPlans = data.reservationPlans;
-console.log($scope.reservationPlans);
+    //console.log($scope.reservationPlans);
     //位置情報を設定
     for (var i = 0; i < data.reservationPlans.length;
          i++) {
@@ -554,10 +554,14 @@ NetCommonsApp.controller('Reservations.selectLocation',
         };
 
         $scope.changeLocation = function(displayStyle = 'largemonthly') {
-          $scope.selectLocation = filterFilter($scope.data.locations, {ReservationLocation: {key: $scope.selectedLocation}})[0];
+          $scope.selectLocation = filterFilter(
+              $scope.data.locations,
+              {ReservationLocation: {key: $scope.selectedLocation}}
+          )[0];
           //http://127.0.0.1:9090/reservations/reservations/index?year=2017&month=02&day=26&style=largemonthly&frame_id=42
-          var url = NC3_URL+'/reservations/reservations/index?style=' + displayStyle + '&frame_id='+$scope.frameId;
-          url = url + '&location_key='+$scope.selectLocation.ReservationLocation.key;
+          var url = NC3_URL + '/reservations/reservations/index' +
+                        '?style=' + displayStyle + '&frame_id=' + $scope.frameId;
+          url = url + '&location_key=' + $scope.selectLocation.ReservationLocation.key;
           console.log(url);
           // $location.path(url);
           // $location.html5Mode(true);
@@ -570,7 +574,7 @@ NetCommonsApp.controller('Reservations.selectLocation',
     ]);
 
 NetCommonsApp.controller('ReservationsDetailEdit',
-    ['$scope', '$location', 'NetCommonsModal', '$http', 'NC3_URL' ,'filterFilter',
+    ['$scope', '$location', 'NetCommonsModal', '$http', 'NC3_URL', 'filterFilter',
       function($scope, $location, NetCommonsModal, $http, NC3_URL, filterFilter) {
        $scope.repeatArray = [];  //key=Frame.id、value=T/F of checkbox
        //key=Frame.id,value=index number
@@ -607,9 +611,10 @@ NetCommonsApp.controller('ReservationsDetailEdit',
 
        };
        $scope.setLocationKey = function(locationKey) {
-         $scope.selectLocation = filterFilter($scope.data.locations, {ReservationLocation:{key:locationKey}})[0];
+          $scope.selectLocation = filterFilter(
+              $scope.data.locations, {ReservationLocation: {key: locationKey}}
+          )[0];
        };
-
 
        // 施設カテゴリ選択
        $scope.locationOptions = [];
@@ -617,22 +622,26 @@ NetCommonsApp.controller('ReservationsDetailEdit',
        $scope.selectLocationCategory = function() {
          // all　絞り込み解除
          // ''  -> nullだけに絞り込み
-         if ($scope.locationCategory == 'all'){
+         if ($scope.locationCategory == 'all') {
            $scope.locationOptions = $scope.data.locations;
-         }else if($scope.locationCategory == ''){
-           $scope.locationOptions = filterFilter($scope.data.locations, {Category:{id:null}});
-         }else{
-           $scope.locationOptions = filterFilter($scope.data.locations, {Category:{id:$scope.locationCategory}});
+         } else if ($scope.locationCategory == '') {
+           $scope.locationOptions = filterFilter($scope.data.locations, {Category: {id: null}});
+         } else {
+           $scope.locationOptions = filterFilter(
+                $scope.data.locations, {Category: {id: $scope.locationCategory}}
+           );
          }
        };
        $scope.changeLocation = function() {
          // console.log($scope.current);
-         // $scope.selectLocation = filterFilter($scope.data.locations, {ReservationLocation:{key:$scope.ReservationActionPlan.location_key}})[0];
+         // $scope.selectLocation = filterFilter($scope.data.locations, {
+         //     ReservationLocation: {key: $scope.ReservationActionPlan.location_key}}
+         // )[0];
          // console.log($scope.ReservationActionPlan.location_key);
          // console.log($scope.selectLocation);
 
        };
-       
+
        $scope.changeEditRrule = function(frameId, firstSibEditLink) {
          var nums = ['0', '1', '2'];
          for (var num in nums) {
