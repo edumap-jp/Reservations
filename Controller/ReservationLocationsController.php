@@ -112,7 +112,7 @@ class ReservationLocationsController extends ReservationsAppController {
  * @return void
  */
 	public function index() {
-		$data = $this->ReservationLocation->findById(1);
+		//$data = $this->ReservationLocation->findById(1);
 		// FAQの並び替え参考にしよう
 		$query = array();
 
@@ -169,7 +169,8 @@ class ReservationLocationsController extends ReservationsAppController {
 			//$this->request->data['ReservationLocation']['block_id'] = Current::read('Block.id');
 			// set language_id
 			$this->request->data['ReservationLocation']['language_id'] = Current::read('Language.id');
-			if (($result = $this->ReservationLocation->saveLocation($this->request->data))) {
+			$result = $this->ReservationLocation->saveLocation($this->request->data);
+			if ($result) {
 				$url = NetCommonsUrl::actionUrl(
 					array(
 						'controller' => 'reservation_locations',
