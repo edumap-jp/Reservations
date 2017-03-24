@@ -19,8 +19,8 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th><?php echo $this->Paginator->sort('category_id'); ?></th>
-                    <th colspan="2"><?php echo $this->Paginator->sort('location_name'); ?></th>
+                    <th><?php echo $this->Paginator->sort('category_id', __d('reservations', 'Category')); ?></th>
+                    <th colspan="2"><?php echo $this->Paginator->sort('location_name', __d('reservations', 'Location name')); ?></th>
                     <!--<th>--><?php //echo $this->Paginator->sort('add_authority'); ?><!--</th>-->
                     <th><?php __d('reservations', '利用可能日時') ?></th>
                     <!--<th>--><?php //echo $this->Paginator->sort('use_private'); ?><!--</th>-->
@@ -78,6 +78,3 @@
 
     </div><!--end tab-content-->
 </article>
-
-
-TODO　FAQのような並び替えボタン

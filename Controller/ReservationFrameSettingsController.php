@@ -73,6 +73,14 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 					'label' => ['reservations', 'Location setting'],
 					'url' => array('controller' => 'reservation_locations', 'action' => 'index')
 				),
+				'timeframe_settings' => array(
+					'label' => ['reservations', 'TimeFrame setting'],
+					'url' => array('controller' => 'reservation_timeframes', 'action' => 'index')
+				),
+				'import_reservations' => array(
+					'label' => ['reservations', 'Import Reservations'],
+					'url' => array('controller' => 'reservation_import', 'action' => 'edit')
+				),
 				'frame_settings' => array(	//表示設定変更
 					'url' => array('controller' => 'reservation_frame_settings')
 				),
@@ -84,7 +92,9 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 				),
 			),
 			'mainTabsOrder' => [
-				'frame_settings', 'location_settings', 'category_settings', 'mail_settings',
+				'frame_settings', 'location_settings', 'category_settings', 'timeframe_settings',
+				'mail_settings', 'import_reservations'
+
 			],
 		),
 		'NetCommons.NetCommonsForm',

@@ -77,6 +77,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		'NetCommons.NetCommonsTime',
 		'NetCommons.TitleIcon',
 		//'Blocks.BlockForm',
+
 		'Blocks.BlockTabs' => array(
 			//画面上部のタブ設定
 			'mainTabs' => array(
@@ -87,6 +88,14 @@ class ReservationLocationsController extends ReservationsAppController {
 				'location_settings' => array(
 					'label' => ['reservations', 'Location setting'],
 					'url' => array('controller' => 'reservation_locations', 'action' => 'index')
+				),
+				'timeframe_settings' => array(
+					'label' => ['reservations', 'TimeFrame setting'],
+					'url' => array('controller' => 'reservation_timeframes', 'action' => 'index')
+				),
+				'import_reservations' => array(
+					'label' => ['reservations', 'Import Reservations'],
+					'url' => array('controller' => 'reservation_import', 'action' => 'edit')
 				),
 				'frame_settings' => array(	//表示設定変更
 					'url' => array('controller' => 'reservation_frame_settings')
@@ -99,7 +108,9 @@ class ReservationLocationsController extends ReservationsAppController {
 				),
 			),
 			'mainTabsOrder' => [
-				'frame_settings', 'location_settings', 'category_settings', 'mail_settings',
+				'frame_settings', 'location_settings', 'category_settings', 'timeframe_settings',
+				'mail_settings', 'import_reservations'
+
 			],
 		),
 		'Rooms.RoomsForm',
@@ -188,8 +199,11 @@ class ReservationLocationsController extends ReservationsAppController {
 		} else {
 			//$this->request->data = $blogEntry;
 		}
-
-		$this->RoomsForm->setRoomsForCheckbox(); // TODO プライベートは除外した方がいい？
+		// プライベートルームは除外する
+		$roomConditions = [
+			'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
+		];
+		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
 		$this->render('form');
 	}
 
@@ -273,6 +287,11 @@ class ReservationLocationsController extends ReservationsAppController {
 		//$comments = $this->ReservationLocation->getCommentsByContentKey($blogEntry['ReservationLocation']['key']);
 		//$this->set('comments', $comments);
 
+		// プライベートルームは除外する
+		$roomConditions = [
+			'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
+		];
+		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
 		$this->render('form');
 	}
 
