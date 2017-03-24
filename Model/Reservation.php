@@ -231,6 +231,7 @@ class Reservation extends ReservationsAppModel {
 			//Frameモデルに記録されているのと同じ「ルーム,言語,plugin_key=カレンダ」のレコードが
 			//Blockモデルに存在するか調べる
 			$block = $this->Block->find('first', array(
+				'recursive' => -1,
 				'conditions' => array(
 					'Block.room_id' => $roomId,
 					'Block.plugin_key' => $pluginKey,
@@ -259,6 +260,9 @@ class Reservation extends ReservationsAppModel {
 			CakeLog::error($ex);
 			throw $ex;		//再throw
 		}
+
+		//beginでMasterDBに切り替わってしまったので、SlaveDBに戻す
+		$this->setSlaveDataSource();
 		return $block;
 	}
 

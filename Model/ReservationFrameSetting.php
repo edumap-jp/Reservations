@@ -141,14 +141,15 @@ class ReservationFrameSetting extends ReservationsAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 				'rule2' => array(
-					'rule' => array('inList', array(
-						ReservationsComponent::CALENDAR_DISP_TYPE_SMALL_MONTHLY,
-						ReservationsComponent::CALENDAR_DISP_TYPE_LARGE_MONTHLY,
-						ReservationsComponent::CALENDAR_DISP_TYPE_WEEKLY,
-						ReservationsComponent::CALENDAR_DISP_TYPE_DAILY,
-						ReservationsComponent::CALENDAR_DISP_TYPE_TSCHEDULE,
-						ReservationsComponent::CALENDAR_DISP_TYPE_MSCHEDULE,
-					)),
+					'rule' => array('inList', ReservationsComponent::$reservationTypes),
+					//'rule' => array('inList', array(
+					//	ReservationsComponent::CALENDAR_DISP_TYPE_SMALL_MONTHLY,
+					//	ReservationsComponent::CALENDAR_DISP_TYPE_LARGE_MONTHLY,
+					//	ReservationsComponent::CALENDAR_DISP_TYPE_WEEKLY,
+					//	ReservationsComponent::CALENDAR_DISP_TYPE_DAILY,
+					//	ReservationsComponent::CALENDAR_DISP_TYPE_TSCHEDULE,
+					//	ReservationsComponent::CALENDAR_DISP_TYPE_MSCHEDULE,
+					//)),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
@@ -353,7 +354,7 @@ class ReservationFrameSetting extends ReservationsAppModel {
 		//frame_key,room_idは明示的に設定されることを想定し、setDefaultではなにもしない。
 		return $this->create(array(
 			$this->alias => array(
-				'display_type' => ReservationsComponent::CALENDAR_DISP_TYPE_SMALL_MONTHLY,
+				'display_type' => ReservationsComponent::RESERVATION_DISP_TYPE_DEFAULT,
 				'display_count' => ReservationsComponent::CALENDAR_STANDARD_DISPLAY_DAY_COUNT,
 				'timeline_base_time' => ReservationsComponent::CALENDAR_TIMELINE_DEFAULT_BASE_TIME,
 				'is_select_room' => false,
