@@ -197,7 +197,13 @@ class ReservationLocationsController extends ReservationsAppController {
 			$this->NetCommons->handleValidationError($this->ReservationLocation->validationErrors);
 
 		} else {
-			//$this->request->data = $blogEntry;
+			$newReservationLocation = $this->ReservationLocation->create();
+			$newReservationLocation['ReservationLocation'] =[
+				'start_time' => '09:00',
+				'end_time' => '18:00',
+				'time_table' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+			];
+			$this->request->data = $newReservationLocation;
 		}
 		// プライベートルームは除外する
 		$roomConditions = [
