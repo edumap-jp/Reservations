@@ -13,7 +13,7 @@ App::uses('NetCommonsMigration', 'NetCommons.Config/Migration');
 /**
  * 表示方法変更テーブルの修正
  *
- * @author Shohei Nakajima <nakajimashouhei@gmail.com>
+ * @author Your Name <yourname@domain.com>
  * @package NetCommons\Reservations\Config\Migration
  */
 class AlterFrameSettings extends NetCommonsMigration {
