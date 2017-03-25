@@ -1230,3 +1230,15 @@ msgstr "施設設定"
 
 msgid "Location category setting"
 msgstr "施設カテゴリ設定"
+
+msgid "TimeFrame setting"
+msgstr "時間枠設定"
+
+msgid "Import Reservations"
+msgstr "予約のインポート"
+
+msgid "Category"
+msgstr "カテゴリ"
+
+msgid "Location name"
+msgstr "施設名"
