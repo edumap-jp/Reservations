@@ -635,13 +635,15 @@ class ReservationMonthlyHelper extends AppHelper {
 			$html .= '<div class="' . $htmlClass . '">';
 			$this->_lineProcess = true; //line予定の追加
 			//予定概要群
-			$html .= $this->_makePlanSummariesHtml($vars, $nctm, $vars['mInfo']['year'],
-				$vars['mInfo']['month'], $day);
+			$html .= $this->_makePlanSummariesHtml(
+				$vars, $nctm, $vars['mInfo']['year'], $vars['mInfo']['month'], $day
+			);
 			$html .= '</div>';
 			$this->_lineProcess = false; //line以外の予定の追加
 			//予定概要群
-			$html .= $this->_makePlanSummariesHtml($vars, $nctm, $vars['mInfo']['year'],
-				$vars['mInfo']['month'], $day);
+			$html .= $this->_makePlanSummariesHtml(
+				$vars, $nctm, $vars['mInfo']['year'], $vars['mInfo']['month'], $day
+			);
 			$this->_celCnt++;
 			$html .= $this->_makeEndTr($cnt);
 			// line end

@@ -261,8 +261,6 @@ class Reservation extends ReservationsAppModel {
 			throw $ex;		//再throw
 		}
 
-		//beginでMasterDBに切り替わってしまったので、SlaveDBに戻す
-		$this->setSlaveDataSource();
 		return $block;
 	}
 

@@ -110,11 +110,11 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 	public function getPlanTitleHtml(&$vars, $year, $month, $day, $fromTime, $toTime, $plan) {
 		$html = '';
 		// 大枠
-		$html .= '<div class="row">';
-		$html .= '<div class="col-xs-12">';
+		//$html .= '<div class="row">';
+		//$html .= '<div class="col-xs-12">';
 		// スペースごとの枠
 		$html .= $this->getPlanTitle($vars, $year, $month, $day, $fromTime, $toTime, $plan);
-		$html .= '</div></div>';
+		//$html .= '</div></div>';
 
 		return $html;
 	}
