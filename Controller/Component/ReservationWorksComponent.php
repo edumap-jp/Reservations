@@ -20,6 +20,17 @@ App::uses('Component', 'Controller');
 class ReservationWorksComponent extends Component {
 
 /**
+ * Called after the Controller::beforeFilter() and before the controller action
+ *
+ * @param Controller $controller Controller with components to startup
+ * @return void
+ * @throws ForbiddenException
+ */
+	public function startup(Controller $controller) {
+		$this->controller = $controller;
+	}
+
+/**
  * getDateTimeParam
  *
  * オプション取得
@@ -119,6 +130,19 @@ class ReservationWorksComponent extends Component {
 			//CakeLog::debug("DBG: data[GroupsUser]は無し。よって、capForView[GroupsUser][" .
 			//	serialize($capForView['GroupsUser']) . "]を代入");
 		}
+
+		//追加時、施設を設定する
+		//事前にlocationsを取得しておくこと
+		if (! isset($data['ReservationActionPlan']['location_key'])) {
+			$locationKey = $this->controller->request->query('location_key');
+			if (! $locationKey) {
+				$locationKey = Hash::get(
+					$this->controller->viewVars['locations'], '0.ReservationLocation.key'
+				);
+			}
+			$data['ReservationActionPlan']['location_key'] = $locationKey;
+		}
+
 
 		return $data;
 	}

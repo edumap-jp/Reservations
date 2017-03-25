@@ -93,15 +93,15 @@ echo $this->element('Reservations.scripts');
 					?>
 					&nbsp;
 					<?php
-					echo $this->NetCommonsForm->checkbox('ReservationActionPlan.enable_time', array(
-						'label' => __d('reservations', 'Setting the time'),
-						'class' => 'reservation-specify-a-time_' . $frameId,
-						'div' => false,
-						'ng-model' => $useTime,
-						'ng-change' => 'toggleEnableTime(' . $frameId . ')',
-						'ng-false-value' => 'false',
-						'ng-true-value' => 'true',
-						'ng-init' => (($this->request->data['ReservationActionPlan']['enable_time']) ? ($useTime . ' = true') : ($useTime . ' = false')),
+						echo $this->NetCommonsForm->checkbox('ReservationActionPlan.enable_time', array(
+							'label' => __d('reservations', 'Setting the time'),
+							'class' => 'reservation-specify-a-time_' . $frameId,
+							'div' => false,
+							'ng-model' => $useTime,
+							'ng-change' => 'toggleEnableTime(' . $frameId . ')',
+							'ng-false-value' => 'false',
+							'ng-true-value' => 'true',
+							'ng-init' => (($this->request->data['ReservationActionPlan']['enable_time']) ? ($useTime . ' = true') : ($useTime . ' = false')),
 						));
 					?>
 				</div>

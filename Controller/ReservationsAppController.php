@@ -11,6 +11,7 @@
 
 App::uses('AppController', 'Controller');
 App::uses('Space', 'Rooms.Model');
+App::uses('ReservationsComponent', 'Reservations.Controller/Component');
 
 /**
  * ReservationsAppController
@@ -55,21 +56,21 @@ class ReservationsAppController extends AppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 
-		//NC3の標準のカテゴリーを利用するために、
-		//roomId=パブリック、blockId=サイト全体(＝パブリック)でひとつ持つ
-		//Current::read('Block')を唯一のBlockに置き換える
-		$roomId = Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID);
-		$pluginKey = Inflector::underscore($this->plugin);
-
-		$this->Reservation->prepareBlock($roomId, '0', $pluginKey);
-		$block = $this->Block->find('first', array(
-			'recursive' => -1,
-			'conditions' => array(
-				'Block.room_id' => $roomId,
-				'Block.plugin_key' => $pluginKey,
-			)
-		));
-		Current::write('Block', $block['Block']);
+		////NC3の標準のカテゴリーを利用するために、
+		////roomId=パブリック、blockId=サイト全体(＝パブリック)でひとつ持つ
+		////Current::read('Block')を唯一のBlockに置き換える
+		//$roomId = Current::read('Room.id');
+		//$pluginKey = Inflector::underscore($this->plugin);
+		//
+		//$this->Reservation->prepareBlock($roomId, '0', $pluginKey);
+		//$block = $this->Block->find('first', array(
+		//	'recursive' => -1,
+		//	'conditions' => array(
+		//		'Block.room_id' => $roomId,
+		//		'Block.plugin_key' => $pluginKey,
+		//	)
+		//));
+		//Current::write('Block', $block['Block']);
 	}
 
 /**
@@ -151,8 +152,10 @@ class ReservationsAppController extends AppController {
 				$vars['day'] = 1;
 			}
 		}
+
 		$specDate = new DateTime(sprintf('%d-%d-%d', $vars['year'], $vars['month'], $vars['day']));
 		$vars['week'] = $specDate->format('w');
+
 		////$vars['dayOfTheWeek'] = date('w', strtotime($userNowYmdHis));	//date()は使わない
 		$userTz = (new NetCommonsTime())->getUserTimezone();
 		$date = new DateTime('now', (new DateTimeZone($userTz)));	//ユーザー系
@@ -189,11 +192,11 @@ class ReservationsAppController extends AppController {
 		$vars['mInfo'] = (new ReservationTime())->getMonthlyInfoAlt($vars['year'], $vars['month']);
 		//前月・当月・次月の祝日情報を取り出す。
 		$vars['holidays'] = $this->Holiday->getHoliday(
-			sprintf("%04d-%02d-%02d",
+			sprintf('%04d-%02d-%02d',
 				$vars['mInfo']['yearOfPrevMonth'],
 				$vars['mInfo']['prevMonth'],
 				1),
-			sprintf("%04d-%02d-%02d",
+			sprintf('%04d-%02d-%02d',
 				$vars['mInfo']['yearOfNextMonth'],
 				$vars['mInfo']['nextMonth'],
 				$vars['mInfo']['daysInNextMonth'])
@@ -225,16 +228,16 @@ class ReservationsAppController extends AppController {
 			'dtend' => $dtend,
 		);
 
-		if (isset($vars['sort'])) { //スケジュールでソートする場合
-			if ($vars['sort'] === 'member') { //メンバー順
-				//$order = array('TrackableCreator' . '.username');
-				$order = array('TrackableCreator' . '.handlename');
-			} else { //時間順
-				$order = array('ReservationEvent' . '.dtstart');
-			}
-		} else {
+//		if (isset($vars['sort'])) { //スケジュールでソートする場合
+//			if ($vars['sort'] === 'member') { //メンバー順
+//				//$order = array('TrackableCreator' . '.username');
+//				$order = array('TrackableCreator' . '.handlename');
+//			} else { //時間順
+//				$order = array('ReservationEvent' . '.dtstart');
+//			}
+//		} else {
 			$order = array('ReservationEvent' . '.start_date');
-		}
+//		}
 
 		$vars['parentIdType'] = array(	//これも共通なので含めておく。
 			'public' => Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID),	//公開
@@ -253,6 +256,7 @@ class ReservationsAppController extends AppController {
 		if ($locationKey) {
 			$planParams['location_key'] = $locationKey;
 		}
+		$vars['location_key'] = $locationKey;
 
 		$vars['plans'] = $this->ReservationEvent->getPlans($vars, $planParams, $order);
 

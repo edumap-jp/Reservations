@@ -8,7 +8,8 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 App::uses('AppHelper', 'View/Helper');
-App::uses('ReservationComponent', 'Reservations.Controller/Component');
+App::uses('ReservationsComponent', 'Reservations.Controller/Component');
+
 /**
  * Reservation weekly Helper
  *
@@ -54,8 +55,9 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 
 		if ($this->_lineProcess == true) {
 
-			$html .= $this->getPlanSummariesLineHtml($vars, $year, $month, $day, $fromTime, $toTime,
-			$plans, $vars['currentRoomId']);
+			$html .= $this->getPlanSummariesLineHtml(
+				$vars, $year, $month, $day, $fromTime, $toTime, $plans, $vars['currentLocationKey']
+			);
 			return $html;
 		}
 
@@ -67,19 +69,19 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 			//予定が１件以上あるとき）
 			//※roomIdが一致するデータ
 
-			if ($vars['currentRoomId'] != $plan['ReservationEvent']['room_id']) {
-				if ($vars['currentRoomId'] == ReservationsComponent::FRIEND_PLAN_VIRTUAL_ROOM_ID
-					&& !empty($plan['ReservationEvent']['pseudo_friend_share_plan'])) {
-					//このルームは「仲間の予定」仮想ルームで、かつ、
-					//予定($plan['ReservationEvent])の擬似項目pseudo_friend_share_planに値(1)がセットされている「仲間の予定」
-					//データである。よって、room_idが一致しなくても、表示する例外ケース。
-				} else {
-					//ルームIDが予定のルームIDと一致もしないし、
-					//「仲間の予定」仮想ルーム時の「仲間の予定」データでもないので、
-					//次の予定に進む。
-					continue;
-				}
-			}
+//			if ($vars['currentRoomId'] != $plan['ReservationEvent']['room_id']) {
+//				if ($vars['currentRoomId'] == ReservationsComponent::FRIEND_PLAN_VIRTUAL_ROOM_ID
+//					&& !empty($plan['ReservationEvent']['pseudo_friend_share_plan'])) {
+//					//このルームは「仲間の予定」仮想ルームで、かつ、
+//					//予定($plan['ReservationEvent])の擬似項目pseudo_friend_share_planに値(1)がセットされている「仲間の予定」
+//					//データである。よって、room_idが一致しなくても、表示する例外ケース。
+//				} else {
+//					//ルームIDが予定のルームIDと一致もしないし、
+//					//「仲間の予定」仮想ルーム時の「仲間の予定」データでもないので、
+//					//次の予定に進む。
+//					continue;
+//				}
+//			}
 
 			$isLine = $this->ReservationPlan->isLinePlan($plan);
 			if ($isLine == true) {
@@ -108,11 +110,11 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 	public function getPlanTitleHtml(&$vars, $year, $month, $day, $fromTime, $toTime, $plan) {
 		$html = '';
 		// 大枠
-		$html .= '<div class="row">';
-		$html .= '<div class="col-xs-12">';
+		//$html .= '<div class="row">';
+		//$html .= '<div class="col-xs-12">';
 		// スペースごとの枠
 		$html .= $this->getPlanTitle($vars, $year, $month, $day, $fromTime, $toTime, $plan);
-		$html .= '</div></div>';
+		//$html .= '</div></div>';
 
 		return $html;
 	}
@@ -152,17 +154,19 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 		$wDay = array();
 
 		/* 曜日 */
-		$html = '<tr><td rowspan=2 class="reservation-weekly-col-room-name-head"></td>';
+		$html = '<tr><td rowspan="2" class="reservation-col-head"></td>';
 		for ($i = 0; $i < 7; $i++) {
 			$timestamp = mktime(0, 0, 0, $firstMonth, ($firstDay + $i ), $firstYear);
 			$years[$i] = date('Y', $timestamp);
 			$months[$i] = date('m', $timestamp);
 			$days[$i] = (int)date('d', $timestamp);
 			$wDay[$i] = date('w', $timestamp);
-			$url = $this->ReservationUrl->getReservationDailyUrl($years[$i], $months[$i], $days[$i]);
+			$url = $this->ReservationUrl->getReservationDailyUrl(
+				$years[$i], $months[$i], $days[$i], $vars
+			);
 			$tdColor[$i] = '';
 			if ($this->ReservationCommon->isToday($vars, $years[$i], $months[$i], $days[$i])) {
-				$tdColor[$i] = 'reservation-weekly-tbl-td-today-head-top';
+				$tdColor[$i] = 'reservation-today';
 			}
 			$textColor = $this->ReservationCommon->makeTextColor(
 				$years[$i], $months[$i], $days[$i], $vars['holidays'], $wDay[$i]);
@@ -183,8 +187,7 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 		$html .= '</tr>';
 		$html .= '<tr>';
 		for ($i = 0; $i < 7; $i++) {
-			$tdBottomColor = str_replace('top', 'bottom', $tdColor[$i]);
-			$html .= '<td class="reservation-weekly-col-day-head-bottom ' . $tdBottomColor . '">';
+			$html .= '<td class="reservation-weekly-col-day-head-bottom ' . $tdColor[$i] . '">';
 			$html .= $this->ReservationButton->makeGlyphiconPlusWithUrl(
 				$years[$i], $months[$i], $days[$i], $vars);
 			$html .= '</td>';
@@ -192,6 +195,7 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 		$html .= '</tr>';
 		return $html;
 	}
+
 /**
  * makeWeeklyBodyHtml
  *
@@ -202,13 +206,7 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
  */
 	public function makeWeeklyBodyHtml($vars) {
 		$html = '';
-		$rooms = $vars['exposeRoomOptions'];
-
-		//プライベートを表示することになって入るなら「仲間の予定」仮想ルーム情報を追記
-		if ($vars['ReservationFrameSetting']['is_myroom']) {
-			$friendRoomId = ReservationsComponent::FRIEND_PLAN_VIRTUAL_ROOM_ID;
-			$rooms[$friendRoomId] = __d('reservations', 'Schedule of fellow');
-		}
+		$locations = $this->_View->viewVars['locations'];
 
 		//ルーム数分繰り返し
 		$cnt = 0;
@@ -216,15 +214,14 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 		$month = $vars['month'];
 		$day = $vars['day'];
 		$nctm = new NetCommonsTime();
+		$roomMaxNum = count($locations);
 
-		$roomMaxNum = count($rooms);
-		foreach ($rooms as $room) {
+		foreach ($locations as $location) {
 			$cnt++;
-			$roomID = array_keys($rooms, $room);
-			//週の行の左のルーム名の場合、具体的な予定($plan)を渡せないので、第２引数はnullにし、
-			//第３引数で直接roomIdを渡すようにしている。
-			$reservationPlanMark = $this->ReservationCommon->getPlanMarkClassName($vars, null, $roomID[0]);
-			$html .= '<tr><div class="row">'; //1行の開始
+			$locationKye = $location['ReservationLocation']['key'];
+			$vars['currentLocationKey'] = $locationKye;//$cnt;
+
+			$html .= '<tr>'; //1行の開始
 
 			/**Line**/
 			$this->_week = $cnt - 1;
@@ -233,13 +230,14 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 			$this->_linePlanCnt = 0; // この週の連続する予定数
 			/**Line**/
 
-			//ルーム名
-			$html .= '<td class="reservation-weekly-col-room-name reservation-tbl-td-pos">';
-			$html .= '<div class="row"><div class="col-xs-12">';
-			$html .= '<div class="reservation-plan-mark ' . $reservationPlanMark . '">';
-			$html .= $room; // ここに来る前にすでにエスケープ処理が終わっていた
-			$html .= '</div></div></div></td>';
-			$vars['currentRoomId'] = $roomID[0];//$cnt;
+			//施設名
+			$html .= '<td class="reservation-col-head">' .
+						'<div>' .
+							$location['ReservationLocation']['location_name'] .
+						'</div>' .
+						//$this->ReservationButton->getAddButton($vars) .
+					'</td>';
+
 			//予定（7日分繰り返し）
 			for ($nDay = 0; $nDay < 7; $nDay++) {
 				$tdColor = '';
@@ -251,20 +249,16 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 					list($year, $month, $day) = ReservationTime::getNextDay($year, $month, $day);
 				}
 				if ($tdColor = $this->ReservationCommon->isToday($vars, $year, $month, $day) == true) {
-					if ($cnt == $roomMaxNum) {//最終行
-						$tdColor = 'reservation-weekly-tbl-td-today-last';
-					} else {
-						$tdColor = 'reservation-weekly-tbl-td-today';
-					}
+					$tdClass = ' class="reservation-today"';
+				} else {
+					$tdClass = '';
 				}
-				$html .= '<td class="';
-				$html .= 'reservation-weekly-col-day reservation-tbl-td-pos reservation-tbl-td-room-plan ';
-				$html .= $tdColor . '"><div>';
-				//ルームID($cnt)が一致するの当日の予定を取得 pending
+
+				$html .= '<td' . $tdClass . '><div>';
+				//施設ID($cnt)が一致するの当日の予定を取得 pending
 				//line----start
 				$html .= "<div class=
 					'reservation-col-day-line reservation-period_" . $this->_week . $this->_celCnt . "'>";
-
 				$this->_lineProcess = true; //line予定の追加
 				$html .= $this->_makePlanSummariesHtml($vars, $nctm, $year, $month, $day);
 				$html .= "</div>";
@@ -277,7 +271,7 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 				$html .= "</div></td>";
 			}
 
-			$html .= "</div></tr>"; // 1行の終了
+			$html .= '</tr>'; // 1行の終了
 		}
 		return $html;
 	}

@@ -419,8 +419,9 @@ class ReservationMonthlyHelper extends AppHelper {
 
 			$day = $vars['mInfo']['daysInPrevMonth'] - $vars['mInfo']['wdayOf1stDay'] + ($idx + 1);
 			//$url = $this->ReservationUrl->getPlanListUrl('prevMonth', $vars['mInfo']['yearOfPrevMonth'], $vars['mInfo']['prevMonth'], $day, $vars);
-			$url = $this->ReservationUrl->getReservationDailyUrl($vars['mInfo']['yearOfPrevMonth'],
-				$vars['mInfo']['prevMonth'], $day);
+			$url = $this->ReservationUrl->getReservationDailyUrl(
+				$vars['mInfo']['yearOfPrevMonth'], $vars['mInfo']['prevMonth'], $day, $vars
+			);
 			$html .= '<td class=';
 			$html .= "'reservation-col-small-day reservation-out-of-range reservation-plan-list' ";
 			$html .= "data-url='" . $url . "'>";
@@ -448,7 +449,8 @@ class ReservationMonthlyHelper extends AppHelper {
 
 			//$url = $this->ReservationUrl->getPlanListUrl('thisMonth', $vars['mInfo']['year'], $vars['mInfo']['month'], $day, $vars);
 			$url = $this->ReservationUrl->getReservationDailyUrl(
-				$vars['mInfo']['year'], $vars['mInfo']['month'], $day);
+				$vars['mInfo']['year'], $vars['mInfo']['month'], $day, $vars
+			);
 			$html .= "<td class='reservation-col-small-day reservation-plan-list {$tdColor}' ";
 			$html .= "data-url='" . $url . "'><div><span class='text-center {$textColor}'>";
 			$html .= $day;
@@ -470,8 +472,8 @@ class ReservationMonthlyHelper extends AppHelper {
 			//$url = $this->ReservationUrl->getPlanListUrl(
 			//'nextMonth', $vars['mInfo']['yearOfNextMonth'], $vars['mInfo']['nextMonth'], $day, $vars);
 			$url = $this->ReservationUrl->getReservationDailyUrl(
-				$vars['mInfo']['yearOfNextMonth'],
-				$vars['mInfo']['nextMonth'], $day);
+				$vars['mInfo']['yearOfNextMonth'], $vars['mInfo']['nextMonth'], $day, $vars
+			);
 			$html .= "<td class='reservation-col-small-day reservation-out-of-range reservation-plan-list' ";
 			$html .= "data-url='" . $url . "'><div><span class='text-center text-muted'>";
 			$html .= $day;
@@ -513,7 +515,7 @@ class ReservationMonthlyHelper extends AppHelper {
 			$year = $vars['mInfo']['yearOfNextMonth'];
 			$month = $vars['mInfo']['nextMonth'];
 		}
-		$url = $this->ReservationUrl->getReservationDailyUrl($year, $month, $day);
+		$url = $this->ReservationUrl->getReservationDailyUrl($year, $month, $day, $vars);
 		//<!-- 1row --> 日付と予定追加glyph
 		$html .= "<div class='row'>";
 		$html .= "<div class='col-xs-3 col-sm-12'>";
@@ -590,7 +592,8 @@ class ReservationMonthlyHelper extends AppHelper {
 		for ($day = 1; $day <= $vars['mInfo']['daysInMonth']; ++$day) {
 			$tdColor = '';
 			$url = $this->ReservationUrl->getReservationDailyUrl(
-				$vars['mInfo']['year'], $vars['mInfo']['month'], $day);
+				$vars['mInfo']['year'], $vars['mInfo']['month'], $day, $vars
+			);
 			$isToday = $this->ReservationCommon->isToday(
 				$vars, $vars['mInfo']['year'], $vars['mInfo']['month'], $day);
 			$holidayTitle = $this->ReservationCommon->getHolidayTitle(
@@ -632,13 +635,15 @@ class ReservationMonthlyHelper extends AppHelper {
 			$html .= '<div class="' . $htmlClass . '">';
 			$this->_lineProcess = true; //line予定の追加
 			//予定概要群
-			$html .= $this->_makePlanSummariesHtml($vars, $nctm, $vars['mInfo']['year'],
-				$vars['mInfo']['month'], $day);
+			$html .= $this->_makePlanSummariesHtml(
+				$vars, $nctm, $vars['mInfo']['year'], $vars['mInfo']['month'], $day
+			);
 			$html .= '</div>';
 			$this->_lineProcess = false; //line以外の予定の追加
 			//予定概要群
-			$html .= $this->_makePlanSummariesHtml($vars, $nctm, $vars['mInfo']['year'],
-				$vars['mInfo']['month'], $day);
+			$html .= $this->_makePlanSummariesHtml(
+				$vars, $nctm, $vars['mInfo']['year'], $vars['mInfo']['month'], $day
+			);
 			$this->_celCnt++;
 			$html .= $this->_makeEndTr($cnt);
 			// line end

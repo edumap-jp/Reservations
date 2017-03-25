@@ -283,6 +283,10 @@ class ReservationPlansController extends ReservationsAppController {
  * @return void
  */
 	public function add() {
+		// 施設情報
+		$locations = $this->ReservationLocation->getLocations();
+		$this->set('locations', $locations);
+
 		$frameId = Current::read('Frame.id');
 		if (! $frameId) {
 			$this->setAction('can_not_edit');
@@ -295,10 +299,6 @@ class ReservationPlansController extends ReservationsAppController {
 		$this->_reservationGet(ReservationsComponent::PLAN_ADD);
 		// 表示画面CTPはdetail_edit
 		$this->view = 'detail_edit';
-
-		// 施設情報
-		$locations = $this->ReservationLocation->getLocations();
-		$this->set('locations', $locations);
 	}
 
 /**

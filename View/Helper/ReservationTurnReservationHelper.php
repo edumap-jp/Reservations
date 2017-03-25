@@ -66,10 +66,8 @@ class ReservationTurnReservationHelper extends AppHelper {
 		$htmlClass = 'reservation-date-move-operations reservation-date-move-operations-' . $pos;
 		if ($pos == 'top') {
 			$htmlClass .= ' pull-left';
-			$html .= '<div class="' . $htmlClass . '" style="margin-right:10px">';
-		} else {
-			$html .= '<div class="' . $htmlClass . '">';
 		}
+		$html .= '<div class="' . $htmlClass . '">';
 
 		if ($prevUrl) {
 			$html .= $this->NetCommonsHtml->link(
@@ -90,7 +88,7 @@ class ReservationTurnReservationHelper extends AppHelper {
 		}
 
 		if ($thisDayUrl) {
-			$html .= '<div class="reservation-this-month">';
+			$html .= '<div class="reservation-today">';
 			$html .= $this->NetCommonsHtml->link(
 				$this->_getNowButtonTitle($type),
 				$thisDayUrl,
@@ -99,14 +97,13 @@ class ReservationTurnReservationHelper extends AppHelper {
 			$html .= '</div>';
 		}
 		$html .= '</div>';
-		if ($pos == 'top') {
-			$html .= $this->_View->element('Reservations.Reservations/select_location');
-		}
+//		if ($pos == 'top') {
+//			$html .= $this->_View->element('Reservations.Reservations/select_location');
+//		}
 		return $html;
 	}
+
 /**
- * _getDateTitle
- *
  * 施設予約上部の年月表示部
  *
  * @param string $type month, week, day のいずれか
@@ -125,12 +122,13 @@ class ReservationTurnReservationHelper extends AppHelper {
 
 		$dateTimePickerInput = $this->_getDateTimePickerForMoveOperation($type, $pos, $vars);
 
-		$html = '<div>';
+//		$html = '<div>';
+		$html = '';
 		if ($pos == 'bottom') {
 			$html .= $dateTimePickerInput;
 		}
-		$html .= '<label class="reservation_event_target_year" for="' . $turnNavId . '">';
-		$html .= '<h2 class="reservation_event_target_title ' . $textColor . ' reservation-space0">';
+		$html .= '<label class="reservation_event_target" for="' . $turnNavId . '">';
+		$html .= '<h2 class="' . $textColor . '">';
 		switch($type) {
 			case 'month':
 			case 'week':
@@ -157,7 +155,7 @@ class ReservationTurnReservationHelper extends AppHelper {
 		if ($pos == 'top') {
 			$html .= $dateTimePickerInput;
 		}
-		$html .= '</div>';
+//		$html .= '</div>';
 		return $html;
 	}
 /**
@@ -403,7 +401,7 @@ class ReservationTurnReservationHelper extends AppHelper {
 			'datetimepicker' => 'datetimepicker',
 			'datetimepicker-options' => $pickerOpt,
 			'value' => (empty($year)) ? '' : intval($year),
-			'class' => 'reservation-datetimepicker-hide-input',
+			'class' => 'reservation-datetimepicker',
 			'error' => false,
 			'ng-model' => 'targetYear',
 			'ng-init' => "targetYear='" . $targetYearMonth . "'",

@@ -9,9 +9,8 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-
-<tr>
-	<td class="reservation-virtical-timeline-periodtime reservation-col-head reservation-daily-timeline-<?php echo $timeIndex; ?>">
+<tr class="reservations-weekly-timeline-row">
+	<td class="reservation-virtical-timeline-periodtime reservation-tbl-td-pos reservation-daily-timeline-<?php echo $timeIndex; ?>">
 		<div class="row">
 			<div class="col-xs-12">
 				<p class="text-right">
@@ -29,30 +28,24 @@
 			<div class="clearfix"></div>
 		</div>
 	</td>
+	<!-- timeline-slit -->
 
     <?php for ($weekday = 0; $weekday <= 6; $weekday++): ?>
-		<?php
-			$currentDay = strtotime(sprintf('%d-%d-%d +%d day',
-				$this->ReservationWeekly->weekFirst['firstYear'],
-				$this->ReservationWeekly->weekFirst['firstMonth'],
-				$this->ReservationWeekly->weekFirst['firstDay'],
-				$weekday
-			));
-			$currentDayVars = $vars;
-			$currentDayVars['year'] = date('Y', $currentDay);
-			$currentDayVars['month'] = date('n', $currentDay);
-			$currentDayVars['day'] = date('j', $currentDay);
-			$day = $this->ReservationWeekly->weekFirst['firstDay'] + $weekday;
-			if ($this->ReservationCommon->isToday($vars, $vars['year'], $vars['month'], $day)) {
-				$todayClass = ' class="reservation-today"';
-			} else {
-				$todayClass = '';
-			}
-		?>
-		<td<?php echo $todayClass; ?>>
+        <td class="reservation-weekly-timeline-col-slit reservation-tbl-td-pos">
             <?php if ($needTimeSlit): ?>
             <div class="reservation-timeline-data-area"><?php /*-- 位置調整用 --*/ ?>
                 <?php
+					$currentDay = strtotime(sprintf('%d-%d-%d +%d day',
+						$this->ReservationWeekly->weekFirst['firstYear'],
+						$this->ReservationWeekly->weekFirst['firstMonth'],
+						$this->ReservationWeekly->weekFirst['firstDay'],
+						$weekday
+						));
+					$currentDayVars = $vars;
+					$currentDayVars['year'] = date('Y', $currentDay);
+					$currentDayVars['month'] = date('n', $currentDay);
+					$currentDayVars['day'] = date('j', $currentDay);
+
 					echo $this->ReservationWeeklyTimeline->makeDailyBodyHtml($currentDayVars);
 					$reservationPlans = $this->ReservationWeeklyTimeline->getTimelineData();
 				?>
