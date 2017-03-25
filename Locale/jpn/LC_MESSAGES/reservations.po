@@ -1237,8 +1237,5 @@ msgstr "時間枠設定"
 msgid "Import Reservations"
 msgstr "予約のインポート"
 
-msgid "Category"
-msgstr "カテゴリ"
-
 msgid "Location name"
 msgstr "施設名"

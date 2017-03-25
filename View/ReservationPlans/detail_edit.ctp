@@ -93,16 +93,20 @@ echo $this->element('Reservations.scripts');
 					?>
 					&nbsp;
 					<?php
-						echo $this->NetCommonsForm->checkbox('ReservationActionPlan.enable_time', array(
-							'label' => __d('reservations', 'Setting the time'),
-							'class' => 'reservation-specify-a-time_' . $frameId,
-							'div' => false,
+						echo $this->NetCommonsForm->hidden('ReservationActionPlan.enable_time', array(
 							'ng-model' => $useTime,
-							'ng-change' => 'toggleEnableTime(' . $frameId . ')',
-							'ng-false-value' => 'false',
-							'ng-true-value' => 'true',
 							'ng-init' => (($this->request->data['ReservationActionPlan']['enable_time']) ? ($useTime . ' = true') : ($useTime . ' = false')),
 						));
+						//echo $this->NetCommonsForm->checkbox('ReservationActionPlan.enable_time', array(
+						//	'label' => __d('reservations', 'Setting the time'),
+						//	'class' => 'reservation-specify-a-time_' . $frameId,
+						//	'div' => false,
+						//	'ng-model' => $useTime,
+						//	'ng-change' => 'toggleEnableTime(' . $frameId . ')',
+						//	'ng-false-value' => 'false',
+						//	'ng-true-value' => 'true',
+						//	'ng-init' => (($this->request->data['ReservationActionPlan']['enable_time']) ? ($useTime . ' = true') : ($useTime . ' = false')),
+						//));
 					?>
 				</div>
  			</div><!-- end form-group-->
@@ -114,14 +118,19 @@ echo $this->element('Reservations.scripts');
 				</div>
 			</div><!-- form-group name="inputStartEndDateTime"おわり -->
 
-
+			<?php /* 繰り返し設定 （この予定のみ変更のときは出さない）*/ ?>
+			<div class="form-group" data-reservation-name="inputRruleInfo" ng-hide="editRrule==0">
+				<div class="col-xs-12">
+					<?php echo $this->element('Reservations.ReservationPlans/detail_edit_repeat_items', array('useTime' => $useTime)); ?>
+				</div>
+			</div><!-- end form-group-->
             <div class='form-group' >
                 <div class='col-xs-12'>
 					<?php
 					echo $this->NetCommonsForm->label('', __d('reservations', '施設'), array(
 						'required' => true));
 					?>
-                    <div class='col-xs-11 col-xs-offset-1'>
+                    <div class='col-xs-12'>
 
                         <?php
 							//  カテゴリ絞り込み
@@ -192,13 +201,6 @@ echo $this->element('Reservations.scripts');
             </div><!-- form-group name="inputStartEndDateTime"おわり -->
 
 			<?php //echo $this->element('Reservations.ReservationPlans/detail_edit_location') ?>
-
-			<?php /* 繰り返し設定 （この予定のみ変更のときは出さない）*/ ?>
-			<div class="form-group" data-reservation-name="inputRruleInfo" ng-hide="editRrule==0">
-				<div class="col-xs-12">
-					<?php echo $this->element('Reservations.ReservationPlans/detail_edit_repeat_items', array('useTime' => $useTime)); ?>
-				</div>
-			</div><!-- end form-group-->
 
 			<?php /* 予定の対象空間選択 */ ?>
 			<div class="form-group" data-reservation-name="selectRoomForOpen">

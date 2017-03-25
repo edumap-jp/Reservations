@@ -42,7 +42,7 @@ class ReservationWorksComponent extends Component {
 		$userTz = (new NetCommonsTime())->getUserTimezone();
 		$date = new DateTime('now', (new DateTimeZone($userTz)));
 
-		$enableTime = false;
+		$enableTime = true;
 		$year = $date->format('Y');
 		$month = $date->format('m');
 		$day = $date->format('d');
@@ -142,7 +142,6 @@ class ReservationWorksComponent extends Component {
 			}
 			$data['ReservationActionPlan']['location_key'] = $locationKey;
 		}
-
 
 		return $data;
 	}
