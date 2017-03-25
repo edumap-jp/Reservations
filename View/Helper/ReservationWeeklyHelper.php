@@ -173,8 +173,8 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 			$holidayTitle = $this->ReservationCommon->getHolidayTitle(
 				$years[$i], $months[$i], $days[$i], $vars['holidays'], $i);
 
-			$html .= "<td class='reservation-monthly-line-" . ($i + 1) .
-				" reservation-weekly-col-day-head " . $tdColor[$i] . "'>";
+			$html .= '<td class="reservation-monthly-line-' . ($i + 1) .
+				' reservation-weekly-col-day-head ' . $tdColor[$i] . '">';
 			$html .= '<span class=';
 			$html .= '"reservation-day reservation-daily-disp ';
 			$html .= $textColor . '" data-url="' . $url . '">';
