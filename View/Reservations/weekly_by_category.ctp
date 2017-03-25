@@ -24,7 +24,9 @@ echo $this->element('Reservations.scripts');
 	<div class="clearfix">
 		<?php echo $this->ReservationTurnReservation->getTurnReservationOperations('week', 'top', $vars); ?>
 
-		<?php echo $this->element('Reservations.Reservations/dropdown_category'); ?>
+		<div class="reservation-category-operations reservation-category-operations-top pull-left">
+			<?php echo $this->element('Reservations.Reservations/dropdown_category'); ?>
+		</div>
 	</div>
 
 	<div class="text-center reservation-locations-table table-responsive">

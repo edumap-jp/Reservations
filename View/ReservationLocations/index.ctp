@@ -19,7 +19,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th><?php echo $this->Paginator->sort('category_id', __d('reservations', 'Category')); ?></th>
+                    <th><?php echo $this->Paginator->sort('category_id', __d('categories', 'Category')); ?></th>
                     <th colspan="2"><?php echo $this->Paginator->sort('location_name', __d('reservations', 'Location name')); ?></th>
                     <!--<th>--><?php //echo $this->Paginator->sort('add_authority'); ?><!--</th>-->
                     <th><?php __d('reservations', '利用可能日時') ?></th>

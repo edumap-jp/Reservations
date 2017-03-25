@@ -369,7 +369,7 @@ class ReservationSupport {
  * convTzOffset2TzId
  *
  * timezoneOffset(数字-12.0-12.0）からtzId(Asia/Tokyoなど)への変換
- * 
+ *
  * @param double $tzOffsetVal timezoneのoffset値(-12.0 - 12.0)
  * @return string timezoneId
  */

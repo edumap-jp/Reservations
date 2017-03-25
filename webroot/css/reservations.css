@@ -178,6 +178,7 @@
  * カテゴリ絞り込み、施設絞り込み
  */
 .reservation-date-move-operations,
+.reservation-category-operations,
 .reservation-category-locaction-operations {
 	display: -webkit-flex;
 	display: -moz-flex;
@@ -187,10 +188,12 @@
 	margin-right: 32px;
 }
 .reservation-date-move-operations-top,
+.reservation-category-operations-top,
 .reservation-category-locaction-operations-top {
 	margin-bottom:1em;
 }
 .reservation-date-move-operations-bottom,
+.reservation-category-operations-bottom,
 .reservation-category-locaction-operations-bottom {
 	margin-top: 1em;
 	justify-content: flex-end;
@@ -310,12 +313,12 @@ div.reservation-today a:focus {
 }
 
 .reservation-weekly-col-day-head {
-	width: 12%;
+/*	width: 12%;
 	border-width: 1px 1px 0px 1px;
 	border-style: solid;
 	border-color: #ddd;
 	padding: 0.2em;
-	vertical-align:top;
+	vertical-align:top;*/
 }
 .reservation-weekly-col-day-head .reservation-day {
 	font-size: 1.8em;
@@ -813,7 +816,7 @@ padding-right:3px;
  * 縦タイムテーブル(施設別 - 週表示)
  */
 .reservation-vertical-timeline > table {
-	width: 100%;
+	/*width: 100%;*/
 }
 @media screen and (max-width:767px) {
 	.reservation-vertical-timeline > table {
@@ -826,34 +829,35 @@ padding-right:3px;
 	/*table-layout: auto;*/
 	table-layout: fixed;
 	overflow-y: scroll;
+	width: 816px;
 }
 .reservation-vertical-timeline tbody {
 	height: 568px;
 	overflow-y: scroll;
 	/*margin-top: -1px;*/
-/*	border-width: 1px 1px 1px 1px;
+	border-width: 0px 0px 1px 0px;
 	border-style: solid;
-	border-color: #ddd;*/
+	border-color: #ddd;
 }
 .reservation-vertical-timeline td {
 	vertical-align: top;
-	width: 12%;
+	/*width: 12%;*/
+	width: 102px;
 }
 .reservation-vertical-timeline td.reservation-col-head {
-	min-width: 6em;
-	width: 6%;
+	/*min-width: 6em;*/
+	width: 80px;
 	border-style: solid;
 	border-color: #ddd;
 	padding-bottom: 10px;
 }
-.reservation-vertical-timeline thead tr:last-child > td {
-	border-width: 0px 1px 1px 1px;
-}
-.reservation-vertical-timeline thead tr > td.reservation-col-head {
-	border-width: 1px 1px 1px 1px;
-}
 .reservation-vertical-timeline tbody tr > td.reservation-col-head {
 	padding: 4px;
+}
+.reservation-vertical-timeline tbody tr:last-child > td {
+	border-style: solid;
+	border-color: #ddd;
+
 }
 
 /**
@@ -861,6 +865,7 @@ padding-right:3px;
  */
 .reservation-locations-table {
 	table-layout: fixed;
+	/*width: 814px;*/
 }
 @media screen and (max-width:767px) {
 	.reservation-locations-table > table {
@@ -872,14 +877,20 @@ padding-right:3px;
 	vertical-align: top;
 	/*width: 12%;*/
 }
+.reservation-locations-table thead tr > td,
 .reservation-locations-table tbody tr > td {
-	width: 12%;
+	/*width: 96px;*/
 	border: 1px solid #ddd;
 	padding: 3px 3px 3px 0px;
+}
+.reservation-locations-table tbody tr > td {
 	text-align: left;
 }
+.reservation-locations-table thead tr > td.reservation-col-head,
 .reservation-locations-table tbody tr > td.reservation-col-head {
 	width: 124px;
+}
+.reservation-locations-table tbody tr > td.reservation-col-head {
 	border: 1px solid #ddd;
 	height: 2em;
 	padding: 8px;
@@ -887,13 +898,38 @@ padding-right:3px;
 	text-align: left;
 }
 .reservation-locations-table tbody tr > td.reservation-col-head > div {
-	width: 116px;
+	width: 112px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
 }
 .reservation-locations-table tbody tr > td:not(.reservation-col-head) > div {
 	position: relative !important;
+}
+
+/**
+ * 週のヘッダー
+ */
+.reservation-vertical-timeline thead tr > td,
+.reservation-locations-table thead tr > td {
+	border-left-width: 1px;
+	border-right-width: 1px;
+	border-top-width: 0px;
+	border-bottom-width: 0px;
+	border-color: #ddd;
+	border-style: solid;
+}
+.reservation-vertical-timeline thead tr:first-child > td,
+.reservation-locations-table thead tr:first-child > td {
+	border-top-width: 1px;
+}
+.reservation-vertical-timeline thead tr:last-child > td,
+.reservation-locations-table thead tr:last-child > td {
+	border-bottom-width: 1px;
+}
+.reservation-vertical-timeline thead tr > td.reservation-col-head,
+.reservation-locations-table thead tr > td.reservation-col-head {
+	border-width: 1px 1px 1px 1px;
 }
 
 /**
