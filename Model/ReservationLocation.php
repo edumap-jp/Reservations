@@ -32,7 +32,7 @@ class ReservationLocation extends ReservationsAppModel {
 		),
 		//多言語
 		'M17n.M17n' => array(
-			'commonFields' => array( // TODO 言語が異なっても同じにするフィールド
+			'commonFields' => array( // 言語が異なっても同じにするフィールド
 				'category_id',
 			),
 			'afterCallback' => false,
@@ -249,20 +249,7 @@ class ReservationLocation extends ReservationsAppModel {
  * @throws InternalErrorException
  */
 	public function saveLocation($data) {
-		if (is_array(Hash::get($data, 'ReservationLocation.time_table'))) {
-			$timeTable = implode('|', $data['ReservationLocation']['time_table']);
-			$data['ReservationLocation']['time_table'] = $timeTable;
-		}
-
-		// 全日フラグあったら00:00-24:00あつかいにする
-		if ($data['ReservationLocation']['allday_flag']) {
-			$data['ReservationLocation']['start_time'] = '00:00';
-			$data['ReservationLocation']['end_time'] = '24:00';
-		}
-		// category_id=0だったらnullにする。そうしないと空文字としてSQL発行される
-		if (empty($data[$this->alias]['category_id'])) {
-			$data[$this->alias]['category_id'] = null;
-		}
+		$data = $this->_prepareData($data);
 
 		$this->begin();
 		try {
@@ -276,6 +263,17 @@ class ReservationLocation extends ReservationsAppModel {
 			if (! $savedData) {
 				//このsaveで失敗するならvalidate以外なので例外なげる
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+			// ReservationLocationsRoom登録
+			if (isset($savedData['ReservationLocationsRoom'])) {
+
+				$this->loadModels([
+					'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
+				]);
+				$key = $savedData[$this->alias]['key'];
+				if (!$this->ReservationLocationsRoom->saveReservationLocaitonsRoom($key, $savedData)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
 			}
 
 			//多言語化の処理
@@ -355,5 +353,35 @@ class ReservationLocation extends ReservationsAppModel {
 			$reservationLocation['ReservationLocation']['end_time']
 		);
 		return $ret;
+	}
+
+/**
+ * 保存前にpostされたdataを保存用に加工する
+ *
+ * @param array $data POSTされたdata
+ * @return array 保存用に加工されたdata
+ */
+	protected function _prepareData($data) {
+		if (is_array(Hash::get($data, 'ReservationLocation.time_table'))) {
+			$timeTable = implode('|', $data['ReservationLocation']['time_table']);
+			$data['ReservationLocation']['time_table'] = $timeTable;
+		}
+
+		// 全日フラグあったら00:00-24:00あつかいにする
+		if ($data['ReservationLocation']['allday_flag']) {
+			$data['ReservationLocation']['start_time'] = '00:00';
+			$data['ReservationLocation']['end_time'] = '24:00';
+		}
+		// category_id=0だったらnullにする。そうしないと空文字としてSQL発行される
+		if (empty($data[$this->alias]['category_id'])) {
+			$data[$this->alias]['category_id'] = null;
+		}
+
+		// 予約を受け付けるルームがひとつもえらばれてないとき
+		if (!$data['ReservationLocationsRoom']['room_id']) {
+			$data['ReservationLocationsRoom']['room_id'] = array();
+		}
+
+		return $data;
 	}
 }

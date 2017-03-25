@@ -4,11 +4,11 @@
  *
  * @property Room $Room
  *
-* @author Noriko Arai <arai@nii.ac.jp>
-* @author Your Name <yourname@domain.com>
-* @link http://www.netcommons.org NetCommons Project
-* @license http://www.netcommons.org/license.txt NetCommons License
-* @copyright Copyright 2014, NetCommons Project
+ * @author Noriko Arai <arai@nii.ac.jp>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
  */
 
 App::uses('ReservationsAppModel', 'Reservations.Model');
@@ -69,4 +69,53 @@ class ReservationLocationsRoom extends ReservationsAppModel {
 			'order' => ''
 		)
 	);
+
+/**
+ * ReservationLocationsRoomの登録
+ *
+ * ReservationLocationSetting::saveReservationLocationSetting()から実行されるため、ここではトランザクションを開始しない
+ *
+ * @param string $locationKey ReservationLocation.key
+ * @param array $data リクエストデータ
+ * @return mixed On success Model::$data if its not empty or true, false on failure
+ * @throws InternalErrorException
+ */
+	public function saveReservationLocaitonsRoom($locationKey, $data) {
+		$roomIds = Hash::get($data, $this->alias . '.room_id', array());
+
+		$saved = $this->find('list', array(
+			'recursive' => -1,
+			'fields' => array('id', 'room_id'),
+			'conditions' => ['reservation_location_key' => $locationKey],
+		));
+		$saved = array_unique(array_values($saved));
+
+		$delete = array_diff($saved, $roomIds);
+		if (count($delete) > 0) {
+			$conditions = array(
+				'ReservationLocationsRoom' . '.reservation_location_key' => $locationKey,
+				'ReservationLocationsRoom' . '.room_id' => $delete,
+			);
+			if (! $this->deleteAll($conditions, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+		}
+
+		$new = array_diff($roomIds, $saved);
+		if (count($new) > 0) {
+			$saveDate = array();
+			foreach ($new as $i => $roomId) {
+				$saveDate[$i] = array(
+					'id' => null,
+					'room_id' => $roomId,
+					'reservation_location_key' => $locationKey
+				);
+			}
+			if (! $this->saveMany($saveDate)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+		}
+
+		return true;
+	}
 }

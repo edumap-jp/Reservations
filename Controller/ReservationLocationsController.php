@@ -41,6 +41,7 @@ class ReservationLocationsController extends ReservationsAppController {
  */
 	public $uses = array(
 		'Reservations.ReservationLocation',
+		'Reservations.ReservationLocationsRoom',
 		'Categories.Category',
 		//'Workflow.WorkflowComment',
 	);
@@ -197,17 +198,17 @@ class ReservationLocationsController extends ReservationsAppController {
 			$this->NetCommons->handleValidationError($this->ReservationLocation->validationErrors);
 
 		} else {
-			$newReservationLocation = $this->ReservationLocation->create();
-			$newReservationLocation['ReservationLocation'] =[
+			$newLocation = $this->ReservationLocation->create();
+			$newLocation['ReservationLocation'] = [
 				'start_time' => '09:00',
 				'end_time' => '18:00',
 				'time_table' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
 			];
-			$this->request->data = $newReservationLocation;
+			$this->request->data = $newLocation;
 		}
 		// プライベートルームは除外する
 		$roomConditions = [
-			'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
+			//'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
 		];
 		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
 		$this->render('form');
@@ -284,6 +285,14 @@ class ReservationLocationsController extends ReservationsAppController {
 
 			$this->request->data = $reservationLocation;
 
+			//予約を受け付けるルームを取得
+			$result = $this->ReservationLocationsRoom->find('list', array(
+				'recursive' => -1,
+				'fields' => array('id', 'room_id'),
+				'conditions' => ['reservation_location_key' => $this->request->data['ReservationLocation']['key']],
+			));
+			$this->request->data['ReservationLocationsRoom']['room_id'] =
+				array_unique(array_values($result));
 		}
 
 		$this->set('reservationLocation', $reservationLocation);
@@ -295,7 +304,7 @@ class ReservationLocationsController extends ReservationsAppController {
 
 		// プライベートルームは除外する
 		$roomConditions = [
-			'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
+			//'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
 		];
 		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
 		$this->render('form');

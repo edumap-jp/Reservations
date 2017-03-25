@@ -75,18 +75,24 @@ NetCommonsApp.filter('formatYyyymmdd', function() {
 NetCommonsApp.controller('ReservationLocation', ['$scope', function($scope) {
   $scope.init = function(data) {
     $scope.data = data;
+    // postされたbool値変換
+    if ($scope.data.ReservationLocation.use_all_rooms === '1') {
+      $scope.data.ReservationLocation.use_all_rooms = true;
+    } else {
+      $scope.data.ReservationLocation.use_all_rooms = false;
+    }
 
-    $scope.test = function() {
+    if ($scope.data.ReservationLocation.start_time == '00:00' &&
+        $scope.data.ReservationLocation.end_time == '24:00') {
+      $scope.allDay = true;
+    }
+  };
+  $scope.checkAllDay = function() {
+    if ($scope.allDay) {
+      $scope.data.ReservationLocation.start_time = '00:00';
       $scope.data.ReservationLocation.end_time = '24:00';
       console.log($scope.data.ReservationLocation.end_time);
-    };
-    $scope.checkAllDay = function() {
-      if ($scope.allDay) {
-        $scope.data.ReservationLocation.start_time = '00:00';
-        $scope.data.ReservationLocation.end_time = '24:00';
-        console.log($scope.data.ReservationLocation.end_time);
-      }
-    };
+    }
   };
 }]);
 
