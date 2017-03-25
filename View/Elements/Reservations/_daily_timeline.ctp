@@ -25,7 +25,7 @@
 <div class="row" ng-controller="ReservationsTimeline">
 	<div class="col-xs-12 text-center">
 
-		<div class="reservation-daily-timeline-coordinate-origin" data-daily-start-time-idx="<?php echo $vars['ReservationFrameSetting']['timeline_base_time']; ?>"><?php /*-- overflow-yのdivの始まり --*/?>
+		<div class="reservation-vertical-timeline" data-daily-start-time-idx="<?php echo $vars['ReservationFrameSetting']['timeline_base_time']; ?>"><?php /*-- overflow-yのdivの始まり --*/?>
 
 			<table class='reservation-daily-timeline-table'><?php /*-- overflow-yのscroll分5%考慮 --*/ ?>
 				<tbody>

@@ -98,7 +98,7 @@ NetCommonsApp.controller('ReservationSchedule', ['$scope', function($scope) {
 
 NetCommonsApp.controller('ReservationsTimeline', ['$scope', function($scope) {
   //タイムラインdiv
-  var coordinateOrigins = $('.reservation-daily-timeline-coordinate-origin');
+  var coordinateOrigins = $('.reservation-vertical-timeline');
 
   //指定時間のindex値を、タイムラインdivの属性から取り出し
   var idx = $(coordinateOrigins[0]).attr('data-daily-start-time-idx') - 0;

@@ -20,6 +20,9 @@
 	color: #5bc0de; /* @brand-info: */
 }
 
+/**
+ * TODO: 無くす方向で修正する
+ */
 .reservation-tbl-td-pos {
 	vertical-align: top;
 }
@@ -158,37 +161,46 @@
 	background-color: #e6eff6;
 }
 
-/* 施設予約表示切替タブ */
+/**
+ * 月、週、日表示方法切替タブ
+ */
 .nav-tabs.reservation-date-move-tablist {
-
+	margin-bottom: 24px;
 }
 .nav-tabs.reservation-date-move-tablist > li > a {
 	font-size: 1.5em;
 	padding-left: 1.2em;
 	padding-right: 1.2em;
 }
-/* 施設予約先頭の年月移動リンク入れ物 */
-.reservation-date-move-operations {
+
+/**
+ * 施設予約先頭の年月移動リンク入れ物
+ * カテゴリ絞り込み、施設絞り込み
+ */
+.reservation-date-move-operations,
+.reservation-category-locaction-operations {
 	display: -webkit-flex;
 	display: -moz-flex;
 	display: -ms-flex;
 	display: -o-flex;
 	display: flex;
+	margin-right: 32px;
 }
-.reservation-date-move-operations-top {
+.reservation-date-move-operations-top,
+.reservation-category-locaction-operations-top {
 	margin-bottom:1em;
 }
-.reservation-date-move-operations-bottom {
-	margin-top:1em;
+.reservation-date-move-operations-bottom,
+.reservation-category-locaction-operations-bottom {
+	margin-top: 1em;
 	justify-content: flex-end;
 }
-
 .reservation-date-move-operations > a {
-	display:block;
+	display: block;
 	padding: 5px 14px;
 }
 .reservation-date-move-operations > label {
-	display:block;
+	display: block;
 	margin: 0;
 	cursor: pointer;
 }
@@ -197,51 +209,69 @@
 }
 @media screen and (max-width:767px) {
 	.reservation-date-move-operations {
-		margin-top:0.5em;
+		margin-top: 0.5em;
 	}
 	.reservation-date-move-operations > label > h2 {
-		font-size:20px;
+		font-size: 20px;
 	}
 }
 .reservation-date-move-operations > label small {
-	color:inherit;
-	margin-left:0.25em;
-	margin-right:0.25em;
+	color: inherit;
+	margin-left: 0.25em;
+	margin-right: 0.25em;
 }
-/* 今月へボタン */
-.reservation-this-month {
+
+/**
+ * カテゴリ絞り込み、施設絞り込み
+ */
+.reservation-category-locaction-operations > .dropdown:not(:last-child) button.btn {
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-right: none;
 }
-.reservation-this-month a {
+.reservation-category-locaction-operations > .dropdown:last-child button.btn {
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+}
+
+/**
+ * 今月、今週、今日へボタン
+ */
+div.reservation-today a {
 	display: inline-block;
 	padding: 5px 14px;
 	background-color: #fff;
 	border: 1px solid #ddd;
 	border-radius: 15px;
 }
-.reservation-this-month a:hover, .reservation-this-month a:focus {
+div.reservation-today a:hover,
+div.reservation-today a:focus {
 	text-decoration: none;
 	background-color: #e6eff6;
 }
-.reservation_event_target_year {
+
+/**
+ * 年月(日)文字
+ */
+.reservation_event_target {
 	margin-bottom: 0px;
 	cursor: pointer;
 }
-.reservation-date-move-operations-top .reservation_event_target_title {
-	font-size: 26px !important;
+.reservation_event_target h2 {
+	font-size: 26px !Important;
 	margin: 0px !important;
 }
-.reservation-date-move-operations-bottom .reservation_event_target_title {
-	font-size: 18px !important;
-	margin: 0px !important;
-}
-	/* 年月移動DateTimePickerInputのCSS 隠れて見えないようにしている */
-.reservation-datetimepicker-hide-input {
+/**
+ * 年月移動DateTimePickerInputのCSS 隠れて見えないようにしている
+ */
+.reservation-date-move-operations > .reservation-datetimepicker {
 	margin: 0;
 	width: 0;
 	height : 0;
 	opacity: 0;
 	display: block;
 }
+
 /*-- 施設予約　予定共有 人情報 --*/
 .reservation-share-person {
 	margin-right: 1em;
@@ -269,9 +299,9 @@
 }
 
 /*-- 週施設予約 のルーム名のヘッダ--*/
-.reservation-weekly-col-room-name-head {
-	min-width:6em;
-	width: 16%;
+.reservation-col-head {
+	min-width: 6em;
+	width: 124px;
 	border-width: 1px 1px 1px 1px;
 	border-style: solid;
 	border-color: #ddd;
@@ -317,7 +347,7 @@
 }
 
 /*-- 単一日施設予約 タイムライン カラム 時間帯 --*/
-.reservation-daily-timeline-col-periodtime {
+.reservation-virtical-timeline-periodtime {
 	width: 10%;
 	border-width: 0 1px 1px 1px;
 	border-style: solid;
@@ -341,7 +371,7 @@
 }
 
 /*-- 単一日施設予約のタイムラインのスリット --*/
-.reservation-weekly-timeline-col-slit {
+.reservation-vertical-timeline tbody > tr > td {
 	/*width: 90%;*/
 	border-width: 1px 1px 1px 1px;
 	border-style: solid;
@@ -455,6 +485,8 @@ td.reservation-col-day .reservation-out-of-range  .reservation-day {
 	border-left-width: 2px;
 	border-right-color: #f0d946;
 	border-right-width: 2px;
+	border-bottom-color: #f0d946;
+	border-bottom-width: 2px;
 }
 
 .reservation-weekly-tbl-td-today-last {
@@ -631,7 +663,7 @@ p.reservation-plan-time {
 	padding-top:1px;
 	font-weight: normal;
 }
-/* 施設予約＋アイコン */
+/* 施設予約 ＋アイコン */
 a.reservation-edit-plus-icon {
 	padding: 0.1em 0.3em;
 	display: inline-block;
@@ -642,9 +674,9 @@ a.reservation-edit-plus-icon {
 	z-index:100;
 }
 .reservation-weekly-col-day-head-bottom a.reservation-edit-plus-icon,
-.reservation-daily-timeline-col-periodtime a.reservation-edit-plus-icon {
-	position:static;
-	right:0;
+.reservation-virtical-timeline-periodtime a.reservation-edit-plus-icon {
+	position: static;
+	right: 0;
 }
 .reservation-schedule-row-title a.reservation-edit-plus-icon {
 	padding: 0.1em 1em;
@@ -654,12 +686,12 @@ a.reservation-edit-plus-icon:hover {
 	background-color:#dff0d8;
 	color:#3c763d;
 }
-
+/*
 .reservation-space0 {
 margin: 0;
 padding: 0;
 }
-
+*/
 .reservation-small-title{
 	padding:10px;
 }
@@ -774,19 +806,123 @@ padding-right:3px;
 
 .reservation-list-wrapper {
 	max-height: 450px;
-	overflow-y:scroll;
-}
-.reservation-daily-timeline-coordinate-origin {
-	height: 568px;
 	overflow-y: scroll;
-	border-width: 1px 1px 1px 1px;
-	border-style: solid;
-	border-color: #ddd;
-}
-.reservation-daily-timeline-table {
-	width: 95%;
 }
 
-.reservations-weekly-timeline-row{
-	height:50px;
+/**
+ * 縦タイムテーブル(施設別 - 週表示)
+ */
+.reservation-vertical-timeline > table {
+	width: 100%;
+}
+@media screen and (max-width:767px) {
+	.reservation-vertical-timeline > table {
+		font-size: 75%;
+	}
+}
+.reservation-vertical-timeline thead,
+.reservation-vertical-timeline tbody {
+	display: block;
+	/*table-layout: auto;*/
+	table-layout: fixed;
+	overflow-y: scroll;
+}
+.reservation-vertical-timeline tbody {
+	height: 568px;
+	overflow-y: scroll;
+	/*margin-top: -1px;*/
+/*	border-width: 1px 1px 1px 1px;
+	border-style: solid;
+	border-color: #ddd;*/
+}
+.reservation-vertical-timeline td {
+	vertical-align: top;
+	width: 12%;
+}
+.reservation-vertical-timeline td.reservation-col-head {
+	min-width: 6em;
+	width: 6%;
+	border-style: solid;
+	border-color: #ddd;
+	padding-bottom: 10px;
+}
+.reservation-vertical-timeline thead tr:last-child > td {
+	border-width: 0px 1px 1px 1px;
+}
+.reservation-vertical-timeline thead tr > td.reservation-col-head {
+	border-width: 1px 1px 1px 1px;
+}
+.reservation-vertical-timeline tbody tr > td.reservation-col-head {
+	padding: 4px;
+}
+
+/**
+ * 週表示テーブル(カテゴリー別 - 週表示)
+ */
+.reservation-locations-table {
+	table-layout: fixed;
+}
+@media screen and (max-width:767px) {
+	.reservation-locations-table > table {
+		font-size: 80%;
+	}
+}
+
+.reservation-locations-table td {
+	vertical-align: top;
+	/*width: 12%;*/
+}
+.reservation-locations-table tbody tr > td {
+	width: 12%;
+	border: 1px solid #ddd;
+	padding: 3px 3px 3px 0px;
+	text-align: left;
+}
+.reservation-locations-table tbody tr > td.reservation-col-head {
+	width: 124px;
+	border: 1px solid #ddd;
+	height: 2em;
+	padding: 8px;
+	background-color: #f5f5f5;
+	text-align: left;
+}
+.reservation-locations-table tbody tr > td.reservation-col-head > div {
+	width: 116px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.reservation-locations-table tbody tr > td:not(.reservation-col-head) > div {
+	position: relative !important;
+}
+
+/**
+ * 一覧の今日のセルの背景色、枠線
+ */
+.reservation-vertical-timeline thead tr > td.reservation-today,
+.reservation-vertical-timeline tbody tr > td.reservation-today,
+.reservation-locations-table thead tr > td.reservation-today,
+.reservation-locations-table tbody tr > td.reservation-today {
+	background-color: #ffffcf;
+	border-left-color: #f0d946;
+	border-left-width: 2px;
+	border-right-color: #f0d946;
+	border-right-width: 2px;
+}
+.reservation-vertical-timeline thead tr:first-child > td.reservation-today,
+.reservation-locations-table thead tr:first-child > td.reservation-today {
+	border-top-color: #f0d946;
+	border-top-width: 2px;
+}
+.reservation-vertical-timeline tbody tr:last-child > td.reservation-today,
+.reservation-locations-table tbody tr:last-child > td.reservation-today {
+	border-bottom-color: #f0d946;
+	border-bottom-width: 2px;
+}
+
+/**
+ * カテゴリー別、施設別タブ
+ */
+.reservation-common-tabs {
+	margin-bottom: 24px;
 }

@@ -10,7 +10,7 @@
  */
 ?>
 <tr>
-	<td class="reservation-daily-timeline-col-periodtime reservation-tbl-td-pos reservation-daily-timeline-<?php echo $timeIndex; ?>">
+	<td class="reservation-virtical-timeline-periodtime reservation-tbl-td-pos reservation-daily-timeline-<?php echo $timeIndex; ?>">
 		<div class="row">
 			<div class="col-xs-12">
 				<p class="text-right">

@@ -128,9 +128,10 @@ class ReservationUrlHelper extends AppHelper {
  * @param int $year 年
  * @param int $month 月
  * @param int $day 日
+ * @param array &$vars 施設予約情報
  * @return string URL
  */
-	public function getReservationDailyUrl($year, $month, $day) {
+	public function getReservationDailyUrl($year, $month, $day, &$vars) {
 		$url = $this->getReservationUrl(array(
 			'plugin' => 'reservations',
 			'controller' => 'reservations',
@@ -138,8 +139,7 @@ class ReservationUrlHelper extends AppHelper {
 			'block_id' => '',
 			'frame_id' => Current::read('Frame.id'),
 			'?' => array(
-				'style' => 'daily',
-				'tab' => 'list',
+				'style' => $vars['style'],
 				'year' => $year,
 				'month' => $month,
 				'day' => $day,

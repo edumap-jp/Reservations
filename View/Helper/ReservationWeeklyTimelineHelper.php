@@ -159,7 +159,7 @@ class ReservationWeeklyTimelineHelper extends ReservationMonthlyHelper {
 		$html = '';
 		for ($i=2; $i < 22 ; $i++) { //2時から22時まで
 			$html .= '<tr>';
-			$html .= '<td class="reservation-daily-timeline-col-periodtime reservation-tbl-td-pos">';
+			$html .= '<td class="reservation-virtical-timeline-periodtime reservation-tbl-td-pos">';
 			$html .= '<div class="row">';
 			$html .= '<div class="col-xs-12">';
 

@@ -25,9 +25,14 @@ msgstr "月表示(施設別)"
 msgid "Weekly Reservation (Location)"
 msgstr "週表示(施設別)"
 
+msgid "By Category"
+msgstr "カテゴリー別"
+
+msgid "By Location"
+msgstr "施設別"
 
 
-#----- 以下後で整理
+#----- 以下、後で整理
 
 
 #: Reservations/Controller/ReservationFrameSettingsController.php:113
