@@ -112,8 +112,8 @@ class ReservationDailyHelper extends ReservationMonthlyHelper {
 		$html .= $this->ReservationCommon->makeWorkFlowLabel($plan['ReservationEvent']['status']);
 		$html .= '</div>';
 		$url = $this->ReservationUrl->makePlanShowUrl($year, $month, $day, $plan, true);
-		if ($fromTime !== $plan['ReservationEvent']['fromTime'] || $toTime !==
-			$plan['ReservationEvent']['toTime']) {
+		if ($fromTime !== $plan['ReservationEvent']['fromTime'] ||
+				$toTime !== $plan['ReservationEvent']['toTime']) {
 			$html .= '<p class="reservation-daily-nontimeline-plan reservation-plan-time small">';
 			$html .= h($plan['ReservationEvent']['fromTime']) . ' - ' .
 				h($plan['ReservationEvent']['toTime']) . '</p>';
@@ -123,7 +123,7 @@ class ReservationDailyHelper extends ReservationMonthlyHelper {
 		$spaceName = $this->ReservationCommon->decideRoomName($spaceName, $reservationPlanMark);
 		$html .= '<p class="reservation-plan-spacename small">' . h($spaceName) . '</p>';
 
-		$html .= '<h3 class="reservation-plan-tittle">';
+		$html .= '<h3 class="reservation-plan-title">';
 		$html .= $this->NetCommonsHtml->link(
 			$this->TitleIcon->titleIcon($plan['ReservationEvent']['title_icon']) .
 			h($plan['ReservationEvent']['title']),

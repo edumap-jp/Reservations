@@ -300,7 +300,7 @@ class ReservationMonthlyHelper extends AppHelper {
 				h($plan['ReservationEvent']['toTime']);
 			$html .= '</p>';
 		}
-		$html .= '<h3 class="reservation-plan-tittle">';
+		$html .= '<h3 class="reservation-plan-title">';
 		if (isset($options['short_title'])) {
 			$title = h(mb_strimwidth($plan['ReservationEvent']['title'], 0, 20, '...'));
 		} else {
