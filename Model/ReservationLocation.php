@@ -296,13 +296,17 @@ class ReservationLocation extends ReservationsAppModel {
  *
  * @return array
  */
-	public function getLocations() {
+	public function getLocations($categoryId = null) {
 		$options = [
 			'conditions' => [
 				'language_id' => Current::read('Language.id'),
 			],
 			'order' => 'ReservationLocation.weight ASC'
 		];
+		if (isset($categoryId)) {
+			$options['conditions']['category_id'] = $categoryId;
+		}
+
 		$locations = $this->find('all', $options);
 		// openTextをセットする。
 		foreach ($locations as &$location) {
