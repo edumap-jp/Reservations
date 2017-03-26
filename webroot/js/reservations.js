@@ -1100,18 +1100,18 @@ NetCommonsApp.controller('ReservationFrameSettings', [
       if (type == variables.RESERVATION_DISP_TYPE_LOCATION_MONTHLY) {
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;
-        $scope.isShowTimelineStart = false;
+        $scope.isShowTimelineStart = true;
         $scope.isShowSelectLocation = true;
       } else if (type == variables.RESERVATION_DISP_TYPE_CATEGORY_WEEKLY) {
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;
-        $scope.isShowTimelineStart = false;
-        $scope.isShowSelectLocation = false;
+        $scope.isShowTimelineStart = true;
+        $scope.isShowSelectLocation = true;
       } else if (type == variables.RESERVATION_DISP_TYPE_CATEGORY_DAILY) {
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;
         $scope.isShowTimelineStart = true;
-        $scope.isShowSelectLocation = false;
+        $scope.isShowSelectLocation = true;
       } else if (type == variables.RESERVATION_DISP_TYPE_LOCATION_WEEKLY) {
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;

@@ -66,3 +66,6 @@
 
 	/* 表時開始施設選択 */
 	echo $this->element('Reservations.ReservationFrameSettings/select_location');
+
+	/* 時間枠 */
+	echo $this->element('Reservations.ReservationFrameSettings/display_timeframe');

@@ -11,8 +11,8 @@
 ?>
 <div class="form-group" ng-show="isShowSelectLocation"
 		ng-controller="ReservationFrameSettings.selectLocation" ng-init="initialize(<?php echo h(json_encode(['locations' => $locations])); ?>)">
-	<?php echo $this->NetCommonsForm->label('ReservationFrameSetting.location_key', __d('reservations', '最初に表示する施設'), array('class' => 'col-xs-12')); ?>
-	<div class="col-xs-12 col-sm-9">
+	<?php echo $this->NetCommonsForm->label('ReservationFrameSetting.location_key', __d('reservations', '最初に表示する施設')); ?>
+	<!--<div class="col-xs-12 col-sm-9">-->
 
 		<?php
 		//  カテゴリ絞り込み
@@ -78,6 +78,5 @@
 		?>
 
 
-	</div><!-- col-xs-10おわり -->
 	<div class="clearfix"></div><?php /* 幅広画面整えるため追加 */ ?>
 </div><!-- form-groupおわり-->
