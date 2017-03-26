@@ -1063,13 +1063,18 @@ NetCommonsApp.controller('ReservationFrameSettings', [
      * @type {Object.<string>}
      */
     var variables = {
-      CALENDAR_DISP_TYPE_SMALL_MONTHLY: '1',
-      CALENDAR_DISP_TYPE_LARGE_MONTHLY: '2',
-      CALENDAR_DISP_TYPE_WEEKLY: '3',
-      CALENDAR_DISP_TYPE_DAILY: '4',
-      CALENDAR_DISP_TYPE_TSCHEDULE: '5',
-      CALENDAR_DISP_TYPE_MSCHEDULE: '6'
-    };
+      // RESERVATION_DISP_TYPE_SMALL_MONTHLY: '1',
+      // RESERVATION_DISP_TYPE_LARGE_MONTHLY: '2',
+      // RESERVATION_DISP_TYPE_WEEKLY: '3',
+      // RESERVATION_DISP_TYPE_DAILY: '4',
+      // RESERVATION_DISP_TYPE_TSCHEDULE: '5',
+      // RESERVATION_DISP_TYPE_MSCHEDULE: '6'
+      RESERVATION_DISP_TYPE_CATEGORY_WEEKLY: '1',  //カテゴリー別 - 週表示
+      RESERVATION_DISP_TYPE_CATEGORY_DAILY: '2',   //カテゴリー別 - 日表示
+      RESERVATION_DISP_TYPE_LOCATION_MONTHLY: '3', //施設別 - 月表示
+      RESERVATION_DISP_TYPE_LOCATION_WEEKLY: '4',  //施設別 - 週表示
+
+  };
 
     $scope.initialize = function(data) {
       $scope.data = angular.fromJson(data);
@@ -1099,24 +1104,27 @@ NetCommonsApp.controller('ReservationFrameSettings', [
     */
     $scope.setIsShowElement = function() {
       var type = $scope.data.reservationFrameSetting.displayType;
-      if (type == variables.CALENDAR_DISP_TYPE_SMALL_MONTHLY ||
-          type == variables.CALENDAR_DISP_TYPE_LARGE_MONTHLY) {
+      if (type == variables.RESERVATION_DISP_TYPE_LOCATION_MONTHLY) {
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;
         $scope.isShowTimelineStart = false;
-      } else if (type == variables.CALENDAR_DISP_TYPE_WEEKLY) {
+      } else if (type == variables.RESERVATION_DISP_TYPE_CATEGORY_WEEKLY) {
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;
         $scope.isShowTimelineStart = false;
-      } else if (type == variables.CALENDAR_DISP_TYPE_DAILY) {
+      } else if (type == variables.RESERVATION_DISP_TYPE_CATEGORY_DAILY) {
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;
         $scope.isShowTimelineStart = true;
-      } else if (type == variables.CALENDAR_DISP_TYPE_TSCHEDULE ||
-          type == variables.CALENDAR_DISP_TYPE_MSCHEDULE) {
-        $scope.isShowStartPos = true;
-        $scope.isShowDisplayCount = true;
-        $scope.isShowTimelineStart = false;
+      } else if (type == variables.RESERVATION_DISP_TYPE_LOCATION_WEEKLY) {
+        $scope.isShowStartPos = false;
+        $scope.isShowDisplayCount = false;
+        $scope.isShowTimelineStart = true;
+      // } else if (type == variables.RESERVATION_DISP_TYPE_TSCHEDULE ||
+      //     type == variables.RESERVATION_DISP_TYPE_MSCHEDULE) {
+      //   $scope.isShowStartPos = true;
+      //   $scope.isShowDisplayCount = true;
+      //   $scope.isShowTimelineStart = false;
       } else {
         $scope.isShowStartPos = true;
         $scope.isShowDisplayCount = true;
