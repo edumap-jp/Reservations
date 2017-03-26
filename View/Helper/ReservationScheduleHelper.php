@@ -129,7 +129,7 @@ class ReservationScheduleHelper extends ReservationMonthlyHelper {
 
 			$html .= '<p class="reservation-plan-spacename small">' . h($spaceName) . '</p>';
 
-			$html .= '<h3 class="reservation-plan-tittle">';
+			$html .= '<h3 class="reservation-plan-title">';
 			//タイトルアイコン+タイトル
 			$html .= $this->NetCommonsHtml->link(
 				$this->TitleIcon->titleIcon($reservationEvent['title_icon']) .
@@ -220,7 +220,7 @@ class ReservationScheduleHelper extends ReservationMonthlyHelper {
 			$spaceName = $this->ReservationCommon->decideRoomName($spaceName, $reservationPlanMark);
 			$htmlPlan .= '<p class="reservation-plan-spacename small">' . h($spaceName) . '</p>';
 
-			$htmlPlan .= '<h3 class="reservation-plan-tittle">';
+			$htmlPlan .= '<h3 class="reservation-plan-title">';
 			//タイトルアイコン+タイトル
 			$htmlPlan .= $this->NetCommonsHtml->link(
 				$this->TitleIcon->titleIcon($reservationEvent['title_icon']) .

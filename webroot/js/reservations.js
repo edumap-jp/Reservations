@@ -309,11 +309,11 @@ NetCommonsApp.controller('ReservationsWeeklyTimelinePlan', ['$scope', function($
     return 0;
 
     //0列目からチェック
-    for (var i = 0; i <= $scope.maxLineNum; i++) {
-      if ($scope.checkColumn(i, x, y) == false) {
-        return i; //重なりの無い列を返却
-      }
-    }
+    //for (var i = 0; i <= $scope.maxLineNum; i++) {
+    //  if ($scope.checkColumn(i, x, y) == false) {
+    //    return i; //重なりの無い列を返却
+    //  }
+    //}
 
     $scope.maxLineNum++; //新しい列
     $scope.Column[$scope.maxLineNum] = [];

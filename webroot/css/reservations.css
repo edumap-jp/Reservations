@@ -350,14 +350,19 @@ div.reservation-today a:focus {
 }
 
 /*-- 単一日施設予約 タイムライン カラム 時間帯 --*/
-.reservation-virtical-timeline-periodtime {
-	width: 10%;
+.reservation-vertical-timeline-periodtime,
+.reservation-horizon-timeline-periodtime {
+	/*width: 10%;*/
 	border-width: 0 1px 1px 1px;
 	border-style: solid;
 	border-color: #ddd;
-	height: 2em;
+	/*height: 4.4em;*/
 	padding: 5px;
 }
+.reservation-vertical-timeline-periodtime {
+	height: 4.4em;
+}
+
 /*-- 単一日施設予約のタイムラインのスリット --*/
 .reservation-daily-timeline-col-slit {
 	width: 90%;
@@ -645,7 +650,7 @@ p.reservation-plan-time {
 }
 
 /* 施設予約のタイトル */
-.reservation-plan-tittle {
+.reservation-plan-title {
 	margin: 0px !important;
 	padding-bottom:4px;
 	clear: left;
@@ -677,7 +682,8 @@ a.reservation-edit-plus-icon {
 	z-index:100;
 }
 .reservation-weekly-col-day-head-bottom a.reservation-edit-plus-icon,
-.reservation-virtical-timeline-periodtime a.reservation-edit-plus-icon {
+.reservation-vertical-timeline-periodtime a.reservation-edit-plus-icon,
+.reservation-horizon-timeline-periodtime a.reservation-edit-plus-icon {
 	position: static;
 	right: 0;
 }
@@ -857,61 +863,141 @@ padding-right:3px;
 .reservation-vertical-timeline tbody tr:last-child > td {
 	border-style: solid;
 	border-color: #ddd;
-
 }
 
 /**
  * 週表示テーブル(カテゴリー別 - 週表示)
  */
-.reservation-locations-table {
+.reservation-weekly-locations-table {
 	table-layout: fixed;
 	/*width: 814px;*/
 }
 @media screen and (max-width:767px) {
-	.reservation-locations-table > table {
+	.reservation-weekly-locations-table > table {
 		font-size: 80%;
 	}
 }
-
-.reservation-locations-table td {
+.reservation-weekly-locations-table td {
 	vertical-align: top;
 	/*width: 12%;*/
 }
-.reservation-locations-table thead tr > td,
-.reservation-locations-table tbody tr > td {
+.reservation-weekly-locations-table thead tr > td,
+.reservation-weekly-locations-table tbody tr > td {
 	/*width: 96px;*/
 	border: 1px solid #ddd;
 	padding: 3px 3px 3px 0px;
 }
-.reservation-locations-table tbody tr > td {
+.reservation-weekly-locations-table tbody tr > td {
 	text-align: left;
 }
-.reservation-locations-table thead tr > td.reservation-col-head,
-.reservation-locations-table tbody tr > td.reservation-col-head {
+.reservation-weekly-locations-table thead tr > td.reservation-col-head,
+.reservation-weekly-locations-table tbody tr > td.reservation-col-head {
 	width: 124px;
 }
-.reservation-locations-table tbody tr > td.reservation-col-head {
+.reservation-weekly-locations-table tbody tr > td.reservation-col-head {
 	border: 1px solid #ddd;
 	height: 2em;
 	padding: 8px;
 	background-color: #f5f5f5;
 	text-align: left;
 }
-.reservation-locations-table tbody tr > td.reservation-col-head > div {
+.reservation-weekly-locations-table tbody tr > td.reservation-col-head > div {
 	width: 112px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
 }
-.reservation-locations-table tbody tr > td:not(.reservation-col-head) > div {
+.reservation-weekly-locations-table tbody tr > td:not(.reservation-col-head) > div {
 	position: relative !important;
+}
+
+/**
+ *　日表示(カテゴリー別)
+ */
+.reservation-daily-locations-table table {
+	table-layout: fixed;
+	/*width: 814px;*/
+}
+@media screen and (max-width:767px) {
+	.reservation-daily-locations-table table {
+		font-size: 80%;
+	}
+}
+.reservation-daily-locations-table td {
+	vertical-align: top;
+	/*width: 12%;*/
+}
+.reservation-daily-locations-table table.reservation-row-data > thead > tr > td {
+	vertical-align: bottom;
+	padding-left: 4px;
+}
+.reservation-daily-locations-table table.reservation-row-data > thead > tr > td div:first-child {
+	margin-top: 6px;
+}
+.reservation-daily-locations-table tr > td,
+.reservation-daily-locations-table tr > td {
+	/*width: 96px;*/
+	border: 1px solid #ddd;
+	padding: 4px 4px 4px 0px;
+	text-align: left;
+}
+.reservation-daily-locations-table table.reservation-row-data tbody > tr > td {
+	padding: 4px 0px;
+}
+.reservation-weekly-locations-table table.reservation-row-head {
+	/*width: 124px;*/
+}
+.reservation-daily-locations-table .table-responsive {
+	width: 686px;
+	margin-left: -1px;
+	overflow-y: hidden;
+}
+.reservation-daily-locations-table table.reservation-row-data {
+	width: 100%;
+}
+.reservation-daily-locations-table table.reservation-row-head > thead > tr > td,
+.reservation-daily-locations-table table.reservation-row-head > tbody > tr > td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+.reservation-daily-locations-table table.reservation-row-head > thead > tr > td,
+.reservation-daily-locations-table table.reservation-row-data > thead > tr > td {
+	height: 3em;
+}
+.reservation-daily-locations-table table.reservation-row-head > tbody > tr > td,
+.reservation-daily-locations-table table.reservation-row-data > tbody > tr > td {
+	height: 4em;
+}
+.reservation-daily-locations-table table.reservation-row-head > tbody > tr > td {
+	background-color: #f5f5f5;
+}
+.reservation-daily-locations-table table.reservation-row-head > tbody > tr > td > div {
+	width: 112px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.reservation-daily-locations-table table.reservation-row-data tbody > tr > td > div {
+	position: relative !important;
+}
+.reservation-daily-locations-table table.reservation-row-data tr > td {
+	width: 92px;
+}
+.reservation-daily-locations-table table.reservation-row-data .reservation-daily-timeline-slit-deco {
+	height: 3.4em;
+	margin: 0px;
+	width: auto;
+}
+.reservation-daily-locations-table table.reservation-row-data tbody .reservation-plan-clickable > small:last-child {
+	display: inline-block;
 }
 
 /**
  * 週のヘッダー
  */
 .reservation-vertical-timeline thead tr > td,
-.reservation-locations-table thead tr > td {
+.reservation-weekly-locations-table thead tr > td {
 	border-left-width: 1px;
 	border-right-width: 1px;
 	border-top-width: 0px;
@@ -920,15 +1006,15 @@ padding-right:3px;
 	border-style: solid;
 }
 .reservation-vertical-timeline thead tr:first-child > td,
-.reservation-locations-table thead tr:first-child > td {
+.reservation-weekly-locations-table thead tr:first-child > td {
 	border-top-width: 1px;
 }
 .reservation-vertical-timeline thead tr:last-child > td,
-.reservation-locations-table thead tr:last-child > td {
+.reservation-weekly-locations-table thead tr:last-child > td {
 	border-bottom-width: 1px;
 }
 .reservation-vertical-timeline thead tr > td.reservation-col-head,
-.reservation-locations-table thead tr > td.reservation-col-head {
+.reservation-weekly-locations-table thead tr > td.reservation-col-head {
 	border-width: 1px 1px 1px 1px;
 }
 
@@ -937,8 +1023,8 @@ padding-right:3px;
  */
 .reservation-vertical-timeline thead tr > td.reservation-today,
 .reservation-vertical-timeline tbody tr > td.reservation-today,
-.reservation-locations-table thead tr > td.reservation-today,
-.reservation-locations-table tbody tr > td.reservation-today {
+.reservation-weekly-locations-table thead tr > td.reservation-today,
+.reservation-weekly-locations-table tbody tr > td.reservation-today {
 	background-color: #ffffcf;
 	border-left-color: #f0d946;
 	border-left-width: 2px;
@@ -946,12 +1032,12 @@ padding-right:3px;
 	border-right-width: 2px;
 }
 .reservation-vertical-timeline thead tr:first-child > td.reservation-today,
-.reservation-locations-table thead tr:first-child > td.reservation-today {
+.reservation-weekly-locations-table thead tr:first-child > td.reservation-today {
 	border-top-color: #f0d946;
 	border-top-width: 2px;
 }
 .reservation-vertical-timeline tbody tr:last-child > td.reservation-today,
-.reservation-locations-table tbody tr:last-child > td.reservation-today {
+.reservation-weekly-locations-table tbody tr:last-child > td.reservation-today {
 	border-bottom-color: #f0d946;
 	border-bottom-width: 2px;
 }
