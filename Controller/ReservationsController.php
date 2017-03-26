@@ -92,12 +92,13 @@ class ReservationsController extends ReservationsAppController {
 		// 表示ブロックIDがないときは、パブリックTOPページで仮表示されることに話が決まった
 		$this->ReservationEvent->initSetting($this->Workflow);
 
-		$locations = $this->ReservationLocation->getLocations();
+		$categoryId = Hash::get($this->params['named'], 'category_id');
+		$locations = $this->ReservationLocation->getLocations($categoryId);
 		$this->set('locations', $locations);
 
-		if (! $locations) {
-			$this->setAction('emptyRender');
-		}
+		//if (! $locations) {
+		//	$this->setAction('emptyRender');
+		//}
 	}
 
 /**
@@ -328,9 +329,11 @@ class ReservationsController extends ReservationsAppController {
 			if($locationKey) {
 				$vars['location_key'] = $locationKey;
 			}else{
-				$vars['location_key'] = Current::read('ReservationFrameSetting.location_key');
+				$vars['location_key'] = Current::read(
+					'ReservationFrameSetting.location_key',
+					Hash::get($this->viewVars['locations'], '0.ReservationLocation.key')
+				);
 			}
-			//$vars['location_key'] = Hash::get($this->viewVars['locations'], '0.ReservationLocation.key');
 		}
 
 		switch ($style) {
