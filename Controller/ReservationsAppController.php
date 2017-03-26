@@ -252,11 +252,11 @@ class ReservationsAppController extends AppController {
 		$this->__setExposeRoomOptionsEtc($vars);
 
 		// 施設で絞り込む
-		$locationKey = $this->request->query('location_key');
-		if ($locationKey) {
-			$planParams['location_key'] = $locationKey;
+		//$locationKey = $this->request->query('location_key');
+		if (isset($vars['location_key'])) {
+			$planParams['location_key'] = $vars['location_key'];
 		}
-		$vars['location_key'] = $locationKey;
+		//$vars['location_key'] = $locationKey;
 
 		$vars['plans'] = $this->ReservationEvent->getPlans($vars, $planParams, $order);
 

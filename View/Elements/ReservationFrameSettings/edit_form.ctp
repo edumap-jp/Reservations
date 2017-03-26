@@ -50,14 +50,22 @@
 
 <?php
 	/* ルーム選択 */
-	echo $this->element('Reservations.ReservationFrameSettings/room_select');
+	//echo $this->element('Reservations.ReservationFrameSettings/room_select');
+	echo $this->NetCommonsForm->hidden('ReservationFrameSetting.is_select_room');
 
 	/* 開始位置 */
-	echo $this->element('Reservations.ReservationFrameSettings/start_pos');
+	//echo $this->element('Reservations.ReservationFrameSettings/start_pos');
+	echo $this->NetCommonsForm->hidden('ReservationFrameSetting.start_pos');
 
 	/* 日数 */
-	echo $this->element('Reservations.ReservationFrameSettings/display_count');
+	//echo $this->element('Reservations.ReservationFrameSettings/display_count');
+	echo $this->NetCommonsForm->hidden('ReservationFrameSetting.display_count');
 
 	/* タイムライン開始 */
 	echo $this->element('Reservations.ReservationFrameSettings/timeline_start');
 
+	/* 表時開始施設選択 */
+	echo $this->element('Reservations.ReservationFrameSettings/select_location');
+
+	/* 時間枠 */
+	echo $this->element('Reservations.ReservationFrameSettings/display_timeframe');
