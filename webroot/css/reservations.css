@@ -951,6 +951,7 @@ padding-right:3px;
 	width: 686px;
 	margin-left: -1px;
 	overflow-y: hidden;
+	border-right: 1px solid #ddd;
 }
 .reservation-daily-locations-table table.reservation-row-data {
 	width: 100%;
