@@ -1063,18 +1063,11 @@ NetCommonsApp.controller('ReservationFrameSettings', [
      * @type {Object.<string>}
      */
     var variables = {
-      // RESERVATION_DISP_TYPE_SMALL_MONTHLY: '1',
-      // RESERVATION_DISP_TYPE_LARGE_MONTHLY: '2',
-      // RESERVATION_DISP_TYPE_WEEKLY: '3',
-      // RESERVATION_DISP_TYPE_DAILY: '4',
-      // RESERVATION_DISP_TYPE_TSCHEDULE: '5',
-      // RESERVATION_DISP_TYPE_MSCHEDULE: '6'
       RESERVATION_DISP_TYPE_CATEGORY_WEEKLY: '1',  //カテゴリー別 - 週表示
       RESERVATION_DISP_TYPE_CATEGORY_DAILY: '2',   //カテゴリー別 - 日表示
       RESERVATION_DISP_TYPE_LOCATION_MONTHLY: '3', //施設別 - 月表示
       RESERVATION_DISP_TYPE_LOCATION_WEEKLY: '4',  //施設別 - 週表示
-
-  };
+    };
 
     $scope.initialize = function(data) {
       $scope.data = angular.fromJson(data);
