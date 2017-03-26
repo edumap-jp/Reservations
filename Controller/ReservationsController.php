@@ -107,27 +107,27 @@ class ReservationsController extends ReservationsAppController {
  */
 	public function index() {
 		$vars = array();
+		$this->setReservationCommonCurrent($vars);
 		$style = $this->getQueryParam('style');
 		if (! $style) {
 			//style未指定の場合、ReservationFrameSettingモデルのdisplay_type情報から表示するctpを決める。
-			$this->setReservationCommonCurrent($vars);
-			$displayType = (int)Current::read('ReservationFrameSetting.display_type');
 
-			if ($displayType === ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_WEEKLY) {
-				//カテゴリー別 - 週表示
-				$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_WEEKLY;
-			} elseif ($displayType === ReservationsComponent::RESERVATION_STYLE_CATEGORY_DAILY) {
-				//カテゴリー別 - 日表示
-				$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_WEEKLY;
-			} elseif ($displayType === ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_WEEKLY) {
-				//施設別 - 月表示
-				$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_WEEKLY;
-			} elseif ($displayType === ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_WEEKLY) {
-				//カテゴリー別 - 日表示
-				$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_WEEKLY;
-			} else {
-				//上記以外は、カテゴリー別 - 週表示
-				$style = ReservationsComponent::RESERVATION_STYLE_DEFAULT;
+			$displayType = (int)Current::read('ReservationFrameSetting.display_type');
+			switch($displayType) {
+				case ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_WEEKLY:
+					$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_WEEKLY;
+					break;
+				case ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_DAILY:
+					$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_DAILY;
+					break;
+				case ReservationsComponent::RESERVATION_DISP_TYPE_LACATION_MONTHLY:
+					$style = ReservationsComponent::RESERVATION_STYLE_LACATION_MONTHLY;
+					break;
+				case ReservationsComponent::RESERVATION_DISP_TYPE_LACATION_WEEKLY:
+					$style = ReservationsComponent::RESERVATION_STYLE_LACATION_WEEKLY;
+					break;
+				default:
+					$style = ReservationsComponent::RESERVATION_STYLE_DEFAULT;
 			}
 		}
 		$this->_storeRedirectPath($vars);
@@ -323,6 +323,16 @@ class ReservationsController extends ReservationsAppController {
 	public function _getCtpAndVars($style, &$vars) {
 		$vars['style'] = $style;
 
+		if (in_array($vars['style'], ReservationsComponent::$reservationStylesByLocation, true)) {
+			$locationKey = $this->request->query('location_key');
+			if($locationKey) {
+				$vars['location_key'] = $locationKey;
+			}else{
+				$vars['location_key'] = Current::read('ReservationFrameSetting.location_key');
+			}
+			//$vars['location_key'] = Hash::get($this->viewVars['locations'], '0.ReservationLocation.key');
+		}
+
 		switch ($style) {
 			case ReservationsComponent::RESERVATION_STYLE_CATEGORY_WEEKLY:
 				//カテゴリー別 - 週表示
@@ -370,9 +380,9 @@ class ReservationsController extends ReservationsAppController {
 			//	$vars = $this->_getMonthlyVars($vars);
 		}
 
-		if (in_array($vars['style'], ReservationsComponent::$reservationStylesByLocation, true)) {
-			$vars['location_key'] = Hash::get($this->viewVars['locations'], '0.ReservationLocation.key');
-		}
+		//if (in_array($vars['style'], ReservationsComponent::$reservationStylesByLocation, true)) {
+		//	$vars['location_key'] = Hash::get($this->viewVars['locations'], '0.ReservationLocation.key');
+		//}
 
 		$ctpName = $vars['style'];
 		return $ctpName;
