@@ -10,8 +10,7 @@
  */
 ?>
 <div class="form-group" ng-show="isShowTimelineStart">
-	<?php echo $this->NetCommonsForm->label('ReservationFrameSetting.timeline_base_time', __d('reservations', 'Timeline start time'), array('class' => 'col-xs-12')); ?>
-	<div class="col-xs-12 col-sm-9">
+	<?php echo $this->NetCommonsForm->label('ReservationFrameSetting.timeline_base_time', __d('reservations', 'Timeline start time')); ?>
 
 		<?php
 		$options = array();
@@ -28,5 +27,5 @@
 		'class' => 'form-control',
 		));
 		?>
-	</div><!-- col-xs-10おわり -->
+	<div class="clearfix"></div>
 </div><!-- form-groupおわり-->

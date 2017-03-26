@@ -1063,12 +1063,10 @@ NetCommonsApp.controller('ReservationFrameSettings', [
      * @type {Object.<string>}
      */
     var variables = {
-      CALENDAR_DISP_TYPE_SMALL_MONTHLY: '1',
-      CALENDAR_DISP_TYPE_LARGE_MONTHLY: '2',
-      CALENDAR_DISP_TYPE_WEEKLY: '3',
-      CALENDAR_DISP_TYPE_DAILY: '4',
-      CALENDAR_DISP_TYPE_TSCHEDULE: '5',
-      CALENDAR_DISP_TYPE_MSCHEDULE: '6'
+      RESERVATION_DISP_TYPE_CATEGORY_WEEKLY: '1',  //カテゴリー別 - 週表示
+      RESERVATION_DISP_TYPE_CATEGORY_DAILY: '2',   //カテゴリー別 - 日表示
+      RESERVATION_DISP_TYPE_LOCATION_MONTHLY: '3', //施設別 - 月表示
+      RESERVATION_DISP_TYPE_LOCATION_WEEKLY: '4',  //施設別 - 週表示
     };
 
     $scope.initialize = function(data) {
@@ -1099,32 +1097,76 @@ NetCommonsApp.controller('ReservationFrameSettings', [
     */
     $scope.setIsShowElement = function() {
       var type = $scope.data.reservationFrameSetting.displayType;
-      if (type == variables.CALENDAR_DISP_TYPE_SMALL_MONTHLY ||
-          type == variables.CALENDAR_DISP_TYPE_LARGE_MONTHLY) {
-        $scope.isShowStartPos = false;
-        $scope.isShowDisplayCount = false;
-        $scope.isShowTimelineStart = false;
-      } else if (type == variables.CALENDAR_DISP_TYPE_WEEKLY) {
-        $scope.isShowStartPos = false;
-        $scope.isShowDisplayCount = false;
-        $scope.isShowTimelineStart = false;
-      } else if (type == variables.CALENDAR_DISP_TYPE_DAILY) {
+      if (type == variables.RESERVATION_DISP_TYPE_LOCATION_MONTHLY) {
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;
         $scope.isShowTimelineStart = true;
-      } else if (type == variables.CALENDAR_DISP_TYPE_TSCHEDULE ||
-          type == variables.CALENDAR_DISP_TYPE_MSCHEDULE) {
-        $scope.isShowStartPos = true;
-        $scope.isShowDisplayCount = true;
-        $scope.isShowTimelineStart = false;
+        $scope.isShowSelectLocation = true;
+      } else if (type == variables.RESERVATION_DISP_TYPE_CATEGORY_WEEKLY) {
+        $scope.isShowStartPos = false;
+        $scope.isShowDisplayCount = false;
+        $scope.isShowTimelineStart = true;
+        $scope.isShowSelectLocation = true;
+      } else if (type == variables.RESERVATION_DISP_TYPE_CATEGORY_DAILY) {
+        $scope.isShowStartPos = false;
+        $scope.isShowDisplayCount = false;
+        $scope.isShowTimelineStart = true;
+        $scope.isShowSelectLocation = true;
+      } else if (type == variables.RESERVATION_DISP_TYPE_LOCATION_WEEKLY) {
+        $scope.isShowStartPos = false;
+        $scope.isShowDisplayCount = false;
+        $scope.isShowTimelineStart = true;
+        $scope.isShowSelectLocation = true;
+      // } else if (type == variables.RESERVATION_DISP_TYPE_TSCHEDULE ||
+      //     type == variables.RESERVATION_DISP_TYPE_MSCHEDULE) {
+      //   $scope.isShowStartPos = true;
+      //   $scope.isShowDisplayCount = true;
+      //   $scope.isShowTimelineStart = false;
       } else {
-        $scope.isShowStartPos = true;
-        $scope.isShowDisplayCount = true;
-        $scope.isShowTimelineStart = true;
+        $scope.isShowStartPos = false;
+        $scope.isShowDisplayCount = false;
+        $scope.isShowTimelineStart = false;
       }
     };
-  }]);
+  }
+]);
 
+NetCommonsApp.controller('ReservationFrameSettings.selectLocation', [
+  '$scope', 'filterFilter', function($scope, filterFilter) {
+
+    $scope.initialize = function(data) {
+      $scope.data = angular.fromJson(data);
+      // console.log($scope.data);
+      $scope.locationOptions = $scope.data.locations;
+      // console.log($scope.locationOptions);
+
+      $scope.ReservationActionPlan = {
+        location_key: null
+      };
+    };
+
+    $scope.setLocationKey = function(locationKey) {
+      $scope.selectLocation = filterFilter(
+          $scope.data.locations, {ReservationLocation: {key: locationKey}})[0];
+    };
+
+    // 施設カテゴリ選択
+    $scope.locationOptions = [];
+    $scope.locationCategory = 'all';
+    $scope.selectLocationCategory = function() {
+      // all　絞り込み解除
+      // ''  -> nullだけに絞り込み
+      if ($scope.locationCategory == 'all') {
+        $scope.locationOptions = $scope.data.locations;
+      } else if ($scope.locationCategory == '') {
+        $scope.locationOptions = filterFilter($scope.data.locations, {Category: {id: null}});
+      } else {
+        $scope.locationOptions = filterFilter(
+            $scope.data.locations, {Category: {id: $scope.locationCategory}});
+      }
+    };
+  }
+]);
 
 /**
  * angularJSに依存しないJavaScriptプログラム(NonAngularJS)

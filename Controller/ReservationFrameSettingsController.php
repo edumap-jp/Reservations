@@ -53,6 +53,7 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		),
 		'Paginator',
 		'Rooms.RoomsForm',
+		'Categories.Categories',
 	);
 
 /**
@@ -109,6 +110,7 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		'Reservations.Reservation',
 		'Reservations.ReservationFrameSetting',
 		'Reservations.ReservationFrameSettingSelectRooms',
+		'Reservations.ReservationLocation',
 		'Rooms.Room'
 	);
 
@@ -215,6 +217,9 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		$this->request->data['Frame'] = Current::read('Frame');
 		// 施設予約表示種別
 		$this->set('displayTypeOptions', $this->_displayTypeOptions);
+
+		$locations = $this->ReservationLocation->getLocations();
+		$this->set('locations', $locations);
 	}
 /**
  * _getRoom
