@@ -50,7 +50,8 @@
 
 <?php
 	/* ルーム選択 */
-	echo $this->element('Reservations.ReservationFrameSettings/room_select');
+	//echo $this->element('Reservations.ReservationFrameSettings/room_select');
+	echo $this->NetCommonsForm->hidden('ReservationFrameSetting.is_select_room');
 
 	/* 開始位置 */
 	echo $this->element('Reservations.ReservationFrameSettings/start_pos');
