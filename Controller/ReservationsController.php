@@ -276,7 +276,7 @@ class ReservationsController extends ReservationsAppController {
  * @return array $vars 日次施設予約変数
  */
 	public function _getDailyVars($vars) {
-		$tab = $this->getQueryParam('tab');
+		//$tab = $this->getQueryParam('tab');
 //		if ($tab === 'timeline') {
 			$vars = $this->_getDailyTimelineVars($vars);
 //		} else {
@@ -333,6 +333,15 @@ class ReservationsController extends ReservationsAppController {
 					'ReservationFrameSetting.location_key',
 					Hash::get($this->viewVars['locations'], '0.ReservationLocation.key')
 				);
+			}
+			// カテゴリ絞り込みの結果、指定した施設がなかったら1番目の施設を選択する。
+			$locationList = Hash::combine($this->viewVars['locations'],
+				'{n}.ReservationLocation.key',
+				'{n}.ReservationLocation.location_name'
+			//'{n}.ReservationLocation.category_id'
+			);
+			if (!isset($locationList[$vars['location_key']])) {
+				$vars['location_key'] = Hash::get($this->viewVars['locations'], '0.ReservationLocation.key');
 			}
 		}
 

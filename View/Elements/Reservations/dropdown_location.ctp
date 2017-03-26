@@ -23,6 +23,9 @@ $commonUrl = array(
 		'day' => $vars['day'],
 	)
 );
+if (isset($this->request->named['category_id'])) {
+	$commonUrl['category_id'] = $this->request->named['category_id'];
+}
 ?>
 
 <div class="dropdown btn-group">
