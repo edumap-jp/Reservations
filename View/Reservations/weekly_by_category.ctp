@@ -29,7 +29,7 @@ echo $this->element('Reservations.scripts');
 		</div>
 	</div>
 
-	<div class="text-center reservation-locations-table table-responsive">
+	<div class="text-center reservation-weekly-locations-table table-responsive">
 		<table>
 			<thead>
 				<?php echo $this->ReservationWeekly->makeWeeklyHeaderHtml($vars); ?>

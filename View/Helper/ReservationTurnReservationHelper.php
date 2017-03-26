@@ -217,9 +217,9 @@ class ReservationTurnReservationHelper extends AppHelper {
 			'frame_id' => Current::read('Frame.id'),
 			'?' => Hash::merge(array('style' => $vars['style']), $dateArr),
 		);
-		if (isset($vars['tab'])) {
-			$urlArray['?']['tab'] = $vars['tab'];
-		}
+		//if (isset($vars['tab'])) {
+		//	$urlArray['?']['tab'] = $vars['tab'];
+		//}
 		$url = $this->ReservationUrl->getReservationUrlAsArray($urlArray);
 		return $url;
 	}

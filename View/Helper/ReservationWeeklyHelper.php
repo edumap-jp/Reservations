@@ -65,6 +65,10 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 		$html .= "<div style='z-index:1;' id='" . $id . "'></div>"; //縦位置調整用
 
 		foreach ($plans as $plan) {
+			if ($vars['currentLocationKey'] !== $plan['ReservationEvent']['location_key']) {
+				continue;
+			}
+
 			//仕様
 			//予定が１件以上あるとき）
 			//※roomIdが一致するデータ
@@ -218,8 +222,8 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 
 		foreach ($locations as $location) {
 			$cnt++;
-			$locationKye = $location['ReservationLocation']['key'];
-			$vars['currentLocationKey'] = $locationKye;//$cnt;
+			$locationKey = $location['ReservationLocation']['key'];
+			$vars['currentLocationKey'] = $locationKey;//$cnt;
 
 			$html .= '<tr>'; //1行の開始
 
@@ -233,7 +237,7 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 			//施設名
 			$html .= '<td class="reservation-col-head">' .
 						'<div>' .
-							$location['ReservationLocation']['location_name'] .
+							h($location['ReservationLocation']['location_name']) .
 						'</div>' .
 						//$this->ReservationButton->getAddButton($vars) .
 					'</td>';
