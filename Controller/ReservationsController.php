@@ -92,12 +92,13 @@ class ReservationsController extends ReservationsAppController {
 		// 表示ブロックIDがないときは、パブリックTOPページで仮表示されることに話が決まった
 		$this->ReservationEvent->initSetting($this->Workflow);
 
-		$locations = $this->ReservationLocation->getLocations();
+		$categoryId = Hash::get($this->params['named'], 'category_id');
+		$locations = $this->ReservationLocation->getLocations($categoryId);
 		$this->set('locations', $locations);
 
-		if (! $locations) {
-			$this->setAction('emptyRender');
-		}
+		//if (! $locations) {
+		//	$this->setAction('emptyRender');
+		//}
 	}
 
 /**
