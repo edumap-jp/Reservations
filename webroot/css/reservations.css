@@ -991,7 +991,7 @@ padding-right:3px;
 	width: auto;
 }
 .reservation-daily-locations-table table.reservation-row-data tbody .reservation-plan-clickable > small:last-child {
-	display: inline-block;
+	display: block;
 }
 
 /**

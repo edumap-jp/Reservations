@@ -117,7 +117,7 @@ class ReservationDailyTimelineHelper extends ReservationMonthlyHelper {
 
 			$htmlClass = 'reservation-plan-clickable text-left reservation-plan-show';
 			$html .= '<div><p class="' . $htmlClass . '" data-url="' . $url . '">';
-			$html .= '<small class="pull-left">';
+			$html .= '<small>';
 			$html .= h($plan['ReservationEvent']['fromTime']) . '-' . h($plan['ReservationEvent']['toTime']);
 			$html .= '</small>';
 
