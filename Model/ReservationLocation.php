@@ -38,6 +38,7 @@ class ReservationLocation extends ReservationsAppModel {
 			'afterCallback' => false,
 		),
 		'Reservations.ReservationValidate',
+		//'Reservations.ReservationRoleAndPerm', //施設予約役割・権限
 	);
 
 /**
@@ -291,15 +292,33 @@ class ReservationLocation extends ReservationsAppModel {
 /**
  * 施設データを取得する
  *
- * TODO: 後で自分が閲覧可のみ取得するように条件を追加する
+ * アクセス可能なルームで予約可能な施設だけに絞り込んで返す
  * とりあえず、すべて取得する
  *
+ * @param int $categoryId カテゴリID
  * @return array
  */
 	public function getLocations($categoryId = null) {
+		// ログインユーザが参加してるルームを取得
+		$accessibleRoomIds = $this->getReadableRoomIds();
+		$this->loadModels([
+			'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom'
+		]);
+		$locationsRooms = $this->ReservationLocationsRoom->find('all', ['conditions' => [
+			'room_id' => $accessibleRoomIds,
+		]]);
+		$locationKeys = Hash::combine($locationsRooms,
+			'{n}.ReservationLocationsRoom.reservation_location_key',
+			'{n}.ReservationLocationsRoom.reservation_location_key'
+			);
+		// そのルームからの予約を受け付ける施設を取得
 		$options = [
 			'conditions' => [
 				'language_id' => Current::read('Language.id'),
+				'OR' => [
+					'use_all_rooms' => 1, // 全てのルームから予約を受け付ける施設
+					'ReservationLocation.key' => $locationKeys
+				]
 			],
 			'order' => 'ReservationLocation.weight ASC'
 		];

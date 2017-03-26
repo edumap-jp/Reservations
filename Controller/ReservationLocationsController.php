@@ -203,6 +203,7 @@ class ReservationLocationsController extends ReservationsAppController {
 				'start_time' => '09:00',
 				'end_time' => '18:00',
 				'time_table' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+				'use_all_rooms' => '1',
 			];
 			$this->request->data = $newLocation;
 		}
@@ -338,10 +339,10 @@ class ReservationLocationsController extends ReservationsAppController {
 		return $this->redirect(
 			NetCommonsUrl::actionUrl(
 				array(
-					'controller' => 'blog_entries',
+					'controller' => 'reservation_locations',
 					'action' => 'index',
 					'frame_id' => Current::read('Frame.id'),
-					'block_id' => Current::read('Block.id')
+					//'block_id' => Current::read('Block.id')
 				)
 			)
 		);
