@@ -29,4 +29,5 @@
 		));
 		?>
 	</div><!-- col-xs-10おわり -->
+	<div class="clearfix"></div>
 </div><!-- form-groupおわり-->

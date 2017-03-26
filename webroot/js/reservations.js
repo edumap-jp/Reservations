@@ -1101,31 +1101,72 @@ NetCommonsApp.controller('ReservationFrameSettings', [
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;
         $scope.isShowTimelineStart = false;
+        $scope.isShowSelectLocation = true;
       } else if (type == variables.RESERVATION_DISP_TYPE_CATEGORY_WEEKLY) {
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;
         $scope.isShowTimelineStart = false;
+        $scope.isShowSelectLocation = false;
       } else if (type == variables.RESERVATION_DISP_TYPE_CATEGORY_DAILY) {
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;
         $scope.isShowTimelineStart = true;
+        $scope.isShowSelectLocation = false;
       } else if (type == variables.RESERVATION_DISP_TYPE_LOCATION_WEEKLY) {
         $scope.isShowStartPos = false;
         $scope.isShowDisplayCount = false;
         $scope.isShowTimelineStart = true;
+        $scope.isShowSelectLocation = true;
       // } else if (type == variables.RESERVATION_DISP_TYPE_TSCHEDULE ||
       //     type == variables.RESERVATION_DISP_TYPE_MSCHEDULE) {
       //   $scope.isShowStartPos = true;
       //   $scope.isShowDisplayCount = true;
       //   $scope.isShowTimelineStart = false;
       } else {
-        $scope.isShowStartPos = true;
-        $scope.isShowDisplayCount = true;
-        $scope.isShowTimelineStart = true;
+        $scope.isShowStartPos = false;
+        $scope.isShowDisplayCount = false;
+        $scope.isShowTimelineStart = false;
       }
     };
-  }]);
+  }
+]);
 
+NetCommonsApp.controller('ReservationFrameSettings.selectLocation', [
+  '$scope', 'filterFilter', function($scope, filterFilter) {
+
+    $scope.initialize = function(data) {
+      $scope.data = angular.fromJson(data);
+      // console.log($scope.data);
+      $scope.locationOptions = $scope.data.locations;
+      // console.log($scope.locationOptions);
+
+      $scope.ReservationActionPlan = {
+        location_key: null
+      };
+    };
+
+    $scope.setLocationKey = function(locationKey) {
+      $scope.selectLocation = filterFilter(
+          $scope.data.locations, {ReservationLocation: {key: locationKey}})[0];
+    };
+
+    // 施設カテゴリ選択
+    $scope.locationOptions = [];
+    $scope.locationCategory = 'all';
+    $scope.selectLocationCategory = function() {
+      // all　絞り込み解除
+      // ''  -> nullだけに絞り込み
+      if ($scope.locationCategory == 'all') {
+        $scope.locationOptions = $scope.data.locations;
+      } else if ($scope.locationCategory == '') {
+        $scope.locationOptions = filterFilter($scope.data.locations, {Category: {id: null}});
+      } else {
+        $scope.locationOptions = filterFilter(
+            $scope.data.locations, {Category: {id: $scope.locationCategory}});
+      }
+    };
+  }
+]);
 
 /**
  * angularJSに依存しないJavaScriptプログラム(NonAngularJS)
