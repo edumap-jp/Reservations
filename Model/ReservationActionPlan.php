@@ -455,7 +455,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 		if ($startDate != $endDate) {
 			//　日付またぎの予約なら日付毎に分割してチェックする
 			// $startDateから1日ずつたして$endDateまで
-			$current = strtotime($startDate)
+			$current = strtotime($startDate);
 			for ($current = $current; $current <= strtotime(
 				$endDate
 			); $current = $current + (24 * 60 * 60)) {
