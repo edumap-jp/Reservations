@@ -407,6 +407,15 @@ class ReservationActionPlan extends ReservationsAppModel {
 					'rule' => array('checkReverseStartEndDateTime', 'detail'),
 					'message' => __d('reservations', 'Invalid input. (start day (time) and end day (time))'),
 				),
+				'rule3' => array(
+					'rule' => array('validteNotExistReservation'),
+					'message' => __d('reservations', '既に予約が入っているため、予約できません。'),
+					// NC2では予約の入ってる日付を表示してた（繰り返し用だが、単発予約でも表示）
+				),
+				'rule4' => array(
+					'rule' => array('validteUseLocationTimeRange'),
+					'message' => __d('reservations', '予約時間の範囲に誤りがあります。予約時間を確認し、正しい時間帯を入力してください。'),
+				),
 			),
 			'detail_end_datetime' => array(
 				'rule1' => array(
@@ -414,7 +423,143 @@ class ReservationActionPlan extends ReservationsAppModel {
 					'message' => __d('reservations', 'Invalid input. (end date)'),
 				),
 			),
+
 		));
+	}
+
+/**
+ * 施設利用時間内の予約になっているか
+ *
+ * @param array $check チェック対象
+ * @return bool
+ */
+	public function validteUseLocationTimeRange($check) {
+		// TODO タイムゾーン対応
+		$locationKey = $this->data[$this->alias]['location_key'];
+		$startDateTime = $this->data[$this->alias]['detail_start_datetime'];
+		$endDateTime = $this->data[$this->alias]['detail_end_datetime'];
+
+		$this->loadModels(
+			[
+				'ReservationLocation' => 'Reservations.ReservationLocation'
+			]
+		);
+		$location = $this->ReservationLocation->findByKeyAndLanguageId(
+			$locationKey,
+			Current::read('Language.id')
+		);
+		$reservableTimeTable = explode('|', $location['ReservationLocation']['time_table']);
+
+		$startDate = date('Y-m-d', strtotime($startDateTime));
+		$endDate = date('Y-m-d', strtotime($endDateTime));
+		if ($startDate != $endDate) {
+			//　日付またぎの予約なら日付毎に分割してチェックする
+			// $startDateから1日ずつたして$endDateまで
+			$current = strtotime($startDate)
+			for ($current = $current; $current <= strtotime(
+				$endDate
+			); $current = $current + (24 * 60 * 60)) {
+				if ($current == strtotime($startDate)) {
+					// 開始日
+					$startUnixTime = strtotime($startDateTime);
+				} else {
+					$startUnixTime = $current;
+				}
+				if ($current == strtotime($endDate)) {
+					// 終了日
+					$endUnixTime = strtotime($endDateTime);
+				} else {
+					$endUnixTime = $current + (24 * 60 * 60);
+				}
+				$result = $this->_useLocationTimeRange(
+					$startUnixTime,
+					$reservableTimeTable,
+					$endUnixTime,
+					$location
+				);
+				if (!$result) {
+					return false;
+				}
+			}
+			return true;
+		} else {
+			// 予約OKな曜日か
+
+			$startUnixTime = strtotime($startDateTime);
+			$endUnixTime = strtotime($endDateTime);
+
+			return $this->_useLocationTimeRange(
+				$startUnixTime,
+				$reservableTimeTable,
+				$endUnixTime,
+				$location
+			);
+		}
+	}
+
+/**
+ * 重複予約のチェック
+ *
+ * @param array $check チェック対象
+ * @return bool
+ */
+	public function validteNotExistReservation($check) {
+		// TODO リピート予約に対応させる
+		// この時点ではユーザタイム
+		$startDateTime = $this->data[$this->alias]['detail_start_datetime'];
+		$endDateTime = $this->data[$this->alias]['detail_end_datetime'];
+		$inputTimeZone = $this->data[$this->alias]['timezone_offset'];
+		$locationKey = $this->data[$this->alias]['location_key'];
+		// サーバタイムに変換
+		$netCommonsTime = new NetCommonsTime();
+		$startDateTime = $netCommonsTime->toServerDatetime($startDateTime, $inputTimeZone);
+		$endDateTime = $netCommonsTime->toServerDatetime($endDateTime, $inputTimeZone);
+
+		$startDateTime = date('YmdHis', strtotime($startDateTime));
+		$endDateTime = date('YmdHis', strtotime($endDateTime));
+		// 存在チェック
+		$this->loadModels(['ReservationEvent' => 'Reservations.ReservationEvent']);
+		$conditions = [
+			'ReservationEvent.location_key' => $locationKey,
+			// workflow
+			[
+				// isActive
+				// isLatestは承認申請中だけ（差し戻しと一時保存はチェックしない）
+				'OR' => [
+					'ReservationEvent.is_active' => 1,
+					[
+						'ReservationEvent.is_latest' => 1,
+						'ReservationEvent.status' => WorkflowComponent::STATUS_APPROVAL_WAITING,
+					]
+				]
+			],
+			[
+				'OR' => [
+					[
+						// 始点が指定した範囲にあったら時間枠重複
+						'ReservationEvent.dtstart >' => $startDateTime,
+						'ReservationEvent.dtstart <' => $endDateTime,
+					],
+					[
+						// 終点が指定した範囲にあったら時間枠重複
+						'ReservationEvent.dtend >' => $startDateTime,
+						'ReservationEvent.dtend <' => $endDateTime,
+
+					],
+					[
+						// 始点、終点ともそれぞれ指定範囲の前と後だったら時間枠重複
+						'ReservationEvent.dtstart <' => $startDateTime,
+						'ReservationEvent.dtend >' => $endDateTime,
+					],
+				]
+			],
+
+		];
+		$exist = $this->ReservationEvent->find('count', ['conditions' => $conditions]);
+		if ($exist) {
+			return false;
+		}
+		return true;
 	}
 
 /**
@@ -516,6 +661,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 						ReservationsComponent::CALENDAR_VALIDATOR_TEXTAREA_LEN),
 				),
 			),
+
 			//statusの値は 施設予約独自status取得関数getStatusで取ってくるので省略
 		));
 		$this->_doMergeRruleValidate($isDetailEdit);	//繰返し関連validation
@@ -1012,5 +1158,33 @@ class ReservationActionPlan extends ReservationsAppModel {
 			}
 		}
 		return $aReturn;
+	}
+
+/**
+ * 施設利用可能時間かチェック
+ *
+ * @param int $startUnixTime 開始日時
+ * @param int $endUnixTime 終了日時
+ * @param array $reservableTimeTable 予約可能曜日
+ * @param array $location ReservationLocation data
+ * @return bool
+ */
+	protected function _useLocationTimeRange(
+		$startUnixTime,
+		$endUnixTime,
+		$reservableTimeTable,
+		$location
+	) {
+		$weekDay = date('D', $startUnixTime); // 曜日 Mon .. Sun形式
+		if (!in_array($weekDay, $reservableTimeTable)) {
+			return false;
+		}
+		// 利用可能時間に収まっているか
+		$startTime = date('H:i', $startUnixTime);
+		$endTime = date('H:i', $endUnixTime);
+		if ($startTime < $location['ReservationLocation']['start_time'] || $location['ReservationLocation']['end_time'] < $endTime) {
+			return false;
+		}
+		return true;
 	}
 }

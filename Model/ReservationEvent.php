@@ -96,7 +96,7 @@ class ReservationEvent extends ReservationsAppModel {
 			'className' => 'Reservations.ReservationLocation',
 			'foreignKey' => false,
 			'conditions' => [
-				'location_key = ReservationLocation.key',
+				'ReservationEvent.location_key = ReservationLocation.key',
 				'ReservationEvent.language_id = ReservationLocation.language_id'
 			],
 		],
