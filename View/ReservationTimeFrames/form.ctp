@@ -14,7 +14,7 @@ $dataJson = json_encode($this->request->data);
 
 <?php echo $this->BlockTabs->main('timeframe_settings'); ?>
 
-<div class="reservationTimeFrames form" >
+<div class="reservationTimeFrames form" ng-init="data=<?php echo h($dataJson)?>" >
 	<div class="reservationTimeFrames form">
 		<article>
 			<div class="panel panel-default">
@@ -112,8 +112,8 @@ $dataJson = json_encode($this->request->data);
 									__d('reservations', '時間枠色'));
 								echo $this->element('NetCommons.color_palette_picker', array(
 									'ngAttrName' => 'data[ReservationTimeframe][color]',
-									'ngModel' => 'choice.graphColor',
-									'colorValue' => '{{choice.graphColor}}',
+									'ngModel' => 'data.ReservationTimeframe.color',
+									'colorValue' => '{{data.ReservationTimeframe.color}}',
 								)); ?>
 							</div>
 
