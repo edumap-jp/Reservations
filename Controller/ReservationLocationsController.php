@@ -138,6 +138,12 @@ class ReservationLocationsController extends ReservationsAppController {
 		$query['conditions'] = $conditions;
 		//$query['conditions'] = $this->ReservationLocation->getWorkflowConditi?ons($conditions);
 
+		// TODO order効かない？
+		//$query['order'] = [
+		//	//'CategoryOrder.weight ASC',
+		//	'ReservationLocation.weight ASC',
+		//	'ReservationLocation.category_id ASC'
+		//];
 		//表示件数
 		//if (isset($this->params['named']['limit'])) {
 		//	$query['limit'] = (int)$this->params['named']['limit'];
@@ -321,19 +327,21 @@ class ReservationLocationsController extends ReservationsAppController {
 		$this->request->allowMethod('post', 'delete');
 
 		$key = $this->request->data['ReservationLocation']['key'];
-		$blogEntry = $this->ReservationLocation->getWorkflowContents('first', array(
-			'recursive' => 0,
-			'conditions' => array(
-				'ReservationLocation.key' => $key
-			)
-		));
+		//$blogEntry = $this->ReservationLocation->getWorkflowContents('first', array(
+			//'recursive' => 0,
+		//	'conditions' => array(
+		//		'ReservationLocation.key' => $key
+		//	)
+		//));
 
 		// 権限チェック
-		if ($this->ReservationLocation->canDeleteWorkflowContent($blogEntry) === false) {
-			return $this->throwBadRequest();
-		}
-
-		if ($this->ReservationLocation->deleteEntryByKey($key) === false) {
+		//if ($this->ReservationLocation->canDeleteWorkflowContent($blogEntry) === false) {
+		//	return $this->throwBadRequest();
+		//}
+		$conditions = [
+			'ReservationLocation.key' => $key
+		];
+		if ($this->ReservationLocation->deleteAll($conditions) === false) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 		return $this->redirect(
