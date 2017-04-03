@@ -236,7 +236,7 @@ echo h($dataJson) ?>)">
 								'type' => 'delete',
 								'url' => NetCommonsUrl::blockUrl(
 									array(
-										'controller' => 'blog_entries_edit',
+										'controller' => 'reservation_locations',
 										'action' => 'delete',
 										'frame_id' => Current::read('Frame.id')
 									)
