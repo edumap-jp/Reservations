@@ -54,6 +54,7 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		'Paginator',
 		'Rooms.RoomsForm',
 		'Categories.Categories',
+		'Reservations.ReservationSettingTab',
 	);
 
 /**
@@ -63,41 +64,7 @@ class ReservationFrameSettingsController extends ReservationsAppController {
  */
 	public $helpers = array(
 		//'Blocks.BlockForm',
-		'Blocks.BlockTabs' => array(
-			//画面上部のタブ設定
-			'mainTabs' => array(
-				'category_settings' => [
-					'label' => ['reservations', 'Location category setting'],
-					'url' => array('controller' => 'reservation_settings', 'action' => 'edit')
-				],
-				'location_settings' => array(
-					'label' => ['reservations', 'Location setting'],
-					'url' => array('controller' => 'reservation_locations', 'action' => 'index')
-				),
-				'timeframe_settings' => array(
-					'label' => ['reservations', 'TimeFrame setting'],
-					'url' => array('controller' => 'reservation_timeframes', 'action' => 'index')
-				),
-				'import_reservations' => array(
-					'label' => ['reservations', 'Import Reservations'],
-					'url' => array('controller' => 'reservation_import', 'action' => 'edit')
-				),
-				'frame_settings' => array(	//表示設定変更
-					'url' => array('controller' => 'reservation_frame_settings')
-				),
-				//'role_permissions' => array(
-				//	'url' => array('controller' => 'reservation_block_role_permissions'),
-				//),
-				'mail_settings' => array(
-					'url' => array('controller' => 'reservation_mail_settings'),
-				),
-			),
-			'mainTabsOrder' => [
-				'frame_settings', 'location_settings', 'category_settings', 'timeframe_settings',
-				'mail_settings', 'import_reservations'
-
-			],
-		),
+		'Blocks.BlockTabs', // 設定内容はReservationSettingTabComponentにまとめた
 		'NetCommons.NetCommonsForm',
 		//'NetCommons.Date',
 		'Reservations.ReservationRoomSelect',
@@ -164,6 +131,8 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		parent::beforeFilter();
 		$this->Auth->deny('index');
 		$this->Reservation->afterFrameSave(['Frame' => Current::read('Frame')]);
+
+		$this->helpers['Blocks.BlockTabs'] = ReservationSettingTabComponent::$blockTabs;
 	}
 
 /**

@@ -54,6 +54,7 @@ class ReservationSettingsController extends ReservationsAppController {
 		),
 		'Paginator',
 		'Categories.CategoryEdit',
+		'Reservations.ReservationSettingTab',
 	);
 
 /**
@@ -63,41 +64,7 @@ class ReservationSettingsController extends ReservationsAppController {
  */
 	public $helpers = array(
 		'Blocks.BlockForm',
-		'Blocks.BlockTabs' => array(
-			//画面上部のタブ設定
-			'mainTabs' => array(
-				'category_settings' => [
-					'label' => ['reservations', 'Location category setting'],
-					'url' => array('controller' => 'reservation_settings', 'action' => 'edit')
-				],
-				'location_settings' => array(
-					'label' => ['reservations', 'Location setting'],
-					'url' => array('controller' => 'reservation_locations', 'action' => 'index')
-				),
-				'timeframe_settings' => array(
-					'label' => ['reservations', 'TimeFrame setting'],
-					'url' => array('controller' => 'reservation_timeframes', 'action' => 'index')
-				),
-				'import_reservations' => array(
-					'label' => ['reservations', 'Import Reservations'],
-					'url' => array('controller' => 'reservation_import', 'action' => 'edit')
-				),
-				'frame_settings' => array(	//表示設定変更
-					'url' => array('controller' => 'reservation_frame_settings')
-				),
-				//'role_permissions' => array(
-				//	'url' => array('controller' => 'reservation_block_role_permissions'),
-				//),
-				'mail_settings' => array(
-					'url' => array('controller' => 'reservation_mail_settings'),
-				),
-			),
-			'mainTabsOrder' => [
-				'frame_settings', 'location_settings', 'category_settings', 'timeframe_settings',
-				'mail_settings', 'import_reservations'
-
-			],
-		),
+		'Blocks.BlockTabs', // 設定内容はReservationSettingTabComponentにまとめた
 		'Blocks.BlockIndex',
 		//'Blocks.Block',
 		'Likes.Like',
@@ -115,6 +82,8 @@ class ReservationSettingsController extends ReservationsAppController {
 		if ($this->params['action'] === 'index') {
 			$this->Components->unload('Categories.CategoryEdit');
 		}
+
+		$this->helpers['Blocks.BlockTabs'] = ReservationSettingTabComponent::$blockTabs;
 	}
 
 /**
