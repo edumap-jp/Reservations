@@ -7,9 +7,14 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  */
 
-
+/**
+ * Class ReservationSettingTabComponent
+ */
 class ReservationSettingTabComponent extends Component {
 
+/**
+ * @var array BlockTabsHelper設定
+ */
 	public static $blockTabs = array(
 		//画面上部のタブ設定
 		'mainTabs' => array(
