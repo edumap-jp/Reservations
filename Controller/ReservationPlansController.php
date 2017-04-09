@@ -140,7 +140,7 @@ class ReservationPlansController extends ReservationsAppController {
 		// 表示データ上の意味がないのでチェックは行わない
 		// 表示ブロックIDがないときは、パブリックTOPページで仮表示されることに話が決まった
 
-		//TODO: 不要ではないか？ by NakaZii
+		//ε(　　　　 v ﾟωﾟ)　＜ 不要ではないか？ by NakaZii
 		//$this->Auth->allow('add', 'delete', 'edit', 'view');
 
 		$this->ReservationEvent->initSetting($this->Workflow);

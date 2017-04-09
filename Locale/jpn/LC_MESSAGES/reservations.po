@@ -1239,3 +1239,6 @@ msgstr "予約のインポート"
 
 msgid "Location name"
 msgstr "施設名"
+
+msgid "Invalid reservation time range."
+msgstr "予約時間の範囲に誤りがあります。予約時間を確認し、正しい時間帯を入力してください。"

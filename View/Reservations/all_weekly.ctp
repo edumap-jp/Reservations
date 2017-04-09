@@ -19,11 +19,11 @@ echo $this->element('Reservations.scripts');
 <article ng-controller="ReservationsDetailEdit" class="block-setting-body">
 	<?php
 	echo $this->element('Reservations.Reservations/reservation_tabs', array('active' =>
-        'all_weekly', 'frameId' => $frameId, 'languageId' => $languageId));
+		'all_weekly', 'frameId' => $frameId, 'languageId' => $languageId));
 	?>
 
 	<?php echo $this->ReservationTurnReservation->getTurnReservationOperationsWrap('week',
-        'top', $vars); ?>
+		'top', $vars); ?>
 
     <div class="row" ng-controller="ReservationsTimeline"><!--全体枠-->
         <div class="col-xs-12 col-sm-12 text-center table-responsive">

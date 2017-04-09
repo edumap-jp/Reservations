@@ -152,7 +152,7 @@ class ReservationsController extends ReservationsAppController {
  * @param array $vars カレンンダー情報
  * @return array $vars 月（縮小用）データ
  */
-	public function _getMonthlyVars($vars) {
+	protected function _getMonthlyVars($vars) {
 		$this->setReservationCommonVars($vars);
 		$vars['selectRooms'] = array();	//マージ前の暫定
 		return $vars;
@@ -166,7 +166,7 @@ class ReservationsController extends ReservationsAppController {
  * @param array $vars カレンンダー情報
  * @return array $vars 週単位データ
  */
-	public function _getWeeklyVars($vars) {
+	protected function _getWeeklyVars($vars) {
 		$this->setReservationCommonVars($vars);
 		$vars['selectRooms'] = array();	//マージ前の暫定
 		$vars['week'] = $this->getQueryParam('week');
@@ -193,81 +193,11 @@ class ReservationsController extends ReservationsAppController {
  * @param array $vars カレンンダー情報
  * @return array $vars 日単位（タイムライン）データ
  */
-	public function _getDailyTimelineVars($vars) {
+	protected function _getDailyTimelineVars($vars) {
 		$this->setReservationCommonVars($vars);
 		$vars['tab'] = 'timeline';
 		return $vars;
 	}
-//
-///**
-// * getMemberScheduleVars
-// *
-// * スケジュール（会員順）用変数取得
-// *
-// * @param array $vars カレンンダー情報
-// * @return array $vars スケジュール（会員順）データ
-// */
-//	public function getMemberScheduleVars($vars) {
-//		$vars['sort'] = 'member';
-//		$this->setReservationCommonVars($vars);
-//
-//		$vars['selectRooms'] = array();	//マージ前の暫定
-//
-//		//表示方法設定情報を取り出し
-//		$frameSetting = $this->ReservationFrameSetting->getFrameSetting();
-//
-//		//表示日数（n日分）
-//		$vars['display_count'] = $frameSetting['ReservationFrameSetting']['display_count'];
-//
-//		//開始位置（今日/前日）
-//		$vars['start_pos'] = $frameSetting['ReservationFrameSetting']['start_pos'];
-//
-//		$vars['isCollapsed'] = array_fill(0, $vars['display_count'] + 1, true);
-//
-//		if ($vars['start_pos'] == ReservationsComponent::CALENDAR_START_POS_WEEKLY_TODAY) {
-//			$vars['isCollapsed'][1] = false;
-//			$vars['isCollapsed'][2] = false;
-//		} else {
-//			$vars['isCollapsed'][2] = false;
-//			$vars['isCollapsed'][3] = false;
-//		}
-//		return $vars;
-//	}
-//
-///**
-// * getTimeScheduleVars
-// *
-// * スケジュール（時間順）用変数取得
-// *
-// * @param array $vars カレンンダー情報
-// * @return array $vars スケジュール（時間順）データ
-// */
-//	public function getTimeScheduleVars($vars) {
-//		$vars['sort'] = 'time';
-//		$this->setReservationCommonVars($vars);
-//
-//		$vars['selectRooms'] = array();	//マージ前の暫定
-//
-//		//表示方法設定情報を取り出し
-//		$frameSetting = $this->ReservationFrameSetting->getFrameSetting();
-//
-//		//開始位置（今日/前日）
-//		$vars['start_pos'] = $frameSetting['ReservationFrameSetting']['start_pos'];
-//
-//		//表示日数（n日分）
-//		$vars['display_count'] = $frameSetting['ReservationFrameSetting']['display_count'];
-//		$vars['isCollapsed'] = array_fill(0, $vars['display_count'] + 1, true);
-//
-//		if ($vars['start_pos'] == ReservationsComponent::CALENDAR_START_POS_WEEKLY_TODAY) {
-//			$vars['isCollapsed'][1] = false;
-//			$vars['isCollapsed'][2] = false;
-//		} else {
-//			$vars['isCollapsed'][2] = false;
-//			$vars['isCollapsed'][3] = false;
-//		}
-//
-//		return $vars;
-//	}
 
 /**
  * 日次施設予約変数取得
@@ -275,13 +205,13 @@ class ReservationsController extends ReservationsAppController {
  * @param array $vars カレンンダー情報
  * @return array $vars 日次施設予約変数
  */
-	public function _getDailyVars($vars) {
+	protected function _getDailyVars($vars) {
 		//$tab = $this->getQueryParam('tab');
-//		if ($tab === 'timeline') {
-			$vars = $this->_getDailyTimelineVars($vars);
-//		} else {
-//			$vars = $this->getDailyListVars($vars);
-//		}
+		//if ($tab === 'timeline') {
+		$vars = $this->_getDailyTimelineVars($vars);
+		//} else {
+		//	$vars = $this->getDailyListVars($vars);
+		//}
 
 		$vars['selectRooms'] = array();	//マージ前の暫定
 
@@ -321,14 +251,14 @@ class ReservationsController extends ReservationsAppController {
  * @param array &$vars 施設予約共通変数
  * @return string ctpNameを格納したstring
  */
-	public function _getCtpAndVars($style, &$vars) {
+	protected function _getCtpAndVars($style, &$vars) {
 		$vars['style'] = $style;
 
 		if (in_array($vars['style'], ReservationsComponent::$reservationStylesByLocation, true)) {
 			$locationKey = $this->request->query('location_key');
-			if($locationKey) {
+			if ($locationKey) {
 				$vars['location_key'] = $locationKey;
-			}else{
+			} else {
 				$vars['location_key'] = Current::read(
 					'ReservationFrameSetting.location_key',
 					Hash::get($this->viewVars['locations'], '0.ReservationLocation.key')

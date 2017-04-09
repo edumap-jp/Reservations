@@ -73,19 +73,19 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 			//予定が１件以上あるとき）
 			//※roomIdが一致するデータ
 
-//			if ($vars['currentRoomId'] != $plan['ReservationEvent']['room_id']) {
-//				if ($vars['currentRoomId'] == ReservationsComponent::FRIEND_PLAN_VIRTUAL_ROOM_ID
-//					&& !empty($plan['ReservationEvent']['pseudo_friend_share_plan'])) {
-//					//このルームは「仲間の予定」仮想ルームで、かつ、
-//					//予定($plan['ReservationEvent])の擬似項目pseudo_friend_share_planに値(1)がセットされている「仲間の予定」
-//					//データである。よって、room_idが一致しなくても、表示する例外ケース。
-//				} else {
-//					//ルームIDが予定のルームIDと一致もしないし、
-//					//「仲間の予定」仮想ルーム時の「仲間の予定」データでもないので、
-//					//次の予定に進む。
-//					continue;
-//				}
-//			}
+			//if ($vars['currentRoomId'] != $plan['ReservationEvent']['room_id']) {
+			//	if ($vars['currentRoomId'] == ReservationsComponent::FRIEND_PLAN_VIRTUAL_ROOM_ID
+			//		&& !empty($plan['ReservationEvent']['pseudo_friend_share_plan'])) {
+			//		//このルームは「仲間の予定」仮想ルームで、かつ、
+			//		//予定($plan['ReservationEvent])の擬似項目pseudo_friend_share_planに値(1)がセットされている「仲間の予定」
+			//		//データである。よって、room_idが一致しなくても、表示する例外ケース。
+			//	} else {
+			//		//ルームIDが予定のルームIDと一致もしないし、
+			//		//「仲間の予定」仮想ルーム時の「仲間の予定」データでもないので、
+			//		//次の予定に進む。
+			//		continue;
+			//	}
+			//}
 
 			$isLine = $this->ReservationPlan->isLinePlan($plan);
 			if ($isLine == true) {

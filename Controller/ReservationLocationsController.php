@@ -138,7 +138,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		$query['conditions'] = $conditions;
 		//$query['conditions'] = $this->ReservationLocation->getWorkflowConditi?ons($conditions);
 
-		// TODO order効かない？
+		// ε(　　　　 v ﾟωﾟ)　＜ order効かない？
 		//$query['order'] = [
 		//	//'CategoryOrder.weight ASC',
 		//	'ReservationLocation.weight ASC',
@@ -296,7 +296,8 @@ class ReservationLocationsController extends ReservationsAppController {
 			$result = $this->ReservationLocationsRoom->find('list', array(
 				'recursive' => -1,
 				'fields' => array('id', 'room_id'),
-				'conditions' => ['reservation_location_key' => $this->request->data['ReservationLocation']['key']],
+				'conditions' => ['reservation_location_key' =>
+					$this->request->data['ReservationLocation']['key']],
 			));
 			$this->request->data['ReservationLocationsRoom']['room_id'] =
 				array_unique(array_values($result));

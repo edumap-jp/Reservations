@@ -228,16 +228,16 @@ class ReservationsAppController extends AppController {
 			'dtend' => $dtend,
 		);
 
-//		if (isset($vars['sort'])) { //スケジュールでソートする場合
-//			if ($vars['sort'] === 'member') { //メンバー順
-//				//$order = array('TrackableCreator' . '.username');
-//				$order = array('TrackableCreator' . '.handlename');
-//			} else { //時間順
-//				$order = array('ReservationEvent' . '.dtstart');
-//			}
-//		} else {
-			$order = array('ReservationEvent' . '.start_date');
-//		}
+		//if (isset($vars['sort'])) { //スケジュールでソートする場合
+		//	if ($vars['sort'] === 'member') { //メンバー順
+		//		//$order = array('TrackableCreator' . '.username');
+		//		$order = array('TrackableCreator' . '.handlename');
+		//	} else { //時間順
+		//		$order = array('ReservationEvent' . '.dtstart');
+		//	}
+		//} else {
+		$order = array('ReservationEvent' . '.start_date');
+		//}
 
 		$vars['parentIdType'] = array(	//これも共通なので含めておく。
 			'public' => Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID),	//公開

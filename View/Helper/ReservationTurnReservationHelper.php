@@ -97,9 +97,6 @@ class ReservationTurnReservationHelper extends AppHelper {
 			$html .= '</div>';
 		}
 		$html .= '</div>';
-//		if ($pos == 'top') {
-//			$html .= $this->_View->element('Reservations.Reservations/select_location');
-//		}
 		return $html;
 	}
 
@@ -122,7 +119,6 @@ class ReservationTurnReservationHelper extends AppHelper {
 
 		$dateTimePickerInput = $this->_getDateTimePickerForMoveOperation($type, $pos, $vars);
 
-//		$html = '<div>';
 		$html = '';
 		if ($pos == 'bottom') {
 			$html .= $dateTimePickerInput;
@@ -155,7 +151,6 @@ class ReservationTurnReservationHelper extends AppHelper {
 		if ($pos == 'top') {
 			$html .= $dateTimePickerInput;
 		}
-//		$html .= '</div>';
 		return $html;
 	}
 /**

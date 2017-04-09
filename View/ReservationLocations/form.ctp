@@ -153,7 +153,7 @@ echo h($dataJson) ?>)">
 							'ReservationLocation.category_id',
 							array('empty' => true)
 						);
-						// TODO 予約できる権限
+						// ε(　　　　 v ﾟωﾟ)　＜ 予約できる権限
 						// 予約を受け付けるルーム
 						echo $this->NetCommonsForm->label(null, __d('reservations', '予約を受け付けるルーム'));
 						echo $this->NetCommonsForm->checkbox(
@@ -166,7 +166,6 @@ echo h($dataJson) ?>)">
 								'ng-model' => 'data.ReservationLocation.use_all_rooms'
 							]
 						);
-						// ε(　　　　 v ﾟωﾟ)　＜ is_accept_all_roomに名前変更した方がわかりやすい？
 						?>
 						<div ng-hide="data.ReservationLocation.use_all_rooms">
 							<?php

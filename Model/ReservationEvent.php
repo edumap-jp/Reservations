@@ -304,8 +304,8 @@ class ReservationEvent extends ReservationsAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
-			// TODO 施設利用可能時間か
-			// TODO 他の予約がはいっていないか
+			// ε(　　　　 v ﾟωﾟ)　＜ 施設利用可能時間か
+			// ε(　　　　 v ﾟωﾟ)　＜ 他の予約がはいっていないか
 		));
 		$this->_doMergeWorkflowParamValidate(); //Workflowパラメータ関連validation
 		return parent::beforeValidate($options);

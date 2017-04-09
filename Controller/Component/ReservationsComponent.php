@@ -31,10 +31,10 @@ class ReservationsComponent extends CalendarsComponent {
 	//const	CALENDAR_DISP_TYPE_DAILY = 4;			//日表示
 	//const	CALENDAR_DISP_TYPE_TSCHEDULE = 5;		//スケジュール（時間順）
 	//const	CALENDAR_DISP_TYPE_MSCHEDULE = 6;		//スケジュール（会員順）
-	const RESERVATION_DISP_TYPE_CATEGORY_WEEKLY = 1;  //カテゴリー別 - 週表示
-	const RESERVATION_DISP_TYPE_CATEGORY_DAILY = 2;   //カテゴリー別 - 日表示
-	const RESERVATION_DISP_TYPE_LACATION_MONTHLY = 3; //施設別 - 月表示
-	const RESERVATION_DISP_TYPE_LACATION_WEEKLY = 4;  //施設別 - 週表示
+	const RESERVATION_DISP_TYPE_CATEGORY_WEEKLY = 1;	//カテゴリー別 - 週表示
+	const RESERVATION_DISP_TYPE_CATEGORY_DAILY = 2;		//カテゴリー別 - 日表示
+	const RESERVATION_DISP_TYPE_LACATION_MONTHLY = 3;	//施設別 - 月表示
+	const RESERVATION_DISP_TYPE_LACATION_WEEKLY = 4;	//施設別 - 週表示
 
 /**
  * 表示方法のデフォルト
@@ -65,10 +65,10 @@ class ReservationsComponent extends CalendarsComponent {
 	//const	CALENDAR_STYLE_WEEKLY = 'weekly';			//週表示
 	//const	CALENDAR_STYLE_DAILY = 'daily';			//日表示
 	//const	CALENDAR_STYLE_SCHEDULE = 'schedule';		//スケジュール
-	const RESERVATION_STYLE_CATEGORY_WEEKLY = 'weekly_by_category';    //カテゴリー別 - 週表示
-	const RESERVATION_STYLE_CATEGORY_DAILY = 'daily_by_category';      //カテゴリー別 - 日表示
-	const RESERVATION_STYLE_LACATION_MONTHLY = 'monthly_by_location';  //施設別 - 月表示
-	const RESERVATION_STYLE_LACATION_WEEKLY = 'weekly_by_location';    //施設別 - 週表示
+	const RESERVATION_STYLE_CATEGORY_WEEKLY = 'weekly_by_category';		//カテゴリー別 - 週表示
+	const RESERVATION_STYLE_CATEGORY_DAILY = 'daily_by_category';		//カテゴリー別 - 日表示
+	const RESERVATION_STYLE_LACATION_MONTHLY = 'monthly_by_location';	//施設別 - 月表示
+	const RESERVATION_STYLE_LACATION_WEEKLY = 'weekly_by_location';		//施設別 - 週表示
 
 /**
  * 画面スタイルのデフォルト値

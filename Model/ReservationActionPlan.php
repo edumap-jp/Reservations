@@ -409,12 +409,15 @@ class ReservationActionPlan extends ReservationsAppModel {
 				),
 				'rule3' => array(
 					'rule' => array('validteNotExistReservation'),
-					'message' => __d('reservations', '既に予約が入っているため、予約できません。'),
+					'message' =>
+						__d('reservations', '既に予約が入っているため、予約できません。'),
 					// NC2では予約の入ってる日付を表示してた（繰り返し用だが、単発予約でも表示）
 				),
 				'rule4' => array(
 					'rule' => array('validteUseLocationTimeRange'),
-					'message' => __d('reservations', '予約時間の範囲に誤りがあります。予約時間を確認し、正しい時間帯を入力してください。'),
+					'message' =>
+						__d('reservations',
+							'Invalid reservation time range.'),
 				),
 			),
 			'detail_end_datetime' => array(
@@ -434,7 +437,7 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @return bool
  */
 	public function validteUseLocationTimeRange($check) {
-		// TODO タイムゾーン対応
+		// ε(　　　　 v ﾟωﾟ)　＜ タイムゾーン対応
 		$locationKey = $this->data[$this->alias]['location_key'];
 		$startDateTime = $this->data[$this->alias]['detail_start_datetime'];
 		$endDateTime = $this->data[$this->alias]['detail_end_datetime'];
@@ -455,10 +458,9 @@ class ReservationActionPlan extends ReservationsAppModel {
 		if ($startDate != $endDate) {
 			//　日付またぎの予約なら日付毎に分割してチェックする
 			// $startDateから1日ずつたして$endDateまで
+			$endDateUnixtime = strtotime($endDate);
 			$current = strtotime($startDate);
-			for ($current = $current; $current <= strtotime(
-				$endDate
-			); $current = $current + (24 * 60 * 60)) {
+			for ($current = $current; $current <= $endDateUnixtime; $current = $current + (24 * 60 * 60)) {
 				if ($current == strtotime($startDate)) {
 					// 開始日
 					$startUnixTime = strtotime($startDateTime);
@@ -504,7 +506,7 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @return bool
  */
 	public function validteNotExistReservation($check) {
-		// TODO リピート予約に対応させる
+		// ε(　　　　 v ﾟωﾟ)　＜ リピート予約に対応させる
 		// この時点ではユーザタイム
 		$startDateTime = $this->data[$this->alias]['detail_start_datetime'];
 		$endDateTime = $this->data[$this->alias]['detail_end_datetime'];
@@ -1182,7 +1184,8 @@ class ReservationActionPlan extends ReservationsAppModel {
 		// 利用可能時間に収まっているか
 		$startTime = date('H:i', $startUnixTime);
 		$endTime = date('H:i', $endUnixTime);
-		if ($startTime < $location['ReservationLocation']['start_time'] || $location['ReservationLocation']['end_time'] < $endTime) {
+		if ($startTime < $location['ReservationLocation']['start_time'] ||
+			$location['ReservationLocation']['end_time'] < $endTime) {
 			return false;
 		}
 		return true;
