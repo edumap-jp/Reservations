@@ -51,7 +51,7 @@ $weeklyUrlByLocation = $this->ReservationUrl->getReservationUrl(
 
 <div class="btn-group btn-group-justified reservation-common-tabs" role="group" aria-label="...">
 	<div class="btn-group" role="group">
-		<?php if (in_array($vars['style'], ReservationsComponent::$reservationStylesByCategory, true)): ?>
+		<?php if (in_array($vars['style'], ReservationsComponent::$stylesByCategory, true)): ?>
 			<a class="btn btn-default active" href='' onclick='return false;'>
 				<?php echo __d('reservations', 'By Category'); ?>
 			</a>
@@ -62,7 +62,7 @@ $weeklyUrlByLocation = $this->ReservationUrl->getReservationUrl(
 		<?php endif; ?>
 	</div>
 	<div class="btn-group" role="group">
-		<?php if (in_array($vars['style'], ReservationsComponent::$reservationStylesByLocation, true)): ?>
+		<?php if (in_array($vars['style'], ReservationsComponent::$stylesByLocation, true)): ?>
 			<a class="btn btn-default active" href='' onclick='return false;'>
 				<?php echo __d('reservations', 'By Location'); ?>
 			</a>

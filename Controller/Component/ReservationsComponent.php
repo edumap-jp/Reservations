@@ -82,7 +82,7 @@ class ReservationsComponent extends CalendarsComponent {
  *
  * @var array
  */
-	public static $reservationStylesByCategory = array(
+	public static $stylesByCategory = array(
 		self::RESERVATION_STYLE_CATEGORY_WEEKLY,
 		self::RESERVATION_STYLE_CATEGORY_DAILY,
 	);
@@ -92,7 +92,7 @@ class ReservationsComponent extends CalendarsComponent {
  *
  * @var array
  */
-	public static $reservationStylesByLocation = array(
+	public static $stylesByLocation = array(
 		self::RESERVATION_STYLE_LACATION_MONTHLY,
 		self::RESERVATION_STYLE_LACATION_WEEKLY,
 	);

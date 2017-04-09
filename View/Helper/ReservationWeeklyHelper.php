@@ -218,7 +218,7 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 		$month = $vars['month'];
 		$day = $vars['day'];
 		$nctm = new NetCommonsTime();
-		$roomMaxNum = count($locations);
+		//$roomMaxNum = count($locations);
 
 		foreach ($locations as $location) {
 			$cnt++;

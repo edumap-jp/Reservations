@@ -254,7 +254,7 @@ class ReservationsController extends ReservationsAppController {
 	protected function _getCtpAndVars($style, &$vars) {
 		$vars['style'] = $style;
 
-		if (in_array($vars['style'], ReservationsComponent::$reservationStylesByLocation, true)) {
+		if (in_array($vars['style'], ReservationsComponent::$stylesByLocation, true)) {
 			$locationKey = $this->request->query('location_key');
 			if ($locationKey) {
 				$vars['location_key'] = $locationKey;
