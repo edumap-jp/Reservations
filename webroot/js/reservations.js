@@ -560,10 +560,9 @@ NetCommonsApp.controller('Reservations.selectLocation',
         };
 
         $scope.changeLocation = function(displayStyle = 'largemonthly') {
-          $scope.selectLocation = filterFilter(
-              $scope.data.locations,
-              {ReservationLocation: {key: $scope.selectedLocation}}
-          )[0];
+          $scope.selectLocation =
+              filterFilter($scope.data.locations,
+                  {ReservationLocation: {key: $scope.selectedLocation}})[0];
           //http://127.0.0.1:9090/reservations/reservations/index?year=2017&month=02&day=26&style=largemonthly&frame_id=42
           var url = NC3_URL + '/reservations/reservations/index' +
                         '?style=' + displayStyle + '&frame_id=' + $scope.frameId;
@@ -617,9 +616,9 @@ NetCommonsApp.controller('ReservationsDetailEdit',
 
        };
        $scope.setLocationKey = function(locationKey) {
-          $scope.selectLocation = filterFilter(
-              $scope.data.locations, {ReservationLocation: {key: locationKey}}
-          )[0];
+          $scope.selectLocation =
+              filterFilter($scope.data.locations,
+                  {ReservationLocation: {key: locationKey}})[0];
        };
 
        // 施設カテゴリ選択
@@ -1066,7 +1065,7 @@ NetCommonsApp.controller('ReservationFrameSettings', [
       RESERVATION_DISP_TYPE_CATEGORY_WEEKLY: '1',  //カテゴリー別 - 週表示
       RESERVATION_DISP_TYPE_CATEGORY_DAILY: '2',   //カテゴリー別 - 日表示
       RESERVATION_DISP_TYPE_LOCATION_MONTHLY: '3', //施設別 - 月表示
-      RESERVATION_DISP_TYPE_LOCATION_WEEKLY: '4',  //施設別 - 週表示
+      RESERVATION_DISP_TYPE_LOCATION_WEEKLY: '4'  //施設別 - 週表示
     };
 
     $scope.initialize = function(data) {

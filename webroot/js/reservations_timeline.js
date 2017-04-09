@@ -7,7 +7,6 @@
 /**
  * 水平タイムラインデータ初期処理
  *
- * @type type
  */
 NetCommonsApp.controller('ReservationsHorizonTimeline', ['$scope', function($scope) {
   //タイムラインdiv
@@ -76,7 +75,7 @@ NetCommonsApp.controller('ReservationsHorizonTimelinePlan', ['$scope', function(
    * イニシャライズ処理
    *
    * @param {type} data
-   * @returns {void}
+   * @return {void}
    */
   $scope.initialize = function(data) {
     $scope.reservationPlans = data.reservationPlans;
@@ -99,7 +98,7 @@ NetCommonsApp.controller('ReservationsHorizonTimelinePlan', ['$scope', function(
    * @param {type} id
    * @param {type} fromTime
    * @param {type} toTime
-   * @returns {void}
+   * @return {void}
    */
   $scope.setTimelinePos = function(id, fromTime, toTime, locationKey, eventId) {
     //var planObj = document.getElementById('plan' + String(id));
@@ -149,7 +148,7 @@ NetCommonsApp.controller('ReservationsHorizonTimelinePlan', ['$scope', function(
    *
    * @param {type} x
    * @param {type} y
-   * @returns {Number}
+   * @return {Number}
    */
   $scope.getLineNum = function(x, y) {
     return 0;
