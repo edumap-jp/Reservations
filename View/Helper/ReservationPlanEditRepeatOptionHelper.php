@@ -113,7 +113,7 @@ class ReservationPlanEditRepeatOptionHelper extends AppHelper {
 				'When you select the [all] will be re-set to the contents is repeated first plan.');
 			$html .= '<br />';
 			$html .= __d('reservations',
-				'If you want to edit without changing the schedule key, select "all after this one" and edit.');
+				'If you want to edit without changing the schedule key, select [all after this one] and edit.');
 			$html .= '</small></p>';
 		}
 		$html .= '</div></div></div>';

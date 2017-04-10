@@ -596,7 +596,7 @@ msgstr "場所"
 #: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:35
 #: Reservations/View/Helper/ReservationDailyHelper.php:141
 msgid "Contact"
-msgstr "連絡先"
+msgstr "施設管理者"
 
 #: Reservations/View/ReservationPlans/view.ctp:110
 #: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:45
@@ -946,7 +946,7 @@ msgid "When you select the [all] will be re-set to the contents is repeated firs
 msgstr "「設定した全ての予約」を選択すると、現在の編集がキャンセルされ、繰返しの初回予約に再設定されます。"
 
 #: Reservations/View/Helper/ReservationPlanEditRepeatOptionHelper.php:115
-msgid "If you want to edit without changing the schedule key, select "all after this one" and edit."
+msgid "If you want to edit without changing the schedule key, select [all after this one] and edit."
 msgstr "予約のキーを替えずに編集されたい時は、「この予約のみ」を選択して編集してください。"
 
 #: Reservations/View/Helper/ReservationPlanEditRepeatOptionHelper.php:131
@@ -1186,7 +1186,7 @@ msgstr "施設予約に戻る"
 
 #: View/ReservationPlans/detail_edit.ctp:990
 msgid "Notify by e-mail"
-msgstr "メール通知"
+msgstr "メールで通知"
 
 #: View/ReservationPlans/detail_edit.ctp:1007
 msgid "e-mail notification before event"
@@ -1210,11 +1210,6 @@ msgstr "開始時間と終了時間の指定"
 #: View/ReservationPlans/easy_edit.ctp:128
 msgid "Plans(Start time - End time)"
 msgstr "予約（開始時間～終了時間） "
-
-#: View/ReservationPlans/easy_edit.ctp:200
-#: View/Elements/ReservationPlans/select_target_to_expose.ctp:200
-msgid "Notify by e-mail"
-msgstr "メールで通知"
 
 #: View/ReservationPlans/easy_edit.ctp:212
 #: View/Elements/ReservationPlans/select_target_to_expose.ctp:232
@@ -1242,3 +1237,24 @@ msgstr "施設名"
 
 msgid "Invalid reservation time range."
 msgstr "予約時間の範囲に誤りがあります。予約時間を確認し、正しい時間帯を入力してください。"
+
+msgid "alters by time of use"
+msgstr "閲覧時刻により変動"
+
+msgid "fixed"
+msgstr "固定"
+
+msgid "Default institution"
+msgstr "最初に表示する施設"
+
+msgid "no category"
+msgstr "カテゴリ無し"
+
+msgid "Display all"
+msgstr "全て表示"
+
+msgid "Available"
+msgstr "利用時間"
+
+msgid "[Available]"
+msgstr "【使用時間】"

@@ -682,7 +682,6 @@ msgstr ""
 msgid "Previous day"
 msgstr ""
 
-#: Reservations/View/Elements/ReservationFrameSettings/timeline_start.ctp:13
 msgid "Timeline start time"
 msgstr ""
 
