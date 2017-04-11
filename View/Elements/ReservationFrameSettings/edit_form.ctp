@@ -70,53 +70,11 @@ echo $this->NetCommonsForm->hidden('ReservationFrameSetting.start_pos');
 echo $this->NetCommonsForm->hidden('ReservationFrameSetting.display_count');
 ?>
 
-<?php // タイムラインスタート位置 ?>
-<div class="form-group" ng-show="isShowTimelineStart">
-	<?php echo $this->NetCommonsForm->label(
-		'ReservationFrameSetting.timeline_base_time',
-		__d('reservations', 'Timeline start time')
-	); ?>
-	<?php
-	echo $this->NetCommonsForm->input('ReservationFrameSetting.display_start_time_type', [
-			'type' => 'radio',
-		'options' => [
-				0 => __d('reservations', 'alters by time of use'),
-				1 => __d('reservations', 'fixed')
-			],
-		'ng-model' => 'display_start_time_type',
-		'ng-init' => sprintf("display_start_time_type='%s'",
-			$this->request->data['ReservationFrameSetting']['display_start_time_type']),
-	]);
-	?>
-	<div class="col-xs-11 col-xs-offset-1"
-			ng-show="display_start_time_type == 1">
-		<?php
-		$options = array();
-		for ($idx = ReservationsComponent::CALENDAR_TIMELINE_MIN_TIME; $idx <= ReservationsComponent::CALENDAR_TIMELINE_MAX_TIME; ++$idx) {
-			$options[$idx] = sprintf("%02d:00", $idx);
-		}
-
-		echo $this->NetCommonsForm->input(
-			'ReservationFrameSetting.timeline_base_time',
-			array(
-				'type' => 'select',
-				'label' => false,
-				'div' => false,
-				'options' => $options,
-				'selected' => $this->request->data['ReservationFrameSetting']['timeline_base_time'],
-				'class' => 'form-control',
-			)
-		);
-		?>
-	</div>
-
-	<div class="clearfix"></div>
-</div><!-- form-groupおわり-->
 
 <?php
 /* 表時開始施設選択 */
 ?>
-<div class="form-group" ng-show="isShowSelectLocation"
+<div class="form-group col-xs-11 col-xs-offset-1" ng-show="isShowSelectLocation"
 		ng-controller="ReservationFrameSettings.selectLocation"
 		ng-init="initialize(<?php echo h(json_encode(['locations' => $locations])); ?>)">
 	<?php echo $this->NetCommonsForm->label(
@@ -204,6 +162,50 @@ echo $this->NetCommonsForm->hidden('ReservationFrameSetting.display_count');
 
 	<div class="clearfix"></div><?php /* 幅広画面整えるため追加 */ ?>
 </div><!-- form-groupおわり-->
+
+<?php // タイムラインスタート位置 ?>
+<div class="form-group" ng-show="isShowTimelineStart">
+	<?php echo $this->NetCommonsForm->label(
+		'ReservationFrameSetting.timeline_base_time',
+		__d('reservations', 'Timeline start time')
+	); ?>
+	<?php
+	echo $this->NetCommonsForm->input('ReservationFrameSetting.display_start_time_type', [
+		'type' => 'radio',
+		'options' => [
+			0 => __d('reservations', 'alters by time of use'),
+			1 => __d('reservations', 'fixed')
+		],
+		'ng-model' => 'display_start_time_type',
+		'ng-init' => sprintf("display_start_time_type='%s'",
+			$this->request->data['ReservationFrameSetting']['display_start_time_type']),
+	]);
+	?>
+	<div class="col-xs-11 col-xs-offset-1"
+			ng-show="display_start_time_type == 1">
+		<?php
+		$options = array();
+		for ($idx = ReservationsComponent::CALENDAR_TIMELINE_MIN_TIME; $idx <= ReservationsComponent::CALENDAR_TIMELINE_MAX_TIME; ++$idx) {
+			$options[$idx] = sprintf("%02d:00", $idx);
+		}
+
+		echo $this->NetCommonsForm->input(
+			'ReservationFrameSetting.timeline_base_time',
+			array(
+				'type' => 'select',
+				'label' => false,
+				'div' => false,
+				'options' => $options,
+				'selected' => $this->request->data['ReservationFrameSetting']['timeline_base_time'],
+				'class' => 'form-control',
+			)
+		);
+		?>
+	</div>
+
+	<div class="clearfix"></div>
+</div><!-- form-groupおわり-->
+
 
 <?php
 /* 時間枠 */
