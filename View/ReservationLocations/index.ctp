@@ -13,13 +13,18 @@
 		//)); ?>
 
         <div class="text-right nc-table-add">
-            <?php echo $this->LinkButton->add(__d('reservations', '追加'), ['action' => 'add', 'frame_id' => Current::read('Frame.id')]); ?>
+			<?php echo $this->LinkButton->sort('',
+				array('controller' => 'reservation_locations', 'action' => 'sort')
+			); ?>
+
+			<?php echo $this->LinkButton->add(__d('reservations', '追加'), ['action' => 'add', 'frame_id' => Current::read('Frame.id')]); ?>
         </div>
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th><?php echo $this->Paginator->sort('category_id', __d('categories', 'Category')); ?></th>
+                    <th><?php echo $this->Paginator->sort('CategoryOrder.weight', __d('categories',
+							'Category')); ?></th>
                     <th colspan="2"><?php echo $this->Paginator->sort('location_name', __d('reservations', 'Location name')); ?></th>
                     <!--<th>--><?php //echo $this->Paginator->sort('add_authority'); ?><!--</th>-->
                     <th><?php __d('reservations', '利用可能日時') ?></th>

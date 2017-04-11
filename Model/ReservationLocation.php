@@ -34,6 +34,7 @@ class ReservationLocation extends ReservationsAppModel {
 		'M17n.M17n' => array(
 			'commonFields' => array( // 言語が異なっても同じにするフィールド
 				'category_id',
+				'weight'
 			),
 			'afterCallback' => false,
 		),
@@ -287,6 +288,34 @@ class ReservationLocation extends ReservationsAppModel {
 			$this->rollback($e);
 		}
 		return $savedData;
+	}
+
+/**
+ * 並び替えの保存
+ *
+ * @param array $data 並び替えデータ
+ * @throws InternalErrorException 例外エラー
+ * @return bool
+ */
+	public function saveWeights($data) {
+		//トランザクションBegin
+		$this->begin();
+
+		try {
+			//登録処理
+			if (! $this->saveMany($data['ReservationLocations'], ['validate' => false])) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			//トランザクションCommit
+			$this->commit();
+
+		} catch (Exception $ex) {
+			//トランザクションRollback
+			$this->rollback($ex);
+		}
+
+		return true;
 	}
 
 /**

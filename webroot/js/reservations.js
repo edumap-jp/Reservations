@@ -1230,3 +1230,57 @@ $(function() {
     }
   });
 });
+
+
+/**
+ * ReservationLocationOrders Javascript
+ *
+ * @param {string} Controller name
+ * @param {function($scope)} Controller
+ */
+NetCommonsApp.controller('ReservationLocationOrders', ['$scope', function($scope) {
+
+  /**
+   * ReservationLocations
+   *
+   * @type {object}
+   */
+  $scope.reservationLocations = [];
+
+  /**
+   * initialize
+   *
+   * @return {void}
+   */
+  $scope.initialize = function(data) {
+    $scope.reservationLocations = data.reservationLocations;
+    $scope.reservationLocationsMap = data.reservationLocationsMap;
+  };
+
+  /**
+   * move
+   *
+   * @return {void}
+   */
+  $scope.move = function(type, index) {
+    var dest = (type === 'up') ? index - 1 : index + 1;
+    if (angular.isUndefined($scope.reservationLocations[dest])) {
+      return false;
+    }
+
+    var destQuestion = angular.copy($scope.reservationLocations[dest]);
+    var targetQuestion = angular.copy($scope.reservationLocations[index]);
+    $scope.reservationLocations[index] = destQuestion;
+    $scope.reservationLocations[dest] = targetQuestion;
+  };
+
+  /**
+   * Get index
+   *
+   * @return {void}
+   */
+  $scope.getIndex = function(key) {
+    return $scope.reservationLocationsMap[key];
+  };
+
+}]);

@@ -100,8 +100,6 @@ class ReservationLocationsController extends ReservationsAppController {
  * @return void
  */
 	public function index() {
-		//$data = $this->ReservationLocation->findById(1);
-		// FAQの並び替え参考にしよう
 		$query = array();
 
 		//条件
@@ -111,31 +109,17 @@ class ReservationLocationsController extends ReservationsAppController {
 		if (isset($this->params['named']['category_id'])) {
 			$conditions['ReservationLocation.category_id'] = $this->params['named']['category_id'];
 		}
-		$query['conditions'] = $conditions;
-		//$query['conditions'] = $this->ReservationLocation->getWorkflowConditi?ons($conditions);
+		$query = [
+			'conditions' => $conditions,
+			'recursive' => 0,
+			'order' => 'ReservationLocation.weight ASC'
+		];
 
-		// ε(　　　　 v ﾟωﾟ)　＜ order効かない？
-		//$query['order'] = [
-		//	//'CategoryOrder.weight ASC',
-		//	'ReservationLocation.weight ASC',
-		//	'ReservationLocation.category_id ASC'
-		//];
-		//表示件数
-		//if (isset($this->params['named']['limit'])) {
-		//	$query['limit'] = (int)$this->params['named']['limit'];
-		//} else {
-		//	$query['limit'] = $this->viewVars['faqFrameSetting']['content_per_page'];
-		//}
-
-		$query['recursive'] = 0;
-		$this->Paginator->settings = $query;
+		$this->Paginator->settings = [
+			'ReservationLocation' => $query
+		];
 		$reservationLocations = $this->Paginator->paginate('ReservationLocation');
 		$this->set('reservationLocations', $reservationLocations);
-
-		// 施設を取得
-
-		// ページング必要
-		// 並び順に並べる
 	}
 
 /**
@@ -331,5 +315,45 @@ class ReservationLocationsController extends ReservationsAppController {
 				)
 			)
 		);
+	}
+
+/**
+ * 施設並び替え
+ *
+ * @return void
+ */
+	public function sort() {
+		if ($this->request->is('post')) {
+			if ($this->ReservationLocation->saveWeights($this->data)) {
+				$this->redirect(['action' => 'index', 'frame_id' => Current::read('Frame.id')]);
+				return;
+			}
+			$this->NetCommons->handleValidationError($this->ReservationLocation->validationErrors);
+
+		} else {
+
+			//条件
+			$conditions = array(
+				'ReservationLocation.language_id' => Current::read('Language.id'),
+			);
+			if (isset($this->params['named']['category_id'])) {
+				$conditions['ReservationLocation.category_id'] = $this->params['named']['category_id'];
+			}
+			$query = [
+				'conditions' => $conditions,
+				'recursive' => 0,
+				'limit' => PHP_INT_MAX,
+				'maxLimit' => PHP_INT_MAX
+			];
+
+			$this->Paginator->settings = [
+				'ReservationLocation' => $query
+			];
+			$reservationLocations = $this->Paginator->paginate('ReservationLocation');
+			$this->set('reservationLocations', $reservationLocations);
+
+			$this->request->data['ReservationLocations'] = $reservationLocations;
+			$this->request->data['Frame'] = Current::read('Frame');
+		}
 	}
 }
