@@ -17,8 +17,8 @@ App::uses('ReservationsComponent', 'Reservations.Controller/Component');
  *
  * @author Allcreator <info@allcreator.net>
  * @package NetCommons\Reservations\Controller
+ * @property ReservationFrameSetting $ReservationFrameSetting
  */
-
 class ReservationFrameSettingsController extends ReservationsAppController {
 
 /**

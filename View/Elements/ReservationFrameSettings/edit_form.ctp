@@ -70,6 +70,48 @@ echo $this->NetCommonsForm->hidden('ReservationFrameSetting.start_pos');
 echo $this->NetCommonsForm->hidden('ReservationFrameSetting.display_count');
 ?>
 
+<?php
+/* 表時開始カテゴリ選択 */
+?>
+<div class="form-group col-xs-11 col-xs-offset-1" ng-show="isShowSelectCategory"
+		ng-controller="ReservationFrameSettings.selectLocation"
+		ng-init="initialize(<?php echo h(json_encode(['locations' => $locations])); ?>)">
+	<?php echo $this->NetCommonsForm->label(
+		'ReservationFrameSetting.location_key',
+		__d('reservations', 'Default category')
+	); ?>
+	<!--<div class="col-xs-12 col-sm-9">-->
+
+	<?php
+	//  カテゴリ絞り込み
+	$locationCategories = Hash::combine(
+		$categories,
+		'{n}.Category.id',
+		'{n}.CategoriesLanguage.name'
+	);
+	// 施設の絞り込み, カテゴリなし　を追加
+	$locationCategories = Hash::merge(
+		[
+			'' => __d('reservations', 'Display all'),
+			//'' => __d('reservations', 'no category')
+		],
+		$locationCategories
+	);
+	//$this->NetCommonsForm->unlockField('ReservationLocation.category_id');
+	echo $this->NetCommonsForm->input(
+		'ReservationFrameSetting.category_id',
+		[
+			'label' => false,
+			'options' => $locationCategories,
+			//'ng-change' => 'selectLocationCategory()',
+			//'ng-model' => 'locationCategory',
+		]
+	);
+	?>
+	<div class="clearfix"></div><?php /* 幅広画面整えるため追加 */ ?>
+</div><!-- form-groupおわり-->
+
+
 
 <?php
 /* 表時開始施設選択 */
@@ -98,10 +140,10 @@ echo $this->NetCommonsForm->hidden('ReservationFrameSetting.display_count');
 		],
 		$locationCategories
 	);
-	$this->NetCommonsForm->unlockField('ReservationLocation.category_id');
+	//$this->NetCommonsForm->unlockField('ReservationLocation.category_id');
 	$this->NetCommonsForm->unlockField('ReservationActionPlan.location_key');
 	echo $this->NetCommonsForm->input(
-		'ReservationLocation.category_id',
+		'ReservationLocation.filterByCategoryId',
 		[
 			'label' => false,
 			'options' => $locationCategories,
