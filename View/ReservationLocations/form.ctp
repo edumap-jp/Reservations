@@ -154,7 +154,13 @@ echo h($dataJson) ?>)">
 							array('empty' => true)
 						);
 						// ε(　　　　 v ﾟωﾟ)　＜ 予約できる権限
-						echo $this->NetCommonsForm->label(null, __d('reservations', 'Authority'));
+						//echo $this->NetCommonsForm->label(null, __d('reservations', 'Authority'));
+						echo $this->element('Blocks.block_permission_setting', array(
+								//'panelLabel' => __d('reservations', 'Authority'),
+							'settingPermissions' => array(
+								'content_creatable' => __d('reservations', 'Authority'),
+							),
+						));
 
 						// 予約を受け付けるルーム
 						echo $this->NetCommonsForm->label(null, __d('reservations', 'Select rooms'));
