@@ -20,7 +20,7 @@ echo h($dataJson) ?>)">
 		<article>
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<?php echo __d('reservations', '施設登録'); ?>
+					<?php echo __d('reservations', 'Register Location'); ?>
 				</div>
 
 				<?php echo $this->NetCommonsForm->create(
@@ -61,7 +61,7 @@ echo h($dataJson) ?>)">
 							'location_name',
 							array(
 								'required' => 'required',
-								'label' => __d('reservations', '施設名'),
+								'label' => __d('reservations', 'Location name'),
 								//'childDiv' => ['class' => 'form-inline'],
 							)
 						);
@@ -70,7 +70,7 @@ echo h($dataJson) ?>)">
 							<?php
 							echo $this->NetCommonsForm->label(
 								null,
-								__d('reservations', '利用時間'),
+								__d('reservations', 'Available'),
 								['required' => 'required']
 							);
 							?>
@@ -116,7 +116,7 @@ echo h($dataJson) ?>)">
 										'ng-click' => 'checkAllDay()',
 										//'hiddenField' => false,
 										'label'
-										=> __d('reservations', '利用時間の制限無し')
+										=> __d('reservations', 'Not specify')
 									]
 								);
 								?>
@@ -154,14 +154,22 @@ echo h($dataJson) ?>)">
 							array('empty' => true)
 						);
 						// ε(　　　　 v ﾟωﾟ)　＜ 予約できる権限
+						//echo $this->NetCommonsForm->label(null, __d('reservations', 'Authority'));
+						echo $this->element('Blocks.block_permission_setting', array(
+								//'panelLabel' => __d('reservations', 'Authority'),
+							'settingPermissions' => array(
+								'content_creatable' => __d('reservations', 'Authority'),
+							),
+						));
+
 						// 予約を受け付けるルーム
-						echo $this->NetCommonsForm->label(null, __d('reservations', '予約を受け付けるルーム'));
+						echo $this->NetCommonsForm->label(null, __d('reservations', 'Select rooms'));
 						echo $this->NetCommonsForm->checkbox(
 							'ReservationLocation.use_all_rooms',
 							[
 								'label' => __d(
 									'reservations',
-									'全てのルームから予約を受け付ける'
+									'Allow all the groups to use?'
 								),
 								'ng-model' => 'data.ReservationLocation.use_all_rooms'
 							]
@@ -188,14 +196,14 @@ echo h($dataJson) ?>)">
 						echo $this->NetCommonsForm->input(
 							'ReservationLocation.contact',
 							[
-								'label' => __d('reservations', '施設管理者')
+								'label' => __d('reservations', 'Contact')
 							]
 						);
 						// 施設説明 WYSIWYG
 						echo $this->NetCommonsForm->wysiwyg(
 							'ReservationLocation.detail',
 							array(
-								'label' => __d('reservations', '説明'),
+								'label' => __d('reservations', 'Description'),
 								'required' => false,
 								'rows' => 12,
 								'ng-model' => 'data.ReservationLocation.detail'

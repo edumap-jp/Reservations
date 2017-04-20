@@ -44,6 +44,8 @@ class ReservationLocationsController extends ReservationsAppController {
 		'Reservations.ReservationLocationsRoom',
 		'Categories.Category',
 		//'Workflow.WorkflowComment',
+		//'Reservations.ReservationPermission',
+		'Roles.DefaultRolePermission'
 	);
 
 /**
@@ -80,6 +82,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		//'Blocks.BlockForm',
 
 		'Blocks.BlockTabs', // 設定内容はReservationSettingTabComponentにまとめた
+		'Blocks.BlockRolePermissionForm', // 設定内容はReservationSettingTabComponentにまとめた
 		'Rooms.RoomsForm',
 		'Reservations.ReservationLocation',
 	);
@@ -178,7 +181,76 @@ class ReservationLocationsController extends ReservationsAppController {
 			//'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
 		];
 		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
+
+		$this->_processPermission();
+
 		$this->render('form');
+	}
+
+	protected function _processPermission() {
+		// TODO Edit時はここのデータの呼び出し元をカエレバいいのかな
+		$permissions = $this->Workflow->getBlockRolePermissions(
+			array(
+				'content_creatable',
+			)
+		);
+		//$this->request->data['BlockRolePermission'] = $permissions['BlockRolePermissions'];
+		 $default = array(
+			'content_creatable' => array(
+				'room_administrator' => array(
+					'role_key' => 'room_administrator',
+					'type' => 'room_role',
+					'permission' => 'content_creatable',
+					'value' => true,
+					'fixed' => true,
+					'default' => true,
+					'roles_room_id' => '1',
+					//'block_key' => '0955dd34f66ac731ab5a548afcbfeb82'
+				),
+				'chief_editor' => array(
+					'role_key' => 'chief_editor',
+					'type' => 'room_role',
+					'permission' => 'content_creatable',
+					'value' => true,
+					'fixed' => true,
+					'default' => true,
+					'roles_room_id' => '2',
+					//'block_key' => '0955dd34f66ac731ab5a548afcbfeb82'
+				),
+				'editor' => array(
+					'role_key' => 'editor',
+					'type' => 'room_role',
+					'permission' => 'content_creatable',
+					'value' => true,
+					'fixed' => true,
+					'default' => true,
+					'roles_room_id' => '3',
+					//'block_key' => '0955dd34f66ac731ab5a548afcbfeb82'
+				),
+				'general_user' => array(
+					'role_key' => 'general_user',
+					'type' => 'room_role',
+					'permission' => 'content_creatable',
+					'value' => true,
+					'fixed' => false,
+					'default' => true,
+					'roles_room_id' => '4',
+					//'block_key' => '0955dd34f66ac731ab5a548afcbfeb82'
+				),
+				'visitor' => array(
+					'role_key' => 'visitor',
+					'type' => 'room_role',
+					'permission' => 'content_creatable',
+					'value' => false,
+					'fixed' => true,
+					'default' => false,
+					'roles_room_id' => '5',
+					//'block_key' => '0955dd34f66ac731ab5a548afcbfeb82'
+				)
+			)
+		);
+		$this->request->data['BlockRolePermission'] = Hash::merge($default, Hash::get($this->request->data, 'BlockRolePermission'));
+		$this->set('roles', $permissions['Roles']);
 	}
 
 /**
@@ -275,6 +347,9 @@ class ReservationLocationsController extends ReservationsAppController {
 			//'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
 		];
 		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
+
+		$this->_processPermission();
+
 		$this->render('form');
 	}
 

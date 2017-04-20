@@ -1261,3 +1261,21 @@ msgstr "【使用時間】"
 
 msgid "Default category"
 msgstr "最初に表示するカテゴリ"
+
+msgid "Authority"
+msgstr "予約できる権限"
+
+msgid "Select rooms"
+msgstr "予約を受け付けるルーム"
+
+msgid "Allow all the groups to use?"
+msgstr "全てのルームから予約を受け付ける"
+
+msgid "Description"
+msgstr "説明"
+
+msgid "Not specify"
+msgstr "利用時間の制限無し"
+
+msgid "Register Location"
+msgstr "施設登録"
