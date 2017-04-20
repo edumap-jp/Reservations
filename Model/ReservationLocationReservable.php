@@ -1,7 +1,8 @@
 <?php
 /**
- * ReservationLocationPermission Model
+ * ReservationLocationReservable Model
  *
+ * @property Room $Room
  *
 * @author Noriko Arai <arai@nii.ac.jp>
 * @author Your Name <yourname@domain.com>
@@ -13,9 +14,9 @@
 App::uses('ReservationsAppModel', 'Reservations.Model');
 
 /**
- * Summary for ReservationLocationPermission Model
+ * Summary for ReservationLocationReservable Model
  */
-class ReservationLocationPermission extends ReservationsAppModel {
+class ReservationLocationReservable extends ReservationsAppModel {
 
 /**
  * Use database config
@@ -23,6 +24,13 @@ class ReservationLocationPermission extends ReservationsAppModel {
  * @var string
  */
 	public $useDbConfig = 'master';
+
+/**
+ * Use table
+ *
+ * @var mixed False or table name
+ */
+	public $useTable = 'reservation_location_reservable';
 
 /**
  * Validation rules
@@ -50,5 +58,22 @@ class ReservationLocationPermission extends ReservationsAppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+	);
+
+	//The Associations below have been created with all possible keys, those that are not needed can be removed
+
+/**
+ * belongsTo associations
+ *
+ * @var array
+ */
+	public $belongsTo = array(
+		'Room' => array(
+			'className' => 'Room',
+			'foreignKey' => 'room_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
 	);
 }

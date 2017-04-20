@@ -178,15 +178,15 @@ class ReservationsSchema extends CakeSchema {
 	);
 
 /**
- * reservation_location_permissions
+ * reservation_location_reservable
  *
  * @var array
  */
-	public $reservation_location_permissions = array(
+	public $reservation_location_reservable = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
 		'location_key' => array('type' => 'string', 'null' => false, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'comment' => '施設キー', 'charset' => 'utf8'),
 		'role_key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'ロールキー', 'charset' => 'utf8'),
-		'permission' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => 'パーミッション  e.g.) content_creatable', 'charset' => 'utf8'),
+		'room_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'value' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
