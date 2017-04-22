@@ -215,6 +215,28 @@ echo h($dataJson) ?>)">
 						]);
 						?>
 						<div ng-show="data.ReservationLocation.use_workflow">
+							<div class="form-group"
+									ng-controller="ReservationLocationsApprovalUser">
+								<label class="control-label">
+									<?php echo h(__d('reservations', '施設管理者')); ?>
+								</label>
+
+								<div class="form-group">
+									<div>
+										<?php
+										$title = __d('reservations', '施設管理者');
+										$pluginModel = 'ReservationLocationsApprovalUser';
+										$roomId = Current::read('Room.id');
+										$selectUsers = (isset($this->request->data['selectUsers'])) ? $this->request->data['selectUsers'] : null;
+										echo $this->GroupUserList->select($title, $pluginModel, $roomId, $selectUsers);
+										?>
+									</div>
+									<div class="has-error">
+										<?php echo $this->NetCommonsForm->error('ReservationLocationApprovalUser.user_id', null, array('class' => 'help-block')); ?>
+									</div>
+								</div>
+							</div>
+
 							<?php
 							// 施設管理者
 							echo $this->NetCommonsForm->input(

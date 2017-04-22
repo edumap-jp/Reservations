@@ -47,6 +47,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		//'Reservations.ReservationPermission',
 		'Roles.DefaultRolePermission',
 		'Reservations.ReservationLocationReservable',
+		'Reservations.ReservationLocationsApprovalUser',
 	);
 
 /**
@@ -86,6 +87,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		'Blocks.BlockRolePermissionForm', // 設定内容はReservationSettingTabComponentにまとめた
 		'Rooms.RoomsForm',
 		'Reservations.ReservationLocation',
+		'Groups.GroupUserList',
 	);
 
 /**
@@ -138,6 +140,9 @@ class ReservationLocationsController extends ReservationsAppController {
 		//$blogEntry = $this->ReservationLocation->getNew();
 		//$this->set('blogEntry', $blogEntry);
 		$this->_processPermission();
+
+		// 施設管理者保持
+		$this->request->data = $this->ReservationLocationsApprovalUser->getSelectUsers($this->request->data, false);
 
 		if ($this->request->is('post')) {
 			$this->ReservationLocation->create();
@@ -305,6 +310,9 @@ class ReservationLocationsController extends ReservationsAppController {
 		if (empty($reservationLocation)) {
 			return $this->throwBadRequest();
 		}
+
+		// 施設管理者保持
+		$this->request->data = $this->ReservationLocationsApprovalUser->getSelectUsers($this->request->data, false);
 
 		//if ($this->ReservationLocation->canEditWorkflowContent($blogEntry) === false) {
 		//	return $this->throwBadRequest();

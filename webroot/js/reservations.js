@@ -75,12 +75,37 @@ NetCommonsApp.filter('formatYyyymmdd', function() {
 NetCommonsApp.controller('ReservationLocation', ['$scope', function($scope) {
   $scope.init = function(data) {
     $scope.data = data;
+
+    var boolKeys = ['use_all_rooms', 'use_workflow', 'use_private'];
+    angular.forEach($scope.data.ReservationLocation, function(value, key) {
+      if ($.inArray(key, boolKeys) >= 0) {
+
+        if (value === '1' || value == true) {
+          $scope.data.ReservationLocation[key] = true;
+        } else {
+          $scope.data.ReservationLocation[key] = false;
+        }
+      }
+    });
+
     // postされたbool値変換
-    if ($scope.data.ReservationLocation.use_all_rooms === '1') {
-      $scope.data.ReservationLocation.use_all_rooms = true;
-    } else {
-      $scope.data.ReservationLocation.use_all_rooms = false;
-    }
+    // if ($scope.data.ReservationLocation.use_all_rooms === '1') {
+    //   $scope.data.ReservationLocation.use_all_rooms = true;
+    // } else {
+    //   $scope.data.ReservationLocation.use_all_rooms = false;
+    // }
+    // // postされたbool値変換
+    // if ($scope.data.ReservationLocation.use_workflow === '1') {
+    //   $scope.data.ReservationLocation.use_workflow = true;
+    // } else {
+    //   $scope.data.ReservationLocation.use_workflow = false;
+    // }
+    // // postされたbool値変換
+    // if ($scope.data.ReservationLocation.use_private === '1') {
+    //   $scope.data.ReservationLocation.use_private = true;
+    // } else {
+    //   $scope.data.ReservationLocation.use_private = false;
+    // }
 
     if ($scope.data.ReservationLocation.start_time == '00:00' &&
         $scope.data.ReservationLocation.end_time == '24:00') {
@@ -1284,3 +1309,35 @@ NetCommonsApp.controller('ReservationLocationOrders', ['$scope', function($scope
   };
 
 }]);
+
+/**
+ * Tasks.Charge Javascript
+ *
+ * @param {string} Controller name
+ * @param {function($scope, NetCommonsWysiwyg)} Controller
+ */
+NetCommonsApp.controller('ReservationLocationsApprovalUser',
+    function($scope) {
+
+      /**
+       * tinymce
+       *
+       * @type {object}
+       */
+      $scope.target = false;
+
+      /**
+       * Initialize
+       *
+       * @param {object} TaskContents data
+       * @return {void}
+       */
+      $scope.initialize = function(value) {
+        $scope.target = value;
+      };
+
+      $scope.switchCharge = function($event) {
+        $scope.target = $event.target.value;
+      };
+
+    });

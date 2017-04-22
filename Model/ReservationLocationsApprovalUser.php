@@ -69,4 +69,30 @@ class ReservationLocationsApprovalUser extends ReservationsAppModel {
 			'order' => ''
 		)
 	);
+
+/**
+ * 担当者ユーザを設定
+ *
+ * @param array $data ToDoデータ
+ * @param bool $isMyUser 作成者ユーザー取得フラグ
+ * @return array
+ */
+	public function getSelectUsers($data, $isMyUser) {
+		$this->loadModels(['User' => 'Users.User']);
+
+		if ($isMyUser) {
+			$data[$this->alias][] = array('user_id' => Current::read('User.id'));
+		}
+		$selectUsers['selectUsers'] = array();
+		if (isset($data[$this->alias])) {
+			$selectUsers =
+				Hash::extract($data[$this->alias], '{n}.user_id');
+			foreach ($selectUsers as $userId) {
+				$user = $this->User->getUser($userId);
+				$data['selectUsers'][] = $user;
+			}
+		}
+		return $data;
+	}
+
 }

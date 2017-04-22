@@ -305,6 +305,7 @@ class ReservationLocation extends ReservationsAppModel {
 		$this->loadModels(
 			[
 				'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable',
+				'ReservationLocationsApprovalUser' => 'Reservations.ReservationLocationsApprovalUser',
 			]
 		);
 
@@ -343,6 +344,24 @@ class ReservationLocation extends ReservationsAppModel {
 						);
 					}
 				}
+			}
+		}
+
+		$userIds = array_keys(Hash::combine($data, 'ReservationLocationsApprovalUser.{n}.user_id'));
+
+		$this->ReservationLocationsApprovalUser->deleteAll(['location_key' => $locationKey]);
+		foreach ($userIds as $userId) {
+			$this->ReservationLocationsApprovalUser->create();
+			$userData = [
+				'ReservationLocationsApprovalUser' => [
+					'location_key' => $locationKey,
+					'user_id' => $userId
+				]
+			];
+			if (!$this->ReservationLocationsApprovalUser->save($userData)) {
+				throw new InternalErrorException(
+					__d('net_commons', 'Internal Server Error')
+				);
 			}
 		}
 	}
