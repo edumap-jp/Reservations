@@ -153,7 +153,7 @@ echo h($dataJson) ?>)">
 							'ReservationLocation.category_id',
 							array('empty' => true)
 						);
-						// ε(　　　　 v ﾟωﾟ)　＜ 予約できる権限
+						// 予約できる権限
 						//echo $this->NetCommonsForm->label(null, __d('reservations', 'Authority'));
 						echo $this->element('Blocks.block_permission_setting', array(
 								//'panelLabel' => __d('reservations', 'Authority'),
@@ -161,7 +161,20 @@ echo h($dataJson) ?>)">
 								'content_creatable' => __d('reservations', 'Authority'),
 							),
 						));
+						?>
+						<?php // 個人的な予約を受け付ける ?>
+						<div class="form-group">
+							<div class="form-inline">
+								<div class="checkbox checkbox-inline">
+									<?php
+									echo $this->NetCommonsForm->checkbox('ReservationLocation.use_private', ['label' =>
+										__d('reservations', 'Allow private use?')]);
+									?>
+								</div>
+							</div>
+						</div>
 
+						<?php
 						// 予約を受け付けるルーム
 						echo $this->NetCommonsForm->label(null, __d('reservations', 'Select rooms'));
 						echo $this->NetCommonsForm->checkbox(

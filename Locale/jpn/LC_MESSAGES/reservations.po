@@ -1279,3 +1279,6 @@ msgstr "利用時間の制限無し"
 
 msgid "Register Location"
 msgstr "施設登録"
+
+msgid "Allow private use?"
+msgstr "個人的な予約を受け付ける"
