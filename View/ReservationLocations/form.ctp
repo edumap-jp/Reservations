@@ -205,13 +205,27 @@ echo h($dataJson) ?>)">
 						</div>
 
 						<?php
-						// 施設管理者
-						echo $this->NetCommonsForm->input(
-							'ReservationLocation.contact',
-							[
-								'label' => __d('reservations', 'Contact')
-							]
-						);
+
+						echo $this->NetCommonsForm->label(null, __d('blocks', 'Approval settings'));
+						// 予約に承認が必要
+						echo $this->NetCommonsForm->checkbox('ReservationLocation.use_workflow', [
+							'label' =>
+									__d('reservations', 'Need approval reservations'),
+							'ng-model' => 'data.ReservationLocation.use_workflow'
+						]);
+						?>
+						<div ng-show="data.ReservationLocation.use_workflow">
+							<?php
+							// 施設管理者
+							echo $this->NetCommonsForm->input(
+								'ReservationLocation.contact',
+								[
+									'label' => __d('reservations', 'Contact')
+								]
+							);
+							?>
+						</div>
+						<?php
 						// 施設説明 WYSIWYG
 						echo $this->NetCommonsForm->wysiwyg(
 							'ReservationLocation.detail',
