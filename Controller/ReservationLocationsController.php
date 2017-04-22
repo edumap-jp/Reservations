@@ -205,7 +205,9 @@ class ReservationLocationsController extends ReservationsAppController {
 			$reservables = $this->ReservationLocationReservable->find('all', ['conditions' => [
 				'location_key' => $key
 			]]);
-			$reservables = Hash::combine($reservables, '{n}.ReservationLocationReservable.role_key', '{n}.ReservationLocationReservable.value');
+			$reservables = Hash::combine($reservables,
+				'{n}.ReservationLocationReservable.role_key',
+				'{n}.ReservationLocationReservable.value');
 
 		} else {
 			// default
@@ -272,7 +274,8 @@ class ReservationLocationsController extends ReservationsAppController {
 				)
 			)
 		);
-		$this->request->data['BlockRolePermission'] = Hash::merge($default, Hash::get($this->request->data, 'BlockRolePermission'));
+		$this->request->data['BlockRolePermission'] = Hash::merge($default,
+			Hash::get($this->request->data, 'BlockRolePermission'));
 		$this->set('roles', $permissions['Roles']);
 	}
 
