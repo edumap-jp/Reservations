@@ -221,6 +221,7 @@ class ReservationsSchema extends CakeSchema {
 		'use_private' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'use_auth_flag' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'use_all_rooms' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
+		'use_workflow' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'weight' => array('type' => 'integer', 'null' => false, 'default' => '0', 'unsigned' => true),
 		'contact' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
