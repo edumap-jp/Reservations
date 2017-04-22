@@ -1282,3 +1282,6 @@ msgstr "施設登録"
 
 msgid "Allow private use?"
 msgstr "個人的な予約を受け付ける"
+
+msgid "Need approval reservations"
+msgstr "予約に承認が必要"
