@@ -88,6 +88,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		'Rooms.RoomsForm',
 		'Reservations.ReservationLocation',
 		'Groups.GroupUserList',
+		'Users.UserSearch'
 	);
 
 /**
@@ -358,6 +359,12 @@ class ReservationLocationsController extends ReservationsAppController {
 		} else {
 
 			$this->request->data['ReservationLocation'] = $reservationLocation['ReservationLocation'];
+			$approvalUsers = $this->ReservationLocationsApprovalUser->find('all', ['conditions' => [
+				'location_key' => $key
+			]]);
+			foreach($approvalUsers as $approvalUser){
+				$this->request->data['selectUsers'][] =	['User' => $approvalUser['User']];
+			}
 
 			//予約を受け付けるルームを取得
 			$result = $this->ReservationLocationsRoom->find('list', array(
