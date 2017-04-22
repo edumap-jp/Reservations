@@ -45,7 +45,8 @@ class ReservationLocationsController extends ReservationsAppController {
 		'Categories.Category',
 		//'Workflow.WorkflowComment',
 		//'Reservations.ReservationPermission',
-		'Roles.DefaultRolePermission'
+		'Roles.DefaultRolePermission',
+		'Reservations.ReservationLocationReservable',
 	);
 
 /**
@@ -136,6 +137,7 @@ class ReservationLocationsController extends ReservationsAppController {
 
 		//$blogEntry = $this->ReservationLocation->getNew();
 		//$this->set('blogEntry', $blogEntry);
+		$this->_processPermission();
 
 		if ($this->request->is('post')) {
 			$this->ReservationLocation->create();
@@ -182,26 +184,47 @@ class ReservationLocationsController extends ReservationsAppController {
 		];
 		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
 
-		$this->_processPermission();
-
 		$this->render('form');
 	}
 
-	protected function _processPermission() {
-		// TODO Edit時はここのデータの呼び出し元をカエレバいいのかな
+/**
+ * 予約できる権限の処理
+ *
+ * @param null $key locationKey
+ * @return void
+ */
+	protected function _processPermission($key = null) {
+		// ε(　　　　 v ﾟωﾟ)　＜ きれいにしたいところ
 		$permissions = $this->Workflow->getBlockRolePermissions(
 			array(
 				'content_creatable',
 			)
 		);
-		//$this->request->data['BlockRolePermission'] = $permissions['BlockRolePermissions'];
-		 $default = array(
+		// reseravableデータ取得
+		if ($key !== null) {
+			$reservables = $this->ReservationLocationReservable->find('all', ['conditions' => [
+				'location_key' => $key
+			]]);
+			$reservables = Hash::combine($reservables, '{n}.ReservationLocationReservable.role_key', '{n}.ReservationLocationReservable.value');
+
+		} else {
+			// default
+			$reservables = [
+				'room_administrator' => 1,
+				'chief_editor' => 1,
+				'editor' => 1,
+				'general_user' => 1,
+				'visitor' => 0,
+			];
+		}
+
+		$default = array(
 			'content_creatable' => array(
 				'room_administrator' => array(
 					'role_key' => 'room_administrator',
 					'type' => 'room_role',
 					'permission' => 'content_creatable',
-					'value' => true,
+					'value' => $reservables['room_administrator'],
 					'fixed' => true,
 					'default' => true,
 					'roles_room_id' => '1',
@@ -211,7 +234,7 @@ class ReservationLocationsController extends ReservationsAppController {
 					'role_key' => 'chief_editor',
 					'type' => 'room_role',
 					'permission' => 'content_creatable',
-					'value' => true,
+					'value' => $reservables['chief_editor'],
 					'fixed' => true,
 					'default' => true,
 					'roles_room_id' => '2',
@@ -221,7 +244,7 @@ class ReservationLocationsController extends ReservationsAppController {
 					'role_key' => 'editor',
 					'type' => 'room_role',
 					'permission' => 'content_creatable',
-					'value' => true,
+					'value' => $reservables['editor'],
 					'fixed' => true,
 					'default' => true,
 					'roles_room_id' => '3',
@@ -231,7 +254,7 @@ class ReservationLocationsController extends ReservationsAppController {
 					'role_key' => 'general_user',
 					'type' => 'room_role',
 					'permission' => 'content_creatable',
-					'value' => true,
+					'value' => $reservables['general_user'],
 					'fixed' => false,
 					'default' => true,
 					'roles_room_id' => '4',
@@ -241,7 +264,7 @@ class ReservationLocationsController extends ReservationsAppController {
 					'role_key' => 'visitor',
 					'type' => 'room_role',
 					'permission' => 'content_creatable',
-					'value' => false,
+					'value' => $reservables['visitor'],
 					'fixed' => true,
 					'default' => false,
 					'roles_room_id' => '5',
@@ -284,6 +307,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		//	return $this->throwBadRequest();
 		//}
 		//$this->_prepare();
+		$this->_processPermission($key);
 
 		if ($this->request->is(array('post', 'put'))) {
 
@@ -322,7 +346,7 @@ class ReservationLocationsController extends ReservationsAppController {
 
 		} else {
 
-			$this->request->data = $reservationLocation;
+			$this->request->data['ReservationLocation'] = $reservationLocation['ReservationLocation'];
 
 			//予約を受け付けるルームを取得
 			$result = $this->ReservationLocationsRoom->find('list', array(
@@ -347,8 +371,6 @@ class ReservationLocationsController extends ReservationsAppController {
 			//'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
 		];
 		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
-
-		$this->_processPermission();
 
 		$this->render('form');
 	}

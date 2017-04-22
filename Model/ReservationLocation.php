@@ -277,6 +277,8 @@ class ReservationLocation extends ReservationsAppModel {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 			}
+			// ReservationLoationReservable保存
+			$this->_saveReservationLocationReservable($key, $savedData);
 
 			//多言語化の処理
 			$this->set($savedData);
@@ -288,6 +290,61 @@ class ReservationLocation extends ReservationsAppModel {
 			$this->rollback($e);
 		}
 		return $savedData;
+	}
+
+/**
+ * 予約できる権限の保存
+ *
+ * @param string $locationKey location_key
+ * @param array $data save data
+ * @throws InternalErrorException
+ * @return void
+ */
+	protected function _saveReservationLocationReservable($locationKey, $data) {
+		// ε(　　　　 v ﾟωﾟ)　＜ きれいにしたいところ
+		$this->loadModels(
+			[
+				'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable',
+			]
+		);
+
+		$roles = $data['BlockRolePermission']['content_creatable'];
+		// 同じ施設のreservableデータをあらかじめ削除しておく
+		$this->ReservationLocationReservable->deleteAll(['location_key' => $locationKey]);
+
+		foreach ($roles as $roleKey => $role) {
+			$value = $role['value'];
+			// ルーム毎に保存
+			if ($data['ReservationLocation']['use_all_rooms']) {
+				// 全てのルームから予約を受けつける
+				$this->ReservationLocationReservable->create();
+				$reservableData = [
+					'location_key' => $locationKey,
+					'role_key' => $roleKey,
+					'room_id' => null,
+					'value' => $value
+				];
+				if (!$this->ReservationLocationReservable->save($reservableData)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				};
+			} else {
+				// 個別のルームから予約を受け付ける
+				foreach ($data['ReservationLocationsRoom']['room_id'] as $roomId) {
+					$this->ReservationLocationReservable->create();
+					$reservableData = [
+						'location_key' => $locationKey,
+						'role_key' => $roleKey,
+						'room_id' => $roomId,
+						'value' => $value
+					];
+					if (!$this->ReservationLocationReservable->save($reservableData)) {
+						throw new InternalErrorException(
+							__d('net_commons', 'Internal Server Error')
+						);
+					}
+				}
+			}
+		}
 	}
 
 /**
