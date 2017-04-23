@@ -143,7 +143,8 @@ class ReservationLocationsController extends ReservationsAppController {
 		$this->_processPermission();
 
 		// 施設管理者保持
-		$this->request->data = $this->ReservationLocationsApprovalUser->getSelectUsers($this->request->data, false);
+		$this->request->data =
+			$this->ReservationLocationsApprovalUser->getSelectUsers($this->request->data, false);
 
 		if ($this->request->is('post')) {
 			$this->ReservationLocation->create();
@@ -313,7 +314,8 @@ class ReservationLocationsController extends ReservationsAppController {
 		}
 
 		// 施設管理者保持
-		$this->request->data = $this->ReservationLocationsApprovalUser->getSelectUsers($this->request->data, false);
+		$this->request->data =
+			$this->ReservationLocationsApprovalUser->getSelectUsers($this->request->data, false);
 
 		//if ($this->ReservationLocation->canEditWorkflowContent($blogEntry) === false) {
 		//	return $this->throwBadRequest();
@@ -362,8 +364,8 @@ class ReservationLocationsController extends ReservationsAppController {
 			$approvalUsers = $this->ReservationLocationsApprovalUser->find('all', ['conditions' => [
 				'location_key' => $key
 			]]);
-			foreach($approvalUsers as $approvalUser){
-				$this->request->data['selectUsers'][] =	['User' => $approvalUser['User']];
+			foreach ($approvalUsers as $approvalUser) {
+				$this->request->data['selectUsers'][] = ['User' => $approvalUser['User']];
 			}
 
 			//予約を受け付けるルームを取得
