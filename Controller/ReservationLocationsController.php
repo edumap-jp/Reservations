@@ -317,24 +317,12 @@ class ReservationLocationsController extends ReservationsAppController {
 		$this->request->data =
 			$this->ReservationLocationsApprovalUser->getSelectUsers($this->request->data, false);
 
-		//if ($this->ReservationLocation->canEditWorkflowContent($blogEntry) === false) {
-		//	return $this->throwBadRequest();
-		//}
-		//$this->_prepare();
 		$this->_processPermission($key);
 
 		if ($this->request->is(array('post', 'put'))) {
 
 			$this->ReservationLocation->create();
-			//$this->request->data['ReservationLocation']['blog_key'] =
-			//	$this->_blogSetting['BlogSetting']['blog_key'];
 
-			// set status
-			//$status = $this->Workflow->parseStatus();
-			//$this->request->data['ReservationLocation']['status'] = $status;
-
-			// set block_id
-			//$this->request->data['ReservationLocation']['block_id'] = Current::read('Block.id');
 			// set language_id
 			$this->request->data['ReservationLocation']['language_id'] = Current::read('Language.id');
 
