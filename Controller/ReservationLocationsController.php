@@ -183,7 +183,7 @@ class ReservationLocationsController extends ReservationsAppController {
 				'time_table' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
 				'use_all_rooms' => '1',
 			];
-			$this->request->data = $newLocation;
+			$this->request->data['ReservationLocation'] = $newLocation['ReservationLocation'];
 		}
 		// プライベートルームは除外する
 		$roomConditions = [
