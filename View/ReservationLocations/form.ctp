@@ -239,12 +239,12 @@ echo h($dataJson) ?>)">
 
 							<?php
 							// 施設管理者
-							echo $this->NetCommonsForm->input(
-								'ReservationLocation.contact',
-								[
-									'label' => __d('reservations', 'Contact')
-								]
-							);
+							//echo $this->NetCommonsForm->input(
+							//	'ReservationLocation.contact',
+							//	[
+							//		'label' => __d('reservations', 'Contact')
+							//	]
+							//);
 							?>
 						</div>
 						<?php
