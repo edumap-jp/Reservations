@@ -348,6 +348,16 @@ class ReservationLocationsController extends ReservationsAppController {
 			$this->NetCommons->handleValidationError($this->ReservationLocation->validationErrors);
 
 		} else {
+			// start_time, end_timeを施設のタイムゾーンに変換してH:i形式へ
+			$locationTimeZone = new DateTimeZone($reservationLocation['ReservationLocation']['timezone']);
+			$startDate = new DateTime($reservationLocation['ReservationLocation']['start_time'], new DateTimeZone('UTC'));
+
+			$startDate->setTimezone($locationTimeZone);
+			$reservationLocation['ReservationLocation']['start_time'] = $startDate->format('H:i');
+
+			$endDate = new DateTime($reservationLocation['ReservationLocation']['end_time'], new DateTimeZone('UTC'));
+			$endDate->setTimezone($locationTimeZone);
+			$reservationLocation['ReservationLocation']['end_time'] = $endDate->format('H:i');
 
 			$this->request->data['ReservationLocation'] = $reservationLocation['ReservationLocation'];
 			$approvalUsers = $this->ReservationLocationsApprovalUser->find('all', ['conditions' => [
