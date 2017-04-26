@@ -206,7 +206,7 @@ class ReservationLocation extends ReservationsAppModel {
 	}
 
 /**
- * 時刻バリデーション H:i形式か。
+ * 時刻バリデーション
  *
  * @param array $check チェックする値の配列
  * @return bool
@@ -215,10 +215,15 @@ class ReservationLocation extends ReservationsAppModel {
 		$values = array_values($check);
 		$time = $values[0];
 
-		if (!preg_match('/^[0-9]{2}:[0-9]{2}$/', $time)) {
+		if (!preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2} ([0-9]{2}):([0-9]{2}):[0-9]{2}$/',
+			$time,
+			$matches
+			)) {
 			return false;
 		}
-		list($hour, $min) = explode(':', $time);
+		//list($hour, $min) = explode(':', $time);
+		$hour = $matches[1];
+		$min = $matches[2];
 		if (intval($hour) < 0 || intval($hour) > 24) {
 			return false;
 		}
@@ -500,6 +505,17 @@ class ReservationLocation extends ReservationsAppModel {
 			$data['ReservationLocation']['start_time'] = '00:00';
 			$data['ReservationLocation']['end_time'] = '24:00';
 		}
+		// start_time end_timeをUTCに変換
+		$startDateTime = Date('Y-m-d') . $data['ReservationLocation']['start_time'] . ':00';
+		$endDateTime = Date('Y-m-d') . $data['ReservationLocation']['end_time'] . ':00';
+		$ncTime = new NetCommonsTime();
+		$startDateTime4UTC = $ncTime->toServerDatetime($startDateTime,
+			$data['ReservationLocation']['timezone']);
+		$endDateTime4UTC = $ncTime->toServerDatetime($endDateTime,
+			$data['ReservationLocation']['timezone']);
+		$data['ReservationLocation']['start_time'] = $startDateTime4UTC;
+		$data['ReservationLocation']['end_time'] = $endDateTime4UTC;
+
 		// category_id=0だったらnullにする。そうしないと空文字としてSQL発行される
 		if (empty($data[$this->alias]['category_id'])) {
 			$data[$this->alias]['category_id'] = null;

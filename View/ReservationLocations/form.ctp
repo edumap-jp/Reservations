@@ -82,6 +82,7 @@ echo h($dataJson) ?>)">
 								echo $this->NetCommonsForm->input(
 									'ReservationLocation.start_time',
 									[
+										'type' => 'text',
 										'datetimepicker',
 										'datetimepicker-options' => json_encode(
 											['format' => 'HH:mm']
@@ -95,6 +96,7 @@ echo h($dataJson) ?>)">
 								echo $this->NetCommonsForm->input(
 									'ReservationLocation.end_time',
 									[
+										'type' => 'text',
 										'datetimepicker',
 										'datetimepicker-options' => json_encode(
 											['format' => 'HH:mm']
