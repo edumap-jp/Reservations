@@ -182,7 +182,8 @@ class ReservationLocationsController extends ReservationsAppController {
 				'end_time' => '18:00',
 				'time_table' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
 				'use_all_rooms' => '1',
-			];
+				'timezone' => $this->Auth->user('timezone'),
+				];
 			$this->request->data['ReservationLocation'] = $newLocation['ReservationLocation'];
 		}
 		// プライベートルームは除外する

@@ -218,6 +218,7 @@ class ReservationsSchema extends CakeSchema {
 		'time_table' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 32, 'collate' => 'utf8_general_ci', 'comment' => '利用可能な曜日', 'charset' => 'utf8'),
 		'start_time' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 14, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'end_time' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 14, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'timezone' => array('type' => 'string', 'null' => false, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'use_private' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'use_auth_flag' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'use_all_rooms' => array('type' => 'boolean', 'null' => false, 'default' => '0'),

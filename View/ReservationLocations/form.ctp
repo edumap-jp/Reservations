@@ -120,7 +120,25 @@ echo h($dataJson) ?>)">
 									]
 								);
 								?>
+
 							</div>
+							<?php
+							// タイムゾーン
+							if (Hash::get($this->request->data, 'ReservationLocation.timezone')
+								!= AuthComponent::user('timezone')) {
+								// ユーザのタイムゾーンと異なっていたらタイムゾーン選択ドロップダウン表示
+								$SiteSetting = new SiteSetting();
+								$SiteSetting->prepare();
+								echo $this->NetCommonsForm->input('ReservationLocation.timezone', [
+									'label' => false,
+									'options' => $SiteSetting->defaultTimezones,
+									'type' => 'select'
+								]);
+							} else {
+								// 新規登録ならタイムゾーンは現在のユーザのタイムゾーンにする
+								echo $this->NetCommonsForm->hidden('ReservationLocation.timezone');
+							}
+							?>
 							<?php
 							// 利用時間曜日チェックボックス
 							$weekDaysOptions = [
