@@ -480,11 +480,27 @@ class ReservationLocation extends ReservationsAppModel {
 		}
 
 		//時間
-		$ret = sprintf('%s %s-%s',
+		$locationTimeZone = new DateTimeZone($reservationLocation['ReservationLocation']['timezone']);
+		$startDate = new DateTime($reservationLocation['ReservationLocation']['start_time'], new DateTimeZone('UTC'));
+
+		$startDate->setTimezone($locationTimeZone);
+		$reservationLocation['ReservationLocation']['start_time'] = $startDate->format('H:i');
+
+		$endDate = new DateTime($reservationLocation['ReservationLocation']['end_time'], new DateTimeZone('UTC'));
+		$endDate->setTimezone($locationTimeZone);
+		$reservationLocation['ReservationLocation']['end_time'] = $endDate->format('H:i');
+
+		$ret = sprintf('%s %s - %s',
 			$ret,
 			$reservationLocation['ReservationLocation']['start_time'],
 			$reservationLocation['ReservationLocation']['end_time']
 		);
+		if (AuthComponent::user('timezone') != $reservationLocation['ReservationLocation']['timezone']) {
+			$SiteSetting = new SiteSetting();
+			$SiteSetting->prepare();
+			$ret .= ' ';
+			$ret .= $SiteSetting->defaultTimezones[$reservationLocation['ReservationLocation']['timezone']];
+		}
 		return $ret;
 	}
 
