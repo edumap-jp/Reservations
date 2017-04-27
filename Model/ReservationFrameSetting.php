@@ -182,20 +182,20 @@ class ReservationFrameSetting extends ReservationsAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
-			'is_myroom' => array(
-				'rule1' => array(
-					'rule' => 'boolean',
-					'required' => true,
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-			),
-			'is_select_room' => array(
-				'rule1' => array(
-					'rule' => 'boolean',
-					'required' => true,
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-			),
+//			'is_myroom' => array(
+//				'rule1' => array(
+//					'rule' => 'boolean',
+//					'required' => true,
+//					'message' => __d('net_commons', 'Invalid request.'),
+//				),
+//			),
+//			'is_select_room' => array(
+//				'rule1' => array(
+//					'rule' => 'boolean',
+//					'required' => true,
+//					'message' => __d('net_commons', 'Invalid request.'),
+//				),
+//			),
 			'room_id' => array(
 				'rule1' => array(
 					'rule' => array('numeric'),
@@ -270,12 +270,12 @@ class ReservationFrameSetting extends ReservationsAppModel {
 				$this->rollback();
 				return false;
 			}
-			$data['ReservationFrameSetting']['is_myroom'] = false;
-			$privateRoomIdRoot = Space::getRoomIdRoot(Space::PRIVATE_SPACE_ID);
-			if (! $data['ReservationFrameSetting']['is_select_room'] ||
-				!empty($data['ReservationFrameSettingSelectRoom'][$privateRoomIdRoot]['room_id'])) {
-				$data['ReservationFrameSetting']['is_myroom'] = true;
-			}
+//			$data['ReservationFrameSetting']['is_myroom'] = false;
+//			$privateRoomIdRoot = Space::getRoomIdRoot(Space::PRIVATE_SPACE_ID);
+//			if (! $data['ReservationFrameSetting']['is_select_room'] ||
+//				!empty($data['ReservationFrameSettingSelectRoom'][$privateRoomIdRoot]['room_id'])) {
+//				$data['ReservationFrameSetting']['is_myroom'] = true;
+//			}
 			//フレームの登録
 			//バリデートは前で終わっているので第二引数=false
 			$data = $this->save($data, false);
@@ -357,8 +357,8 @@ class ReservationFrameSetting extends ReservationsAppModel {
 				'display_type' => ReservationsComponent::RESERVATION_DISP_TYPE_DEFAULT,
 				'display_count' => ReservationsComponent::CALENDAR_STANDARD_DISPLAY_DAY_COUNT,
 				'timeline_base_time' => ReservationsComponent::CALENDAR_TIMELINE_DEFAULT_BASE_TIME,
-				'is_select_room' => false,
-				'is_myroom' => true,
+//				'is_select_room' => false,
+//				'is_myroom' => true,
 				'id' => null,
 			)
 		));

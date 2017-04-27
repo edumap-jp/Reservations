@@ -145,9 +145,9 @@ class ReservationSearchPlanBehavior extends ReservationAppBehavior {
  * @return array
  */
 	protected function _getSharePlans($model, $vars, $baseOptions) {
-		if ($vars['ReservationFrameSetting']['is_myroom'] == false) {
-			return array();
-		}
+//		if ($vars['ReservationFrameSetting']['is_myroom'] == false) {
+//			return array();
+//		}
 		///////////////////////////////////////////////////////////////////////
 		//自ユーザーを共有指定している他人のプライベート予定をとってくる。
 		//ここは、上記のルームIDの範疇外になるので、別にfindして、plansに

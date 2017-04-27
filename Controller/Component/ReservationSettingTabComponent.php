@@ -47,7 +47,6 @@ class ReservationSettingTabComponent extends Component {
 		'mainTabsOrder' => [
 			'frame_settings', 'location_settings', 'category_settings', 'timeframe_settings',
 			'mail_settings', 'import_reservations'
-
 		],
 	);
 }

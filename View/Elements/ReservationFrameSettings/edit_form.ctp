@@ -21,7 +21,6 @@ echo $this->NetCommonsForm->hidden('ReservationFrameSetting.frame_key');
 echo $this->NetCommonsForm->hidden('Frame.id');
 echo $this->NetCommonsForm->hidden('Frame.key');
 echo $this->NetCommonsForm->hidden('ReservationFrameSetting.room_id');
-echo $this->NetCommonsForm->hidden('ReservationFrameSetting.is_myroom');
 
 $displayType = $this->request->data['ReservationFrameSetting']['display_type'];
 ?>
@@ -54,11 +53,6 @@ $displayType = $this->request->data['ReservationFrameSetting']['display_type'];
 	</div>
 </div><!-- form-groupおわり-->
 
-<?php
-/* ルーム選択 */
-//echo $this->element('Reservations.ReservationFrameSettings/room_select');
-echo $this->NetCommonsForm->hidden('ReservationFrameSetting.is_select_room');
-?>
 <?php
 /* 開始位置 */
 //echo $this->element('Reservations.ReservationFrameSettings/start_pos');
