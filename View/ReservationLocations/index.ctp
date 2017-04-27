@@ -1,18 +1,18 @@
 <?php
 /**
- * 施設設定 > 施設一覧テンプレート
+ * 施設設定 > 施設一覧
  *
  * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
 ?>
 
 <article class="block-setting-body">
-
-	<?php //echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_FRAME_SETTING); ?>
-	<?php echo $this->BlockTabs->main('location_settings'); ?>
+	<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_LOCATION_SETTING); ?>
 
     <div class="tab-content">
 		<?php /* 施設予約にはBLOCK_TAB_SETTINGは無し */ ?>

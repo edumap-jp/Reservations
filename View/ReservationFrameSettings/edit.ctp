@@ -9,6 +9,8 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
+App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
+
 echo $this->element('Reservations.scripts');
 
 if (isset($this->data['ReservationFrameSetting'])) {
@@ -32,7 +34,7 @@ if (isset($this->data['ReservationFrameSetting'])) {
 	ng-controller="ReservationFrameSettings"
 	ng-init="initialize(<?php echo h(json_encode($camelizeData, JSON_FORCE_OBJECT)); ?>)">
 
-	<?php echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_FRAME_SETTING); ?>
+	<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_FRAME_SETTING); ?>
 
 	<div class="tab-content">
 	<?php /* 施設予約にはBLOCK_TAB_SETTINGは無し */ ?>

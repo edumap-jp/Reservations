@@ -1,21 +1,29 @@
-<?php echo $this->NetCommonsHtml->script(
+<?php
+/**
+ * 施設設定 > 施設登録
+ *
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
+ */
+
+App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
+
+echo $this->NetCommonsHtml->script(
 	[
 		'/reservations/js/reservations.js',
-		//'/blogs/js/blogs_entry_edit.js',
-		//'/tags/js/tags.js',
 	]
-); ?>
-<?php
-//$dataJson = json_encode(
-//	$this->NetCommonsTime->toUserDatetimeArray($this->request->data, array('ReservationLocation.publish_start'))
-//);
+);
+
 $dataJson = json_encode($this->request->data);
 ?>
 
-<?php echo $this->BlockTabs->main('location_settings'); ?>
+<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_LOCATION_SETTING); ?>
 
-<div class="reservationLocations form" ng-controller="ReservationLocation" ng-init="init(<?php
-echo h($dataJson) ?>)">
+<div class="reservationLocations form"
+		ng-controller="ReservationLocation" ng-init="init(<?php echo h($dataJson) ?>)">
+
 	<div class="reservationLocations form">
 		<article>
 			<div class="panel panel-default">
