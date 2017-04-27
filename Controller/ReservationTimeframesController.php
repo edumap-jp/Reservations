@@ -65,7 +65,7 @@ class ReservationTimeframesController extends ReservationsAppController {
 		'NetCommons.NetCommonsTime',
 		'Paginator',
 		'Rooms.RoomsForm',
-		'Reservations.ReservationSettingTab',
+		'Reservations.ReservationSettings',
 	);
 
 /**
@@ -79,7 +79,7 @@ class ReservationTimeframesController extends ReservationsAppController {
 		'NetCommons.TitleIcon',
 		//'Blocks.BlockForm',
 
-		'Blocks.BlockTabs', // 設定内容はReservationSettingTabComponentにまとめた
+		'Blocks.BlockTabs', // 設定内容はReservationSettingsComponentにまとめた
 
 		'Rooms.RoomsForm',
 	);
@@ -91,7 +91,7 @@ class ReservationTimeframesController extends ReservationsAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingTabComponent::$blockTabs;
+		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**

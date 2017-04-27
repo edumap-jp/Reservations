@@ -1300,3 +1300,7 @@ msgstr "時間枠色"
 
 msgid "%s - %s"
 msgstr "%s 〜 %s"
+
+msgid "Available datetime"
+msgid "利用可能日時"
+

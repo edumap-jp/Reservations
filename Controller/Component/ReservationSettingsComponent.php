@@ -1,6 +1,6 @@
 <?php
 /**
- * ReservationSettingTabComponent.php
+ * ReservationSettingsComponent.php
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Ryuji AMANO <ryuji@ryus.co.jp>
@@ -11,9 +11,9 @@
 App::uses('BlockTabsHelper', 'Blocks.View/Helper');
 
 /**
- * Class ReservationSettingTabComponent
+ * Class ReservationSettingsComponent
  */
-class ReservationSettingTabComponent extends Component {
+class ReservationSettingsComponent extends Component {
 
 /**
  * タブの定数(表示方法変更)

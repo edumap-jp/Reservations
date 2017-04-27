@@ -8,11 +8,11 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
+App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 ?>
 
 <article class="block-setting-body">
-	<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_IMPORT_RESERVATIONS); ?>
+	<?php echo $this->BlockTabs->main(ReservationSettingsComponent::MAIN_TAB_IMPORT_RESERVATIONS); ?>
 
 	<div class="tab-content">
 
