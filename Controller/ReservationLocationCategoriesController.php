@@ -17,7 +17,7 @@ App::uses('ReservationsAppController', 'Reservations.Controller');
  * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @package NetCommons\Reservations\Controller
  */
-class ReservationSettingsController extends ReservationsAppController {
+class ReservationLocationCategoriesController extends ReservationsAppController {
 
 /**
  * layout

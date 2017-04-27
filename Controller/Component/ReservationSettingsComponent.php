@@ -65,7 +65,7 @@ class ReservationSettingsComponent extends Component {
 		'mainTabs' => array(
 			self::MAIN_TAB_CATEGORY_SETTING => [ //施設カテゴリ設定
 				'label' => ['reservations', 'Location category setting'],
-				'url' => array('controller' => 'reservation_settings', 'action' => 'edit')
+				'url' => array('controller' => 'reservation_location_categories', 'action' => 'edit')
 			],
 			self::MAIN_TAB_LOCATION_SETTING => array( //施設設定
 				'label' => ['reservations', 'Location setting'],
