@@ -1,9 +1,9 @@
 <?php
 /**
- * ReservationMailSettings Controller
+ * メール設定 Controller
  *
  * @author Noriko Arai <arai@nii.ac.jp>
- * @author AllCreator Co., Ltd. <info@allcreator.net>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
@@ -14,9 +14,9 @@ App::uses('Room', 'Rooms.Model');
 App::uses('ReservationPermissiveRooms', 'Reservations.Utility');
 
 /**
- * ReservationMailSettingsController
+ * メール設定 Controller
  *
- * @author Allcreator <info@allcreator.net>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @package NetCommons\Reservations\Controller
  */
 

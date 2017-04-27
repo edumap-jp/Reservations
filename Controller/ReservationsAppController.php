@@ -3,7 +3,7 @@
  * ReservationsApp Controller
  *
  * @author Noriko Arai <arai@nii.ac.jp>
- * @author Allcreator <info@allcreator.net>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
@@ -14,9 +14,9 @@ App::uses('Space', 'Rooms.Model');
 App::uses('ReservationsComponent', 'Reservations.Controller/Component');
 
 /**
- * ReservationsAppController
+ * ReservationsApp Controller
  *
- * @author Allcreator <info@allcreator.net>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @package NetCommons\Reservations\Controller
  */
 class ReservationsAppController extends AppController {

@@ -1,20 +1,21 @@
 <?php
 /**
- * BlogEntriesEdit
+ * 予約のインポート Controller
+ *
+ * @author Noriko Arai <arai@nii.ac.jp>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
  */
+
 App::uses('ReservationsAppController', 'Reservations.Controller');
 
 /**
- * BlogEntriesEdit Controller
+ * 予約のインポート Controller
  *
- *
- * @author   Ryuji AMANO <ryuji@ryus.co.jp>
- * @link     http://www.netcommons.org NetCommons Project
- * @license  http://www.netcommons.org/license.txt NetCommons License
- * @property NetCommonsWorkflow $NetCommonsWorkflow
- * @property PaginatorComponent $Paginator
- * @property ReservationLocation $ReservationLocation
- * @property BlogCategory $BlogCategory
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
+ * @package NetCommons\Reservations\Controller
  */
 class ReservationImportController extends ReservationsAppController {
 

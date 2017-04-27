@@ -5,7 +5,7 @@
  * @property PaginatorComponent $Paginator
  *
  * @author Noriko Arai <arai@nii.ac.jp>
- * @author Allcreator <info@allcreator.net>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
@@ -19,7 +19,7 @@ App::uses('ReservationPermissiveRooms', 'Reservations.Utility');
 /**
  * ReservationPlansController
  *
- * @author Allcreator <info@allcreator.net>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @package NetCommons\Reservations\Controller
  */
 class ReservationPlansController extends ReservationsAppController {
