@@ -10,6 +10,7 @@
  */
 
 App::uses('ReservationsAppController', 'Reservations.Controller');
+App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
 
 /**
  * 予約のインポート Controller
@@ -66,7 +67,7 @@ class ReservationImportController extends ReservationsAppController {
 		'NetCommons.NetCommonsTime',
 		'Paginator',
 		'Rooms.RoomsForm',
-		'Reservations.ReservationSettingTab',
+//		'Reservations.ReservationSettingTab',
 	);
 
 /**

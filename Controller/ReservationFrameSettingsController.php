@@ -11,6 +11,7 @@
 
 App::uses('ReservationsAppController', 'Reservations.Controller');
 App::uses('ReservationsComponent', 'Reservations.Controller/Component');
+App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
 
 /**
  * 表示方法変更 Controller
@@ -53,7 +54,7 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		'Paginator',
 		'Rooms.RoomsForm',
 		'Categories.Categories',
-		'Reservations.ReservationSettingTab',
+//		'Reservations.ReservationSettingTab',
 	);
 
 /**

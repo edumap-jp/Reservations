@@ -12,6 +12,7 @@
 App::uses('MailSettingsController', 'Mails.Controller');
 App::uses('Room', 'Rooms.Model');
 App::uses('ReservationPermissiveRooms', 'Reservations.Utility');
+App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
 
 /**
  * メール設定 Controller
@@ -36,7 +37,7 @@ class ReservationMailSettingsController extends MailSettingsController {
 		),
 		'Pages.PageLayout',
 		'Security',
-		'Reservations.ReservationSettingTab',
+//		'Reservations.ReservationSettingTab',
 	);
 
 /**
