@@ -1,3 +1,14 @@
+<?php
+/**
+ * 施設設定 > 施設一覧テンプレート
+ *
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
+ */
+?>
+
 <article class="block-setting-body">
 
 	<?php //echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_FRAME_SETTING); ?>
