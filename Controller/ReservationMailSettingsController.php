@@ -12,6 +12,7 @@
 App::uses('MailSettingsController', 'Mails.Controller');
 App::uses('Room', 'Rooms.Model');
 App::uses('ReservationPermissiveRooms', 'Reservations.Utility');
+App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 /**
  * メール設定 Controller
@@ -36,7 +37,7 @@ class ReservationMailSettingsController extends MailSettingsController {
 		),
 		'Pages.PageLayout',
 		'Security',
-		'Reservations.ReservationSettingTab',
+//		'Reservations.ReservationSettings',
 	);
 
 /**
@@ -61,7 +62,7 @@ class ReservationMailSettingsController extends MailSettingsController {
  */
 	public $helpers = array(
 		'Blocks.BlockRolePermissionForm',
-		'Blocks.BlockTabs', // 設定内容はReservationSettingTabComponentにまとめた
+		'Blocks.BlockTabs', // 設定内容はReservationSettingsComponentにまとめた
 		'Mails.MailForm',
 	);
 
@@ -87,7 +88,7 @@ class ReservationMailSettingsController extends MailSettingsController {
 			Current::$current['Block']['key'] = $mailRooms[$specifiedRoomId]['blockKey'];
 		}
 
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingTabComponent::$blockTabs;
+		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**

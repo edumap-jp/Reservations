@@ -1,6 +1,6 @@
 <?php
 /**
- * Block index template
+ * 施設カテゴリー設定
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
@@ -8,10 +8,12 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 ?>
 
 <article class="block-setting-body">
-	<?php echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_BLOCK_INDEX); ?>
+	<?php echo $this->BlockTabs->main(ReservationSettingsComponent::MAIN_TAB_CATEGORY_SETTING); ?>
 
 	<?php echo $this->BlockIndex->description(); ?>
 

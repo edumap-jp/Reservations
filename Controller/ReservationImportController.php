@@ -10,6 +10,7 @@
  */
 
 App::uses('ReservationsAppController', 'Reservations.Controller');
+App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 /**
  * 予約のインポート Controller
@@ -66,7 +67,7 @@ class ReservationImportController extends ReservationsAppController {
 		'NetCommons.NetCommonsTime',
 		'Paginator',
 		'Rooms.RoomsForm',
-		'Reservations.ReservationSettingTab',
+//		'Reservations.ReservationSettings',
 	);
 
 /**
@@ -80,7 +81,7 @@ class ReservationImportController extends ReservationsAppController {
 		'NetCommons.TitleIcon',
 		//'Blocks.BlockForm',
 
-		'Blocks.BlockTabs', // 設定内容はReservationSettingTabComponentにまとめた
+		'Blocks.BlockTabs', // 設定内容はReservationSettingsComponentにまとめた
 
 		'Rooms.RoomsForm',
 		'Reservations.ReservationLocation',
@@ -93,7 +94,7 @@ class ReservationImportController extends ReservationsAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingTabComponent::$blockTabs;
+		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**

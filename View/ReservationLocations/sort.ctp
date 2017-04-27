@@ -10,7 +10,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
+App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 echo $this->NetCommonsHtml->script('/reservations/js/reservations.js');
 
@@ -21,7 +21,7 @@ $reservationLocationsMap = array_flip(
 //debug($reservationLocationsMap);
 ?>
 <article class="block-setting-body">
-	<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_LOCATION_SETTING); ?>
+	<?php echo $this->BlockTabs->main(ReservationSettingsComponent::MAIN_TAB_LOCATION_SETTING); ?>
 
 	<div class="tab-content">
 

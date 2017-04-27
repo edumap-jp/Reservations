@@ -52,7 +52,7 @@ class ReservationSettingsController extends ReservationsAppController {
 		),
 		'Paginator',
 		'Categories.CategoryEdit',
-		'Reservations.ReservationSettingTab',
+		'Reservations.ReservationSettings',
 	);
 
 /**
@@ -62,7 +62,7 @@ class ReservationSettingsController extends ReservationsAppController {
  */
 	public $helpers = array(
 		'Blocks.BlockForm',
-		'Blocks.BlockTabs', // 設定内容はReservationSettingTabComponentにまとめた
+		'Blocks.BlockTabs', // 設定内容はReservationSettingsComponentにまとめた
 		'Blocks.BlockIndex',
 		//'Blocks.Block',
 		'Likes.Like',
@@ -81,7 +81,7 @@ class ReservationSettingsController extends ReservationsAppController {
 			$this->Components->unload('Categories.CategoryEdit');
 		}
 
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingTabComponent::$blockTabs;
+		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**

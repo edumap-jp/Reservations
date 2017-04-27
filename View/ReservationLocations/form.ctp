@@ -8,7 +8,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
+App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 echo $this->NetCommonsHtml->script(
 	[
@@ -19,7 +19,7 @@ echo $this->NetCommonsHtml->script(
 $dataJson = json_encode($this->request->data);
 ?>
 
-<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_LOCATION_SETTING); ?>
+<?php echo $this->BlockTabs->main(ReservationSettingsComponent::MAIN_TAB_LOCATION_SETTING); ?>
 
 <div class="reservationLocations form"
 		ng-controller="ReservationLocation" ng-init="init(<?php echo h($dataJson) ?>)">

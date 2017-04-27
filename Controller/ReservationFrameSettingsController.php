@@ -11,6 +11,7 @@
 
 App::uses('ReservationsAppController', 'Reservations.Controller');
 App::uses('ReservationsComponent', 'Reservations.Controller/Component');
+App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 /**
  * 表示方法変更 Controller
@@ -53,7 +54,7 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		'Paginator',
 		'Rooms.RoomsForm',
 		'Categories.Categories',
-		'Reservations.ReservationSettingTab',
+//		'Reservations.ReservationSettings',
 	);
 
 /**
@@ -63,7 +64,7 @@ class ReservationFrameSettingsController extends ReservationsAppController {
  */
 	public $helpers = array(
 		//'Blocks.BlockForm',
-		'Blocks.BlockTabs', // 設定内容はReservationSettingTabComponentにまとめた
+		'Blocks.BlockTabs', // 設定内容はReservationSettingsComponentにまとめた
 		'NetCommons.NetCommonsForm',
 		//'NetCommons.Date',
 //		'Reservations.ReservationRoomSelect',
@@ -119,7 +120,7 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		$this->Auth->deny('index');
 		$this->Reservation->afterFrameSave(['Frame' => Current::read('Frame')]);
 
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingTabComponent::$blockTabs;
+		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**

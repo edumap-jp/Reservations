@@ -12,7 +12,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
+App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 $urlParams = array(
 	'controller' => 'reservation_mail_settings',
@@ -23,7 +23,7 @@ $urlParams = array(
 );
 ?>
 <article class="block-setting-body">
-	<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_MAIL_SETTING); ?>
+	<?php echo $this->BlockTabs->main(ReservationSettingsComponent::MAIN_TAB_MAIL_SETTING); ?>
 
 	<div class="tab-content">
 
