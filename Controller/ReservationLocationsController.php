@@ -1,11 +1,11 @@
 <?php
 /**
- * BlogEntriesEdit
+ * 施設設定
  */
 App::uses('ReservationsAppController', 'Reservations.Controller');
 
 /**
- * BlogEntriesEdit Controller
+ * 施設設定 Controller
  *
  *
  * @author   Ryuji AMANO <ryuji@ryus.co.jp>
