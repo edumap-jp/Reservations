@@ -1,13 +1,16 @@
 <?php
 /**
- * FaqQuestionOrders edit
+ * 施設設定 > 並び替え
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
 
 echo $this->NetCommonsHtml->script('/reservations/js/reservations.js');
 
@@ -18,9 +21,7 @@ $reservationLocationsMap = array_flip(
 //debug($reservationLocationsMap);
 ?>
 <article class="block-setting-body">
-
-	<?php //echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_FRAME_SETTING); ?>
-	<?php echo $this->BlockTabs->main('location_settings'); ?>
+	<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_LOCATION_SETTING); ?>
 
 	<div class="tab-content">
 

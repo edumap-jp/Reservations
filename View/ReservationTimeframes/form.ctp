@@ -1,25 +1,32 @@
-<?php echo $this->NetCommonsHtml->script(
+<?php
+/**
+ * 時間枠設定 > 時間枠登録
+ *
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
+ */
+
+App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
+
+echo $this->NetCommonsHtml->script(
 	[
 		'/reservations/js/reservations.js',
-		//'/blogs/js/blogs_entry_edit.js',
-		//'/tags/js/tags.js',
 	]
-); ?>
-<?php
-//$dataJson = json_encode(
-//	$this->NetCommonsTime->toUserDatetimeArray($this->request->data, array('ReservationTimeframe.publish_start'))
-//);
+);
+
 $dataJson = json_encode($this->request->data);
 ?>
 
-<?php echo $this->BlockTabs->main('timeframe_settings'); ?>
+<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_TIMEFRAME_SETTING); ?>
 
 <div class="reservationTimeFrames form" ng-init="data=<?php echo h($dataJson)?>" >
 	<div class="reservationTimeFrames form">
 		<article>
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<?php echo __d('reservations', '時間枠設定'); ?>
+					<?php echo __d('reservations', 'TimeFrame setting'); ?>
 				</div>
 
 				<?php echo $this->NetCommonsForm->create(
@@ -60,7 +67,7 @@ $dataJson = json_encode($this->request->data);
 							'title',
 							array(
 								'required' => 'required',
-								'label' => __d('reservations', '時間枠名'),
+								'label' => __d('reservations', 'Time frame name'),
 								//'childDiv' => ['class' => 'form-inline'],
 							)
 						);
@@ -69,7 +76,7 @@ $dataJson = json_encode($this->request->data);
 							<?php
 							echo $this->NetCommonsForm->label(
 								null,
-								__d('reservations', '時間範囲'),
+								__d('reservations', 'Time frame range'),
 								['required' => 'required']
 							);
 							?>
@@ -109,7 +116,7 @@ $dataJson = json_encode($this->request->data);
 								<?php
 								$this->NetCommonsForm->unlockField('ReservationTimeframe.color');
 								echo $this->NetCommonsForm->label('ReservationTimeframe.color',
-									__d('reservations', '時間枠色'));
+									__d('reservations', 'Time frame color'));
 								echo $this->element('NetCommons.color_palette_picker', array(
 									'ngAttrName' => 'data[ReservationTimeframe][color]',
 									'ngModel' => 'data.ReservationTimeframe.color',

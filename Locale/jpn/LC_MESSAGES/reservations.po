@@ -1288,3 +1288,15 @@ msgstr "予約に承認が必要"
 
 msgid "No institution yet registered."
 msgstr "施設が登録されていません。"
+
+msgid "Time frame name"
+msgstr "時間枠名"
+
+msgid "Time frame range"
+msgstr "時間範囲"
+
+msgid "Time frame color"
+msgstr "時間枠色"
+
+msgid "%s - %s"
+msgstr "%s 〜 %s"

@@ -1,9 +1,9 @@
 <?php
 /**
- * ReservationFrameSettings Controller
+ * 表示方法変更 Controller
  *
  * @author Noriko Arai <arai@nii.ac.jp>
- * @author AllCreator Co., Ltd. <info@allcreator.net>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
@@ -13,11 +13,10 @@ App::uses('ReservationsAppController', 'Reservations.Controller');
 App::uses('ReservationsComponent', 'Reservations.Controller/Component');
 
 /**
- * ReservationFrameSettingsController
+ * 表示方法変更 Controller
  *
- * @author Allcreator <info@allcreator.net>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @package NetCommons\Reservations\Controller
- * @property ReservationFrameSetting $ReservationFrameSetting
  */
 class ReservationFrameSettingsController extends ReservationsAppController {
 

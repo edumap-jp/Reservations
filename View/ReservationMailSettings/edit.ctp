@@ -1,15 +1,19 @@
 <?php
 /**
- * メール設定 template
+ * メール設定
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Shohei Nakajima <nakajimashouhei@gmail.com>
  * @author Mitsuru Mutaguchi <mutaguchi@opensource-workshop.jp>
  * @author Allcreator <info@allcreator.net>
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
+
 $urlParams = array(
 	'controller' => 'reservation_mail_settings',
 	'action' => 'edit',
@@ -19,7 +23,7 @@ $urlParams = array(
 );
 ?>
 <article class="block-setting-body">
-	<?php echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_MAIL_SETTING); ?>
+	<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_MAIL_SETTING); ?>
 
 	<div class="tab-content">
 

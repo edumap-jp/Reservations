@@ -1,7 +1,18 @@
-<article class="block-setting-body">
+<?php
+/**
+ * 時間枠設定 > 時間枠登録
+ *
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
+ */
 
-	<?php //echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_FRAME_SETTING); ?>
-	<?php echo $this->BlockTabs->main('timeframe_settings'); ?>
+App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
+?>
+
+<article class="block-setting-body">
+	<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_TIMEFRAME_SETTING); ?>
 
     <div class="tab-content">
 		<?php /* 施設予約にはBLOCK_TAB_SETTINGは無し */ ?>
@@ -13,15 +24,15 @@
 		//)); ?>
 
         <div class="text-right nc-table-add">
-            <?php echo $this->LinkButton->add(__d('reservations', '追加'), ['action' => 'add', 'frame_id' => Current::read('Frame.id')]); ?>
+            <?php echo $this->LinkButton->add(__d('net_commons', 'Add'), ['action' => 'add', 'frame_id' => Current::read('Frame.id')]); ?>
         </div>
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th colspan="2"><?php echo __d('reservations', '時間枠名') ?></th>
-                    <th><?php echo __d('reservations', '時間範囲') ?></th>
-                    <th><?php echo __d('reservations', '色') ?></th>
+                    <th colspan="2"><?php echo __d('reservations', 'Time frame name') ?></th>
+                    <th><?php echo __d('reservations', 'Time frame range') ?></th>
+                    <th><?php echo __d('reservations', 'Time frame color') ?></th>
                 </tr>
                 </thead>
                 <?php foreach ($reservationTimeframes as $reservationTimeframe): ?>
@@ -44,7 +55,7 @@
 							?>
                         </td>
 						<td>
-							<?php echo __d('reservations', '%s 〜 %s',
+							<?php echo __d('reservations', '%s - %s',
 									h($reservationTimeframe['ReservationTimeframe']['start_time']),
 									h($reservationTimeframe['ReservationTimeframe']['end_time'])
 									); ?>

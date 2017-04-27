@@ -1,7 +1,18 @@
-<article class="block-setting-body">
+<?php
+/**
+ * 予約のインポート > 初期画面
+ *
+ * @author Ryuji AMANO <ryuji@ryus.co.jp>
+ * @link http://www.netcommons.org NetCommons Project
+ * @license http://www.netcommons.org/license.txt NetCommons License
+ * @copyright Copyright 2014, NetCommons Project
+ */
 
-	<?php //echo $this->BlockTabs->main(BlockTabsHelper::MAIN_TAB_FRAME_SETTING); ?>
-	<?php echo $this->BlockTabs->main('import_reservations'); ?>
+App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
+?>
+
+<article class="block-setting-body">
+	<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_IMPORT_RESERVATIONS); ?>
 
 	<div class="tab-content">
 
