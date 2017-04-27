@@ -1285,3 +1285,6 @@ msgstr "個人的な予約を受け付ける"
 
 msgid "Need approval reservations"
 msgstr "予約に承認が必要"
+
+msgid "No institution yet registered."
+msgstr "施設が登録されていません。"

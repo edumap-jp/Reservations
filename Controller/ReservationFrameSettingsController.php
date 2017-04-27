@@ -129,11 +129,19 @@ class ReservationFrameSettingsController extends ReservationsAppController {
  * @return void
  */
 	public function edit() {
+		$locations = $this->ReservationLocation->getLocations();
+		if (! $locations) {
+			$this->view = 'nolocation';
+			return;
+		}
+		$this->set('locations', $locations);
+
 		if ($this->request->is(['put', 'post'])) {
 			//登録(PUT)処理
 			$data = $this->request->data;
-			$data['ReservationFrameSetting']['display_type'] =
-				(int)$data['ReservationFrameSetting']['display_type'];
+
+			$displayType = (int)$data['ReservationFrameSetting']['display_type'];
+			$data['ReservationFrameSetting']['display_type'] = $displayType;
 			if ($this->ReservationFrameSetting->saveFrameSetting($data)) {
 				$this->redirect(NetCommonsUrl::backToPageUrl(true));
 				return;
@@ -155,8 +163,8 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		if (! $this->request->is(['put', 'post'])) {
 			$this->request->data['ReservationFrameSetting'] = $setting['ReservationFrameSetting'];
 
-			$selectRooms = $this->ReservationFrameSetting->getSelectRooms($settingId);
-			$this->request->data['ReservationFrameSettingSelectRoom'] = $selectRooms;
+//			$this->request->data['ReservationFrameSettingSelectRoom'] =
+//				$this->ReservationFrameSetting->getSelectRooms($settingId);
 		}
 
 //		// 空間情報
@@ -175,13 +183,11 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		// フレーム情報
 		//施設予約ではsaveAssociated()はつかわないので外す。
 		$this->request->data['Frame'] = Current::read('Frame');
+
 		// 施設予約表示種別
 		$this->set('displayTypeOptions', $this->_displayTypeOptions);
-
-		$locations = $this->ReservationLocation->getLocations();
-		$this->set('locations', $locations);
 	}
-//
+
 ///**
 // * _getRoom
 // *

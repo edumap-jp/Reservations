@@ -1,6 +1,6 @@
 <?php
 /**
- * reservations frame setting view template
+ * 表示方法変更テンプレート
  *
  * @author Noriko Arai <arai@nii.ac.jp>
  * @author Allcreator <info@allcreator.net>
@@ -15,7 +15,7 @@ if (isset($this->data['ReservationFrameSetting'])) {
 	$camelizeData = NetCommonsAppController::camelizeKeyRecursive(array(
 		'frameId' => $this->request->data['Frame']['id'],
 		'reservationFrameSetting' => $this->request->data['ReservationFrameSetting'],
-		'reservationFrameSettingSelectRoom' => $this->request->data['ReservationFrameSettingSelectRoom'],
+//		'reservationFrameSettingSelectRoom' => $this->request->data['ReservationFrameSettingSelectRoom'],
 		'displayTypeOptions' => $displayTypeOptions
 	));
 
