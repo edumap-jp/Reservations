@@ -10,7 +10,6 @@
  */
 
 App::uses('ReservationsAppController', 'Reservations.Controller');
-App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 /**
  * 予約のインポート Controller
@@ -54,12 +53,12 @@ class ReservationImportController extends ReservationsAppController {
  * @var array
  */
 	public $components = array(
-		'NetCommons.Permission' => array(
-			//アクセスの権限
-			'allow' => array(
-				'edit' => 'page_editable',
-			),
-		),
+//		'NetCommons.Permission' => array(
+//			//アクセスの権限
+//			'allow' => array(
+//				'edit' => 'page_editable',
+//			),
+//		),
 		//'Workflow.Workflow',
 
 		'Categories.Categories',
@@ -67,7 +66,7 @@ class ReservationImportController extends ReservationsAppController {
 		'NetCommons.NetCommonsTime',
 		'Paginator',
 		'Rooms.RoomsForm',
-//		'Reservations.ReservationSettings',
+		'Reservations.ReservationSettings', //NetCommons.Permissionは使わず、独自でやる
 	);
 
 /**
@@ -94,7 +93,6 @@ class ReservationImportController extends ReservationsAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**

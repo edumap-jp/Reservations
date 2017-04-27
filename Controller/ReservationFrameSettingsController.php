@@ -45,16 +45,18 @@ class ReservationFrameSettingsController extends ReservationsAppController {
  * @var array
  */
 	public $components = array(
-		'NetCommons.Permission' => array(
-			//アクセスの権限
-			'allow' => array(
-				'edit' => 'page_editable',
-			),
-		),
+//		'NetCommons.Permission' => array(
+//			//アクセスの権限
+//			'allow' => array(
+//				'edit' => 'page_editable',
+//			),
+//		),
 		'Paginator',
 		'Rooms.RoomsForm',
 		'Categories.Categories',
-//		'Reservations.ReservationSettings',
+		'Reservations.ReservationSettings' => [ //NetCommons.Permissionは使わず、独自でやる
+			'permission' => ReservationSettingsComponent::PERMISSION_ROOM_EDITABLE
+		],
 	);
 
 /**
@@ -119,8 +121,6 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		parent::beforeFilter();
 		$this->Auth->deny('index');
 		$this->Reservation->afterFrameSave(['Frame' => Current::read('Frame')]);
-
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**

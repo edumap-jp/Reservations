@@ -12,7 +12,6 @@
 App::uses('MailSettingsController', 'Mails.Controller');
 App::uses('Room', 'Rooms.Model');
 App::uses('ReservationPermissiveRooms', 'Reservations.Utility');
-App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 /**
  * メール設定 Controller
@@ -30,14 +29,14 @@ class ReservationMailSettingsController extends MailSettingsController {
  */
 	public $components = array(
 		'Mails.MailSettings',
-		'NetCommons.Permission' => array(
-			'allow' => array(
-				'edit' => 'mail_editable',
-			),
-		),
+//		'NetCommons.Permission' => array(
+//			'allow' => array(
+//				'edit' => 'mail_editable',
+//			),
+//		),
 		'Pages.PageLayout',
 		'Security',
-//		'Reservations.ReservationSettings',
+		'Reservations.ReservationSettings', //NetCommons.Permissionは使わず、独自でやる
 	);
 
 /**
@@ -87,8 +86,6 @@ class ReservationMailSettingsController extends MailSettingsController {
 			Current::$current['Room']['id'] = $specifiedRoomId;
 			Current::$current['Block']['key'] = $mailRooms[$specifiedRoomId]['blockKey'];
 		}
-
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**

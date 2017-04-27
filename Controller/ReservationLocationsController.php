@@ -11,7 +11,6 @@
 
 App::uses('ReservationsAppController', 'Reservations.Controller');
 App::uses('ReservationLocationReservable', 'Reservations.Model');
-App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 /**
  * 施設設定 Controller
@@ -59,12 +58,12 @@ class ReservationLocationsController extends ReservationsAppController {
  * @var array
  */
 	public $components = array(
-		'NetCommons.Permission' => array(
-			//アクセスの権限
-			'allow' => array(
-				'edit' => 'page_editable',
-			),
-		),
+//		'NetCommons.Permission' => array(
+//			//アクセスの権限
+//			'allow' => array(
+//				'edit' => 'page_editable',
+//			),
+//		),
 		//'Workflow.Workflow',
 
 		'Categories.Categories',
@@ -72,7 +71,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		'NetCommons.NetCommonsTime',
 		'Paginator',
 		'Rooms.RoomsForm',
-//		'Reservations.ReservationSettings',
+		'Reservations.ReservationSettings', //NetCommons.Permissionは使わず、独自でやる
 	);
 
 /**
@@ -101,7 +100,6 @@ class ReservationLocationsController extends ReservationsAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**
