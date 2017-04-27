@@ -8,7 +8,10 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
 App::uses('ReservationsAppController', 'Reservations.Controller');
+App::uses('ReservationLocationReservable', 'Reservations.Model');
+App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 /**
  * 施設設定 Controller
@@ -69,7 +72,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		'NetCommons.NetCommonsTime',
 		'Paginator',
 		'Rooms.RoomsForm',
-		'Reservations.ReservationSettingTab',
+//		'Reservations.ReservationSettings',
 	);
 
 /**
@@ -83,8 +86,8 @@ class ReservationLocationsController extends ReservationsAppController {
 		'NetCommons.TitleIcon',
 		//'Blocks.BlockForm',
 
-		'Blocks.BlockTabs', // 設定内容はReservationSettingTabComponentにまとめた
-		'Blocks.BlockRolePermissionForm', // 設定内容はReservationSettingTabComponentにまとめた
+		'Blocks.BlockTabs', // 設定内容はReservationSettingsComponentにまとめた
+		'Blocks.BlockRolePermissionForm', // 設定内容はReservationSettingsComponentにまとめた
 		'Rooms.RoomsForm',
 		'Reservations.ReservationLocation',
 		'Groups.GroupUserList',
@@ -98,7 +101,7 @@ class ReservationLocationsController extends ReservationsAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingTabComponent::$blockTabs;
+		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**
@@ -136,27 +139,17 @@ class ReservationLocationsController extends ReservationsAppController {
  */
 	public function add() {
 		$this->set('isEdit', false);
-		//$this->_prepare();
 
-		//$blogEntry = $this->ReservationLocation->getNew();
-		//$this->set('blogEntry', $blogEntry);
 		$this->_processPermission();
 
 		// 施設管理者保持
-		$this->request->data =
-			$this->ReservationLocationsApprovalUser->getSelectUsers($this->request->data, false);
+		$this->request->data = $this->ReservationLocationsApprovalUser->getSelectUsers(
+			$this->request->data, false
+		);
 
 		if ($this->request->is('post')) {
-			$this->ReservationLocation->create();
-			//$this->request->data['ReservationLocation']['blog_key'] =
-			//	$this->_blogSetting['BlogSetting']['blog_key'];
+//			$this->ReservationLocation->create();
 
-			// set status
-			//$status = $this->Workflow->parseStatus();
-			//$this->request->data['ReservationLocation']['status'] = $status;
-
-			// set block_id
-			//$this->request->data['ReservationLocation']['block_id'] = Current::read('Block.id');
 			// set language_id
 			$this->request->data['ReservationLocation']['language_id'] = Current::read('Language.id');
 			$result = $this->ReservationLocation->saveLocation($this->request->data);
@@ -168,7 +161,7 @@ class ReservationLocationsController extends ReservationsAppController {
 						//'block_id' => Current::read('Block.id'),
 						'frame_id' => Current::read('Frame.id'),
 						//'key' => $result['ReservationLocation']['key']
-						)
+					)
 				);
 				return $this->redirect($url);
 			}
@@ -176,14 +169,7 @@ class ReservationLocationsController extends ReservationsAppController {
 			$this->NetCommons->handleValidationError($this->ReservationLocation->validationErrors);
 
 		} else {
-			$newLocation = $this->ReservationLocation->create();
-			$newLocation['ReservationLocation'] = [
-				'start_time' => '09:00',
-				'end_time' => '18:00',
-				'time_table' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-				'use_all_rooms' => '1',
-				'timezone' => $this->Auth->user('timezone'),
-				];
+			$newLocation = $this->ReservationLocation->createLocation();
 			$this->request->data['ReservationLocation'] = $newLocation['ReservationLocation'];
 		}
 		// プライベートルームは除外する
@@ -213,19 +199,14 @@ class ReservationLocationsController extends ReservationsAppController {
 			$reservables = $this->ReservationLocationReservable->find('all', ['conditions' => [
 				'location_key' => $key
 			]]);
-			$reservables = Hash::combine($reservables,
+			$reservables = Hash::combine(
+				$reservables,
 				'{n}.ReservationLocationReservable.role_key',
-				'{n}.ReservationLocationReservable.value');
-
+				'{n}.ReservationLocationReservable.value'
+			);
 		} else {
 			// default
-			$reservables = [
-				'room_administrator' => 1,
-				'chief_editor' => 1,
-				'editor' => 1,
-				'general_user' => 1,
-				'visitor' => 0,
-			];
+			$reservables = ReservationLocationReservable::$defaultReservables;
 		}
 
 		$default = array(

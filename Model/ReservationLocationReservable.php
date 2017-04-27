@@ -19,6 +19,19 @@ App::uses('ReservationsAppModel', 'Reservations.Model');
 class ReservationLocationReservable extends ReservationsAppModel {
 
 /**
+ * 予約できる権限のデフォルト値
+ *
+ * @var array
+ */
+	public static $defaultReservables = [
+		'room_administrator' => 1,
+		'chief_editor' => 1,
+		'editor' => 1,
+		'general_user' => 1,
+		'visitor' => 0,
+	];
+
+/**
  * Use table
  *
  * @var mixed False or table name

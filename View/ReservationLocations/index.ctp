@@ -8,46 +8,44 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 
-App::uses('ReservationSettingTabComponent', 'Reservations.Controller/Component');
+App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 ?>
 
 <article class="block-setting-body">
-	<?php echo $this->BlockTabs->main(ReservationSettingTabComponent::MAIN_TAB_LOCATION_SETTING); ?>
+	<?php echo $this->BlockTabs->main(ReservationSettingsComponent::MAIN_TAB_LOCATION_SETTING); ?>
 
     <div class="tab-content">
-		<?php /* 施設予約にはBLOCK_TAB_SETTINGは無し */ ?>
-
-		<?php //echo $this->element('Blocks.edit_form', array(
-		//	'model' => 'ReservationFrameSetting',
-		//	'callback' => 'Reservations.ReservationFrameSettings/edit_form',
-		//	'cancelUrl' => NetCommonsUrl::backToIndexUrl('default_action'),
-		//)); ?>
-
         <div class="text-right nc-table-add">
-			<?php echo $this->LinkButton->sort('',
-				array('controller' => 'reservation_locations', 'action' => 'sort')
-			); ?>
-
-			<?php echo $this->LinkButton->add(__d('reservations', '追加'), ['action' => 'add', 'frame_id' => Current::read('Frame.id')]); ?>
+			<?php
+				//並び替え
+				if (count($reservationLocations) > 1) {
+					$params = ['controller' => 'reservation_locations', 'action' => 'sort'];
+					$options = [];
+				} else {
+					$params = '#';
+					$options = ['disabled' => true];
+				}
+				echo $this->LinkButton->sort('', $params, $options);
+			?>
+			<?php
+				//追加
+				echo $this->LinkButton->add(
+					__d('net_commons', 'Add'),
+					['action' => 'add', 'frame_id' => Current::read('Frame.id')]
+				);
+			?>
         </div>
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th><?php echo $this->Paginator->sort('CategoryOrder.weight', __d('categories',
-							'Category')); ?></th>
-                    <th colspan="2"><?php echo $this->Paginator->sort('location_name', __d('reservations', 'Location name')); ?></th>
-                    <!--<th>--><?php //echo $this->Paginator->sort('add_authority'); ?><!--</th>-->
-                    <th><?php __d('reservations', '利用可能日時') ?></th>
-                    <!--<th>--><?php //echo $this->Paginator->sort('use_private'); ?><!--</th>-->
-                    <!--<th>--><?php //echo $this->Paginator->sort('use_auth_flag'); ?><!--</th>-->
-                    <!--<th>--><?php //echo $this->Paginator->sort('use_all_rooms'); ?><!--</th>-->
-                    <!--<th>--><?php //echo $this->Paginator->sort('display_sequence'); ?><!--</th>-->
-                    <!--<th>--><?php //echo $this->Paginator->sort('created_user'); ?><!--</th>-->
-                    <!--<th>--><?php //echo $this->Paginator->sort('created'); ?><!--</th>-->
-                    <!--<th>--><?php //echo $this->Paginator->sort('modified_user'); ?><!--</th>-->
-                    <!--<th>--><?php //echo $this->Paginator->sort('modified'); ?><!--</th>-->
-
+                    <th>
+						<?php echo $this->Paginator->sort('CategoryOrder.weight', __d('categories', 'Category')); ?>
+					</th>
+                    <th colspan="2">
+						<?php echo $this->Paginator->sort('location_name', __d('reservations', 'Location name')); ?>
+					</th>
+                    <th><?php __d('reservations', 'Available datetim') ?></th>
                 </tr>
                 </thead>
                 <?php foreach ($reservationLocations as $reservationLocation): ?>

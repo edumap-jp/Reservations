@@ -206,6 +206,26 @@ class ReservationLocation extends ReservationsAppModel {
 	}
 
 /**
+ * 施設生成処理
+ *
+ * @return array
+ */
+	public function createLocation() {
+		$newLocation = $this->create();
+		$newLocation['ReservationLocation'] = Hash::merge(
+			$newLocation['ReservationLocation'],
+			[
+				'start_time' => '09:00',
+				'end_time' => '18:00',
+				'time_table' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+				'use_all_rooms' => '1',
+				'timezone' => Current::read('User.timezone'),
+			]
+		);
+		return $newLocation;
+	}
+
+/**
  * 時刻バリデーション
  *
  * @param array $check チェックする値の配列
