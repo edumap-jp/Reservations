@@ -222,9 +222,9 @@ class ReservationLegendHelper extends AppHelper {
  * @return bool
  */
 	protected function _isDisplayLegend($vars, $id) {
-		if (! $vars['ReservationFrameSetting']['is_select_room']) {
-			return true;
-		}
+//		if (! $vars['ReservationFrameSetting']['is_select_room']) {
+//			return true;
+//		}
 		if ($id == Space::getRoomIdRoot(Space::PRIVATE_SPACE_ID)) {
 			if (! Hash::get($vars, 'exposeRoomOptions.' . $vars['myself'])) {
 				return false;

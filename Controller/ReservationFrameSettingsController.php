@@ -67,7 +67,7 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		'Blocks.BlockTabs', // 設定内容はReservationSettingTabComponentにまとめた
 		'NetCommons.NetCommonsForm',
 		//'NetCommons.Date',
-		'Reservations.ReservationRoomSelect',
+//		'Reservations.ReservationRoomSelect',
 	);
 
 /**
@@ -107,18 +107,6 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 				__d('reservations', 'Monthly Reservation (Location)'),
 			ReservationsComponent::RESERVATION_DISP_TYPE_LACATION_WEEKLY =>
 				__d('reservations', 'Weekly Reservation (Location)'),
-			//ReservationsComponent::CALENDAR_DISP_TYPE_SMALL_MONTHLY =>
-			//	__d('reservations', 'Monthly Reservation (small)'),
-			//ReservationsComponent::CALENDAR_DISP_TYPE_LARGE_MONTHLY =>
-			//	__d('reservations', 'Monthly Reservation (large)'),
-			//ReservationsComponent::CALENDAR_DISP_TYPE_WEEKLY =>
-			//	__d('reservations', 'Weekly Reservation'),
-			//ReservationsComponent::CALENDAR_DISP_TYPE_DAILY =>
-			//	__d('reservations', 'Day View'),
-			//ReservationsComponent::CALENDAR_DISP_TYPE_TSCHEDULE =>
-			//	__d('reservations', 'Schedule (ordered-by-time)'),
-			//ReservationsComponent::CALENDAR_DISP_TYPE_MSCHEDULE =>
-			//	__d('reservations', 'Schedule (ordered-by-user)'),
 		);
 	}
 
@@ -166,21 +154,24 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 
 		if (! $this->request->is(['put', 'post'])) {
 			$this->request->data['ReservationFrameSetting'] = $setting['ReservationFrameSetting'];
-			$this->request->data['ReservationFrameSettingSelectRoom'] =
-				$this->ReservationFrameSetting->getSelectRooms($settingId);
+
+			$selectRooms = $this->ReservationFrameSetting->getSelectRooms($settingId);
+			$this->request->data['ReservationFrameSettingSelectRoom'] = $selectRooms;
 		}
 
-		// 空間情報
-		$spaces = $this->Room->getSpaces();
-		// ルームツリー
-		$spaceIds = array(Space::PUBLIC_SPACE_ID, Space::COMMUNITY_SPACE_ID);
-		foreach ($spaceIds as $spaceId) {
-			$rooms[$spaceId] = $this->_getRoom($spaceId);
-			$roomTreeList[$spaceId] = $this->_getRoomTree($spaces[$spaceId]['Room']['id'], $rooms[$spaceId]);
-		}
-		$this->set('spaces', $spaces);
-		$this->set('rooms', $rooms);
-		$this->set('roomTreeList', $roomTreeList);
+//		// 空間情報
+//		$spaces = $this->Room->getSpaces();
+//
+//		// ルームツリー
+//		$spaceIds = array(Space::PUBLIC_SPACE_ID, Space::COMMUNITY_SPACE_ID);
+//		foreach ($spaceIds as $spaceId) {
+//			$rooms[$spaceId] = $this->_getRoom($spaceId);
+//			$roomTreeList[$spaceId] = $this->_getRoomTree($spaces[$spaceId]['Room']['id'], $rooms[$spaceId]);
+//		}
+//		$this->set('spaces', $spaces);
+//		$this->set('rooms', $rooms);
+//		$this->set('roomTreeList', $roomTreeList);
+
 		// フレーム情報
 		//施設予約ではsaveAssociated()はつかわないので外す。
 		$this->request->data['Frame'] = Current::read('Frame');
@@ -190,32 +181,33 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		$locations = $this->ReservationLocation->getLocations();
 		$this->set('locations', $locations);
 	}
-/**
- * _getRoom
- *
- * @param int $spaceId space id
- * @return array
- */
-	protected function _getRoom($spaceId) {
-		//$rooms = $this->Room->find('threaded', $this->Room->getReadableRoomsConditions($spaceId));
-		$rooms = $this->Room->find('all',
-			$this->Room->getReadableRoomsConditions(array('Room.space_id' => $spaceId)));
-		$rooms = Hash::combine($rooms, '{n}.Room.id', '{n}');
-		return $rooms;
-	}
-/**
- * _getRoomTree
- *
- * @param int $spaceRoomId room id which is space's
- * @param array $rooms room information
- * @return array
- */
-	protected function _getRoomTree($spaceRoomId, $rooms) {
-		// ルームTreeリスト取得
-		$roomTreeList = $this->Room->generateTreeList(
-			array(
-				'Room.id' => array_merge(
-					array($spaceRoomId), array_keys($rooms))), null, null, Room::$treeParser);
-		return $roomTreeList;
-	}
+//
+///**
+// * _getRoom
+// *
+// * @param int $spaceId space id
+// * @return array
+// */
+//	protected function _getRoom($spaceId) {
+//		//$rooms = $this->Room->find('threaded', $this->Room->getReadableRoomsConditions($spaceId));
+//		$rooms = $this->Room->find('all',
+//			$this->Room->getReadableRoomsConditions(array('Room.space_id' => $spaceId)));
+//		$rooms = Hash::combine($rooms, '{n}.Room.id', '{n}');
+//		return $rooms;
+//	}
+///**
+// * _getRoomTree
+// *
+// * @param int $spaceRoomId room id which is space's
+// * @param array $rooms room information
+// * @return array
+// */
+//	protected function _getRoomTree($spaceRoomId, $rooms) {
+//		// ルームTreeリスト取得
+//		$roomTreeList = $this->Room->generateTreeList(
+//			array(
+//				'Room.id' => array_merge(
+//					array($spaceRoomId), array_keys($rooms))), null, null, Room::$treeParser);
+//		return $roomTreeList;
+//	}
 }
