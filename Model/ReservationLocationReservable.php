@@ -19,13 +19,6 @@ App::uses('ReservationsAppModel', 'Reservations.Model');
 class ReservationLocationReservable extends ReservationsAppModel {
 
 /**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'master';
-
-/**
  * Use table
  *
  * @var mixed False or table name

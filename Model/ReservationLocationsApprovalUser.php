@@ -19,13 +19,6 @@ App::uses('ReservationsAppModel', 'Reservations.Model');
 class ReservationLocationsApprovalUser extends ReservationsAppModel {
 
 /**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'master';
-
-/**
  * Validation rules
  *
  * @var array
