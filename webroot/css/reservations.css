@@ -1078,3 +1078,12 @@ padding-right:3px;
 	}
 }
 
+/**
+ * 表示方法変更
+ */
+.reservation-select-location > .form-group {
+	margin-bottom: 8px;
+}
+.reservation-radio-timeline .form-radio-outer > .radio:last-child {
+	margin-bottom: 4px;
+}

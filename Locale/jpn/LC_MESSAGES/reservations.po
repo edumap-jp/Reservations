@@ -1242,7 +1242,7 @@ msgid "alters by time of use"
 msgstr "閲覧時刻により変動"
 
 msgid "fixed"
-msgstr "固定"
+msgstr "時刻を固定"
 
 msgid "Default institution"
 msgstr "最初に表示する施設"
@@ -1304,3 +1304,8 @@ msgstr "%s 〜 %s"
 msgid "Available datetime"
 msgstr "利用可能日時"
 
+msgid "Time Frames setting"
+msgstr "時間枠表示"
+
+msgid "Display timeframe"
+msgstr "時間枠を表示する"

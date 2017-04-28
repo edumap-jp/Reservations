@@ -45,14 +45,6 @@ class ReservationFrameSettingsController extends ReservationsAppController {
  * @var array
  */
 	public $components = array(
-//		'NetCommons.Permission' => array(
-//			//アクセスの権限
-//			'allow' => array(
-//				'edit' => 'page_editable',
-//			),
-//		),
-		'Paginator',
-		'Rooms.RoomsForm',
 		'Categories.Categories',
 		'Reservations.ReservationSettings' => [ //NetCommons.Permissionは使わず、独自でやる
 			'permission' => ReservationSettingsComponent::PERMISSION_ROOM_EDITABLE
@@ -65,11 +57,7 @@ class ReservationFrameSettingsController extends ReservationsAppController {
  * @var array
  */
 	public $helpers = array(
-		//'Blocks.BlockForm',
 		'Blocks.BlockTabs', // 設定内容はReservationSettingsComponentにまとめた
-		'NetCommons.NetCommonsForm',
-		//'NetCommons.Date',
-//		'Reservations.ReservationRoomSelect',
 	);
 
 /**
@@ -78,9 +66,8 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 	public $uses = array(
 		'Reservations.Reservation',
 		'Reservations.ReservationFrameSetting',
-		'Reservations.ReservationFrameSettingSelectRooms',
 		'Reservations.ReservationLocation',
-		'Rooms.Room'
+		'Reservations.ReservationTimeframe'
 	);
 
 /**
@@ -162,58 +149,15 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 
 		if (! $this->request->is(['put', 'post'])) {
 			$this->request->data['ReservationFrameSetting'] = $setting['ReservationFrameSetting'];
-
-//			$this->request->data['ReservationFrameSettingSelectRoom'] =
-//				$this->ReservationFrameSetting->getSelectRooms($settingId);
 		}
 
-//		// 空間情報
-//		$spaces = $this->Room->getSpaces();
-//
-//		// ルームツリー
-//		$spaceIds = array(Space::PUBLIC_SPACE_ID, Space::COMMUNITY_SPACE_ID);
-//		foreach ($spaceIds as $spaceId) {
-//			$rooms[$spaceId] = $this->_getRoom($spaceId);
-//			$roomTreeList[$spaceId] = $this->_getRoomTree($spaces[$spaceId]['Room']['id'], $rooms[$spaceId]);
-//		}
-//		$this->set('spaces', $spaces);
-//		$this->set('rooms', $rooms);
-//		$this->set('roomTreeList', $roomTreeList);
-
 		// フレーム情報
-		//施設予約ではsaveAssociated()はつかわないので外す。
 		$this->request->data['Frame'] = Current::read('Frame');
 
 		// 施設予約表示種別
 		$this->set('displayTypeOptions', $this->_displayTypeOptions);
-	}
 
-///**
-// * _getRoom
-// *
-// * @param int $spaceId space id
-// * @return array
-// */
-//	protected function _getRoom($spaceId) {
-//		//$rooms = $this->Room->find('threaded', $this->Room->getReadableRoomsConditions($spaceId));
-//		$rooms = $this->Room->find('all',
-//			$this->Room->getReadableRoomsConditions(array('Room.space_id' => $spaceId)));
-//		$rooms = Hash::combine($rooms, '{n}.Room.id', '{n}');
-//		return $rooms;
-//	}
-///**
-// * _getRoomTree
-// *
-// * @param int $spaceRoomId room id which is space's
-// * @param array $rooms room information
-// * @return array
-// */
-//	protected function _getRoomTree($spaceRoomId, $rooms) {
-//		// ルームTreeリスト取得
-//		$roomTreeList = $this->Room->generateTreeList(
-//			array(
-//				'Room.id' => array_merge(
-//					array($spaceRoomId), array_keys($rooms))), null, null, Room::$treeParser);
-//		return $roomTreeList;
-//	}
+		// 時間枠データを取得する。なければ、時間枠の表示設定を表示しない
+		$this->set('hasTimeframe', (bool)$this->ReservationTimeframe->find('count', ['recursive' => -1]));
+	}
 }

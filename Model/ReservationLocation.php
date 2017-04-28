@@ -501,13 +501,15 @@ class ReservationLocation extends ReservationsAppModel {
 		}
 
 		//時間
+		$startTime = $reservationLocation['ReservationLocation']['start_time'];
 		$locationTimeZone = new DateTimeZone($reservationLocation['ReservationLocation']['timezone']);
-		$startDate = new DateTime($reservationLocation['ReservationLocation']['start_time'], new DateTimeZone('UTC'));
+		$startDate = new DateTime($startTime, new DateTimeZone('UTC'));
 
 		$startDate->setTimezone($locationTimeZone);
 		$reservationLocation['ReservationLocation']['start_time'] = $startDate->format('H:i');
 
-		$endDate = new DateTime($reservationLocation['ReservationLocation']['end_time'], new DateTimeZone('UTC'));
+		$endTime = $reservationLocation['ReservationLocation']['end_time'];
+		$endDate = new DateTime($endTime, new DateTimeZone('UTC'));
 		$endDate->setTimezone($locationTimeZone);
 		$reservationLocation['ReservationLocation']['end_time'] = $endDate->format('H:i');
 
