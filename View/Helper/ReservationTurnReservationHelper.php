@@ -213,7 +213,7 @@ class ReservationTurnReservationHelper extends AppHelper {
 			'?' => Hash::merge(
 				array(
 					'style' => $vars['style'],
-					'location_key' => $vars['location_key']
+					'location_key' => Hash::get($vars, 'location_key')
 				),
 				$dateArr),
 			'category_id' => Hash::get($this->request->named, 'category_id')
