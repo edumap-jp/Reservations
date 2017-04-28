@@ -20,7 +20,7 @@ App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 		<?php echo $this->element('Blocks.edit_form', array(
 			'model' => 'Reservation',
-			'callback' => 'Reservations.ReservationSettings/edit_form',
+			'callback' => 'Reservations.ReservationLocationCategories/edit_form',
 			'cancelUrl' => NetCommonsUrl::backToIndexUrl('default_setting_action'),
 		)); ?>
 
@@ -34,7 +34,7 @@ App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 		//			'frame_id' => Current::read('Frame.id')
 		//		)),
 		//		//'action' => 'delete/' . Current::read('Frame.id') . '/' . Current::read('Block.id'),
-		//		'callback' => 'Reservations.ReservationSettings/delete_form'
+		//		'callback' => 'Reservations.ReservationLocationCategories/delete_form'
 		//	)); ?>
 		<?php //endif; ?>
 	</div>

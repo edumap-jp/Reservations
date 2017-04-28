@@ -1,6 +1,6 @@
 <?php
 /**
- * ReservationFrameSettingSelectRoom Model
+ * ReservationFrameSetting Model
  *
  * @property Room $Room
  * @property ReservationFrameSetting $ReservationFrameSetting
@@ -77,13 +77,6 @@ class ReservationFrameSetting extends ReservationsAppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Room' => array(
-			'className' => 'Rooms.Room',
-			'foreignKey' => 'room_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
 		'Frame' => array(
 			'className' => 'Frames.Frame',
 			'foreignKey' => 'frame_key',
@@ -91,27 +84,6 @@ class ReservationFrameSetting extends ReservationsAppModel {
 			'fields' => '',
 			'order' => ''
 		),
-	);
-
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'ReservationFrameSettingSelectRoom' => array(
-			'className' => 'Reservations.ReservationFrameSettingSelectRoom',
-			'foreignKey' => 'reservation_frame_setting_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => array('id' => 'ASC'),
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
 	);
 
 /**
@@ -132,7 +104,6 @@ class ReservationFrameSetting extends ReservationsAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$roomIds = $this->getReadableRoomIds();
 		$this->validate = Hash::merge($this->validate, array(
 			'display_type' => array(
 				'rule1' => array(
@@ -142,70 +113,8 @@ class ReservationFrameSetting extends ReservationsAppModel {
 				),
 				'rule2' => array(
 					'rule' => array('inList', ReservationsComponent::$reservationTypes),
-					//'rule' => array('inList', array(
-					//	ReservationsComponent::CALENDAR_DISP_TYPE_SMALL_MONTHLY,
-					//	ReservationsComponent::CALENDAR_DISP_TYPE_LARGE_MONTHLY,
-					//	ReservationsComponent::CALENDAR_DISP_TYPE_WEEKLY,
-					//	ReservationsComponent::CALENDAR_DISP_TYPE_DAILY,
-					//	ReservationsComponent::CALENDAR_DISP_TYPE_TSCHEDULE,
-					//	ReservationsComponent::CALENDAR_DISP_TYPE_MSCHEDULE,
-					//)),
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
-			),
-			'start_pos' => array(
-				'rule1' => array(
-					'rule' => array('numeric'),
-					'required' => true,
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-				'rule2' => array(
-					'rule' => array('inList', array(
-						ReservationsComponent::CALENDAR_START_POS_WEEKLY_TODAY,
-						ReservationsComponent::CALENDAR_START_POS_WEEKLY_YESTERDAY
-					)),
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-			),
-			'display_count' => array(
-				'rule1' => array(
-					'rule' => array('numeric'),
-					'required' => true,
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-				'rule2' => array(
-					'rule' => array('comparison', '>=', ReservationsComponent::CALENDAR_MIN_DISPLAY_DAY_COUNT),
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-				'rule3' => array(
-					'rule' => array('comparison', '<=', ReservationsComponent::CALENDAR_MAX_DISPLAY_DAY_COUNT),
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-			),
-//			'is_myroom' => array(
-//				'rule1' => array(
-//					'rule' => 'boolean',
-//					'required' => true,
-//					'message' => __d('net_commons', 'Invalid request.'),
-//				),
-//			),
-//			'is_select_room' => array(
-//				'rule1' => array(
-//					'rule' => 'boolean',
-//					'required' => true,
-//					'message' => __d('net_commons', 'Invalid request.'),
-//				),
-//			),
-			'room_id' => array(
-				'rule1' => array(
-					'rule' => array('numeric'),
-					'required' => true,
-					'message' => __d('net_commons', 'Invalid request.'),
-				),
-				'rule2' => array(
-					'rule' => array('inList', $roomIds),
-					'message' => __d('net_commons', 'Invalid request.'),
-				)
 			),
 			'timeline_base_time' => array(
 				'rule1' => array(
@@ -222,33 +131,16 @@ class ReservationFrameSetting extends ReservationsAppModel {
 					'message' => __d('net_commons', 'Invalid request.'),
 				),
 			),
+			'display_start_time_type' => array(
+				'rule1' => array(
+					'rule' => 'boolean',
+					'required' => true,
+					'message' => __d('net_commons', 'Invalid request.'),
+				),
+			),
 		));
 
 		return parent::beforeValidate($options);
-	}
-
-/**
- * getSelectRooms
- *
- * @param int $settingId reservation frame setting id
- * @return array select Rooms
- */
-	public function getSelectRooms($settingId = null) {
-		if ($settingId === null) {
-			$setting = $this->find('first', array(
-				'conditions' => array(
-					'frame_key' => Current::read('Frame.key'),
-				)
-			));
-			if (! $setting) {
-				return array();
-			}
-			$settingId = $setting['ReservationFrameSetting']['id'];
-		}
-		$this->ReservationFrameSettingSelectRoom =
-			ClassRegistry::init('Reservations.ReservationFrameSettingSelectRoom', true);
-		$selectRooms = $this->ReservationFrameSettingSelectRoom->getSelectRooms($settingId);
-		return $selectRooms;
 	}
 
 /**
@@ -270,35 +162,12 @@ class ReservationFrameSetting extends ReservationsAppModel {
 				$this->rollback();
 				return false;
 			}
-//			$data['ReservationFrameSetting']['is_myroom'] = false;
-//			$privateRoomIdRoot = Space::getRoomIdRoot(Space::PRIVATE_SPACE_ID);
-//			if (! $data['ReservationFrameSetting']['is_select_room'] ||
-//				!empty($data['ReservationFrameSettingSelectRoom'][$privateRoomIdRoot]['room_id'])) {
-//				$data['ReservationFrameSetting']['is_myroom'] = true;
-//			}
+
 			//フレームの登録
 			//バリデートは前で終わっているので第二引数=false
 			$data = $this->save($data, false);
 			if (! $data) {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-
-			if ($data['ReservationFrameSetting']['is_select_room']) {
-				//ルーム指定あり処理.
-				$this->ReservationFrameSettingSelectRoom =
-					ClassRegistry::init('Reservations.ReservationFrameSettingSelectRoom');
-
-				//モデル名が長いため、一度変数にセットしてからvalidationメソッドを実行する(phpcs対策)
-				$Model = $this->ReservationFrameSettingSelectRoom;
-				if (! $Model->validateReservationFrameSettingSelectRoom($data)) {
-					CakeLog::error(serialize($this->ReservationFrameSettingSelectRoom->validationErrors));
-					$this->rollback();
-					return false;
-				}
-				// validateのエラーのときは上のvalidateReservationFrameSettingSelectRoomでエラー処理されるし
-				// saveでエラーのときはsaveReservationFrameSettingSelectRoomでthrowされるから
-				// ここでの判断は不要です
-				$this->ReservationFrameSettingSelectRoom->saveReservationFrameSettingSelectRoom($data);
 			}
 
 			$this->commit();
@@ -350,15 +219,11 @@ class ReservationFrameSetting extends ReservationsAppModel {
  * @return array 施設予約表示形式デフォルト情報
  */
 	public function getDefaultFrameSetting() {
-		//start_pos、is_myroom、is_select_roomはtableの初期値をつかう。
 		//frame_key,room_idは明示的に設定されることを想定し、setDefaultではなにもしない。
 		return $this->create(array(
 			$this->alias => array(
 				'display_type' => ReservationsComponent::RESERVATION_DISP_TYPE_DEFAULT,
-				'display_count' => ReservationsComponent::CALENDAR_STANDARD_DISPLAY_DAY_COUNT,
 				'timeline_base_time' => ReservationsComponent::CALENDAR_TIMELINE_DEFAULT_BASE_TIME,
-//				'is_select_room' => false,
-//				'is_myroom' => true,
 				'id' => null,
 			)
 		));

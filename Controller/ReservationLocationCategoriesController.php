@@ -17,7 +17,7 @@ App::uses('ReservationsAppController', 'Reservations.Controller');
  * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @package NetCommons\Reservations\Controller
  */
-class ReservationSettingsController extends ReservationsAppController {
+class ReservationLocationCategoriesController extends ReservationsAppController {
 
 /**
  * layout
@@ -44,15 +44,15 @@ class ReservationSettingsController extends ReservationsAppController {
  * @var array
  */
 	public $components = array(
-		'NetCommons.Permission' => array(
-			//アクセスの権限
-			'allow' => array(
-				'index,add,edit,delete' => 'block_editable',
-			),
-		),
+//		'NetCommons.Permission' => array(
+//			//アクセスの権限
+//			'allow' => array(
+//				'index,add,edit,delete' => 'block_editable',
+//			),
+//		),
 		'Paginator',
 		'Categories.CategoryEdit',
-		'Reservations.ReservationSettings',
+		'Reservations.ReservationSettings', //NetCommons.Permissionは使わず、独自でやる
 	);
 
 /**
@@ -80,8 +80,6 @@ class ReservationSettingsController extends ReservationsAppController {
 		if ($this->params['action'] === 'index') {
 			$this->Components->unload('Categories.CategoryEdit');
 		}
-
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**

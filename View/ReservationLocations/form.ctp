@@ -10,348 +10,286 @@
 
 App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
-echo $this->NetCommonsHtml->script(
-	[
-		'/reservations/js/reservations.js',
-	]
-);
+echo $this->NetCommonsHtml->script('/reservations/js/reservations.js');
+echo $this->NetCommonsHtml->css('/reservations/css/reservations.css');
 
 $dataJson = json_encode($this->request->data);
 ?>
 
 <?php echo $this->BlockTabs->main(ReservationSettingsComponent::MAIN_TAB_LOCATION_SETTING); ?>
 
-<div class="reservationLocations form"
-		ng-controller="ReservationLocation" ng-init="init(<?php echo h($dataJson) ?>)">
+<div ng-controller="ReservationLocation" ng-init="init(<?php echo h($dataJson) ?>)">
+	<article class="panel panel-default">
+		<?php echo $this->NetCommonsForm->create('ReservationLocation'); ?>
 
-	<div class="reservationLocations form">
-		<article>
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<?php echo __d('reservations', 'Register Location'); ?>
-				</div>
+		<?php echo $this->NetCommonsForm->hidden('ReservationLocation.id'); ?>
+		<?php echo $this->NetCommonsForm->hidden('ReservationLocation.key'); ?>
+		<?php echo $this->NetCommonsForm->hidden('Frame.id', array('value' => Current::read('Frame.id'))); ?>
+		<?php echo $this->NetCommonsForm->hidden('Block.id', array('value' => Current::read('Block.id'))); ?>
 
-				<?php echo $this->NetCommonsForm->create(
-					'ReservationLocation',
-					array(
-						'inputDefaults' => array(
-							'div' => 'form-group',
-							'class' => 'form-control',
-							'error' => false,
-						),
-						'div' => 'form-control',
-						'novalidate' => true
-					)
-				);
-				//$this->NetCommonsForm->unlockField('Tag');
+		<div class="panel-body">
+			<?php
+				echo $this->NetCommonsForm->input('ReservationLocation.location_name', array(
+					'required' => 'required',
+					'label' => __d('reservations', 'Location name'),
+				));
+			?>
+
+			<div class="form-group">
+				<?php
+					echo $this->NetCommonsForm->label(
+						null, __d('reservations', 'Available'), ['required' => true]
+					);
 				?>
-				<?php echo $this->NetCommonsForm->hidden('id'); ?>
-				<?php echo $this->NetCommonsForm->hidden('key'); ?>
-				<?php echo $this->NetCommonsForm->hidden(
-					'Frame.id',
-					array(
-						'value' => Current::read('Frame.id'),
-					)
-				); ?>
-				<?php echo $this->NetCommonsForm->hidden(
-					'Block.id',
-					array(
-						'value' => Current::read('Block.id'),
-					)
-				); ?>
 
-				<div class="panel-body">
-
-					<fieldset>
-
+				<div class="form-inline reservation-reserve-time form-input-outer">
+					<div class="input-group">
 						<?php
-						echo $this->NetCommonsForm->input(
-							'location_name',
-							array(
-								'required' => 'required',
-								'label' => __d('reservations', 'Location name'),
-								//'childDiv' => ['class' => 'form-inline'],
-							)
-						);
-						?>
-						<div class="form-group">
-							<?php
-							echo $this->NetCommonsForm->label(
-								null,
-								__d('reservations', 'Available'),
-								['required' => 'required']
-							);
-							?>
-							<div class="form-inline">
-								<?php
-
-								// 利用時間 時分〜　時分
-								// デフォルトは9:00-18:00
-								echo $this->NetCommonsForm->input(
-									'ReservationLocation.start_time',
-									[
-										'type' => 'text',
-										'datetimepicker',
-										'datetimepicker-options' => json_encode(
-											['format' => 'HH:mm']
-										),
-										//'class' => 'form-inline'
-										'ng-model' => 'data.ReservationLocation.start_time',
-										'ng-readonly' => 'allDay',
-									]
-								);
-								echo ' - ';
-								echo $this->NetCommonsForm->input(
-									'ReservationLocation.end_time',
-									[
-										'type' => 'text',
-										'datetimepicker',
-										'datetimepicker-options' => json_encode(
-											['format' => 'HH:mm']
-										),
-										'ng-model' => 'data.ReservationLocation.end_time',
-										'ng-readonly' => 'allDay',
-										//'class' => 'form-inline'
-									]
-								);
-								echo '&nbsp;';
-								// 利用時間の制限無しチェックボックス
-								// 特にカラムはなし。0:00-24:00まで利用可能とするだけ AngularJS制御
-								//$this->NetCommonsForm->unlockField('ReservationLocation.allday_flag');
-								echo $this->NetCommonsForm->inlineCheckbox(
-									'ReservationLocation.allday_flag',
-									[
-										//'type' => 'checkbox',
-										'ng-model' => 'allDay',
-										'ng-click' => 'checkAllDay()',
-										//'hiddenField' => false,
-										'label'
-										=> __d('reservations', 'Not specify')
-									]
-								);
-								?>
-
-							</div>
-							<?php
-							// タイムゾーン
-							if (Hash::get($this->request->data, 'ReservationLocation.timezone')
-								!= AuthComponent::user('timezone')) {
-								// ユーザのタイムゾーンと異なっていたらタイムゾーン選択ドロップダウン表示
-								$SiteSetting = new SiteSetting();
-								$SiteSetting->prepare();
-								echo $this->NetCommonsForm->input('ReservationLocation.timezone', [
-									'label' => false,
-									'options' => $SiteSetting->defaultTimezones,
-									'type' => 'select'
-								]);
-							} else {
-								// 新規登録ならタイムゾーンは現在のユーザのタイムゾーンにする
-								echo $this->NetCommonsForm->hidden('ReservationLocation.timezone');
-							}
-							?>
-							<?php
-							// 利用時間曜日チェックボックス
-							$weekDaysOptions = [
-								'Sun' => __d('holidays', 'Sunday'),
-								'Mon' => __d('holidays', 'Monday'),
-								'Tue' => __d('holidays', 'Tuesday'),
-								'Wed' => __d('holidays', 'Wednesday'),
-								'Thu' => __d('holidays', 'Thursday'),
-								'Fri' => __d('holidays', 'Friday'),
-								'Sat' => __d('holidays', 'Saturday'),
-							];
-							// \
-							//echo $this->NetCommonsForm->checkbox('ReservationLocation.time_table', ['options' =>
-							//    $weekDaysOptions]);
+							// 利用時間 時分〜　時分
+							// デフォルトは9:00-18:00
 							echo $this->NetCommonsForm->input(
-								'ReservationLocation.time_table',
+								'ReservationLocation.start_time',
 								[
-									'options' => $weekDaysOptions,
-									'type' => 'select',
-									'multiple' => 'checkbox',
-									'div' => 'form-inline'
+									'type' => 'text',
+									'datetimepicker',
+									'datetimepicker-options' => json_encode(
+										['format' => 'HH:mm']
+									),
+									//'class' => 'form-inline'
+									'ng-model' => 'data.ReservationLocation.start_time',
+									'ng-readonly' => 'allDay',
+									'div' => false,
+									'error' => false,
+									'default' => false,
 								]
 							);
-							?>
-						</div>
-
-						<?php
-						// カテゴリ
-						echo $this->Category->select(
-							'ReservationLocation.category_id',
-							array('empty' => true)
-						);
-						// 予約できる権限
-						//echo $this->NetCommonsForm->label(null, __d('reservations', 'Authority'));
-						echo $this->element('Blocks.block_permission_setting', array(
-								//'panelLabel' => __d('reservations', 'Authority'),
-							'settingPermissions' => array(
-								'content_creatable' => __d('reservations', 'Authority'),
-							),
-						));
 						?>
-						<?php // 個人的な予約を受け付ける ?>
-						<div class="form-group">
-							<div class="form-inline">
-								<div class="checkbox checkbox-inline">
-									<?php
-									echo $this->NetCommonsForm->checkbox('ReservationLocation.use_private', ['label' =>
-										__d('reservations', 'Allow private use?')]);
-									?>
-								</div>
-							</div>
-						</div>
+
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-minus"></span>
+						</span>
 
 						<?php
-						// 予約を受け付けるルーム
-						echo $this->NetCommonsForm->label(null, __d('reservations', 'Select rooms'));
+							echo $this->NetCommonsForm->input(
+								'ReservationLocation.end_time',
+								[
+									'type' => 'text',
+									'datetimepicker',
+									'datetimepicker-options' => json_encode(
+										['format' => 'HH:mm']
+									),
+									'ng-model' => 'data.ReservationLocation.end_time',
+									'ng-readonly' => 'allDay',
+									//'class' => 'form-inline'
+									'div' => false,
+									'error' => false,
+									'default' => false,
+								]
+							);
+						?>
+					</div>
+
+					<?php
+						echo $this->NetCommonsForm->inlineCheckbox(
+							'ReservationLocation.allday_flag',
+							[
+								//'type' => 'checkbox',
+								'ng-model' => 'allDay',
+								'ng-click' => 'checkAllDay()',
+								//'hiddenField' => false,
+								'label'
+								=> __d('reservations', 'Not specify')
+							]
+						);
+					?>
+
+					<?php
+						// タイムゾーン
+						$locationTimezone = Hash::get($this->request->data, 'ReservationLocation.timezone');
+						if ($locationTimezone != Current::read('User.timezone')) {
+							// ユーザのタイムゾーンと異なっていたらタイムゾーン選択ドロップダウン表示
+							$SiteSetting = new SiteSetting();
+							$SiteSetting->prepare();
+							echo $this->NetCommonsForm->input('ReservationLocation.timezone', [
+								'label' => false,
+								'options' => $SiteSetting->defaultTimezones,
+								'type' => 'select'
+							]);
+						} else {
+							// 新規登録ならタイムゾーンは現在のユーザのタイムゾーンにする
+							echo $this->NetCommonsForm->hidden('ReservationLocation.timezone');
+						}
+					?>
+				</div>
+
+				<div class="reservation-reserve-time form-input-outer">
+					<?php
+						echo $this->NetCommonsForm->error('ReservationLocation.start_time');
+						echo $this->NetCommonsForm->error('ReservationLocation.end_time');
+					?>
+				</div>
+
+				<div class="reservation-form-time-table form-input-outer">
+					<?php
+						// 利用時間曜日チェックボックス
+						$weekDaysOptions = [
+							'Sun' => __d('holidays', 'Sunday'),
+							'Mon' => __d('holidays', 'Monday'),
+							'Tue' => __d('holidays', 'Tuesday'),
+							'Wed' => __d('holidays', 'Wednesday'),
+							'Thu' => __d('holidays', 'Thursday'),
+							'Fri' => __d('holidays', 'Friday'),
+							'Sat' => __d('holidays', 'Saturday'),
+						];
+						// \
+						//echo $this->NetCommonsForm->checkbox('ReservationLocation.time_table', ['options' =>
+						//    $weekDaysOptions]);
+						echo $this->NetCommonsForm->input(
+							'ReservationLocation.time_table',
+							[
+								'options' => $weekDaysOptions,
+								'type' => 'select',
+								'multiple' => 'checkbox',
+								'div' => 'form-inline'
+							]
+						);
+					?>
+				</div>
+			</div>
+
+			<?php
+				// カテゴリ
+				echo $this->Category->select('ReservationLocation.category_id', array('empty' => true));
+			?>
+
+			<?php
+				// 予約できる権限
+				echo $this->element('Reservations.ReservationLocations/block_permission_setting', array(
+					'settingPermissions' => array(
+						'content_creatable' => __d('reservations', 'Authority'),
+					),
+				));
+			?>
+
+			<?php
+				// 予約に承認が必要
+				echo $this->NetCommonsForm->input('ReservationLocation.use_workflow', [
+					'type' => 'radio',
+					'label' => __d('blocks', 'Approval settings'),
+					'options' => [
+						'1' => __d('reservations', 'Need approval reservations'),
+						'0' => __d('blocks', 'Not need approval'),
+					],
+					'default' => Hash::get($this->request->data, 'ReservationLocation.use_workflow'),
+				]);
+			?>
+
+			<?php
+				// 予約を受け付けるルーム
+				echo $this->NetCommonsForm->label(null, __d('reservations', 'Select rooms'));
+			?>
+			<div class="panel panel-default reservation-select-rooms">
+				<div class="panel-heading">
+					<?php
 						echo $this->NetCommonsForm->checkbox(
 							'ReservationLocation.use_all_rooms',
 							[
-								'label' => __d(
-									'reservations',
-									'Allow all the groups to use?'
-								),
+								'label' => __d('reservations', 'Allow all the groups to use?'),
 								'ng-model' => 'data.ReservationLocation.use_all_rooms'
 							]
 						);
-						?>
-						<div ng-hide="data.ReservationLocation.use_all_rooms">
-							<?php
-
-							echo $this->RoomsForm->checkboxRooms(
-								'ReservationLocationsRoom.room_id',
-								array(
-									'privateSpace' => false,
-									'default' => Hash::get($this->request->data, 'ReservationLocationsRoom.room_id'),
-								)
-
-							);
-
-							?>
-
-						</div>
-
-						<?php
-
-						echo $this->NetCommonsForm->label(null, __d('blocks', 'Approval settings'));
-						// 予約に承認が必要
-						echo $this->NetCommonsForm->checkbox('ReservationLocation.use_workflow', [
-							'label' =>
-									__d('reservations', 'Need approval reservations'),
-							'ng-model' => 'data.ReservationLocation.use_workflow'
-						]);
-						?>
-						<div ng-show="data.ReservationLocation.use_workflow">
-							<div class="form-group"
-									ng-controller="ReservationLocationsApprovalUser">
-								<label class="control-label">
-									<?php echo h(__d('reservations', '施設管理者')); ?>
-								</label>
-
-								<div class="form-group">
-									<div>
-										<?php
-										$title = __d('reservations', '施設管理者');
-										$pluginModel = 'ReservationLocationsApprovalUser';
-										$roomId = Current::read('Room.id');
-										$selectUsers = (isset($this->request->data['selectUsers'])) ? $this->request->data['selectUsers'] : null;
-										echo $this->GroupUserList->select($title, $pluginModel, $roomId, $selectUsers);
-										?>
-									</div>
-									<div class="has-error">
-										<?php echo $this->NetCommonsForm->error('ReservationLocationApprovalUser.user_id', null, array('class' => 'help-block')); ?>
-									</div>
-								</div>
-							</div>
-
-							<?php
-							// 施設管理者
-							//echo $this->NetCommonsForm->input(
-							//	'ReservationLocation.contact',
-							//	[
-							//		'label' => __d('reservations', 'Contact')
-							//	]
-							//);
-							?>
-						</div>
-						<?php
-						// 施設説明 WYSIWYG
-						echo $this->NetCommonsForm->wysiwyg(
-							'ReservationLocation.detail',
-							array(
-								'label' => __d('reservations', 'Description'),
-								'required' => false,
-								'rows' => 12,
-								'ng-model' => 'data.ReservationLocation.detail'
-
-							)
-						);
-						?>
-					</fieldset>
+					?>
 				</div>
 
-				<?php //echo $this->Workflow->buttons('ReservationLocation.status'); ?>
-				<?php
-				$cancelUrl = NetCommonsUrl::actionUrlAsArray(
+				<div class="panel-body" ng-hide="data.ReservationLocation.use_all_rooms">
+					<?php
+						echo $this->RoomsForm->checkboxRooms(
+							'ReservationLocationsRoom.room_id',
+							array(
+								'privateSpace' => false,
+								'default' => Hash::get($this->request->data, 'ReservationLocationsRoom.room_id'),
+							)
+						);
+					?>
+				</div>
+			</div>
+
+			<?php
+				//施設管理者
+				echo $this->NetCommonsForm->label(null, __d('reservations', 'Contact'));
+			?>
+			<?php
+				$title = false;
+				$pluginModel = 'ReservationLocationsApprovalUser';
+				$roomId = null;
+				if (isset($this->request->data['selectUsers'])) {
+					$selectUsers = $this->request->data['selectUsers'];
+				} else {
+					$selectUsers = null;
+				}
+				echo $this->GroupUserList->select($title, $pluginModel, $roomId, $selectUsers);
+			?>
+
+			<?php
+				// 施設説明 WYSIWYG
+				echo $this->NetCommonsForm->wysiwyg(
+					'ReservationLocation.detail',
 					array(
-						'plugin' => 'reservations',
-						'controller' => 'reservation_locations',
-						'action' => 'index',
-						'frame_id' => Current::read('Frame.id'),
+						'label' => __d('reservations', 'Description'),
+						'required' => false,
+						'rows' => 12,
+						'ng-model' => 'data.ReservationLocation.detail'
+
 					)
 				);
-				?>
-				<div class="panel-footer text-center">
-					<?php echo $this->Button->cancelAndSave(
+			?>
+
+			<div class="panel-footer text-center">
+				<?php
+					$cancelUrl = NetCommonsUrl::actionUrlAsArray(
+						array(
+							'plugin' => 'reservations',
+							'controller' => 'reservation_locations',
+							'action' => 'index',
+							'frame_id' => Current::read('Frame.id'),
+						)
+					);
+					echo $this->Button->cancelAndSave(
 						__d('net_commons', 'Cancel'),
 						__d('net_commons', 'OK'),
 						$cancelUrl
-					); ?>
-				</div>
-
-				<?php echo $this->NetCommonsForm->end() ?>
-
-				<?php if ($isEdit && $isDeletable) : ?>
-					<div class="panel-footer" style="text-align: right;">
-						<?php echo $this->NetCommonsForm->create(
-							'ReservationLocation',
-							array(
-								'type' => 'delete',
-								'url' => NetCommonsUrl::blockUrl(
-									array(
-										'controller' => 'reservation_locations',
-										'action' => 'delete',
-										'frame_id' => Current::read('Frame.id')
-									)
-								)
-							)
-						) ?>
-						<?php echo $this->NetCommonsForm->input(
-							'key',
-							array('type' => 'hidden')
-						); ?>
-
-						<?php echo $this->Button->delete(
-							'',
-							__d(
-								'net_commons',
-								'Deleting the %s. Are you sure to proceed?',
-								__d('blogs', 'ReservationLocation')
-							)
-						); ?>
-
-						</span>
-						<?php echo $this->NetCommonsForm->end() ?>
-					</div>
-				<?php endif ?>
-
+					);
+				?>
 			</div>
+		<?php echo $this->NetCommonsForm->end(); ?>
 
-			<?php echo $this->Workflow->comments(); ?>
+		<?php if ($isEdit && $isDeletable) : ?>
+			<div class="panel-footer text-right">
+				<?php
+					echo $this->NetCommonsForm->create('ReservationLocation', array(
+						'type' => 'delete',
+						'url' => NetCommonsUrl::blockUrl(
+							array(
+								'controller' => 'reservation_locations',
+								'action' => 'delete',
+								'frame_id' => Current::read('Frame.id')
+							)
+						))
+					);
+				?>
 
-		</article>
+				<?php echo $this->NetCommonsForm->hidden('ReservationLocation.key'); ?>
 
-	</div>
+				<?php
+					echo $this->Button->delete(
+						'',
+						__d('net_commons', 'Deleting the %s. Are you sure to proceed?', __d('resevations', 'Location'))
+					);
+				?>
+				<?php echo $this->NetCommonsForm->end() ?>
+			</div>
+		<?php endif ?>
+	</article>
+</div>
 
 

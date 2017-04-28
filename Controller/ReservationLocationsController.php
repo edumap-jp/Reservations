@@ -11,7 +11,6 @@
 
 App::uses('ReservationsAppController', 'Reservations.Controller');
 App::uses('ReservationLocationReservable', 'Reservations.Model');
-App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 
 /**
  * 施設設定 Controller
@@ -59,12 +58,12 @@ class ReservationLocationsController extends ReservationsAppController {
  * @var array
  */
 	public $components = array(
-		'NetCommons.Permission' => array(
-			//アクセスの権限
-			'allow' => array(
-				'edit' => 'page_editable',
-			),
-		),
+//		'NetCommons.Permission' => array(
+//			//アクセスの権限
+//			'allow' => array(
+//				'edit' => 'page_editable',
+//			),
+//		),
 		//'Workflow.Workflow',
 
 		'Categories.Categories',
@@ -72,7 +71,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		'NetCommons.NetCommonsTime',
 		'Paginator',
 		'Rooms.RoomsForm',
-//		'Reservations.ReservationSettings',
+		'Reservations.ReservationSettings', //NetCommons.Permissionは使わず、独自でやる
 	);
 
 /**
@@ -101,7 +100,6 @@ class ReservationLocationsController extends ReservationsAppController {
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->helpers['Blocks.BlockTabs'] = ReservationSettingsComponent::$blockTabs;
 	}
 
 /**
@@ -143,10 +141,6 @@ class ReservationLocationsController extends ReservationsAppController {
 		$this->_processPermission();
 
 		// 施設管理者保持
-		$this->request->data = $this->ReservationLocationsApprovalUser->getSelectUsers(
-			$this->request->data, false
-		);
-
 		if ($this->request->is('post')) {
 //			$this->ReservationLocation->create();
 
@@ -165,13 +159,20 @@ class ReservationLocationsController extends ReservationsAppController {
 				);
 				return $this->redirect($url);
 			}
-
 			$this->NetCommons->handleValidationError($this->ReservationLocation->validationErrors);
 
+			$isMyUser = false;
 		} else {
 			$newLocation = $this->ReservationLocation->createLocation();
 			$this->request->data['ReservationLocation'] = $newLocation['ReservationLocation'];
+			$isMyUser = true;
 		}
+
+		//施設管理者のデータ取得
+		$this->request->data = $this->ReservationLocationsApprovalUser->getSelectUsers(
+			$this->request->data, $isMyUser
+		);
+
 		// プライベートルームは除外する
 		$roomConditions = [
 			//'Room.space_id !=' => Space::PRIVATE_SPACE_ID,

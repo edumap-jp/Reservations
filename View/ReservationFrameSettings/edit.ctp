@@ -17,7 +17,6 @@ if (isset($this->data['ReservationFrameSetting'])) {
 	$camelizeData = NetCommonsAppController::camelizeKeyRecursive(array(
 		'frameId' => $this->request->data['Frame']['id'],
 		'reservationFrameSetting' => $this->request->data['ReservationFrameSetting'],
-//		'reservationFrameSettingSelectRoom' => $this->request->data['ReservationFrameSettingSelectRoom'],
 		'displayTypeOptions' => $displayTypeOptions
 	));
 
@@ -37,13 +36,10 @@ if (isset($this->data['ReservationFrameSetting'])) {
 	<?php echo $this->BlockTabs->main(ReservationSettingsComponent::MAIN_TAB_FRAME_SETTING); ?>
 
 	<div class="tab-content">
-	<?php /* 施設予約にはBLOCK_TAB_SETTINGは無し */ ?>
-
-	<?php echo $this->element('Blocks.edit_form', array(
+		<?php echo $this->element('Blocks.edit_form', array(
 			'model' => 'ReservationFrameSetting',
 			'callback' => 'Reservations.ReservationFrameSettings/edit_form',
 			'cancelUrl' => NetCommonsUrl::backToIndexUrl('default_action'),
 		)); ?>
-
-	</div><!--end tab-content-->
+	</div>
 </article>

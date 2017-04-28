@@ -590,7 +590,7 @@ msgstr "公開対象"
 #: Reservations/View/ReservationPlans/view.ctp:96
 #: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:25
 msgid "Location"
-msgstr "場所"
+msgstr "施設"
 
 #: Reservations/View/ReservationPlans/view.ctp:103
 #: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:35
@@ -1242,7 +1242,7 @@ msgid "alters by time of use"
 msgstr "閲覧時刻により変動"
 
 msgid "fixed"
-msgstr "固定"
+msgstr "時刻を固定"
 
 msgid "Default institution"
 msgstr "最初に表示する施設"
@@ -1302,5 +1302,10 @@ msgid "%s - %s"
 msgstr "%s 〜 %s"
 
 msgid "Available datetime"
-msgid "利用可能日時"
+msgstr "利用可能日時"
 
+msgid "Time Frames setting"
+msgstr "時間枠表示"
+
+msgid "Display timeframe"
+msgstr "時間枠を表示する"
