@@ -77,13 +77,6 @@ class ReservationFrameSetting extends ReservationsAppModel {
  * @var array
  */
 	public $belongsTo = array(
-//		'Room' => array(
-//			'className' => 'Rooms.Room',
-//			'foreignKey' => 'room_id',
-//			'conditions' => '',
-//			'fields' => '',
-//			'order' => ''
-//		),
 		'Frame' => array(
 			'className' => 'Frames.Frame',
 			'foreignKey' => 'frame_key',
