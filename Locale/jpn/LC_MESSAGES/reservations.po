@@ -1287,7 +1287,7 @@ msgid "Need approval reservations"
 msgstr "予約に承認が必要"
 
 msgid "No institution yet registered."
-msgstr "施設が登録されていません。"
+msgstr "施設がありません。"
 
 msgid "Time frame name"
 msgstr "時間枠名"
@@ -1307,5 +1307,14 @@ msgstr "利用可能日時"
 msgid "Time Frames setting"
 msgstr "時間枠表示"
 
+msgid "No Timeframes yet registered."
+msgstr "時間枠がありません。"
+
 msgid "Display timeframe"
 msgstr "時間枠を表示する"
+
+msgid "Duplicate time frames."
+msgstr "時間枠が重複しています。"
+
+msgid "TimeFrame"
+msgstr "時間枠"

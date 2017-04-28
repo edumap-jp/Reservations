@@ -33,7 +33,6 @@ class ReservationTimeframe extends ReservationsAppModel {
 			),
 			'afterCallback' => false,
 		),
-		//'Reservations.ReservationValidate',
 	);
 
 /**
@@ -52,7 +51,7 @@ class ReservationTimeframe extends ReservationsAppModel {
  */
 	public $belongsTo = array(
 		'Language' => array(
-			'className' => 'Language',
+			'className' => 'M17n.Language',
 			'foreignKey' => 'language_id',
 			'conditions' => '',
 			'fields' => '',
@@ -72,21 +71,16 @@ class ReservationTimeframe extends ReservationsAppModel {
 				'language_id' => array(
 					'numeric' => array(
 						'rule' => array('numeric'),
-						//'message' => 'Your custom message here',
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
+						'message' => __d('net_commons', 'Invalid request.'),
 					),
 				),
 				'title' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
-						'message' => __d('net_commons', 'Please input %s.', __d('reservations', '時間枠名')),
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
+						'message' => __d(
+							'net_commons',
+							'Please input %s.', __d('reservations', 'Time frame name')
+						),
 					),
 				),
 				'start_time' => array(
@@ -100,7 +94,7 @@ class ReservationTimeframe extends ReservationsAppModel {
 					),
 					'rule3' => [
 						'rule' => ['validateTimeFrameNotExist'],
-						'message' => __d('reservations', '時間枠が重複しています。')
+						'message' => __d('reservations', 'Duplicate time frames.')
 					]
 				),
 				'end_time' => array(
@@ -112,15 +106,14 @@ class ReservationTimeframe extends ReservationsAppModel {
 				'color' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
-						'message' => __d('net_commons', 'Please input %s.', __d('reservations', '時間枠色')),
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
+						'message' => __d(
+							'net_commons',
+							'Please input %s.', __d('reservations', 'Time frame color')
+						),
 					),
 				),
-			));
-		//$this->_doMergeWorkflowParamValidate(); //Workflowパラメータ関連validation
+			)
+		);
 		return parent::beforeValidate($options);
 	}
 
@@ -132,16 +125,15 @@ class ReservationTimeframe extends ReservationsAppModel {
  * @throws InternalErrorException
  */
 	public function saveTimeframe($data) {
-		//$data = $this->_prepareData($data);
-
 		$this->begin();
+
 		try {
-			$this->create(); //
 			// 先にvalidate 失敗したらfalse返す
 			$this->set($data);
 			if (!$this->validates($data)) {
 				return false;
 			}
+
 			$savedData = $this->save($data, false);
 			if (! $savedData) {
 				//このsaveで失敗するならvalidate以外なので例外なげる
@@ -157,7 +149,48 @@ class ReservationTimeframe extends ReservationsAppModel {
 		} catch (Exception $e) {
 			$this->rollback($e);
 		}
+
 		return $savedData;
+	}
+
+/**
+ * 時間枠の削除
+ *
+ * @param array $data 登録データ
+ * @return bool
+ * @throws InternalErrorException
+ */
+	public function deleteTimeframe($data) {
+		$this->begin();
+
+		try {
+			$conditions = array(
+				$this->alias . '.key' => $data[$this->alias]['key']
+			);
+			if (! $this->deleteAll($conditions, false)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			//0件になったら、ReservationFrameSetting.display_timeframeを0にする
+			if ($this->find('count', ['recursive' => -1]) === 0) {
+				$this->loadModels([
+					'ReservationFrameSetting' => 'Reservations.ReservationFrameSetting',
+				]);
+				$update = array(
+					$this->ReservationFrameSetting->alias . '.display_timeframe' => false
+				);
+				if (! $this->ReservationFrameSetting->updateAll($update, null)) {
+					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+				}
+			}
+
+			$this->commit();
+
+		} catch (Exception $e) {
+			$this->rollback($e);
+		}
+
+		return true;
 	}
 
 /**
