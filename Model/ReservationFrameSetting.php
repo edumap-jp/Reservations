@@ -172,11 +172,9 @@ class ReservationFrameSetting extends ReservationsAppModel {
 
 			$this->commit();
 		} catch (Exception $ex) {
-			CakeLog::error($ex);
-
-			$this->rollback();
-			throw $ex;
+			$this->rollback($ex);
 		}
+
 		return $data;
 	}
 
@@ -203,7 +201,7 @@ class ReservationFrameSetting extends ReservationsAppModel {
 			return $this->_getFrameSettingData[$frameId];
 		}
 		$frameSetting = $this->find('first', array(
-			'recursive' => 1,	//hasManyでReservationFrameSettingSelectRoomのデータも取り出す。
+			'recursive' => -1,
 			'conditions' => array('frame_key' => Current::read('Frame.key'))
 		));
 		if (! $frameSetting) {
