@@ -1049,3 +1049,32 @@ padding-right:3px;
 .reservation-common-tabs {
 	margin-bottom: 24px;
 }
+
+/**
+ * 施設設定
+ */
+.reservation-form-time-table,
+.reservation-use-private {
+	padding-top: 4px;
+}
+.reservation-select-rooms.form-input-outer {
+	padding: 0px;
+	margin-left: 20px;
+}
+.reservation-select-rooms > .panel-heading .checkbox,
+.reservation-select-rooms > .panel-body dl,
+.reservation-select-rooms > .panel-body dl dd:last-child {
+	margin-bottom: 0px;
+}
+.reservation-form-time-table > .form-inline > .nc-multiple-checkbox {
+	margin-right: 16px;
+}
+@media (max-width: 767px) {
+	.reservation-form-time-table {
+		padding-top: 0px;
+	}
+	.reservation-form-time-table > .form-inline > .nc-multiple-checkbox > input {
+		margin-left: 0px;
+	}
+}
+

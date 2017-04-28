@@ -78,8 +78,7 @@ class ReservationLocationsApprovalUser extends ReservationsAppModel {
 		}
 		$selectUsers['selectUsers'] = array();
 		if (isset($data[$this->alias])) {
-			$selectUsers =
-				Hash::extract($data[$this->alias], '{n}.user_id');
+			$selectUsers = Hash::extract($data[$this->alias], '{n}.user_id');
 			foreach ($selectUsers as $userId) {
 				$user = $this->User->getUser($userId);
 				$data['selectUsers'][] = $user;

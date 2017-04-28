@@ -35,60 +35,54 @@ App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 				);
 			?>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>
-						<?php echo $this->Paginator->sort('CategoryOrder.weight', __d('categories', 'Category')); ?>
-					</th>
-                    <th colspan="2">
-						<?php echo $this->Paginator->sort('location_name', __d('reservations', 'Location name')); ?>
-					</th>
-                    <th><?php __d('reservations', 'Available datetim') ?></th>
-                </tr>
-                </thead>
-                <?php foreach ($reservationLocations as $reservationLocation): ?>
-                    <tr>
-                        <td>
-                            <?php echo $reservationLocation['CategoriesLanguage']['name'] ?>
-                        </td>
-                        <td><?php echo h($reservationLocation['ReservationLocation']['location_name']); ?>&nbsp;</td>
-                        <td>
-                            <?php
-								echo $this->LinkButton->edit(
-									null,
-									[
-										'action' => 'edit',
-										'key' => $reservationLocation['ReservationLocation']['key']
-									],
-									[
-										'iconSize' => 'btn-xs'
-									]
-								);
-							?>
-                        </td>
-                        <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['add_authority']); ?><!--&nbsp;</td>-->
-                        <td>
-							<?php echo $this->ReservationLocation->openText($reservationLocation); ?>
-                        </td>
-                        <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['use_private']); ?><!--&nbsp;</td>-->
-                        <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['use_auth_flag']); ?><!--&nbsp;</td>-->
-                        <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['use_all_rooms']); ?><!--&nbsp;</td>-->
-                        <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['display_sequence']); ?><!--&nbsp;</td>-->
-                        <!--<td>-->
-							<?php //echo $this->Html->link($reservationLocation['TrackableCreator']['id'], array('controller' => 'users', 'action' => 'view', $reservationLocation['TrackableCreator']['id'])); ?>
-                        <!--</td>-->
-                        <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['created']); ?><!--&nbsp;</td>-->
-                        <!--<td>-->
-							<?php //echo $this->Html->link($reservationLocation['TrackableUpdater']['id'], array('controller' => 'users', 'action' => 'view', $reservationLocation['TrackableUpdater']['id'])); ?>
-                        <!--</td>-->
-                        <!--<td>--><?php //echo h($reservationLocation['ReservationLocation']['modified']); ?><!--&nbsp;</td>-->
-                    </tr>
-                <?php endforeach;?>
-            </table>
 
-        </div>
-
-    </div><!--end tab-content-->
+		<?php if ($reservationLocations) : ?>
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+					<tr>
+						<th>
+							<?php echo $this->Paginator->sort('CategoryOrder.weight', __d('categories', 'Category')); ?>
+						</th>
+						<th colspan="2">
+							<?php echo $this->Paginator->sort('location_name', __d('reservations', 'Location name')); ?>
+						</th>
+						<th>
+							<?php echo __d('reservations', 'Available datetime') ?>
+						</th>
+					</tr>
+					</thead>
+					<?php foreach ($reservationLocations as $reservationLocation): ?>
+						<tr>
+							<td>
+								<?php echo h($reservationLocation['CategoriesLanguage']['name']); ?>
+							</td>
+							<td>
+								<?php echo h($reservationLocation['ReservationLocation']['location_name']); ?>
+							</td>
+							<td>
+								<?php
+									echo $this->LinkButton->edit(
+										null,
+										[
+											'action' => 'edit',
+											'key' => $reservationLocation['ReservationLocation']['key']
+										],
+										[
+											'iconSize' => 'btn-xs'
+										]
+									);
+								?>
+							</td>
+							<td>
+								<?php echo $this->ReservationLocation->openText($reservationLocation); ?>
+							</td>
+						</tr>
+					<?php endforeach;?>
+				</table>
+			</div>
+		<?php else: ?>
+			<?php echo __d('reservations', 'No institution yet registered.'); ?>
+		<?php endif; ?>
+    </div>
 </article>

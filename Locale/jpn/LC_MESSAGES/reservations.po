@@ -590,7 +590,7 @@ msgstr "公開対象"
 #: Reservations/View/ReservationPlans/view.ctp:96
 #: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:25
 msgid "Location"
-msgstr "場所"
+msgstr "施設"
 
 #: Reservations/View/ReservationPlans/view.ctp:103
 #: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:35
@@ -1302,5 +1302,5 @@ msgid "%s - %s"
 msgstr "%s 〜 %s"
 
 msgid "Available datetime"
-msgid "利用可能日時"
+msgstr "利用可能日時"
 
