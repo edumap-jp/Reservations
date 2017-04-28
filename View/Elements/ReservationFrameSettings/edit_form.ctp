@@ -210,11 +210,15 @@ $displayType = $this->request->data['ReservationFrameSetting']['display_type'];
 <?php /* 時間枠 */ ?>
 <?php
 	if ($hasTimeframe) {
-		echo $this->NetCommonsForm->input('ReservationFrameSetting.display_timeframe', [
-			'label' => __d('reservations', 'Time Frames setting'),
-			'type' => 'checkbox',
-			'options' => [
-				'1' => __d('reservations', 'Display timeframe')
+		echo $this->NetCommonsForm->label(
+			'ReservationFrameSetting.display_timeframe',
+			__d('reservations', 'Time Frames setting')
+		);
+		echo $this->NetCommonsForm->checkbox(
+			'ReservationFrameSetting.display_timeframe',
+			[
+				'label' => __d('reservations', 'Display timeframe'),
+				'div' => 'form-checkbox-outer'
 			]
-		]);
+		);
 	}
