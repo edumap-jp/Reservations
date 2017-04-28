@@ -20,6 +20,7 @@ $baseLinkArr = array(
 		'year' => sprintf('%04d', $vars['year']),
 		'month' => sprintf('%02d', $vars['month']),
 		'day' => $vars['day'],
+		'location_key' => $vars['location_key']
 	)
 );
 $monthlyLinkArr = Hash::merge($baseLinkArr, array(
