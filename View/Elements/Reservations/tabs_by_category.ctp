@@ -20,7 +20,8 @@ $baseLinkArr = array(
 		'year' => sprintf('%04d', $vars['year']),
 		'month' => sprintf('%02d', $vars['month']),
 		'day' => $vars['day'],
-	)
+	),
+	'category_id' => Hash::get($this->request->named, 'category_id')
 );
 $weeklyLinkArr = Hash::merge($baseLinkArr, array(
 	'?' => array('style' => ReservationsComponent::RESERVATION_STYLE_CATEGORY_WEEKLY)
