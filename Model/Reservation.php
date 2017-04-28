@@ -83,27 +83,6 @@ class Reservation extends ReservationsAppModel {
 	);
 
 /**
- * Constructor. Binds the model's database table to the object.
- *
- * @param bool|int|string|array $id Set this ID for this model on startup,
- * can also be an array of options, see above.
- * @param string $table Name of database table to use.
- * @param string $ds DataSource connection name.
- * @see Model::__construct()
- * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
- */
-	public function __construct($id = false, $table = null, $ds = null) {
-		parent::__construct($id, $table, $ds);
-
-		$this->loadModels([
-			'Frame' => 'Frames.Frame',
-			'ReservationFrameSetting' => 'Reservations.ReservationFrameSetting',
-			////'ReservationSetting' => 'Reservations.ReservationSetting',
-			////'MailSetting' => 'Mails.MailSetting',
-		]);
-	}
-
-/**
  * Called during validation operations, before validation. Please note that custom
  * validation rules can be defined in $validate.
  *
@@ -156,6 +135,10 @@ class Reservation extends ReservationsAppModel {
 		}
 
 		$this->begin();
+
+		$this->loadModels([
+			'Frame' => 'Frames.Frame',
+		]);
 
 		try {
 			if (empty($data['Frame'])) {
@@ -320,6 +303,10 @@ class Reservation extends ReservationsAppModel {
  * @return array 生成したデータ
  */
 	protected function _saveFrameChangeAppearance($frame) {
+		$this->loadModels([
+			'ReservationFrameSetting' => 'Reservations.ReservationFrameSetting',
+		]);
+
 		$frameKey = $frame['key'];
 		$frameSetting = $this->ReservationFrameSetting->find('first', array(
 			'conditions' => array(
