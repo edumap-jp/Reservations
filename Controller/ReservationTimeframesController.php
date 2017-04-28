@@ -24,18 +24,7 @@ class ReservationTimeframesController extends ReservationsAppController {
  *
  * @var array
  */
-	public $layout = 'NetCommons.setting';	//PageLayoutHelperのafterRender()の中で利用。
-											//
-											//$layoutに'NetCommons.setting'があると
-											//「Frame設定も含めたコンテンツElement」として
-											//ng-controller='FrameSettingsController'属性
-											//ng-init=initialize(Frame情報)属性が付与される。
-											//
-											//'NetCommons.setting'がないと、普通の
-											//「コンテンツElement」として扱われる。
-											//
-											//ちなみに、使用されるLayoutは、Pages.default
-											//
+	public $layout = 'NetCommons.setting';
 
 /**
  * @var array use models
