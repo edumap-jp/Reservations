@@ -32,9 +32,9 @@ class ReservationLocationCategoriesController extends ReservationsAppController 
  * @var array
  */
 	public $uses = array(
-		'Reservations.ReservationFrameSetting',
+//		'Reservations.ReservationFrameSetting',
 		'Reservations.Reservation',
-		'Blocks.Block',
+//		'Blocks.Block',
 		//'Reservations.ReservationEntry',¢sa
 	);
 
@@ -50,7 +50,7 @@ class ReservationLocationCategoriesController extends ReservationsAppController 
 //				'index,add,edit,delete' => 'block_editable',
 //			),
 //		),
-		'Paginator',
+//		'Paginator',
 		'Categories.CategoryEdit',
 		'Reservations.ReservationSettings', //NetCommons.Permissionは使わず、独自でやる
 	);
@@ -61,11 +61,11 @@ class ReservationLocationCategoriesController extends ReservationsAppController 
  * @var array
  */
 	public $helpers = array(
-		'Blocks.BlockForm',
+//		'Blocks.BlockForm',
 		'Blocks.BlockTabs', // 設定内容はReservationSettingsComponentにまとめた
-		'Blocks.BlockIndex',
+//		'Blocks.BlockIndex',
 		//'Blocks.Block',
-		'Likes.Like',
+//		'Likes.Like',
 	);
 
 /**
@@ -75,11 +75,11 @@ class ReservationLocationCategoriesController extends ReservationsAppController 
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
-
-		//CategoryEditComponentの削除
-		if ($this->params['action'] === 'index') {
-			$this->Components->unload('Categories.CategoryEdit');
-		}
+//
+//		//CategoryEditComponentの削除
+//		if ($this->params['action'] === 'index') {
+//			$this->Components->unload('Categories.CategoryEdit');
+//		}
 	}
 
 /**
@@ -140,6 +140,7 @@ class ReservationLocationCategoriesController extends ReservationsAppController 
 
 		} else {
 			//表示処理(初期データセット)
+			$this->Reservation->recursive = -1;
 			if (! $reservation = $this->Reservation->findByBlockKey(Current::read('Block.key'))) {
 				return $this->throwBadRequest();
 			}

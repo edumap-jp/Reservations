@@ -107,7 +107,6 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->deny('index');
-		$this->Reservation->afterFrameSave(['Frame' => Current::read('Frame')]);
 	}
 
 /**
@@ -123,6 +122,11 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 		}
 		$this->set('locations', $locations);
 
+		// 設定情報取り出し
+		$setting = $this->ReservationFrameSetting->getFrameSetting();
+		$settingId = $setting['ReservationFrameSetting']['id'];
+		$this->set('settingId', $settingId);
+
 		if ($this->request->is(['put', 'post'])) {
 			//登録(PUT)処理
 			$data = $this->request->data;
@@ -135,19 +139,7 @@ class ReservationFrameSettingsController extends ReservationsAppController {
 			}
 			$this->NetCommons->handleValidationError($this->ReservationFrameSetting->validationErrors);
 			//NC3用のvalidateErrorHandler.エラー時、非ajaxならSession->setFalsh()する.又は.(ajaxの時は)jsonを返す.
-		}
-		//指定したフレームキーのデータセット
-		//
-		//注）施設予約はplugin配置(=フレーム生成)直後に、ReservationモデルのafterFrameSave()が呼ばれ、その中で、
-		//	該当フレームキーのReservationFrameSettingモデルデータが１件新規作成されています。
-		//	なので、ここでは、読むだけでＯＫ．
-		//
-		// 設定情報取り出し
-		$setting = $this->ReservationFrameSetting->getFrameSetting();
-		$settingId = $setting['ReservationFrameSetting']['id'];
-		$this->set('settingId', $settingId);
-
-		if (! $this->request->is(['put', 'post'])) {
+		} else {
 			$this->request->data['ReservationFrameSetting'] = $setting['ReservationFrameSetting'];
 		}
 
