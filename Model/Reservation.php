@@ -29,12 +29,12 @@ class Reservation extends ReservationsAppModel {
  * @var array
  */
 	public $actsAs = array(
-		'NetCommons.OriginalKey',
+//		'NetCommons.OriginalKey',
 		//'Workflow.WorkflowComment',
 		//'Workflow.Workflow',
-		'Blocks.BlockSetting' => array(
-			BlockSettingBehavior::FIELD_USE_WORKFLOW,
-		),
+//		'Blocks.BlockSetting' => array(
+//			BlockSettingBehavior::FIELD_USE_WORKFLOW,
+//		),
 		'Categories.Category'
 	);
 
@@ -53,34 +53,33 @@ class Reservation extends ReservationsAppModel {
 		),
 	);
 
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'ReservationRrule' => array(
-			'className' => 'Reservations.ReservationRrule',
-			'foreignKey' => 'reservation_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => array('id' => 'ASC'),
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
+///**
+// * hasMany associations
+// *
+// * @var array
+// */
+//	public $hasMany = array(
+//		'ReservationRrule' => array(
+//			'className' => 'Reservations.ReservationRrule',
+//			'foreignKey' => 'reservation_id',
+//			'dependent' => true,
+//			'conditions' => '',
+//			'fields' => '',
+//			'order' => array('id' => 'ASC'),
+//			'limit' => '',
+//			'offset' => '',
+//			'exclusive' => '',
+//			'finderQuery' => '',
+//			'counterQuery' => ''
+//		)
+//	);
 
 /**
  * Validation rules
  *
  * @var array
  */
-	public $validate = array(
-	);
+	public $validate = array();
 
 /**
  * Called during validation operations, before validation. Please note that custom
@@ -98,22 +97,9 @@ class Reservation extends ReservationsAppModel {
 					'rule' => array('notBlank'),
 					'message' => __d('net_commons', 'Invalid request.'),
 					'required' => true,
-					'on' => 'update', // 新規の時はブロックIDがなかったりすることがあるので
 				),
 			),
-			//'name' => array(
-			//	'notBlank' => array(
-			//		'rule' => array('notBlank'),
-			//		'message' => sprintf(__d('net_commons', 'Please input %s.'), __d('reservations', 'CALENDAR Name')),	//施設予約名は人間で入れない。プログラムが挿入すること。
-			//		'allowEmpty' => false,
-			//		'required' => true,
-			//	),
-			//),
-			//key,language_id は、NetCommonsプラグインがafterSaveで差し込むので、ノーチェック
 		));
-
-		//施設予約の場合、配置直後の場合、配下にCalenarCompRruleが１件もないことがあり得るので、
-		//配下のレコード有無は調べない。
 
 		return parent::beforeValidate($options);
 	}
@@ -146,22 +132,18 @@ class Reservation extends ReservationsAppModel {
 			}
 			$frame = $data['Frame'];	//FrameモデルですでにFrameモデルデータは登録済み
 
-			//Frameモデルに記録されているのと同じ「ルーム,言語,plugin_key=カレンダ」のレコードが
 			//Blockモデルに存在するか調べる
-			$block = $this->Block->find('first', array(
-				'conditions' => array(
-					'Block.room_id' => $frame['room_id'],
-					'Block.plugin_key' => $frame['plugin_key'],
-				)
-			));
+			$block = $this->getBlock();
 			// まだない場合
 			if (empty($block)) {
 				// ブロックを作成する
-				$block = $this->_makeBlock($frame);
-			} else {
-				//取得したBlockを$current[Block]に記録しておく。
-				Current::$current['Block'] = $block['Block'];
+				$block = $this->saveBlock();
+			} elseif (! $this->_saveReservation($block)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
+
+			//取得したBlockを$current[Block]に記録しておく。
+			Current::$current['Block'] = $block['Block'];
 
 			//Frameモデルに、このブロックのidを記録しておく。 施設予約の場合、Frame:Blockの関係は n:1
 			$data['Frame']['block_id'] = $block['Block']['id'];
@@ -170,213 +152,238 @@ class Reservation extends ReservationsAppModel {
 			}
 			//新規に生成したBlockのidをCurrent[Frame]に追記しておく。
 			Current::$current['Frame']['block_id'] = $block['Block']['id'];
-			//このフレーム用の「表示方法変更」「権限設定」「メール設定」のレコードを
-			//１セット用意します。
 
-			//このフレームの「表示方法変更」
-			if (! $this->_saveFrameChangeAppearance($data['Frame'])) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
+//			//このフレーム用の「表示方法変更」「権限設定」「メール設定」のレコードを
+//			//１セット用意します。
+//
+//			//このフレームの「表示方法変更」
+//			if (! $this->_saveFrameChangeAppearance($data['Frame'])) {
+//				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+//			}
 
-			//権限設定
-			if (! $this->_saveReservation($block)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-
+//			//権限設定
+//			if (! $this->_saveReservation($block)) {
+//				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+//			}
 			$this->commit();
+
 		} catch (Exception $ex) {
 			//トランザクションRollback
-			$this->rollback();
-
-			//エラー出力
-			CakeLog::error($ex);
-
-			throw $ex;		//再throw
+			$this->rollback($ex);
 		}
 
 		return $data;
 	}
 
 /**
- * prepareBlock
- *
  * フレームも何もなくても予定登録のときはこいつをたたいて準備しないといけない
  *
- * @param int $roomId ルームID（企保的に予定の対象のルームID
- * @param int $langId 言語ID
- * @param string $pluginKey プラグインキー（reservations
  * @return mixed 見つかった、もしくは作成したブロック
  * @throws InternalErrorException
  */
-	public function prepareBlock($roomId, $langId, $pluginKey) {
-		$this->begin();
-		try {
-			//Frameモデルに記録されているのと同じ「ルーム,言語,plugin_key=カレンダ」のレコードが
-			//Blockモデルに存在するか調べる
-			$block = $this->Block->find('first', array(
-				'recursive' => -1,
-				'conditions' => array(
-					'Block.room_id' => $roomId,
-					'Block.plugin_key' => $pluginKey,
-				)
-			));
+	public function prepareBlock() {
+		//Blockを取得
+		$block = $this->getBlock();
 
+		try {
 			// まだない場合
 			if (empty($block)) {
+				$this->begin();
+
 				// ブロックを作成する
-				$block = $this->Block->save(array(
-					'room_id' => $roomId,
-					'plugin_key' => $pluginKey,
-				));
-				if (! $block) {
+				if (! $this->saveBlock()) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
+
+				$this->commit();
 			}
 
-			//権限設定
-			if (! $this->_saveReservation($block)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-			$this->commit();
 		} catch (Exception $ex) {
-			$this->rollback();
-			CakeLog::error($ex);
-			throw $ex;		//再throw
+			$this->rollback($ex);
 		}
+
+		Current::$current['Block'] = $block['Block'];
 
 		return $block;
 	}
 
-/**
- * saveMailSetting
- *
- * メール設定データを登録する
- *
- * @return mixed On success Model::$data if its not empty or true, false on failure
- */
-	protected function _saveMailSetting() {
-		//$data = $this->_generateMailSettingData();
-		//$this->MailSetting->set($data);
-		//if (! $this->MailSetting->validates($data, false)) {
-		//	CakeLog::error(serialize($this->MailSetting->validationErrors));
-		//	return false;
-		//}
-		//$data = $this->MailSetting->save($data, false);
-		//if (! $data) {
-		//	CakeLog::error(serialize($this->MailSetting->validationErrors));
-		//	return false;
-		//}
-		//return $data;
-		return array();	//暫定
-	}
+///**
+// * saveMailSetting
+// *
+// * メール設定データを登録する
+// *
+// * @return mixed On success Model::$data if its not empty or true, false on failure
+// */
+//	protected function _saveMailSetting() {
+//		//$data = $this->_generateMailSettingData();
+//		//$this->MailSetting->set($data);
+//		//if (! $this->MailSetting->validates($data, false)) {
+//		//	CakeLog::error(serialize($this->MailSetting->validationErrors));
+//		//	return false;
+//		//}
+//		//$data = $this->MailSetting->save($data, false);
+//		//if (! $data) {
+//		//	CakeLog::error(serialize($this->MailSetting->validationErrors));
+//		//	return false;
+//		//}
+//		//return $data;
+//		return array();	//暫定
+//	}
+//
+///**
+// * generateMailSettingData
+// *
+// * メール設定データを生成する
+// *
+// * @return array 生成したメール設定データ
+// */
+//	protected function _generateMailSettingData() {
+//		$data = $this->MailSetting->create();
+//		$data = Hash::merge($data,
+//			array(
+//				$this->MailSetting->alias => array(
+//					'block_key' => Current::read('Block.key'),
+//					'plugin_key' => Current::read('Block.plugin_key'),
+//					'type_key' => 'aaa',	//定型文の種類',
+//					'mail_fixed_phrase_subject' => 'bbb',	//定型文 件名
+//					'mail_fixed_phrase_body' => 'ccc',	//定型文 本文
+//					'replay_to' => 'ddd',	//返信先アドレス
+//				)
+//			)
+//		);
+//		return $data;
+//	}
+//
+///**
+// * _saveFrameChangeAppearance
+// *
+// * フレームの「表示方法変更」のデータの登録
+// *
+// * @param array $frame フレーム
+// * @return array 生成したデータ
+// */
+//	protected function _saveFrameChangeAppearance($frame) {
+//		$this->loadModels([
+//			'ReservationFrameSetting' => 'Reservations.ReservationFrameSetting',
+//		]);
+//
+//		$frameKey = $frame['key'];
+//		$frameSetting = $this->ReservationFrameSetting->find('first', array(
+//			'recursive' => -1,
+//			'conditions' => array(
+//				'frame_key' => $frameKey
+//			),
+//		));
+//		if ($frameSetting) {
+//			return $frameSetting;
+//		}
+//		$frameSetting = $this->ReservationFrameSetting->create();
+//		$this->ReservationFrameSetting->setDefaultValue($frameSetting);	//Modelの初期値設定
+//		$frameSetting['ReservationFrameSetting']['frame_key'] = $frame['key'];
+////		$frameSetting['ReservationFrameSetting']['room_id'] = Current::read('Room.id');
+//
+//		return $this->ReservationFrameSetting->saveFrameSetting($frameSetting);
+//	}
 
 /**
- * generateMailSettingData
- *
- * メール設定データを生成する
- *
- * @return array 生成したメール設定データ
- */
-	protected function _generateMailSettingData() {
-		$data = $this->MailSetting->create();
-		$data = Hash::merge($data,
-			array(
-				$this->MailSetting->alias => array(
-					'block_key' => Current::read('Block.key'),
-					'plugin_key' => Current::read('Block.plugin_key'),
-					'type_key' => 'aaa',	//定型文の種類',
-					'mail_fixed_phrase_subject' => 'bbb',	//定型文 件名
-					'mail_fixed_phrase_body' => 'ccc',	//定型文 本文
-					'replay_to' => 'ddd',	//返信先アドレス
-				)
-			)
-		);
-		return $data;
-	}
-
-/**
- * _saveFrameChangeAppearance
- *
- * フレームの「表示方法変更」のデータの登録
- *
- * @param array $frame フレーム
- * @return array 生成したデータ
- */
-	protected function _saveFrameChangeAppearance($frame) {
-		$this->loadModels([
-			'ReservationFrameSetting' => 'Reservations.ReservationFrameSetting',
-		]);
-
-		$frameKey = $frame['key'];
-		$frameSetting = $this->ReservationFrameSetting->find('first', array(
-			'conditions' => array(
-				'frame_key' => $frameKey
-			),
-			'recursive' => -1
-		));
-		if ($frameSetting) {
-			return $frameSetting;
-		}
-		$frameSetting = $this->ReservationFrameSetting->create();
-		$this->ReservationFrameSetting->setDefaultValue($frameSetting);	//Modelの初期値設定
-		$frameSetting['ReservationFrameSetting']['frame_key'] = $frame['key'];
-		$frameSetting['ReservationFrameSetting']['room_id'] = Current::read('Room.id');
-
-		return $this->ReservationFrameSetting->saveFrameSetting($frameSetting);
-	}
-
-/**
- * _saveReservation
- *
- * 権限設定のデータの登録
+ * 施設予約のBlockデータの登録
  *
  * @param array $block ブロック
  * @return array 生成したデータ
+ * @throws InternalErrorException
  */
 	protected function _saveReservation($block) {
 		// 今現在ブロックに対応した施設予約があるか
-		$reservation = $this->find('first', array(
+		$count = $this->find('count', array(
+			'recursive' => -1,
 			'conditions' => array(
 				'block_key' => $block['Block']['key']
 			)
 		));
 		// ない場合は作成する
-		if (! $reservation) {
-			$this->create();
-			$this->Behaviors->disable('Blocks.BlockSetting');
-			$reservation = $this->save(array(
-				'block_key' => $block['Block']['key'],
-				//'use_workflow' => true
-			));
-			$this->Behaviors->enable('Blocks.BlockSetting');
-
-			// BlockSettingの use_workflow をroom_id指定で保存
-			$blockSetting = $this->createBlockSetting($block['Block']['room_id']);
-			$this->set($blockSetting);
-			$this->saveBlockSetting($block['Block']['key'], $block['Block']['room_id']);
+		if (! $count) {
+			$this->set($this->create([
+				'block_key' => $block['Block']['key']
+			]));
+			if (!$this->save()) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
 		}
-		return $reservation;
+		return true;
 	}
+//
+///**
+// * _makeBlock($frame);
+// *
+// * ブロックを作成する
+// *
+// * @param array $frame フレーム
+// * @return array 生成したブロック
+// * @throws InternalErrorException
+// */
+//	protected function _makeBlock($frame) {
+//		$block = $this->Block->save(array(
+//			'room_id' => $frame['room_id'],
+//			'plugin_key' => $frame['plugin_key'],
+//		));
+//		if (! $block) {
+//			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+//		}
+//		//新規に生成したBlockを$current[Block]に記録しておく。
+//		Current::$current['Block'] = $block['Block'];
+//		return $block;
+//	}
 
 /**
- * _makeBlock($frame);
- *
  * ブロックを作成する
  *
- * @param array $frame フレーム
  * @return array 生成したブロック
  * @throws InternalErrorException
  */
-	protected function _makeBlock($frame) {
+	public function saveBlock() {
 		$block = $this->Block->save(array(
-			'room_id' => $frame['room_id'],
-			'plugin_key' => $frame['plugin_key'],
+			'room_id' => Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID),
+			'plugin_key' => Inflector::underscore($this->plugin),
 		));
 		if (! $block) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
-		//新規に生成したBlockを$current[Block]に記録しておく。
-		Current::$current['Block'] = $block['Block'];
+
+		// ない場合は作成する
+		if (! $this->_saveReservation()) {
+			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		}
+
 		return $block;
+	}
+
+/**
+ * ブロックを取得
+ *
+ * @return array
+ */
+	public function getBlock() {
+		return $this->Block->find('first', [
+			'recursive' => -1,
+			'conditions' => [
+				'room_id' => Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID),
+				'plugin_key' => Inflector::underscore($this->plugin),
+			]
+		]);
+	}
+
+/**
+ * ブロックが作成されているかどうか
+ *
+ * @return bool
+ */
+	public function isCreatedBlock() {
+		return (bool)$this->Block->find('count', [
+			'recursive' => -1,
+			'conditions' => [
+				'room_id' => Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID),
+				'plugin_key' => Inflector::underscore($this->plugin),
+			]
+		]);
 	}
 }

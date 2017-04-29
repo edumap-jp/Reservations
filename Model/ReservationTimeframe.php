@@ -24,7 +24,6 @@ class ReservationTimeframe extends ReservationsAppModel {
  * @var array
  */
 	public $actsAs = array(
-		'NetCommons.Trackable',
 		'NetCommons.OriginalKey',
 		//多言語
 		'M17n.M17n' => array(
