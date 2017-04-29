@@ -39,36 +39,6 @@ class ReservationFrameSetting extends ReservationsAppModel {
 	public $actsAs = array(
 		'NetCommons.OriginalKey',	// key,origin_id あったら動作し、
 									// なくても無害なビヘイビア
-
-		'NetCommons.Trackable',	// TBLが Trackable項目セット(created_user＋modified_user)を
-								// もっていたらTrackable(人の追跡可能）とみなされる。
-								// Trackableとみなされたたら、created_userに対応する
-								// username,handle(TrackableCreator)が、
-								// modified_userに対応するusername,hanldle(TrackableUpdator)が、
-								// belongToで自動追加され、取得データにくっついてくる。
-								// なお、created_user, modified_userがなくても無害なビヘイビアである。
-
-		//'Workflow.Workflow',	// TBLに 承認項目セット
-								// (status + is_active + is_latest + language_id + (origin_id|key) )があれば、
-								// 承認TBLとみなされる。
-								// 承認TBLのINSERTの時だけ働く。UPDATEの時は働かない。
-								// status===STATUS_PUBLISHED（公開）の時だけINSERTデータのis_activeがtrueになり、
-								//	key,言語が一致するその他のデータはis_activeがfalseにされる。
-								// is_latestは(statusに関係なく)INSERTデータのis_latestがtrueになり、
-								//	key,言語が一致するその他のデータはis_latestがfalseにされる。
-								//
-								// なお、承認項目セットがなくても無害なビヘイビアである。
-
-		//'Workflow.WorkflowComment', // $model->data['WorkflowComment'] があれば働くし、
-								// なくても無害なビヘイビア。
-								// $model->data['WorkflowComment'] があれば、このTBLにstatusがあること
-								//（なければ、status=NULLで突っ込みます）
-
-		'Reservations.ReservationValidate',
-		'Reservations.ReservationApp',	//baseビヘイビア
-		'Reservations.ReservationInsertPlan', //Insert用
-		'Reservations.ReservationUpdatePlan', //Update用
-		'Reservations.ReservationDeletePlan', //Delete用
 	);
 
 /**
@@ -91,8 +61,7 @@ class ReservationFrameSetting extends ReservationsAppModel {
  *
  * @var array
  */
-	public $validate = array(
-	);
+	public $validate = array();
 
 /**
  * Called during validation operations, before validation. Please note that custom
@@ -158,7 +127,6 @@ class ReservationFrameSetting extends ReservationsAppModel {
 			$this->set($data);
 			if (! $this->validates()) {
 				CakeLog::error(serialize($this->validationErrors));
-
 				$this->rollback();
 				return false;
 			}

@@ -24,6 +24,7 @@ $dataJson = json_encode($this->request->data);
 
 			<?php echo $this->NetCommonsForm->hidden('ReservationLocation.id'); ?>
 			<?php echo $this->NetCommonsForm->hidden('ReservationLocation.key'); ?>
+			<?php echo $this->NetCommonsForm->hidden('ReservationLocation.language_id'); ?>
 			<?php echo $this->NetCommonsForm->hidden('Frame.id', array('value' => Current::read('Frame.id'))); ?>
 			<?php echo $this->NetCommonsForm->hidden('Block.id', array('value' => Current::read('Block.id'))); ?>
 
@@ -42,7 +43,7 @@ $dataJson = json_encode($this->request->data);
 						);
 					?>
 
-					<div class="form-inline reservation-reserve-time form-input-outer">
+					<div class="form-inline reservation-reserve-time">
 						<div class="input-group">
 							<?php
 								// 利用時間 時分〜　時分
@@ -122,14 +123,14 @@ $dataJson = json_encode($this->request->data);
 						?>
 					</div>
 
-					<div class="reservation-reserve-time form-input-outer">
+					<div class="reservation-reserve-time">
 						<?php
 							echo $this->NetCommonsForm->error('ReservationLocation.start_time');
 							echo $this->NetCommonsForm->error('ReservationLocation.end_time');
 						?>
 					</div>
 
-					<div class="reservation-form-time-table form-input-outer">
+					<div class="reservation-form-time-table">
 						<?php
 							// 利用時間曜日チェックボックス
 							$weekDaysOptions = [
@@ -164,11 +165,7 @@ $dataJson = json_encode($this->request->data);
 
 				<?php
 					// 予約できる権限
-					echo $this->element('Reservations.ReservationLocations/block_permission_setting', array(
-						'settingPermissions' => array(
-							'content_creatable' => __d('reservations', 'Authority'),
-						),
-					));
+					echo $this->element('Reservations.ReservationLocations/reservable_permission_setting');
 				?>
 
 				<?php

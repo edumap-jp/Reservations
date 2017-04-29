@@ -86,7 +86,7 @@ class ReservationEvent extends ReservationsAppModel {
 			'order' => '',
 		),
 		'Language' => array(
-			'className' => 'Languages.Language',
+			'className' => 'M17n.Language',
 			'foreignKey' => 'language_id',
 			'conditions' => '',
 			'fields' => '',
