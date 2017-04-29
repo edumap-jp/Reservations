@@ -119,47 +119,11 @@ class ReservationExposeRoomBehavior extends ReservationAppBehavior {
 					$spaceNameOfRooms[$roomId] =
 						($space['Space']['type'] == Space::COMMUNITY_SPACE_ID) ? 'group' : 'public';
 					$allRoomNames[$roomId] = $targetTitle;
-
-					if ($this->_isEnableRoomInFrameSetting($roomId, $frameSetting)) {
-						if ($space['Space']['type'] == Space::COMMUNITY_SPACE_ID) {
-							if (empty($userId)) {
-								//未ログインなので、グループ空間をoptionに積んではいけない。抜ける。
-								continue;
-							}
-							//グループ空間の時は、インデントを１つ減らす。..これにより、NC2と同じレベルの表現になる。
-							$nest -= 1;
-						}
-						$options[$roomId] = str_repeat('　', $nest * 1) . $targetTitle;
-					}
 				}
 			}
 		}
 		//CakeLog::debug("DBG: options[" . print_r($options, true) . "]");
 		return array($options, $spaceNameOfRooms, $allRoomNames);
-	}
-
-/**
- * isEnableRoomInFrameSetting
- *
- * 指定ルームが表示方法設定で表示してもいいかどうかの判定
- *
- * @param int $roomId 指定ルーム
- * @param array $frameSetting 施設予約フレーム設定情報
- * @return boot 表示してよい場合true, 表示してはいけない場合false
- */
-	protected function _isEnableRoomInFrameSetting($roomId, $frameSetting) {
-		if ($frameSetting['ReservationFrameSetting']['is_select_room']) {
-			//指定したルームのみ表示する指定あり=seletRoomにレコードがあるものだけ許可
-			foreach ($frameSetting['ReservationFrameSettingSelectRoom'] as $enableRoom) {
-				if ($enableRoom['room_id'] == $roomId) {
-					return true;
-				}
-			}
-			//すべてに一致しなかった
-			return false;
-		}
-		//指定したルームのみ表示する指定なし=無条件に表示してＯＫ
-		return true;
 	}
 
 /**
