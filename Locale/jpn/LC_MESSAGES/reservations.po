@@ -1318,3 +1318,9 @@ msgstr "時間枠が重複しています。"
 
 msgid "TimeFrame"
 msgstr "時間枠"
+
+msgid "Invalid input. Please enter the correct time."
+msgstr "時間の設定に誤りがあります。正しい時間枠を設定してください。"
+
+msgid "Invalid input. Please enter week day."
+msgstr "曜日を選択してください。"

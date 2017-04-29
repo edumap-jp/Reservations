@@ -24,12 +24,9 @@ $reservationLocationsMap = array_flip(
 	<?php echo $this->BlockTabs->main(ReservationSettingsComponent::MAIN_TAB_LOCATION_SETTING); ?>
 
 	<div class="tab-content">
-
-
 		<div class="nc-content-list" ng-controller="ReservationLocationOrders" class="nc-content-list"
-			 ng-init="initialize(<?php echo h(json_encode(['reservationLocations' => $reservationLocations, 'reservationLocationsMap' => $reservationLocationsMap])); ?>)" ng-cloak>
-
-			<?php //echo $this->NetCommonsHtml->blockTitle($faq['name']); ?>
+			 ng-init="initialize(<?php echo h(json_encode(['reservationLocations' => $reservationLocations, 'reservationLocationsMap' => $reservationLocationsMap])); ?>)"
+			 ng-cloak>
 
 			<article>
 				<?php echo $this->NetCommonsForm->create('ReservationLocation'); ?>
@@ -38,11 +35,6 @@ $reservationLocationsMap = array_flip(
 						<?php echo $this->NetCommonsForm->hidden('ReservationLocations.' . $value . '.ReservationLocation.key'); ?>
 						<?php $this->NetCommonsForm->unlockField('ReservationLocations.' . $value . '.ReservationLocation.weight'); ?>
 					<?php endforeach; ?>
-
-					<?php echo $this->NetCommonsForm->hidden('Block.id'); ?>
-					<?php echo $this->NetCommonsForm->hidden('Block.key'); ?>
-					<?php //echo $this->NetCommonsForm->hidden('Faq.id'); ?>
-					<?php //echo $this->NetCommonsForm->hidden('Faq.key'); ?>
 
 					<div ng-hide="reservationLocations.length">
 						<p><?php echo __d('net_commons', 'Not found.'); ?></p>
@@ -58,6 +50,9 @@ $reservationLocationsMap = array_flip(
 									</th>
 									<th>
 										<?php echo $this->Paginator->sort('CategoryOrder.weight', __d('categories', 'Category')); ?>
+									</th>
+									<th>
+										<?php echo __d('reservations', 'Available datetime') ?>
 									</th>
 								</tr>
 							</thead>
@@ -76,9 +71,8 @@ $reservationLocationsMap = array_flip(
 											</button>
 
 											<input type="hidden"
-													name="data[ReservationLocations][{{getIndex(q
-											.reservationLocation.key)}}][ReservationLocation][weight]"
-													ng-value="{{$index + 1}}">
+												name="data[ReservationLocations][{{getIndex(q.reservationLocation.key)}}][ReservationLocation][weight]"
+												ng-value="{{$index + 1}}">
 										</div>
 									</td>
 									<td>
@@ -89,18 +83,30 @@ $reservationLocationsMap = array_flip(
 											{{q.categoriesLanguage.name}}
 										</div>
 									</td>
+									<td>
+										{{q.reservationLocation.openText}}
+									</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
 
 					<div class="text-center">
-						<?php echo $this->Button->cancelAndSave(
+						<?php
+							$cancelUrl = NetCommonsUrl::actionUrlAsArray(
+								array(
+									'plugin' => 'reservations',
+									'controller' => 'reservation_locations',
+									'action' => 'index',
+									'frame_id' => Current::read('Frame.id'),
+								)
+							);
+							echo $this->Button->cancelAndSave(
 								__d('net_commons', 'Cancel'),
 								__d('net_commons', 'OK'),
-								$this->NetCommonsHtml->url(['action' => 'index', 'frame_id' =>
-						Current::read('Frame.id')])
-							); ?>
+								$cancelUrl
+							);
+						?>
 					</div>
 
 				<?php echo $this->NetCommonsForm->end(); ?>

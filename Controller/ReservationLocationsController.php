@@ -25,18 +25,7 @@ class ReservationLocationsController extends ReservationsAppController {
  *
  * @var array
  */
-	public $layout = 'NetCommons.setting';	//PageLayoutHelperのafterRender()の中で利用。
-	//
-	//$layoutに'NetCommons.setting'があると
-	//「Frame設定も含めたコンテンツElement」として
-	//ng-controller='FrameSettingsController'属性
-	//ng-init=initialize(Frame情報)属性が付与される。
-	//
-	//'NetCommons.setting'がないと、普通の
-	//「コンテンツElement」として扱われる。
-	//
-	//ちなみに、使用されるLayoutは、Pages.default
-	//
+	public $layout = 'NetCommons.setting';
 
 /**
  * @var array use models
@@ -45,11 +34,11 @@ class ReservationLocationsController extends ReservationsAppController {
 		'Reservations.ReservationLocation',
 		'Reservations.ReservationLocationsRoom',
 		'Categories.Category',
-		//'Workflow.WorkflowComment',
-		//'Reservations.ReservationPermission',
-		'Roles.DefaultRolePermission',
+		'Roles.Role',
+		'Rooms.RoomRole',
 		'Reservations.ReservationLocationReservable',
 		'Reservations.ReservationLocationsApprovalUser',
+		'Users.User',
 	);
 
 /**
@@ -58,16 +47,7 @@ class ReservationLocationsController extends ReservationsAppController {
  * @var array
  */
 	public $components = array(
-//		'NetCommons.Permission' => array(
-//			//アクセスの権限
-//			'allow' => array(
-//				'edit' => 'page_editable',
-//			),
-//		),
-		//'Workflow.Workflow',
-
 		'Categories.Categories',
-		//'Blogs.ReservationLocationPermission',
 		'NetCommons.NetCommonsTime',
 		'Paginator',
 		'Rooms.RoomsForm',
@@ -78,15 +58,7 @@ class ReservationLocationsController extends ReservationsAppController {
  * @var array helpers
  */
 	public $helpers = array(
-		'NetCommons.BackTo',
-		'NetCommons.NetCommonsForm',
-		'Workflow.Workflow',
-		'NetCommons.NetCommonsTime',
-		'NetCommons.TitleIcon',
-		//'Blocks.BlockForm',
-
 		'Blocks.BlockTabs', // 設定内容はReservationSettingsComponentにまとめた
-		'Blocks.BlockRolePermissionForm', // 設定内容はReservationSettingsComponentにまとめた
 		'Rooms.RoomsForm',
 		'Reservations.ReservationLocation',
 		'Groups.GroupUserList',
@@ -94,22 +66,11 @@ class ReservationLocationsController extends ReservationsAppController {
 	);
 
 /**
- * beforeFilter
- *
- * @return void
- */
-	public function beforeFilter() {
-		parent::beforeFilter();
-	}
-
-/**
  * index
  *
  * @return void
  */
 	public function index() {
-		$query = array();
-
 		//条件
 		$conditions = array(
 			'ReservationLocation.language_id' => Current::read('Language.id'),
@@ -142,24 +103,23 @@ class ReservationLocationsController extends ReservationsAppController {
 
 		// 施設管理者保持
 		if ($this->request->is('post')) {
-//			$this->ReservationLocation->create();
-
-			// set language_id
-			$this->request->data['ReservationLocation']['language_id'] = Current::read('Language.id');
 			$result = $this->ReservationLocation->saveLocation($this->request->data);
 			if ($result) {
 				$url = NetCommonsUrl::actionUrl(
 					array(
 						'controller' => 'reservation_locations',
 						'action' => 'index',
-						//'block_id' => Current::read('Block.id'),
 						'frame_id' => Current::read('Frame.id'),
-						//'key' => $result['ReservationLocation']['key']
 					)
 				);
 				return $this->redirect($url);
 			}
 			$this->NetCommons->handleValidationError($this->ReservationLocation->validationErrors);
+
+			//未選択の場合、文字列の空値が入ってくる
+			if (! is_array($this->request->data['ReservationLocationsRoom']['room_id'])) {
+				$this->request->data['ReservationLocationsRoom']['room_id'] = [];
+			}
 
 			$isMyUser = false;
 		} else {
@@ -168,10 +128,8 @@ class ReservationLocationsController extends ReservationsAppController {
 			$isMyUser = true;
 		}
 
-		//施設管理者のデータ取得
-		$this->request->data = $this->ReservationLocationsApprovalUser->getSelectUsers(
-			$this->request->data, $isMyUser
-		);
+		//施設管理者のセット
+		$this->_setSelectUsers($isMyUser);
 
 		// プライベートルームは除外する
 		$roomConditions = [
@@ -179,7 +137,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		];
 		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
 
-		$this->render('form');
+		$this->view = 'form';
 	}
 
 /**
@@ -189,84 +147,57 @@ class ReservationLocationsController extends ReservationsAppController {
  * @return void
  */
 	protected function _processPermission($key = null) {
-		// ε(　　　　 v ﾟωﾟ)　＜ きれいにしたいところ
-		$permissions = $this->Workflow->getBlockRolePermissions(
-			array(
-				'content_creatable',
-			)
+		$reservables = $this->ReservationLocationReservable->getPermissions($key);
+
+		$this->request->data['ReservationLocationReservable'] = Hash::merge(
+			$reservables,
+			Hash::get($this->request->data, 'ReservationLocationReservable', array())
 		);
-		// reseravableデータ取得
-		if ($key !== null) {
-			$reservables = $this->ReservationLocationReservable->find('all', ['conditions' => [
-				'location_key' => $key
-			]]);
-			$reservables = Hash::combine(
-				$reservables,
-				'{n}.ReservationLocationReservable.role_key',
-				'{n}.ReservationLocationReservable.value'
+
+		//Role取得
+		$roles = $this->Role->find('all', array(
+			'recursive' => -1,
+			'conditions' => array(
+				'Role.type' => Role::ROLE_TYPE_ROOM,
+				'Role.language_id' => Current::read('Language.id'),
+			),
+		));
+		$roles = Hash::combine($roles, '{n}.Role.key', '{n}.Role');
+
+		//RoomRole取得
+		$roomRoles = $this->RoomRole->find('all', array(
+			'recursive' => -1,
+		));
+		$roomRoles = Hash::combine($roomRoles, '{n}.RoomRole.role_key', '{n}.RoomRole');
+		$roomRoles = Hash::remove($roomRoles, '{n}.RoomRole.id');
+
+		$this->set('roles', Hash::merge($roomRoles, $roles));
+	}
+
+/**
+ * 担当者ユーザを設定
+ *
+ * @param bool $isMyUser 作成者ユーザー取得フラグ
+ * @return void
+ */
+	protected function _setSelectUsers($isMyUser) {
+		if ($isMyUser) {
+			$this->request->data['ReservationLocationsApprovalUser'][] = array(
+				'user_id' => Current::read('User.id')
 			);
-		} else {
-			// default
-			$reservables = ReservationLocationReservable::$defaultReservables;
 		}
 
-		$default = array(
-			'content_creatable' => array(
-				'room_administrator' => array(
-					'role_key' => 'room_administrator',
-					'type' => 'room_role',
-					'permission' => 'content_creatable',
-					'value' => $reservables['room_administrator'],
-					'fixed' => true,
-					'default' => true,
-					'roles_room_id' => '1',
-					//'block_key' => '0955dd34f66ac731ab5a548afcbfeb82'
-				),
-				'chief_editor' => array(
-					'role_key' => 'chief_editor',
-					'type' => 'room_role',
-					'permission' => 'content_creatable',
-					'value' => $reservables['chief_editor'],
-					'fixed' => true,
-					'default' => true,
-					'roles_room_id' => '2',
-					//'block_key' => '0955dd34f66ac731ab5a548afcbfeb82'
-				),
-				'editor' => array(
-					'role_key' => 'editor',
-					'type' => 'room_role',
-					'permission' => 'content_creatable',
-					'value' => $reservables['editor'],
-					'fixed' => true,
-					'default' => true,
-					'roles_room_id' => '3',
-					//'block_key' => '0955dd34f66ac731ab5a548afcbfeb82'
-				),
-				'general_user' => array(
-					'role_key' => 'general_user',
-					'type' => 'room_role',
-					'permission' => 'content_creatable',
-					'value' => $reservables['general_user'],
-					'fixed' => false,
-					'default' => true,
-					'roles_room_id' => '4',
-					//'block_key' => '0955dd34f66ac731ab5a548afcbfeb82'
-				),
-				'visitor' => array(
-					'role_key' => 'visitor',
-					'type' => 'room_role',
-					'permission' => 'content_creatable',
-					'value' => $reservables['visitor'],
-					'fixed' => true,
-					'default' => false,
-					'roles_room_id' => '5',
-					//'block_key' => '0955dd34f66ac731ab5a548afcbfeb82'
-				)
-			)
-		);
-		$this->request->data['BlockRolePermission'] = Hash::merge($default,
-			Hash::get($this->request->data, 'BlockRolePermission'));
-		$this->set('roles', $permissions['Roles']);
+		$this->request->data['selectUsers'] = array();
+		if (isset($this->request->data['ReservationLocationsApprovalUser'])) {
+			$selectUsers = Hash::extract(
+				$this->request->data['ReservationLocationsApprovalUser'],
+				'{n}.user_id'
+			);
+			foreach ($selectUsers as $userId) {
+				$user = $this->User->getUser($userId);
+				$this->request->data['selectUsers'][] = $user;
+			}
+		}
 	}
 
 /**
@@ -276,75 +207,72 @@ class ReservationLocationsController extends ReservationsAppController {
  */
 	public function edit() {
 		$this->set('isEdit', true);
-		//$key = $this->request->params['named']['key'];
 		$key = $this->params['key'];
 
-		//  keyのis_latstを元に編集を開始
-		$this->ReservationLocation->recursive = 0;
-		$options = [
+		$this->_processPermission($key);
+
+		//施設データの取得
+		$reservationLocation = $this->ReservationLocation->find('first', [
+			'recursive' => 0,
 			'conditions' => [
 				'ReservationLocation.key' => $key,
 				'ReservationLocation.language_id' => Current::read('Language.id')
 			]
-		];
-
-		$reservationLocation = $this->ReservationLocation->find('first', $options);
-		$timeTable = explode('|', $reservationLocation['ReservationLocation']['time_table']);
-		$reservationLocation['ReservationLocation']['time_table'] = $timeTable;
-
+		]);
 		if (empty($reservationLocation)) {
 			return $this->throwBadRequest();
 		}
-
-		// 施設管理者保持
-		$this->request->data =
-			$this->ReservationLocationsApprovalUser->getSelectUsers($this->request->data, false);
-
-		$this->_processPermission($key);
+		$timeTable = explode('|', $reservationLocation['ReservationLocation']['time_table']);
+		$reservationLocation['ReservationLocation']['time_table'] = $timeTable;
 
 		if ($this->request->is(array('post', 'put'))) {
-
-			$this->ReservationLocation->create();
-
-			// set language_id
-			$this->request->data['ReservationLocation']['language_id'] = Current::read('Language.id');
+			// リクエストデータから施設管理者保持
+			$this->_setSelectUsers(false);
 
 			$data = $this->request->data;
-
-			//unset($data['ReservationLocation']['id']); // 常に新規保存
-
 			if ($this->ReservationLocation->saveLocation($data)) {
 				$url = NetCommonsUrl::actionUrl(
 					array(
 						'controller' => 'reservation_locations',
 						'action' => 'index',
 						'frame_id' => Current::read('Frame.id'),
-						//'block_id' => Current::read('Block.id'),
-						//'key' => $data['ReservationLocation']['key']
 					)
 				);
-
 				return $this->redirect($url);
 			}
 
 			$this->NetCommons->handleValidationError($this->ReservationLocation->validationErrors);
 
+			//未選択の場合、文字列の空値が入ってくる
+			if (! is_array($this->request->data['ReservationLocationsRoom']['room_id'])) {
+				$this->request->data['ReservationLocationsRoom']['room_id'] = [];
+			}
+
 		} else {
 			// start_time, end_timeを施設のタイムゾーンに変換してH:i形式へ
 			$locationTimeZone = new DateTimeZone($reservationLocation['ReservationLocation']['timezone']);
-			$startDate = new DateTime($reservationLocation['ReservationLocation']['start_time'], new DateTimeZone('UTC'));
+			$startDate = new DateTime(
+				$reservationLocation['ReservationLocation']['start_time'], new DateTimeZone('UTC')
+			);
 
 			$startDate->setTimezone($locationTimeZone);
 			$reservationLocation['ReservationLocation']['start_time'] = $startDate->format('H:i');
 
-			$endDate = new DateTime($reservationLocation['ReservationLocation']['end_time'], new DateTimeZone('UTC'));
+			$endDate = new DateTime(
+				$reservationLocation['ReservationLocation']['end_time'], new DateTimeZone('UTC')
+			);
 			$endDate->setTimezone($locationTimeZone);
 			$reservationLocation['ReservationLocation']['end_time'] = $endDate->format('H:i');
 
 			$this->request->data['ReservationLocation'] = $reservationLocation['ReservationLocation'];
-			$approvalUsers = $this->ReservationLocationsApprovalUser->find('all', ['conditions' => [
-				'location_key' => $key
-			]]);
+
+			//施設管理者のデータセット
+			$approvalUsers = $this->ReservationLocationsApprovalUser->find('all', [
+				'recursive' => 0,
+				'conditions' => [
+					'location_key' => $key
+				]
+			]);
 			foreach ($approvalUsers as $approvalUser) {
 				$this->request->data['selectUsers'][] = ['User' => $approvalUser['User']];
 			}
@@ -356,16 +284,12 @@ class ReservationLocationsController extends ReservationsAppController {
 				'conditions' => ['reservation_location_key' =>
 					$this->request->data['ReservationLocation']['key']],
 			));
-			$this->request->data['ReservationLocationsRoom']['room_id'] =
-				array_unique(array_values($result));
+			$roomIds = array_unique(array_values($result));
+			$this->request->data['ReservationLocationsRoom']['room_id'] = $roomIds;
 		}
 
 		$this->set('reservationLocation', $reservationLocation);
-		//$this->set('isDeletable', $this->ReservationLocation->canDeleteWorkflowContent($blogEntry));
 		$this->set('isDeletable', true);
-
-		//$comments = $this->ReservationLocation->getCommentsByContentKey($blogEntry['ReservationLocation']['key']);
-		//$this->set('comments', $comments);
 
 		// プライベートルームは除外する
 		$roomConditions = [
@@ -373,7 +297,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		];
 		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
 
-		$this->render('form');
+		$this->view = 'form';
 	}
 
 /**
@@ -383,36 +307,23 @@ class ReservationLocationsController extends ReservationsAppController {
  * @return void
  */
 	public function delete() {
-		$this->request->allowMethod('post', 'delete');
+		if (! $this->request->is('delete')) {
+			return $this->throwBadRequest();
+		}
 
 		$key = $this->request->data['ReservationLocation']['key'];
-		//$blogEntry = $this->ReservationLocation->getWorkflowContents('first', array(
-			//'recursive' => 0,
-		//	'conditions' => array(
-		//		'ReservationLocation.key' => $key
-		//	)
-		//));
-
-		// 権限チェック
-		//if ($this->ReservationLocation->canDeleteWorkflowContent($blogEntry) === false) {
-		//	return $this->throwBadRequest();
-		//}
-		$conditions = [
-			'ReservationLocation.key' => $key
-		];
-		if ($this->ReservationLocation->deleteAll($conditions) === false) {
+		if (! $this->ReservationLocation->deleteLocation($key)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
-		return $this->redirect(
-			NetCommonsUrl::actionUrl(
-				array(
-					'controller' => 'reservation_locations',
-					'action' => 'index',
-					'frame_id' => Current::read('Frame.id'),
-					//'block_id' => Current::read('Block.id')
-				)
+
+		$url = NetCommonsUrl::actionUrl(
+			array(
+				'controller' => 'reservation_locations',
+				'action' => 'index',
+				'frame_id' => Current::read('Frame.id'),
 			)
 		);
+		return $this->redirect($url);
 	}
 
 /**
@@ -423,13 +334,18 @@ class ReservationLocationsController extends ReservationsAppController {
 	public function sort() {
 		if ($this->request->is('post')) {
 			if ($this->ReservationLocation->saveWeights($this->data)) {
-				$this->redirect(['action' => 'index', 'frame_id' => Current::read('Frame.id')]);
-				return;
+				$url = NetCommonsUrl::actionUrl(
+					array(
+						'controller' => 'reservation_locations',
+						'action' => 'index',
+						'frame_id' => Current::read('Frame.id'),
+					)
+				);
+				return $this->redirect($url);
 			}
 			$this->NetCommons->handleValidationError($this->ReservationLocation->validationErrors);
 
 		} else {
-
 			//条件
 			$conditions = array(
 				'ReservationLocation.language_id' => Current::read('Language.id'),
@@ -440,6 +356,7 @@ class ReservationLocationsController extends ReservationsAppController {
 			$query = [
 				'conditions' => $conditions,
 				'recursive' => 0,
+				'order' => 'ReservationLocation.weight ASC',
 				'limit' => PHP_INT_MAX,
 				'maxLimit' => PHP_INT_MAX
 			];

@@ -25,7 +25,6 @@ class ReservationLocation extends ReservationsAppModel {
  * @var array
  */
 	public $actsAs = array(
-		'NetCommons.Trackable',
 		'NetCommons.OriginalKey',
 		'Wysiwyg.Wysiwyg' => array(
 			'fields' => array('detail'),
@@ -39,7 +38,6 @@ class ReservationLocation extends ReservationsAppModel {
 			'afterCallback' => false,
 		),
 		'Reservations.ReservationValidate',
-		//'Reservations.ReservationRoleAndPerm', //施設予約役割・権限
 	);
 
 /**
@@ -80,111 +78,64 @@ class ReservationLocation extends ReservationsAppModel {
 				'language_id' => array(
 					'numeric' => array(
 						'rule' => array('numeric'),
-						//'message' => 'Your custom message here',
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
+						'message' => __d('net_commons', 'Invalid request.'),
 					),
 				),
 				'category_id' => array(
 					'numeric' => array(
 						'rule' => array('numeric'),
-						//'message' => 'Your custom message here',
+						'message' => __d('net_commons', 'Invalid request.'),
 						'allowEmpty' => true,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
 					),
 				),
 				'location_name' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
 						'message' => __d('net_commons', 'Please input %s.', __d('reservations', 'Location name')),
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
-					),
-				),
-				'add_authority' => array(
-					'boolean' => array(
-						'rule' => array('boolean'),
-						//'message' => 'Your custom message here',
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
 					),
 				),
 				'time_table' => array(
 					'notBlank' => array(
 						'rule' => array('notBlank'),
-						'message' => __d('reservations', '曜日を選択してください。'),
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
+						'message' => __d('reservations', 'Invalid input. Please enter week day.'),
 					),
 				),
 				'start_time' => array(
 					'rule1' => array(
 						'rule' => array('validateTime'),
-						'message' => __d('reservations', 'Invalid value.'),
+						'message' => __d('reservations', 'Invalid input. (time)'),
 					),
 					'rule2' => array(
 						'rule' => array('validateTimeRange', 'end_time'),
-						'message' => __d('reservations', 'Invalid value.'),
+						'message' => __d('reservations', 'Invalid input. Please enter the correct time.'),
 					),
 				),
 				'end_time' => array(
 					'rule1' => array(
 						'rule' => array('validateTime'),
-						'message' => __d('reservations', 'Invalid value.'),
+						'message' => __d('reservations', 'Invalid input. (time)'),
 					),
 				),
 				'use_private' => array(
 					'boolean' => array(
 						'rule' => array('boolean'),
-						//'message' => 'Your custom message here',
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
-					),
-				),
-				'use_auth_flag' => array(
-					'boolean' => array(
-						'rule' => array('boolean'),
-						//'message' => 'Your custom message here',
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
+						'message' => __d('net_commons', 'Invalid request.'),
 					),
 				),
 				'use_all_rooms' => array(
 					'boolean' => array(
 						'rule' => array('boolean'),
-						//'message' => 'Your custom message here',
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
+						'message' => __d('net_commons', 'Invalid request.'),
 					),
 				),
-				'display_sequence' => array(
+				'weight' => array(
 					'numeric' => array(
 						'rule' => array('numeric'),
-						//'message' => 'Your custom message here',
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
+						'message' => __d('net_commons', 'Invalid request.'),
 					),
 				),
 		));
-		//$this->_doMergeWorkflowParamValidate(); //Workflowパラメータ関連validation
+
 		return parent::beforeValidate($options);
 	}
 
@@ -203,6 +154,28 @@ class ReservationLocation extends ReservationsAppModel {
 			$this->bindModel($belongsTo, true);
 		}
 		return true;
+	}
+
+/**
+ * Called after each find operation. Can be used to modify any results returned by find().
+ * Return value should be the (modified) results.
+ *
+ * @param mixed $results The results of the find operation
+ * @param bool $primary Whether this model is being queried directly (vs. being queried as an association)
+ * @return mixed Result of the find operation
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#afterfind
+ */
+	public function afterFind($results, $primary = false) {
+		foreach ($results as $key => $value) {
+			if (array_key_exists('time_table', $results[$key][$this->alias]) &&
+					array_key_exists('start_time', $results[$key][$this->alias]) &&
+					array_key_exists('end_time', $results[$key][$this->alias]) &&
+					array_key_exists('timezone', $results[$key][$this->alias])) {
+				$results[$key][$this->alias]['openText'] = $this->_openText($value);
+			}
+		}
+		return $results;
 	}
 
 /**
@@ -227,49 +200,6 @@ class ReservationLocation extends ReservationsAppModel {
 	}
 
 /**
- * 時刻バリデーション
- *
- * @param array $check チェックする値の配列
- * @return bool
- */
-	public function validateTime($check) {
-		$values = array_values($check);
-		$time = $values[0];
-
-		if (!preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2} ([0-9]{2}):([0-9]{2}):[0-9]{2}$/',
-			$time,
-			$matches
-			)) {
-			return false;
-		}
-		//list($hour, $min) = explode(':', $time);
-		$hour = $matches[1];
-		$min = $matches[2];
-		if (intval($hour) < 0 || intval($hour) > 24) {
-			return false;
-		}
-		if (intval($min) < 0 || intval($min) > 59) {
-			return false;
-		}
-		return true;
-	}
-
-/**
- * 時刻範囲バリデーション
- *
- * @param array $check 開始の配列
- * @param string $endKey 終了値の入るキー名
- * @return bool
- */
-	public function validateTimeRange($check, $endKey) {
-		$values = array_values($check);
-		$startTime = $values[0];
-
-		$endTime = $this->data[$this->alias][$endKey];
-		return ($startTime < $endTime);
-	}
-
-/**
  * 施設データの登録
  *
  * @param array $data 登録データ
@@ -277,11 +207,18 @@ class ReservationLocation extends ReservationsAppModel {
  * @throws InternalErrorException
  */
 	public function saveLocation($data) {
+		$this->loadModels([
+			'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
+			'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable',
+			'ReservationLocationsApprovalUser' => 'Reservations.ReservationLocationsApprovalUser',
+		]);
+
 		$data = $this->_prepareData($data);
 
 		$this->begin();
 		try {
-			$this->create(); //
+			$this->create();
+
 			// 先にvalidate 失敗したらfalse返す
 			$this->set($data);
 			if (!$this->validates($data)) {
@@ -292,19 +229,22 @@ class ReservationLocation extends ReservationsAppModel {
 				//このsaveで失敗するならvalidate以外なので例外なげる
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
+
 			// ReservationLocationsRoom登録
 			if (isset($savedData['ReservationLocationsRoom'])) {
-
-				$this->loadModels([
-					'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
-				]);
 				$key = $savedData[$this->alias]['key'];
-				if (!$this->ReservationLocationsRoom->saveReservationLocaitonsRoom($key, $savedData)) {
+				if (! $this->ReservationLocationsRoom->saveReservationLocaitonsRoom($key, $savedData)) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 				}
 			}
-			// ReservationLoationReservable保存
-			$this->_saveReservationLocationReservable($key, $savedData);
+			// ReservationLoationReservable登録
+			if (! $this->ReservationLocationReservable->saveReservable($key, $savedData)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+			// ReservationLocationsApprovalUser登録
+			if (! $this->ReservationLocationsApprovalUser->saveApprovalUser($key, $savedData)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
 
 			//多言語化の処理
 			$this->set($savedData);
@@ -319,80 +259,6 @@ class ReservationLocation extends ReservationsAppModel {
 	}
 
 /**
- * 予約できる権限の保存
- *
- * @param string $locationKey location_key
- * @param array $data save data
- * @throws InternalErrorException
- * @return void
- */
-	protected function _saveReservationLocationReservable($locationKey, $data) {
-		// ε(　　　　 v ﾟωﾟ)　＜ きれいにしたいところ
-		$this->loadModels(
-			[
-				'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable',
-				'ReservationLocationsApprovalUser' => 'Reservations.ReservationLocationsApprovalUser',
-			]
-		);
-
-		$roles = $data['BlockRolePermission']['content_creatable'];
-		// 同じ施設のreservableデータをあらかじめ削除しておく
-		$this->ReservationLocationReservable->deleteAll(['location_key' => $locationKey]);
-
-		foreach ($roles as $roleKey => $role) {
-			$value = $role['value'];
-			// ルーム毎に保存
-			if ($data['ReservationLocation']['use_all_rooms']) {
-				// 全てのルームから予約を受けつける
-				$this->ReservationLocationReservable->create();
-				$reservableData = [
-					'location_key' => $locationKey,
-					'role_key' => $roleKey,
-					'room_id' => null,
-					'value' => $value
-				];
-				if (!$this->ReservationLocationReservable->save($reservableData)) {
-					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-				};
-			} else {
-				// 個別のルームから予約を受け付ける
-				foreach ($data['ReservationLocationsRoom']['room_id'] as $roomId) {
-					$this->ReservationLocationReservable->create();
-					$reservableData = [
-						'location_key' => $locationKey,
-						'role_key' => $roleKey,
-						'room_id' => $roomId,
-						'value' => $value
-					];
-					if (!$this->ReservationLocationReservable->save($reservableData)) {
-						throw new InternalErrorException(
-							__d('net_commons', 'Internal Server Error')
-						);
-					}
-				}
-			}
-		}
-
-		$userIds = array_keys(Hash::combine($data, 'ReservationLocationsApprovalUser.{n}.user_id'));
-
-		$this->ReservationLocationsApprovalUser->deleteAll(['location_key' => $locationKey]);
-		foreach ($userIds as $userId) {
-			$this->ReservationLocationsApprovalUser->create();
-			$userData = [
-				'ReservationLocationsApprovalUser' => [
-					'location_key' => $locationKey,
-					'user_id' => $userId
-				]
-			];
-			if (!$this->ReservationLocationsApprovalUser->save($userData)) {
-				throw new InternalErrorException(
-					__d('net_commons', 'Internal Server Error')
-				);
-			}
-		}
-	}
-
-/**
  * 並び替えの保存
  *
  * @param array $data 並び替えデータ
@@ -402,6 +268,11 @@ class ReservationLocation extends ReservationsAppModel {
 	public function saveWeights($data) {
 		//トランザクションBegin
 		$this->begin();
+
+		//バリデーション
+		if (! $this->validateMany($data['ReservationLocations'])) {
+			return false;
+		}
 
 		try {
 			//登録処理
@@ -418,6 +289,153 @@ class ReservationLocation extends ReservationsAppModel {
 		}
 
 		return true;
+	}
+
+/**
+ * 施設データの削除
+ *
+ * @param string $locationKey 施設キー
+ * @return bool
+ * @throws InternalErrorException
+ */
+	public function deleteLocation($locationKey) {
+		$this->loadModels([
+			'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
+			'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable',
+			'ReservationLocationsApprovalUser' => 'Reservations.ReservationLocationsApprovalUser',
+			'ReservationEvent' => 'Reservations.ReservationEvent',
+			'ReservationEventContent' => 'Reservations.ReservationEventContent',
+			'ReservationEventShareUser' => 'Reservations.ReservationEventShareUser',
+			'ReservationFrameSetting' => 'Reservations.ReservationFrameSetting',
+		]);
+
+		$this->begin();
+		try {
+			// ReservationLocation 削除
+			$conditions = [
+				$this->alias . '.key' => $locationKey
+			];
+			if (! $this->deleteAll($conditions)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			// ReservationLocationsRoom 削除
+			$conditions = [
+				$this->ReservationLocationsRoom->alias . '.reservation_location_key' => $locationKey
+			];
+			if (! $this->ReservationLocationsRoom->deleteAll($conditions)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			// ReservationLocationReservable 削除
+			$conditions = [
+				$this->ReservationLocationReservable->alias . '.location_key' => $locationKey
+			];
+			if (! $this->ReservationLocationReservable->deleteAll($conditions)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			// ReservationLocationsApprovalUser 削除
+			$conditions = [
+				$this->ReservationLocationsApprovalUser->alias . '.location_key' => $locationKey
+			];
+			if (! $this->ReservationLocationsApprovalUser->deleteAll($conditions)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			// 削除するReservationEvent.id 取得
+			$conditions = [
+				$this->ReservationEvent->alias . '.location_key' => $locationKey
+			];
+			$reserveIds = $this->ReservationEvent->find('list', [
+				'recursive' => -1,
+				'conditions' => $conditions
+			]);
+			$reserveIds = array_values($reserveIds);
+
+			// ReservationEventContent 削除
+			$conditions = [
+				$this->ReservationEventContent->alias . '.reservation_event_id' => $reserveIds
+			];
+			if (! $this->ReservationEventContent->deleteAll($conditions)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			// ReservationEventShareUser 削除
+			$conditions = [
+				$this->ReservationEventShareUser->alias . '.reservation_event_id' => $reserveIds
+			];
+			if (! $this->ReservationEventShareUser->deleteAll($conditions)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			// ReservationEvent 削除
+			$conditions = [
+				$this->ReservationEvent->alias . '.location_key' => $locationKey
+			];
+			if (! $this->ReservationEvent->deleteAll($conditions)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			//ReservationFrameSetting のlocation_keyを変更する
+			$updateKey = $this->_getLocationKeyByMinWeight();
+			$update = [
+				$this->ReservationFrameSetting->alias . '.location_key' => '\'' . $updateKey . '\''
+			];
+			$conditions = [
+				$this->ReservationFrameSetting->alias . '.location_key' => $locationKey
+			];
+			if (! $this->ReservationFrameSetting->updateAll($update, $conditions)) {
+				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+			}
+
+			$this->commit();
+
+		} catch (Exception $e) {
+			$this->rollback($e);
+		}
+
+		return true;
+	}
+
+/**
+ * weightの最大値取得
+ *
+ * @return int
+ */
+	protected function _getMaxWeight() {
+		$order = $this->find('first', array(
+				'recursive' => -1,
+				'fields' => array('weight'),
+				'order' => array('weight' => 'DESC')
+			));
+
+		if (isset($order[$this->alias]['weight'])) {
+			$weight = (int)$order[$this->alias]['weight'];
+		} else {
+			$weight = 0;
+		}
+		return $weight;
+	}
+
+/**
+ * weightの最小値の施設キー取得
+ *
+ * @return int
+ */
+	protected function _getLocationKeyByMinWeight() {
+		$location = $this->find('first', array(
+			'recursive' => -1,
+			'fields' => array('key', 'weight'),
+			'order' => array('weight' => 'ASC')
+		));
+
+		if (! $location) {
+			$locationKey = null;
+		} else {
+			$locationKey = $location[$this->alias]['key'];
+		}
+		return $locationKey;
 	}
 
 /**
@@ -458,10 +476,6 @@ class ReservationLocation extends ReservationsAppModel {
 		}
 
 		$locations = $this->find('all', $options);
-		// openTextをセットする。
-		foreach ($locations as &$location) {
-			$location['ReservationLocation']['openText'] = $this->openText($location);
-		}
 		return $locations;
 	}
 
@@ -471,7 +485,7 @@ class ReservationLocation extends ReservationsAppModel {
  * @param array $reservationLocation 施設データ
  * @return string
  */
-	public function openText($reservationLocation) {
+	protected function _openText($reservationLocation) {
 		$ret = '';
 		$weekDaysOptions = [
 			'Sun' => __d('holidays', 'Sunday'),
@@ -558,6 +572,11 @@ class ReservationLocation extends ReservationsAppModel {
 		// category_id=0だったらnullにする。そうしないと空文字としてSQL発行される
 		if (empty($data[$this->alias]['category_id'])) {
 			$data[$this->alias]['category_id'] = null;
+		}
+
+		//新規の場合、順番を最大値＋１にする
+		if (empty($data['ReservationLocation']['id'])) {
+			$data[$this->alias]['weight'] = $this->_getMaxWeight() + 1;
 		}
 
 		// 予約を受け付けるルームがひとつもえらばれてないとき

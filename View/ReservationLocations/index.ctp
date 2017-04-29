@@ -41,14 +41,14 @@ App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 				<table class="table table-hover">
 					<thead>
 					<tr>
+						<th colspan="2">
+							<?php echo $this->Paginator->sort('location_name', __d('reservations', 'Location name')); ?>
+						</th>
 						<?php if ($categories) : ?>
 							<th>
 								<?php echo $this->Paginator->sort('CategoryOrder.weight', __d('categories', 'Category')); ?>
 							</th>
 						<?php endif; ?>
-						<th colspan="2">
-							<?php echo $this->Paginator->sort('location_name', __d('reservations', 'Location name')); ?>
-						</th>
 						<th>
 							<?php echo __d('reservations', 'Available datetime') ?>
 						</th>
@@ -56,11 +56,6 @@ App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 					</thead>
 					<?php foreach ($reservationLocations as $reservationLocation): ?>
 						<tr>
-							<?php if ($categories) : ?>
-								<td>
-									<?php echo h($reservationLocation['CategoriesLanguage']['name']); ?>
-								</td>
-							<?php endif; ?>
 							<td>
 								<?php echo h($reservationLocation['ReservationLocation']['location_name']); ?>
 							</td>
@@ -68,18 +63,18 @@ App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 								<?php
 									echo $this->LinkButton->edit(
 										null,
-										[
-											'action' => 'edit',
-											'key' => $reservationLocation['ReservationLocation']['key']
-										],
-										[
-											'iconSize' => 'btn-xs'
-										]
+										['action' => 'edit', 'key' => $reservationLocation['ReservationLocation']['key']],
+										['iconSize' => 'btn-xs']
 									);
 								?>
 							</td>
+							<?php if ($categories) : ?>
+								<td>
+									<?php echo h($reservationLocation['CategoriesLanguage']['name']); ?>
+								</td>
+							<?php endif; ?>
 							<td>
-								<?php echo $this->ReservationLocation->openText($reservationLocation); ?>
+								<?php echo h($reservationLocation['ReservationLocation']['openText']); ?>
 							</td>
 						</tr>
 					<?php endforeach;?>
