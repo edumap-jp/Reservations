@@ -28,7 +28,14 @@ $urlParams = array(
 	<div class="tab-content">
 
 		<div class="form-group">
-			<div class="well well-sm"><?php echo __d('reservations', 'Please set from Select the room for which you want e-mail notification settings . It will be the setting of one room.'); ?></div>
+			<div class="well well-sm">
+				<?php
+					echo __d(
+						'reservations',
+						'Please set from Select the room for which you want e-mail notification settings. It will be the setting of one room.'
+					);
+				?>
+			</div>
 			<label><?php echo __d('reservations', 'Target room'); ?></label>
 			<span class="btn-group">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -37,11 +44,18 @@ $urlParams = array(
 				</button>
 				<ul class="dropdown-menu" role="menu">
 					<?php foreach ($mailRooms as $key => $name) : ?>
-					<li<?php echo ($key == Current::read('Room.id') ? ' class="active"' : ''); ?>>
-						<?php echo $this->NetCommonsHtml->link($name,
-							Hash::merge($urlParams, array('?' => array('room' => $key)))
-						); ?>
-					</li>
+						<?php
+							if ($key == Current::read('Room.id')) {
+								$active = ' class="active"';
+							} else {
+								$active = '';
+							}
+						?>
+						<li<?php echo $active; ?>>
+							<?php echo $this->NetCommonsHtml->link($name,
+								Hash::merge($urlParams, array('?' => array('room' => $key)))
+							); ?>
+						</li>
 					<?php endforeach; ?>
 				</ul>
 			</span>
@@ -53,8 +67,8 @@ $urlParams = array(
 					'mailBodyPopoverMessage' => __d('reservations', 'MailSetting.mail_fixed_phrase_body.popover'),
 				),
 			),
-			NetCommonsUrl::backToIndexUrl('default_setting_action')
+			NetCommonsUrl::backToPageUrl(true)
 		); ?>
-	</div><!--end tab-content-->
+	</div>
 </article>
 

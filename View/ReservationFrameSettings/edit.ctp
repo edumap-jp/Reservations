@@ -39,7 +39,7 @@ if (isset($this->data['ReservationFrameSetting'])) {
 		<?php echo $this->element('Blocks.edit_form', array(
 			'model' => 'ReservationFrameSetting',
 			'callback' => 'Reservations.ReservationFrameSettings/edit_form',
-			'cancelUrl' => NetCommonsUrl::backToIndexUrl('default_action'),
+			'cancelUrl' => NetCommonsUrl::backToPageUrl(true),
 		)); ?>
 	</div>
 </article>
