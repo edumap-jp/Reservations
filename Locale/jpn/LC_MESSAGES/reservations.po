@@ -525,7 +525,7 @@ msgid "Sun|Mon|Tue|Wed|Thu|Fri|Sat"
 msgstr "日|月|火|水|木|金|土"
 
 #: Reservations/View/ReservationMailSettings/edit.ctp:27
-msgid "Please set from Select the room for which you want e-mail notification settings . It will be the setting of one room."
+msgid "Please set from Select the room for which you want e-mail notification settings. It will be the setting of one room."
 msgstr "メール通知設定を行う対象のルームを選んでから設定してください。１ルームずつの設定となります。"
 
 #: Reservations/View/ReservationMailSettings/edit.ctp:28

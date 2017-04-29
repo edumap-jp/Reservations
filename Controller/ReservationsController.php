@@ -35,7 +35,6 @@ class ReservationsController extends ReservationsAppController {
 		'Reservations.ReservationFrameSetting',
 		'Reservations.Reservation',
 		'Reservations.ReservationEventShareUser',
-		'Reservations.ReservationFrameSettingSelectRoom',
 		'Reservations.ReservationActionPlan',	//予定CRUDaction専用
 		'Reservations.ReservationLocation',
 		'Holidays.Holiday',

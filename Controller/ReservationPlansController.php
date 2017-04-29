@@ -62,7 +62,6 @@ class ReservationPlansController extends ReservationsAppController {
 		'Reservations.ReservationEvent',
 		'Reservations.ReservationFrameSetting',
 		'Reservations.ReservationEventShareUser',
-		'Reservations.ReservationFrameSettingSelectRoom',
 		'Reservations.ReservationSetting',
 		'Reservations.ReservationWorkflow',
 		'Reservations.ReservationLocation',
