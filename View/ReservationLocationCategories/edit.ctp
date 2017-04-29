@@ -16,26 +16,10 @@ App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 	<?php echo $this->BlockTabs->main(ReservationSettingsComponent::MAIN_TAB_CATEGORY_SETTING); ?>
 
 	<div class="tab-content">
-		<?php //echo $this->BlockTabs->block(BlockTabsHelper::BLOCK_TAB_SETTING); ?>
-
 		<?php echo $this->element('Blocks.edit_form', array(
 			'model' => 'Reservation',
 			'callback' => 'Reservations.ReservationLocationCategories/edit_form',
-			'cancelUrl' => NetCommonsUrl::backToIndexUrl('default_setting_action'),
+			'cancelUrl' => NetCommonsUrl::backToPageUrl(true),
 		)); ?>
-
-		<?php //if ($this->request->params['action'] === 'edit') : ?>
-		<!--	--><?php //echo $this->element('Blocks.delete_form', array(
-		//		'model' => 'ReservationSetting',
-		//		'action' => NetCommonsUrl::actionUrl(array(
-		//			'controller' => $this->params['controller'],
-		//			'action' => 'delete',
-		//			'block_id' => Current::read('Block.id'),
-		//			'frame_id' => Current::read('Frame.id')
-		//		)),
-		//		//'action' => 'delete/' . Current::read('Frame.id') . '/' . Current::read('Block.id'),
-		//		'callback' => 'Reservations.ReservationLocationCategories/delete_form'
-		//	)); ?>
-		<?php //endif; ?>
 	</div>
 </article>
