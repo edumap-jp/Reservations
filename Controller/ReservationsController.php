@@ -83,23 +83,18 @@ class ReservationsController extends ReservationsAppController {
  *
  * @return void
  */
-	public function beforeFilter() {
-		parent::beforeFilter();
-
-		// 以前はここでCurrentのブロックIDをチェックする処理があったが
-		// 施設予約はCurrentのブロックID（＝現在表示中ページのブロックID）は
-		// 表示データ上の意味がないのでチェックは行わない
-		// 表示ブロックIDがないときは、パブリックTOPページで仮表示されることに話が決まった
-		$this->ReservationEvent->initSetting($this->Workflow);
-
-		$categoryId = Hash::get($this->params['named'], 'category_id');
-		$locations = $this->ReservationLocation->getLocations($categoryId);
-		$this->set('locations', $locations);
-
-		//if (! $locations) {
-		//	$this->setAction('emptyRender');
-		//}
-	}
+	//public function beforeFilter() {
+	//	parent::beforeFilter();
+	//
+	//	// 以前はここでCurrentのブロックIDをチェックする処理があったが
+	//	// 施設予約はCurrentのブロックID（＝現在表示中ページのブロックID）は
+	//	// 表示データ上の意味がないのでチェックは行わない
+	//	// 表示ブロックIDがないときは、パブリックTOPページで仮表示されることに話が決まった
+	//
+	//	//if (! $locations) {
+	//	//	$this->setAction('emptyRender');
+	//	//}
+	//}
 
 /**
  * index
@@ -109,6 +104,16 @@ class ReservationsController extends ReservationsAppController {
 	public function index() {
 		$vars = array();
 		$this->setReservationCommonCurrent($vars);
+
+		$this->ReservationEvent->initSetting($this->Workflow);
+		$categoryId = Current::read('ReservationFrameSetting.category_id');
+
+		$categoryId = Hash::get($this->params['named'], 'category_id', $categoryId);
+		$this->request->param('named.category_id', $categoryId);
+
+		$locations = $this->ReservationLocation->getLocations($categoryId);
+		$this->set('locations', $locations);
+
 		$style = $this->getQueryParam('style');
 		if (! $style) {
 			//style未指定の場合、ReservationFrameSettingモデルのdisplay_type情報から表示するctpを決める。
