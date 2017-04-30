@@ -73,8 +73,8 @@ class ReservationMailSettingRecords extends MailsMigration {
 				'plugin_key' => self::PLUGIN_KEY,
 				'block_key' => null,
 				'type_key' => 'contents',
-				'mail_fixed_phrase_subject' => '[{X-SITE_NAME}]予定の通知',
-				'mail_fixed_phrase_body' => '施設予約に予定が追加されたのでお知らせします。
+				'mail_fixed_phrase_subject' => '[{X-SITE_NAME}]予約通知',
+				'mail_fixed_phrase_body' => '施設に予約が追加されたのでお知らせします。
 
 件名:{X-SUBJECT}
 公開対象:{X-ROOM}
@@ -88,7 +88,7 @@ class ReservationMailSettingRecords extends MailsMigration {
 
 {X-BODY}
 
-この予定を見るには、下記アドレスへ
+この予約を見るには、下記アドレスへ
 {X-URL}
 ',
 			),
