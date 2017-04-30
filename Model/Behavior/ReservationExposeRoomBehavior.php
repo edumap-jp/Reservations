@@ -80,6 +80,10 @@ class ReservationExposeRoomBehavior extends ReservationAppBehavior {
 			$roomId = Space::getRoomIdRoot(Space::COMMUNITY_SPACE_ID);
 			$spaceNameOfRooms[$roomId] = 'member';	//例外的に文字列を渡す
 			$allRoomNames[$roomId] = __d('reservations', 'All the members');
+//			if ($this->_isEnableRoomInFrameSetting($roomId, $frameSetting)) {
+				//ログインしている時、optionに積む
+				$options[$roomId] = __d('reservations', 'All the members');
+//			}
 		}
 
 		return array($options, $myself, $spaceNameOfRooms, $allRoomNames);
@@ -115,6 +119,18 @@ class ReservationExposeRoomBehavior extends ReservationAppBehavior {
 					$spaceNameOfRooms[$roomId] =
 						($space['Space']['type'] == Space::COMMUNITY_SPACE_ID) ? 'group' : 'public';
 					$allRoomNames[$roomId] = $targetTitle;
+
+//					if ($this->_isEnableRoomInFrameSetting($roomId, $frameSetting)) {
+						if ($space['Space']['type'] == Space::COMMUNITY_SPACE_ID) {
+							if (empty($userId)) {
+								//未ログインなので、グループ空間をoptionに積んではいけない。抜ける。
+								continue;
+							}
+							//グループ空間の時は、インデントを１つ減らす。..これにより、NC2と同じレベルの表現になる。
+							$nest -= 1;
+						}
+						$options[$roomId] = str_repeat('　', $nest * 1) . $targetTitle;
+//					}
 				}
 			}
 		}
