@@ -29,11 +29,6 @@ class ReservationMailSettingsController extends MailSettingsController {
  */
 	public $components = array(
 		'Mails.MailSettings',
-//		'NetCommons.Permission' => array(
-//			'allow' => array(
-//				'edit' => 'mail_editable',
-//			),
-//		),
 		'Pages.PageLayout',
 		'Security',
 		'Reservations.ReservationSettings', //NetCommons.Permissionは使わず、独自でやる
@@ -45,13 +40,9 @@ class ReservationMailSettingsController extends MailSettingsController {
  * @var array
  */
 	public $uses = array(
-		'Blocks.Block',
-		'Rooms.Room',
-		'Rooms.RoomsLanguage',
 		'Mails.MailSetting',
 		'Mails.MailSettingFixedPhrase',
-		'Reservations.ReservationEvent',
-		'Reservations.ReservationPermission',
+		'Reservations.Reservation',
 	);
 
 /**
@@ -66,70 +57,19 @@ class ReservationMailSettingsController extends MailSettingsController {
 	);
 
 /**
- * beforeFilter
+ * beforeRender
  *
  * @return void
- * @see NetCommonsAppController::beforeFilter()
  */
 	public function beforeFilter() {
 		parent::beforeFilter();
 
 		$this->backUrl = NetCommonsUrl::backToPageUrl(true);
 
-		$mailRooms = $this->_getMailRooms();
-		$mailSelect = Hash::combine($mailRooms, '{n}.roomId', '{n}.name');
-		$this->set('mailRooms', $mailSelect);
-
-		$specifiedRoomId = Hash::get($this->request->query, 'room');
-		if ($specifiedRoomId !== false && isset($mailRooms[$specifiedRoomId])) {
-			// 問題なければ強制すり替え
-			Current::$current['Room']['id'] = $specifiedRoomId;
-			Current::$current['Block']['key'] = $mailRooms[$specifiedRoomId]['blockKey'];
-		}
-	}
-
-/**
- * _getMailRooms
- *
- * メール設定できるルームの一覧を返す
- *
- * @return array
- */
-	protected function _getMailRooms() {
-		$retRoom = array();
-
-		$this->ReservationEvent->initSetting($this->Workflow);
-
-		$roomPermRoles = $this->ReservationEvent->prepareCalRoleAndPerm();
-		ReservationPermissiveRooms::setRoomPermRoles($roomPermRoles);
-
-		// メール設定ができるルームの一覧を取り出す
-		$mailEditableRoomIds = ReservationPermissiveRooms::getMailEditableRoomIdList();
-
-		foreach ($mailEditableRoomIds as $roomId) {
-			$retRoom[$roomId] = array();
-			$retRoom[$roomId]['roomId'] = $roomId;
-
-			if ($roomId == Space::getRoomIdRoot(Space::COMMUNITY_SPACE_ID)) {
-				$retRoom[$roomId]['name'] = __d('reservations', 'All the members');
-			} else {
-				// それぞれのルーム名を取りだして配列作成
-				$roomLang = $this->RoomsLanguage->find('first', array(
-					'conditions' => array(
-						'room_id' => $roomId,
-						'language_id' => Current::read('Language.id')
-					)
-				));
-				$retRoom[$roomId]['name'] = $roomLang['RoomsLanguage']['name'];
-			}
-
-			// それぞれのルームにすでに施設予約ブロックがあるかチェック
-			// ない場合はブロック作成
-			$block = $this->ReservationPermission->saveBlock($roomId);
-			// そのブロックキーも配列に加える
-			$retRoom[$roomId]['blockKey'] = $block['Block']['key'];
-		}
-		return $retRoom;
+		//NC3の標準のカテゴリーを利用するために、
+		//roomId=パブリック、blockId=サイト全体(＝パブリック)でひとつ持つ
+		//Current::read('Block')を唯一のBlockに置き換える
+		$this->Reservation->prepareBlock();
 	}
 
 }
