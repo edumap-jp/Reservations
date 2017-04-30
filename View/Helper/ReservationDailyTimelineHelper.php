@@ -117,9 +117,10 @@ class ReservationDailyTimelineHelper extends ReservationMonthlyHelper {
 
 			$htmlClass = 'reservation-plan-clickable text-left reservation-plan-show';
 			$html .= '<div><p class="' . $htmlClass . '" data-url="' . $url . '">';
-			$html .= '<small>';
-			$html .= h($plan['ReservationEvent']['fromTime']) . '-' . h($plan['ReservationEvent']['toTime']);
-			$html .= '</small>';
+			// 時間表示なくてもタイムラインならわかるので時間非表示
+			//$html .= '<small>';
+			//$html .= h($plan['ReservationEvent']['fromTime']) . '-' . h($plan['ReservationEvent']['toTime']);
+			//$html .= '</small>';
 
 			// ワークフロー（一時保存/承認待ち、など）のマーク
 			$html .= $this->ReservationCommon->makeWorkFlowLabel($plan['ReservationEvent']['status']);
