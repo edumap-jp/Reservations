@@ -437,11 +437,12 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @return bool
  */
 	public function validteUseLocationTimeRange($check) {
-		// ε(　　　　 v ﾟωﾟ)　＜ タイムゾーン対応
+				// ε(　　　　 v ﾟωﾟ)　＜ タイムゾーン対応
 		$locationKey = $this->data[$this->alias]['location_key'];
-		$startDateTime = $this->data[$this->alias]['detail_start_datetime'];
-		$endDateTime = $this->data[$this->alias]['detail_end_datetime'];
+		$startDateTime = $this->data[$this->alias]['detail_start_datetime'] . ':00';
+		$endDateTime = $this->data[$this->alias]['detail_end_datetime'] . ':00';
 
+		// 施設情報を取得
 		$this->loadModels(
 			[
 				'ReservationLocation' => 'Reservations.ReservationLocation'
@@ -452,7 +453,33 @@ class ReservationActionPlan extends ReservationsAppModel {
 			Current::read('Language.id')
 		);
 		$reservableTimeTable = explode('|', $location['ReservationLocation']['time_table']);
+		$locationTimeZone = new DateTimeZone($location['ReservationLocation']['timezone']);
 
+		// 予約時間を施設のタイムゾーンの時間に変換
+		$planTimeZone = new DateTimeZone($this->data[$this->alias]['timezone_offset']);
+		$startDateTime = new DateTime($startDateTime, $planTimeZone);
+		$startDateTime->setTimezone($locationTimeZone);
+		$startDateTime = $startDateTime->format('Y-m-d H:i:s');
+
+		$endDateTime = new DateTime($endDateTime, $planTimeZone);
+		$endDateTime->setTimezone($locationTimeZone);
+		$endDateTime = $endDateTime->format('Y-m-d H:i:s');
+
+		// 施設の利用可能時刻をUTCから施設のタイムゾーンに変換
+		$locationStartTime = new DateTime($location['ReservationLocation']['start_time'],
+			new DateTimeZone('UTC'));
+		$locationStartTime->setTimezone($locationTimeZone);
+		$locationStartTime = $locationStartTime->format('H:i');
+
+		$locationEndTime = new DateTime($location['ReservationLocation']['end_time'],
+			new DateTimeZone('UTC'));
+		$locationEndTime->setTimezone($locationTimeZone);
+		$locationEndTime = $locationEndTime->format('H:i');
+
+		// 予約を日付毎に分割する
+		// 以下、日付毎にチェックする
+		// 　曜日の制約OKかをチェック
+		// 　施設の利用可能時刻におさまってるかチェック
 		$startDate = date('Y-m-d', strtotime($startDateTime));
 		$endDate = date('Y-m-d', strtotime($endDateTime));
 		if ($startDate != $endDate) {
@@ -473,11 +500,12 @@ class ReservationActionPlan extends ReservationsAppModel {
 				} else {
 					$endUnixTime = $current + (24 * 60 * 60);
 				}
-				$result = $this->_useLocationTimeRange(
+				$result = $this->_isReservableLocationTimeRane(
 					$startUnixTime,
-					$reservableTimeTable,
 					$endUnixTime,
-					$location
+					$locationStartTime,
+					$locationEndTime,
+					$reservableTimeTable
 				);
 				if (!$result) {
 					return false;
@@ -490,11 +518,12 @@ class ReservationActionPlan extends ReservationsAppModel {
 			$startUnixTime = strtotime($startDateTime);
 			$endUnixTime = strtotime($endDateTime);
 
-			return $this->_useLocationTimeRange(
+			return $this->_isReservableLocationTimeRane(
 				$startUnixTime,
-				$reservableTimeTable,
 				$endUnixTime,
-				$location
+				$locationStartTime,
+				$locationEndTime,
+				$reservableTimeTable
 			);
 		}
 	}
@@ -1163,20 +1192,17 @@ class ReservationActionPlan extends ReservationsAppModel {
 	}
 
 /**
- * 施設利用可能時間かチェック
+ * 施設利用可能時間かのチェック
  *
- * @param int $startUnixTime 開始日時
- * @param int $endUnixTime 終了日時
+ * @param int $startUnixTime 予約の開始日時
+ * @param int $endUnixTime 予約の終了日時
+ * @param string $locationStartTime 予約可能開始時刻
+ * @param string $locationEndTime 予約可能終了時刻
  * @param array $reservableTimeTable 予約可能曜日
- * @param array $location ReservationLocation data
  * @return bool
  */
-	protected function _useLocationTimeRange(
-		$startUnixTime,
-		$endUnixTime,
-		$reservableTimeTable,
-		$location
-	) {
+	protected function _isReservableLocationTimeRane($startUnixTime, $endUnixTime,
+		$locationStartTime, $locationEndTime, $reservableTimeTable) {
 		$weekDay = date('D', $startUnixTime); // 曜日 Mon .. Sun形式
 		if (!in_array($weekDay, $reservableTimeTable)) {
 			return false;
@@ -1184,10 +1210,12 @@ class ReservationActionPlan extends ReservationsAppModel {
 		// 利用可能時間に収まっているか
 		$startTime = date('H:i', $startUnixTime);
 		$endTime = date('H:i', $endUnixTime);
-		if ($startTime < $location['ReservationLocation']['start_time'] ||
-			$location['ReservationLocation']['end_time'] < $endTime) {
+		if ($startTime < $locationStartTime ||
+			$locationEndTime < $endTime) {
 			return false;
 		}
 		return true;
+
 	}
 }
+

@@ -285,6 +285,7 @@ class ReservationSupport {
 					substr($toYmdHiOfLastHour, 0, 10) . ' ' . substr($toYmdHiOfLastHour, 11),
 				'plan_room_id' => $planRoomId,
 				'timezone_offset' => (new NetCommonsTime())->getUserTimezone(),
+				//'timezone' => (new NetCommonsTime())->getUserTimezone(),
 				'is_detail' => 0,
 				'location' => '',
 				'contact' => '',
