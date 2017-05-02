@@ -53,14 +53,6 @@ class ReservationImportController extends ReservationsAppController {
  * @var array
  */
 	public $components = array(
-//		'NetCommons.Permission' => array(
-//			//アクセスの権限
-//			'allow' => array(
-//				'edit' => 'page_editable',
-//			),
-//		),
-		//'Workflow.Workflow',
-
 		'Categories.Categories',
 		//'Blogs.ReservationLocationPermission',
 		'NetCommons.NetCommonsTime',

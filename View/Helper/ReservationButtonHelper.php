@@ -103,6 +103,11 @@ class ReservationButtonHelper extends AppHelper {
  * @return string
  */
 	public function getAddButton($vars, $options = null) {
+		//debug($vars);
+		// $vars['style']よって判定わける　*_by_categoryならカテゴリ別　*_by_locationなら施設別
+		// カテゴリ別のボタンならひとつでも予約可能な施設があればボタンを表示
+		// 施設別表示なら予約可能な施設ならボタン表示
+
 		// FIXME
 		// フレームIDがないと編集できないため仮処置
 		$frameId = Current::read('Frame.id');

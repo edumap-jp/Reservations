@@ -163,8 +163,10 @@ class ReservationSettingsComponent extends Component {
 			$this->blockTabs = $this->_generalBlockTabs;
 		}
 
-		if ($this->permission === self::PERMISSION_LOCATION_EDITABLE && $controller->viewVars['isAdmin'] ||
-			$this->permission === self::PERMISSION_ROOM_EDITABLE && Current::permission('page_editable')) {
+		if ($this->permission === self::PERMISSION_LOCATION_EDITABLE &&
+			$controller->viewVars['isAdmin'] ||
+			$this->permission === self::PERMISSION_ROOM_EDITABLE &&
+			Current::permission('page_editable')) {
 			$controller->helpers['Blocks.BlockTabs'] = $this->blockTabs;
 			return;
 		}

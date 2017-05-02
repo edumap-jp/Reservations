@@ -1215,7 +1215,6 @@ class ReservationActionPlan extends ReservationsAppModel {
 			return false;
 		}
 		return true;
-
 	}
 }
 

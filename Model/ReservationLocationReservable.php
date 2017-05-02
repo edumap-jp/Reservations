@@ -82,7 +82,7 @@ class ReservationLocationReservable extends ReservationsAppModel {
  * 施設に対する予約できる権限データを取得する
  *
  * @param string $locationKey 施設キー
- * @param int| $roomId 施設キー
+ * @param int| $roomId ルームID
  * @return array
  */
 	public function getPermissions($locationKey, $roomId = null) {

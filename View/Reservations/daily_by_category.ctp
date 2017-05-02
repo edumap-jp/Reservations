@@ -60,6 +60,7 @@ echo $this->NetCommonsHtml->script(array(
 				data-daily-start-time-idx="<?php echo $vars['ReservationFrameSetting']['timeline_base_time']; ?>">
 			<table class="reservation-row-data">
 				<thead>
+					<?php // 時刻と予約の＋ボタン表示 ?>
 					<?php echo $this->ReservationDailyTimeline->makeDailyTimlineHeaderHtml($vars); ?>
 				</thead>
 
