@@ -105,13 +105,6 @@ class ReservationsController extends ReservationsAppController {
 		$this->setReservationCommonCurrent($vars);
 
 		$this->ReservationEvent->initSetting($this->Workflow);
-		$categoryId = Current::read('ReservationFrameSetting.category_id');
-
-		$categoryId = Hash::get($this->params['named'], 'category_id', $categoryId);
-		$this->request->param('named.category_id', $categoryId);
-
-		$locations = $this->ReservationLocation->getLocations($categoryId);
-		$this->set('locations', $locations);
 
 		$style = $this->getQueryParam('style');
 		if (! $style) {
@@ -121,9 +114,11 @@ class ReservationsController extends ReservationsAppController {
 			switch($displayType) {
 				case ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_WEEKLY:
 					$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_WEEKLY;
+					$this->_setDefaultCategory();
 					break;
 				case ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_DAILY:
 					$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_DAILY;
+					$this->_setDefaultCategory();
 					break;
 				case ReservationsComponent::RESERVATION_DISP_TYPE_LACATION_MONTHLY:
 					$style = ReservationsComponent::RESERVATION_STYLE_LACATION_MONTHLY;
@@ -135,6 +130,11 @@ class ReservationsController extends ReservationsAppController {
 					$style = ReservationsComponent::RESERVATION_STYLE_DEFAULT;
 			}
 		}
+		$categoryId = Hash::get($this->request->params['named'], 'category_id');
+
+		$locations = $this->ReservationLocation->getLocations($categoryId);
+		$this->set('locations', $locations);
+
 		$this->_storeRedirectPath($vars);
 
 		$roomPermRoles = $this->ReservationEvent->prepareCalRoleAndPerm();
@@ -146,6 +146,17 @@ class ReservationsController extends ReservationsAppController {
 		$languageId = Current::read('Language.id');
 		$this->set(compact('frameId', 'languageId', 'vars'));
 		$this->render($ctpName);
+	}
+
+/**
+ * カテゴリ別表がデフォルトのとき、初期表示では表示設定で設定されたカテゴリにする。
+ *
+ * @return void
+ */
+	protected function _setDefaultCategory() {
+		$categoryId = Current::read('ReservationFrameSetting.category_id');
+		//$categoryId = Hash::get($this->params['named'], 'category_id', $categoryId);
+		$this->request->param('named.category_id', $categoryId);
 	}
 
 /**
