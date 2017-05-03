@@ -38,6 +38,7 @@ class ReservationLocation extends ReservationsAppModel {
 			'afterCallback' => false,
 		),
 		'Reservations.ReservationValidate',
+		'Reservations.ReservationLocationDelete',
 	);
 
 /**
@@ -311,71 +312,9 @@ class ReservationLocation extends ReservationsAppModel {
 
 		$this->begin();
 		try {
-			// ReservationLocation 削除
-			$conditions = [
-				$this->alias . '.key' => $locationKey
-			];
-			if (! $this->deleteAll($conditions)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
+			$this->deleteLocationData($locationKey);
 
-			// ReservationLocationsRoom 削除
-			$conditions = [
-				$this->ReservationLocationsRoom->alias . '.reservation_location_key' => $locationKey
-			];
-			if (! $this->ReservationLocationsRoom->deleteAll($conditions)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-
-			// ReservationLocationReservable 削除
-			$conditions = [
-				$this->ReservationLocationReservable->alias . '.location_key' => $locationKey
-			];
-			if (! $this->ReservationLocationReservable->deleteAll($conditions)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-
-			// ReservationLocationsApprovalUser 削除
-			$conditions = [
-				$this->ReservationLocationsApprovalUser->alias . '.location_key' => $locationKey
-			];
-			if (! $this->ReservationLocationsApprovalUser->deleteAll($conditions)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-
-			// 削除するReservationEvent.id 取得
-			$conditions = [
-				$this->ReservationEvent->alias . '.location_key' => $locationKey
-			];
-			$reserveIds = $this->ReservationEvent->find('list', [
-				'recursive' => -1,
-				'conditions' => $conditions
-			]);
-			$reserveIds = array_values($reserveIds);
-
-			// ReservationEventContent 削除
-			$conditions = [
-				$this->ReservationEventContent->alias . '.reservation_event_id' => $reserveIds
-			];
-			if (! $this->ReservationEventContent->deleteAll($conditions)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-
-			// ReservationEventShareUser 削除
-			$conditions = [
-				$this->ReservationEventShareUser->alias . '.reservation_event_id' => $reserveIds
-			];
-			if (! $this->ReservationEventShareUser->deleteAll($conditions)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
-
-			// ReservationEvent 削除
-			$conditions = [
-				$this->ReservationEvent->alias . '.location_key' => $locationKey
-			];
-			if (! $this->ReservationEvent->deleteAll($conditions)) {
-				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-			}
+			$this->deleteEventData($locationKey);
 
 			//ReservationFrameSetting のlocation_keyを変更する
 			$updateKey = $this->_getLocationKeyByMinWeight();

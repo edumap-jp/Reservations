@@ -32,6 +32,7 @@ class ReservationLocationsController extends ReservationsAppController {
  */
 	public $uses = array(
 		'Reservations.ReservationLocation',
+		'Reservations.ReservationLocationChangeWeight',
 		'Reservations.ReservationLocationsRoom',
 		'Categories.Category',
 		'Roles.Role',
@@ -333,7 +334,7 @@ class ReservationLocationsController extends ReservationsAppController {
  */
 	public function sort() {
 		if ($this->request->is('post')) {
-			if ($this->ReservationLocation->saveWeights($this->data)) {
+			if ($this->ReservationLocationChangeWeight->saveWeights($this->data)) {
 				$url = NetCommonsUrl::actionUrl(
 					array(
 						'controller' => 'reservation_locations',
