@@ -30,10 +30,19 @@ echo $this->element('Reservations.scripts');
 		</div>
 	</div>
 
+	<?php
+	$startTime = $vars['ReservationFrameSetting']['timeline_base_time'];
+	if ($vars['ReservationFrameSetting']['display_start_time_type'] == 0) {
+		// 表示開始時刻可変のときは、現在時刻より1時間前の「時間」　ex 16:30 -> 15:30 -> 15
+		$ncTime = new NetCommonsTime();
+		$userNow = $ncTime->toUserDatetime(NetCommonsTime::getNowDatetime());
+		$startTime = date('G', strtotime($userNow) - 60 * 60);
+	}
+	?>
 	<div ng-controller="ReservationsTimeline" class="text-center table-responsive">
 		<?php /*-- overflow-yのdivの始まり --*/?>
 		<div class="reservation-vertical-timeline"
-				data-daily-start-time-idx="<?php echo $vars['ReservationFrameSetting']['timeline_base_time']; ?>">
+				data-daily-start-time-idx="<?php echo $startTime ?>">
 
 			<?php /*-- overflow-yのscroll分5%考慮 --*/ ?>
 			<table>

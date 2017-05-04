@@ -149,10 +149,9 @@ NetCommonsApp.controller('ReservationsTimeline', ['$scope', function($scope) {
   //1行(=１時間)の高さ
   //var rowHeight = row1Top - row0Top;
   var rowHeight = (row23Top - row1Top) / 22;
-
   //指定時間が最初になるよう、divの縦スクロールを移動
-  coordinateOrigins[0].scrollTop = rowHeight * idx;
-
+  // coordinateOrigins[0].scrollTop = rowHeight * idx;
+  $('.reservation-vertical-timeline tbody').scrollTop(rowHeight * idx);
   //$scope.origin = coordinateOrigins[0].scrollTop;
   $scope.rowHeight = rowHeight;
 
