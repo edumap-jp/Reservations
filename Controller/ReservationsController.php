@@ -270,6 +270,10 @@ class ReservationsController extends ReservationsAppController {
 	protected function _getCtpAndVars($style, &$vars) {
 		$vars['style'] = $style;
 
+		// プライベートルームか？
+		Current::write('Reservations.accessPrivateRoom',
+			(Current::read('Room.space_id') == Space::PRIVATE_SPACE_ID));
+
 		if (in_array($vars['style'], ReservationsComponent::$stylesByLocation, true)) {
 			$locationKey = $this->request->query('location_key');
 			if ($locationKey) {
@@ -291,7 +295,7 @@ class ReservationsController extends ReservationsAppController {
 			}
 
 			// ReservationLocation, ReservationReservableを設定する。
-			$this->_setupCurrentValues4ByLocation($locationKey);
+			$this->_setupCurrentValues4ByLocation($vars['location_key']);
 		} else {
 			// ReservationLocation, ReservationReservableを設定する。
 			$this->_setupCurrentValues4ByCategory();
@@ -359,7 +363,6 @@ class ReservationsController extends ReservationsAppController {
  * @return void
  */
 	protected function _setupCurrentValues4ByLocation($locationKey) {
-		// 予約可能か
 		// 施設別表時
 		$currentLocation = $this->ReservationLocation->find(
 			'first',
@@ -372,11 +375,20 @@ class ReservationsController extends ReservationsAppController {
 		);
 		Current::write('ReservationLocation', $currentLocation);
 
-		//施設への予約権限をセット
-		Current::write(
-			'ReservationReservable',
-			$this->ReservationLocationReservable->isReservableByLocation($currentLocation)
-		);
+		if (Current::read('Reservations.accessPrivateRoom')) {
+			// プライベートルーム
+			// 個人的な予約OKなら予約可能とする
+			Current::write(
+				'ReservationReservable',
+				$currentLocation['ReservationLocation']['use_private']
+			);
+		} else {
+			//施設への予約権限をセット
+			Current::write(
+				'ReservationReservable',
+				$this->ReservationLocationReservable->isReservableByLocation($currentLocation)
+			);
+		}
 	}
 
 /**
@@ -389,8 +401,15 @@ class ReservationsController extends ReservationsAppController {
 		// 施設が指定されてないなら、いずれかの施設で予約できれば予約権限ありと判定
 		$reservable = false;
 		foreach ($this->viewVars['locations'] as $location) {
-			if ($this->ReservationLocationReservable->isReservableByLocation($location)) {
-				$reservable = true;
+			if (Current::read('Reservations.accessPrivateRoom')) {
+				// プライベートルーム
+				if ($location['ReservationLocation']['use_private']) {
+					$reservable = true;
+				}
+			} else {
+				if ($this->ReservationLocationReservable->isReservableByLocation($location)) {
+					$reservable = true;
+				}
 			}
 		}
 		Current::write('ReservationReservable', $reservable);
