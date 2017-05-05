@@ -79,6 +79,53 @@ class ReservationLocationReservable extends ReservationsAppModel {
 	}
 
 /**
+ * 予約可能な施設か？（権限判定のみ）
+ *
+ * @param array $location ReservationLocation data
+ * @return bool
+ */
+	public function isReservableByLocation($location) {
+		$this->loadModels([
+			'RolesRoomsUser' => 'Rooms.RolesRoomsUser',
+			//'RolesRoom' => 'Rooms.RolesRoom',
+			//'Room' => 'Rooms.Room'
+		]);
+
+		$roomId = Current::read('Room.id');
+		$userId = Current::read('User.id');
+
+		// このルームでのロールを取得
+		$rolesRoomsUsers = $this->RolesRoomsUser->find('first', array(
+			'recursive' => 0,
+			'conditions' => array(
+				'RolesRoomsUser.user_id' => $userId,
+				'RolesRoomsUser.room_id' => $roomId,
+			),
+		));
+		$roleKeys = Hash::get($rolesRoomsUsers, 'RolesRoom.role_key');
+
+		if ($location['ReservationLocation']['use_all_rooms']) {
+			// 全てのルームで予約Ok
+			$conditions = [
+				'ReservationLocationReservable.location_key' => $location['ReservationLocation']['key'],
+				'ReservationLocationReservable.role_key' => $roleKeys,
+				'room_id' => null,
+			];
+			$reservable = $this->find('first', ['conditions' => $conditions]);
+			return Hash::get($reservable, 'ReservationLocationReservable.value', false);
+		} else {
+			// 選択されたルームのみ予約OK
+			$conditions = [
+				'ReservationLocationReservable.location_key' => $location['ReservationLocation']['key'],
+				'ReservationLocationReservable.role_key' => $roleKeys,
+				'room_id' => $roomId,
+			];
+			$reservable = $this->find('first', ['conditions' => $conditions]);
+			return Hash::get($reservable, 'ReservationLocationReservable.value', false);
+		}
+	}
+
+/**
  * 施設に対する予約できる権限データを取得する
  *
  * @param string $locationKey 施設キー

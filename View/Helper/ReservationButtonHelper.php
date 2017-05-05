@@ -110,32 +110,36 @@ class ReservationButtonHelper extends AppHelper {
 
 		// FIXME
 		// フレームIDがないと編集できないため仮処置
-		$frameId = Current::read('Frame.id');
-		if (! $frameId) {
-			return '';
-		}
-
-		// まだ作成可能かどうかの判断フラグが設定されていない場合
-		// まず設定する
-		$frameId = Current::read('Frame.id');
-		if (Hash::get($this->_isCreatable, $frameId) === null) {
-			$rooms = ReservationPermissiveRooms::getCreatableRoomIdList();
-			if (empty($rooms)) {
-				$this->_isCreatable[$frameId] = false;
-			} else {
-				$intersectRoom = array_intersect_key($rooms, $vars['exposeRoomOptions']);
-				if (empty($intersectRoom)) {
-					$this->_isCreatable[$frameId] = false;
-				} else {
-					$this->_isCreatable[$frameId] = true;
-				}
-			}
-		}
-		// 判断フラグがOFFの場合から文字列を返す
-		if ($this->_isCreatable[$frameId] === false) {
-			return '';
-		}
+		//$frameId = Current::read('Frame.id');
+		//if (! $frameId) {
+		//	return '';
+		//}
+		//
+		//// まだ作成可能かどうかの判断フラグが設定されていない場合
+		//// まず設定する
+		//$frameId = Current::read('Frame.id');
+		//if (Hash::get($this->_isCreatable, $frameId) === null) {
+		//	$rooms = ReservationPermissiveRooms::getCreatableRoomIdList();
+		//	if (empty($rooms)) {
+		//		$this->_isCreatable[$frameId] = false;
+		//	} else {
+		//		$intersectRoom = array_intersect_key($rooms, $vars['exposeRoomOptions']);
+		//		if (empty($intersectRoom)) {
+		//			$this->_isCreatable[$frameId] = false;
+		//		} else {
+		//			$this->_isCreatable[$frameId] = true;
+		//		}
+		//	}
+		//}
+		//// 判断フラグがOFFの場合から文字列を返す
+		//if ($this->_isCreatable[$frameId] === false) {
+		//	return '';
+		//}
 		// どこかに書きこみ可能なルームが一つでもあれば追加ボタンを出す
+
+		if (Current::read('ReservationReservable') === false) {
+			return '&nbsp;'; // 空文字列にするとborder消えるので。
+		}
 
 		// 追加画面へのURL指定がある場合（時間とか日付とか)
 		if (isset($options['url'])) {

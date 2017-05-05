@@ -37,6 +37,7 @@ class ReservationsController extends ReservationsAppController {
 		'Reservations.ReservationEventShareUser',
 		'Reservations.ReservationActionPlan',	//予定CRUDaction専用
 		'Reservations.ReservationLocation',
+		'Reservations.ReservationLocationReservable',
 		'Holidays.Holiday',
 		'Rooms.Room',
 		'NetCommons.BackTo',
@@ -288,6 +289,12 @@ class ReservationsController extends ReservationsAppController {
 			if (!isset($locationList[$vars['location_key']])) {
 				$vars['location_key'] = Hash::get($this->viewVars['locations'], '0.ReservationLocation.key');
 			}
+
+			// ReservationLocation, ReservationReservableを設定する。
+			$this->_setupCurrentValues4ByLocation($locationKey);
+		} else {
+			// ReservationLocation, ReservationReservableを設定する。
+			$this->_setupCurrentValues4ByCategory();
 		}
 
 		switch ($style) {
@@ -343,5 +350,49 @@ class ReservationsController extends ReservationsAppController {
 
 		$ctpName = $vars['style'];
 		return $ctpName;
+	}
+
+/**
+ * Current にReservationLocation（施設別表示での施設)ReservationReservable(予約可能な施設があるか)を設定する
+ *
+ * @param string|null $locationKey 施設別ならReservationLocation.key カテゴリ別ならnull
+ * @return void
+ */
+	protected function _setupCurrentValues4ByLocation($locationKey) {
+		// 予約可能か
+		// 施設別表時
+		$currentLocation = $this->ReservationLocation->find(
+			'first',
+			[
+				'conditions' => [
+					'ReservationLocation.key' => $locationKey,
+					'ReservationLocation.language_id' => Current::read('Language.id')
+				]
+			]
+		);
+		Current::write('ReservationLocation', $currentLocation);
+
+		//施設への予約権限をセット
+		Current::write(
+			'ReservationReservable',
+			$this->ReservationLocationReservable->isReservableByLocation($currentLocation)
+		);
+	}
+
+/**
+ * Current にReservationLocation（施設別表示での施設)ReservationReservable(予約可能な施設があるか)を設定する
+ *
+ * @return void
+ */
+	protected function _setupCurrentValues4ByCategory() {
+		// カテゴリ別表時
+		// 施設が指定されてないなら、いずれかの施設で予約できれば予約権限ありと判定
+		$reservable = false;
+		foreach ($this->viewVars['locations'] as $location) {
+			if ($this->ReservationLocationReservable->isReservableByLocation($location)) {
+				$reservable = true;
+			}
+		}
+		Current::write('ReservationReservable', $reservable);
 	}
 }

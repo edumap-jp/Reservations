@@ -244,6 +244,19 @@ class ReservationsAppController extends AppController {
 		//$locationKey = $this->request->query('location_key');
 		if (isset($vars['location_key'])) {
 			$planParams['location_key'] = $vars['location_key'];
+			//$currentLocation  = $this->ReservationLocation->find('first', [
+			//	'conditions' => [
+			//		'ReservationLocation.key' => $vars['location_key'],
+			//		'ReservationLocation.language_id' => Current::read('Language.id')
+			//	]
+			//]);
+			//Current::write('ReservationLocation', $currentLocation);
+			//
+			////施設への予約権限をセット
+			//Current::write('ReservationReservable',
+			//	$this->ReservationLocationReservable->isReservableByLocation($currentLocation));
+		} else {
+			// 施設が指定されてないなら、いずれかの施設で予約できれば予約権限ありと判定
 		}
 		//$vars['location_key'] = $locationKey;
 
