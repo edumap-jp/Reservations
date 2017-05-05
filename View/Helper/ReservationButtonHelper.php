@@ -140,7 +140,6 @@ class ReservationButtonHelper extends AppHelper {
 		if (Current::read('ReservationReservable') === false) {
 			return '&nbsp;'; // 空文字列にするとborder消えるので。
 		}
-
 		// 追加画面へのURL指定がある場合（時間とか日付とか)
 		if (isset($options['url'])) {
 			$url = $options['url'];
@@ -177,6 +176,8 @@ class ReservationButtonHelper extends AppHelper {
 		}
 		//$url = str_replace('reservation_plans/edit', 'reservation_plans/add', $url);
 		$url['action'] = 'add';
+		// location_key
+		$url['?']['location_key'] = Current::read('ReservationLocation.key');
 		return $url;
 	}
 

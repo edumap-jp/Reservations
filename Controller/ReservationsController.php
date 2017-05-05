@@ -373,7 +373,7 @@ class ReservationsController extends ReservationsAppController {
 				]
 			]
 		);
-		Current::write('ReservationLocation', $currentLocation);
+		Current::write('ReservationLocation', $currentLocation['ReservationLocation']);
 
 		if (Current::read('Reservations.accessPrivateRoom')) {
 			// プライベートルーム
