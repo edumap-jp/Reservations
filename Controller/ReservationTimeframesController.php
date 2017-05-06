@@ -97,6 +97,7 @@ class ReservationTimeframesController extends ReservationsAppController {
 			$newTimeframe = $this->ReservationTimeframe->create([
 				'start_time' => '09:00',
 				'end_time' => '18:00',
+				'timezone' => Current::read('User.timezone'),
 			]);
 			$this->request->data = $newTimeframe;
 		}
@@ -137,6 +138,23 @@ class ReservationTimeframesController extends ReservationsAppController {
 			if (empty($timeframe)) {
 				return $this->throwBadRequest();
 			}
+			// start_time, end_timeを時間枠のタイムゾーンに変換してH:i形式へ
+			$timeframeTimeZone = new DateTimeZone($timeframe['ReservationTimeframe']['timezone']);
+			$startDate = new DateTime(
+				$timeframe['ReservationTimeframe']['start_time'], new DateTimeZone('UTC')
+			);
+
+			$startDate->setTimezone($timeframeTimeZone);
+			$timeframe['ReservationTimeframe']['start_time'] = $startDate->format('H:i');
+
+			$endDate = new DateTime(
+				$timeframe['ReservationTimeframe']['end_time'], new DateTimeZone('UTC')
+			);
+			$endDate->setTimezone($timeframeTimeZone);
+			$timeframe['ReservationTimeframe']['end_time'] = $endDate->format('H:i');
+
+			$this->request->data['ReservationTimeframe'] = $timeframe['ReservationTimeframe'];
+
 			$this->request->data = $timeframe;
 		}
 

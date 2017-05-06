@@ -94,6 +94,24 @@ $dataJson = json_encode($this->request->data);
 							echo $this->NetCommonsForm->error('ReservationTimeframe.start_time');
 							echo $this->NetCommonsForm->error('ReservationTimeframe.end_time');
 						?>
+						<?php
+						// タイムゾーン
+						$timeframeTimezone = Hash::get($this->request->data, 'ReservationTimeframe.timezone');
+						if ($timeframeTimezone != Current::read('User.timezone')) {
+							// ユーザのタイムゾーンと異なっていたらタイムゾーン選択ドロップダウン表示
+							$SiteSetting = new SiteSetting();
+							$SiteSetting->prepare();
+							echo $this->NetCommonsForm->input('ReservationTimeframe.timezone', [
+								'label' => false,
+								'options' => $SiteSetting->defaultTimezones,
+								'type' => 'select'
+							]);
+						} else {
+							// 新規登録ならタイムゾーンは現在のユーザのタイムゾーンにする
+							echo $this->NetCommonsForm->hidden('ReservationTimeframe.timezone');
+						}
+						?>
+
 					</div>
 				</div>
 

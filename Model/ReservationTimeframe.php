@@ -117,6 +117,32 @@ class ReservationTimeframe extends ReservationsAppModel {
 	}
 
 /**
+ * Called after each find operation. Can be used to modify any results returned by find().
+ * Return value should be the (modified) results.
+ *
+ * @param mixed $results The results of the find operation
+ * @param bool $primary Whether this model is being queried directly (vs. being queried as an association)
+ * @return mixed Result of the find operation
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#afterfind
+ */
+	public function afterFind($results, $primary = false) {
+		foreach ($results as $key => $value) {
+			if (
+				Hash::check($value, $this->alias . '.start_time') &&
+				Hash::check($value, $this->alias . '.end_time')
+			) {
+				$results[$key][$this->alias]['openText'] = $this->_openText($value);
+			}
+			//if (array_key_exists('start_time', $results[$key][$this->alias]) &&
+			//	array_key_exists('end_time', $results[$key][$this->alias])) {
+			//	$results[$key][$this->alias]['openText'] = $this->_openText($value);
+			//}
+		}
+		return $results;
+	}
+
+/**
  * 時間枠の登録
  *
  * @param array $data 登録データ
@@ -132,6 +158,17 @@ class ReservationTimeframe extends ReservationsAppModel {
 			if (!$this->validates($data)) {
 				return false;
 			}
+
+			// start_time end_timeをUTCに変換
+			$startDateTime = Date('Y-m-d') . $data[$this->alias]['start_time'] . ':00';
+			$endDateTime = Date('Y-m-d') . $data[$this->alias]['end_time'] . ':00';
+			$ncTime = new NetCommonsTime();
+			$startDateTime4UTC = $ncTime->toServerDatetime($startDateTime,
+				$data[$this->alias]['timezone']);
+			$endDateTime4UTC = $ncTime->toServerDatetime($endDateTime,
+				$data[$this->alias]['timezone']);
+			$data[$this->alias]['start_time'] = $startDateTime4UTC;
+			$data[$this->alias]['end_time'] = $endDateTime4UTC;
 
 			$savedData = $this->save($data, false);
 			if (! $savedData) {
@@ -239,32 +276,108 @@ class ReservationTimeframe extends ReservationsAppModel {
 	public function validateTimeFrameNotExist($check) {
 		$startTime = $this->data[$this->alias]['start_time'];
 		$endTime = $this->data[$this->alias]['end_time'];
-		$conditions = [
-			'OR' => [
-				[
-					// 始点が指定した範囲にあったら時間枠重複
-					'start_time >' => $startTime,
-					'start_time <' => $endTime,
-				],
-				[
-					// 終点が指定した範囲にあったら時間枠重複
-					'end_time >' => $startTime,
-					'end_time <' => $endTime,
+		// UTCに変換してから比較する。
+		$startDateTime = Date('Y-m-d') . $startTime . ':00';
+		$endDateTime = Date('Y-m-d') . $endTime . ':00';
+		$ncTime = new NetCommonsTime();
+		$startDateTime4UTC = $ncTime->toServerDatetime($startDateTime,
+			$this->data[$this->alias]['timezone']);
+		$endDateTime4UTC = $ncTime->toServerDatetime($endDateTime,
+			$this->data[$this->alias]['timezone']);
 
+		$startTime = date('H:i:s', strtotime($startDateTime4UTC));
+		$endTime = date('H:i:s', strtotime($endDateTime4UTC));
+
+		// start > endになったら24:00またぎなのでstart-24:00 までと 0:00-end の重複チェックする
+		if ($startTime > $endTime) {
+			$inputRanges = [
+				[
+					'start' => $startTime,
+					'end' => '24:00:00'
 				],
 				[
-					// 始点、終点ともそれぞれ指定範囲の前と後だったら時間枠重複
-					'start_time <' => $startTime,
-					'end_time >' => $endTime,
-				],
+					'start' => '00:00:00',
+					'end' => $endTime
+				]
 
-			]
-		];
-		$exist = $this->find('count', ['conditions' => $conditions]);
-		if ($exist) {
-			return false;
+			];
+		} else {
+			$inputRanges = [
+				[
+					'start' => $startTime,
+					'end' => $endTime
+				]
+			];
+		}
+		// 全時間枠取得
+		$timeframes = $this->find('all', [
+			'group' => 'ReservationTimeframe.key'
+		]);
+		// start > endなデータは24:00またぎなのでstart-24:00 と 0:00-end のデータとして扱う。
+		$existRanges = [];
+		foreach ($timeframes as $timeframe) {
+			if ($timeframe[$this->alias]['start_time'] > $timeframe[$this->alias]['end_time']) {
+				$existRanges[] = [
+					'start' => $timeframe[$this->alias]['start_time'],
+					'end' => '24:00:00'
+				];
+				$existRanges[] = [
+					'start' => '00:00:00',
+					'end' => $timeframe[$this->alias]['end_time']
+				];
+			} else {
+				$existRanges[] = [
+					'start' => $timeframe[$this->alias]['start_time'],
+					'end' => $timeframe[$this->alias]['end_time']
+				];
+			}
+		}
+		foreach ($inputRanges as $inputRange) {
+			foreach ($existRanges as $existRange) {
+				// 既にある時間枠のStartが指定範囲のENDより前で既存時間枠のENDが指定STARTよりも後なら重複
+				if ($existRange['start'] < $inputRange['end'] &&
+					$existRange['end'] > $inputRange['start']
+				) {
+					return false;
+				}
+			}
 		}
 		return true;
 	}
 
+/**
+ * 時間枠の範囲（表示用）を返す
+ *
+ * @param array $timeframe 施設データ
+ * @return string
+ */
+	protected function _openText($timeframe) {
+		$ret = '';
+
+		//時間
+		$startTime = $timeframe[$this->alias]['start_time'];
+		$timeframeTimeZone = new DateTimeZone($timeframe[$this->alias]['timezone']);
+		$startDate = new DateTime($startTime, new DateTimeZone('UTC'));
+
+		$startDate->setTimezone($timeframeTimeZone);
+		$timeframe[$this->alias]['start_time'] = $startDate->format('H:i');
+
+		$endTime = $timeframe[$this->alias]['end_time'];
+		$endDate = new DateTime($endTime, new DateTimeZone('UTC'));
+		$endDate->setTimezone($timeframeTimeZone);
+		$timeframe[$this->alias]['end_time'] = $endDate->format('H:i');
+
+		$ret = sprintf('%s %s - %s',
+			$ret,
+			$timeframe[$this->alias]['start_time'],
+			$timeframe[$this->alias]['end_time']
+		);
+		if (AuthComponent::user('timezone') != $timeframe[$this->alias]['timezone']) {
+			$SiteSetting = new SiteSetting();
+			$SiteSetting->prepare();
+			$ret .= ' ';
+			$ret .= $SiteSetting->defaultTimezones[$timeframe[$this->alias]['timezone']];
+		}
+		return $ret;
+	}
 }

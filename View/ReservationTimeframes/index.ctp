@@ -56,10 +56,11 @@ App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 								</td>
 								<td>
 									<?php
-										echo __d('reservations', '%s - %s',
-											h($reservationTimeframe['ReservationTimeframe']['start_time']),
-											h($reservationTimeframe['ReservationTimeframe']['end_time'])
-										);
+									echo $reservationTimeframe['ReservationTimeframe']['openText'];
+										//echo __d('reservations', '%s - %s',
+										//	h($reservationTimeframe['ReservationTimeframe']['start_time']),
+										//	h($reservationTimeframe['ReservationTimeframe']['end_time'])
+										//);
 									?>
 								</td>
 								<td>
