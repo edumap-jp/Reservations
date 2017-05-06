@@ -38,6 +38,7 @@ class ReservationsController extends ReservationsAppController {
 		'Reservations.ReservationActionPlan',	//予定CRUDaction専用
 		'Reservations.ReservationLocation',
 		'Reservations.ReservationLocationReservable',
+		'Reservations.ReservationTimeframe',
 		'Holidays.Holiday',
 		'Rooms.Room',
 		'NetCommons.BackTo',
@@ -131,6 +132,7 @@ class ReservationsController extends ReservationsAppController {
 					$style = ReservationsComponent::RESERVATION_STYLE_DEFAULT;
 			}
 		}
+
 		$categoryId = Hash::get($this->request->params['named'], 'category_id');
 
 		$locations = $this->ReservationLocation->getLocations($categoryId);
@@ -147,8 +149,26 @@ class ReservationsController extends ReservationsAppController {
 		$languageId = Current::read('Language.id');
 		$this->set(compact('frameId', 'languageId', 'vars'));
 		$this->render($ctpName);
+
+		//$roomId = Current::read('Room.id');
+		//$userId = Current::read('User.id');
 	}
 
+/**
+ * 時間枠セット
+ *
+ * @return void
+ */
+	protected function _setTimeframe() {
+		if (Current::read('ReservationFrameSetting.display_timeframe')) {
+			$timeframes = $this->ReservationTimeframe->find('all', [
+				'conditions' => [
+					'ReservationTimeframe.language_id' => Current::read('Language.id')
+				]
+			]);
+			$this->set('timeframes', $timeframes);
+		}
+	}
 /**
  * カテゴリ別表がデフォルトのとき、初期表示では表示設定で設定されたカテゴリにする。
  *
@@ -309,6 +329,7 @@ class ReservationsController extends ReservationsAppController {
 			case ReservationsComponent::RESERVATION_STYLE_CATEGORY_DAILY:
 				//カテゴリー別 - 日表示
 				$vars = $this->_getDailyVars($vars);
+				$this->_setTimeframe();
 				break;
 			case ReservationsComponent::RESERVATION_STYLE_LACATION_MONTHLY:
 				//施設別 - 月表示
@@ -317,35 +338,8 @@ class ReservationsController extends ReservationsAppController {
 			case ReservationsComponent::RESERVATION_STYLE_LACATION_WEEKLY:
 				//施設別 - 週表示
 				$vars = $this->_getWeeklyVars($vars);
+				$this->_setTimeframe();
 				break;
-			//case 'smallmonthly':
-			//	$ctpName = 'smonthly';
-			//	$vars = $this->_getMonthlyVars($vars);	//月施設予約情報は、拡大・縮小共通
-			//	$vars['style'] = 'smallmonthly';
-			//	break;
-			//case 'largemonthly':
-			//	$ctpName = 'lmonthly';
-			//	$vars = $this->_getMonthlyVars($vars);	//月施設予約情報は、拡大・縮小共通
-			//	$vars['style'] = 'largemonthly';
-			//	break;
-			//case 'weekly':
-			//	$ctpName = 'weekly';
-			//	$vars = $this->_getWeeklyVars($vars);
-			//	$vars['style'] = 'weekly';
-			//	break;
-			//case 'daily':
-			//	$ctpName = 'daily';
-			//	$vars = $this->_getDailyVars($vars);
-			//	$vars['style'] = 'daily';
-			//	break;
-			//case 'schedule':
-			//	$ctpName = 'schedule';
-			//	$vars = $this->getScheduleVars($vars);
-			//	$vars['style'] = 'schedule';
-			//	break;
-			//default:
-			//	//不明時は月（縮小）
-			//	$vars = $this->_getMonthlyVars($vars);
 		}
 
 		//if (in_array($vars['style'], ReservationsComponent::$reservationStylesByLocation, true)) {

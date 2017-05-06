@@ -268,6 +268,45 @@ NetCommonsApp.controller('ReservationsTimelinePlan', ['$scope', function($scope)
 
 }]);
 
+// 週表示時間枠
+
+NetCommonsApp.controller('ReservationsVerticalTimeframe', ['$scope', function($scope) {
+  $scope.init = function(data) {
+    $scope.data = data;
+    angular.forEach($scope.data.timeframes, function(timeframe, key) {
+      timeframe.style = {
+        backgroundColor: timeframe.color
+      };
+      var start = timeframe.start.split(':');
+      var end = timeframe.end.split(':');
+
+      var startHour = parseInt(start[0]);
+      var startMin = parseInt(start[1]);
+
+      var endHour = parseInt(end[0]);
+      var endMin = parseInt(end[1]);
+
+      if (endHour < startHour) {
+        endHour = 24;
+      }
+      //高さ
+      var height = endHour - startHour;
+      height = (height + ((endMin - startMin) / 60)) * $scope.rowHeight;
+
+      //開始位置
+      var top = (startHour + (startMin / 60)) * $scope.rowHeight;
+
+      //位置決定
+      timeframe.style.top = top - $scope.prevMargin;
+      timeframe.style.height = height;
+      // planObj.style.height = String(height) + 'px';
+      // planObj.style.top = String(top - $scope.prevMargin) + 'px'; //(調整)
+
+    });
+
+  };
+}]);
+
 // 週間表示タイムライン
 NetCommonsApp.controller('ReservationsWeeklyTimelinePlan', ['$scope', function($scope) {
   // $scope.reservationPlans = [];

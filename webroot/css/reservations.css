@@ -851,11 +851,23 @@ padding-right:3px;
 	width: 102px;
 }
 .reservation-vertical-timeline td.reservation-col-head {
-	/*min-width: 6em;*/
-	width: 80px;
+	min-width: 3em;
+	width: 50px;
 	border-style: solid;
 	border-color: #ddd;
 	padding-bottom: 10px;
+}
+.reservation-vertical-timeline thead td.reservation-col-head.with-timeframe {
+	width:100px;
+}
+/* 時間枠 */
+div.reservation-vertical-timeframe{
+	position:absolute;
+	overflow: hidden;
+	width:100%;
+	border-style: solid;
+	border-color: #ddd;
+	border-width: 1px;
 }
 .reservation-vertical-timeline tbody tr > td.reservation-col-head {
 	padding: 4px;

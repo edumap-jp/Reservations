@@ -158,7 +158,20 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 		$wDay = array();
 
 		/* 曜日 */
-		$html = '<tr><td rowspan="2" class="reservation-col-head"></td>';
+		$html = '<tr>';
+		// タイムラインとカテゴリ別表時と共通だ。このヘッダ
+		$className = '';
+		$colSpan = 1;
+		if ($vars['style'] == ReservationsComponent::RESERVATION_STYLE_LACATION_WEEKLY) {
+			if (Current::read('ReservationFrameSetting.display_timeframe')) {
+				$className = 'with-timeframe';
+				$colSpan = 2;
+				//$html .= '<td style="width:50px" rowspan="2">&nbsp;</td>';
+			}
+		}
+
+		$html .= '<td rowspan="2" class="reservation-col-head ' . $className . '" colspan="' .
+			$colSpan . '"></td>';
 		for ($i = 0; $i < 7; $i++) {
 			$timestamp = mktime(0, 0, 0, $firstMonth, ($firstDay + $i ), $firstYear);
 			$years[$i] = date('Y', $timestamp);
