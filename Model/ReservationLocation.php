@@ -390,7 +390,8 @@ class ReservationLocation extends ReservationsAppModel {
 		// ログインユーザが参加してるルームを取得
 		$accessibleRoomIds = $this->getReadableRoomIds();
 		$this->loadModels([
-			'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom'
+			'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
+			//'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable'
 		]);
 		$locationsRooms = $this->ReservationLocationsRoom->find('all', ['conditions' => [
 			'room_id' => $accessibleRoomIds,
@@ -416,6 +417,37 @@ class ReservationLocation extends ReservationsAppModel {
 
 		$locations = $this->find('all', $options);
 		return $locations;
+	}
+
+	public function getReservableLocations($categoryId = null) {
+		$this->loadModels(
+			[
+				//'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
+				'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable'
+			]
+		);
+		$locations = $this->getLocations($categoryId);
+
+		// プライベートルームを除外したルームIDで予約可能かチェック
+		$roomIds = $this->getReadableRoomIdsWithOutPrivate();
+		$reservableLocations = [];
+		foreach ($locations as $location) {
+			$reservable = false;
+			// いずれかのルームで予約できるなら予約可能な施設とする
+			foreach ($roomIds as $roomId) {
+				if ($this->ReservationLocationReservable->isReservableByLocation(
+					$location,
+					$roomId
+				)
+				) {
+					$reservable = true;
+				}
+			}
+			if ($reservable) {
+				$reservableLocations[] = $location;
+			}
+		}
+		return $reservableLocations;
 	}
 
 /**

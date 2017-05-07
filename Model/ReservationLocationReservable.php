@@ -91,37 +91,76 @@ class ReservationLocationReservable extends ReservationsAppModel {
 			//'Room' => 'Rooms.Room'
 		]);
 
-		$roomId = Current::read('Room.id');
+		$roomIds = $this->getReadableRoomIdsWithOutPrivate();
 		$userId = Current::read('User.id');
 
-		// このルームでのロールを取得
-		$rolesRoomsUsers = $this->RolesRoomsUser->find('first', array(
-			'recursive' => 0,
-			'conditions' => array(
-				'RolesRoomsUser.user_id' => $userId,
-				'RolesRoomsUser.room_id' => $roomId,
-			),
-		));
-		$roleKeys = Hash::get($rolesRoomsUsers, 'RolesRoom.role_key');
+		// 個人的な予約OKな施設
+		if ($location['ReservationLocation']['use_private']) {
+			// マイルームが使えるならOK
+			$this->loadModels(['UserRoleSetting' => 'UserRoles.UserRoleSetting']);
+			$userRole = Current::read('User.role_key');
+			$userRoleSetting = $this->UserRoleSetting->find('first', [
+				'conditions' => [
+					'UserRoleSetting.role_key' => $userRole
+				]
+			]);
+			$usePrivateRoom = $userRoleSetting['UserRoleSetting']['use_private_room'];
+			return $usePrivateRoom;
+		}
 
 		if ($location['ReservationLocation']['use_all_rooms']) {
 			// 全てのルームで予約Ok
+			// アクセスできる全ルーム（プライベートのぞく）でのロール取得
+			$rolesRoomsUsers = $this->RolesRoomsUser->find('all', array(
+				'recursive' => 0,
+				'conditions' => array(
+					'RolesRoomsUser.user_id' => $userId,
+					'RolesRoomsUser.room_id' => $roomIds,
+				),
+			));
+			$roleKeys = Hash::combine($rolesRoomsUsers, '{n}.RolesRoom.role_key', '{n}.RolesRoom.role_key');
+
 			$conditions = [
 				'ReservationLocationReservable.location_key' => $location['ReservationLocation']['key'],
 				'ReservationLocationReservable.role_key' => $roleKeys,
 				'room_id' => null,
 			];
-			$reservable = $this->find('first', ['conditions' => $conditions]);
-			return Hash::get($reservable, 'ReservationLocationReservable.value', false);
+			$reservables = $this->find('all', ['conditions' => $conditions]);
+
+			foreach ($reservables as $reservable) {
+				if (Hash::get($reservable, 'ReservationLocationReservable.value')) {
+					// いずれかのロールで予約権限ついてれば予約OK
+					return true;
+				}
+			}
+			return false;
 		} else {
 			// 選択されたルームのみ予約OK
-			$conditions = [
-				'ReservationLocationReservable.location_key' => $location['ReservationLocation']['key'],
-				'ReservationLocationReservable.role_key' => $roleKeys,
-				'room_id' => $roomId,
-			];
-			$reservable = $this->find('first', ['conditions' => $conditions]);
-			return Hash::get($reservable, 'ReservationLocationReservable.value', false);
+			$reservable = false;
+			foreach ($roomIds as $roomId) {
+				// ルームでのロール取得
+				$rolesRoomsUsers = $this->RolesRoomsUser->find('first', array(
+					'recursive' => 0,
+					'conditions' => array(
+						'RolesRoomsUser.user_id' => $userId,
+						'RolesRoomsUser.room_id' => $roomId,
+					),
+				));
+				$roleKeys = Hash::get($rolesRoomsUsers, 'RolesRoom.role_key');
+
+				// ロールに対する予約権限取得
+				$conditions = [
+					'ReservationLocationReservable.location_key' => $location['ReservationLocation']['key'],
+					'ReservationLocationReservable.role_key' => $roleKeys,
+					'room_id' => $roomId,
+				];
+				$reservable = $this->find('first', ['conditions' => $conditions]);
+				// ユーザがアクセス可能なルーム（プライベートのぞく）のいずれかで予約OKなら予約できる施設
+				if (Hash::get($reservable, 'ReservationLocationReservable.value', false)) {
+					$reservable = true;
+				}
+			}
+			return $reservable;
 		}
 	}
 

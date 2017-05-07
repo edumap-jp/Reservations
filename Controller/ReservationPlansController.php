@@ -283,7 +283,7 @@ class ReservationPlansController extends ReservationsAppController {
  */
 	public function add() {
 		// 施設情報
-		$locations = $this->ReservationLocation->getLocations();
+		$locations = $this->ReservationLocation->getReservableLocations();
 		$this->set('locations', $locations);
 
 		$frameId = Current::read('Frame.id');
@@ -324,7 +324,7 @@ class ReservationPlansController extends ReservationsAppController {
 		$this->view = 'detail_edit';
 
 		// 施設情報
-		$locations = $this->ReservationLocation->getLocations();
+		$locations = $this->ReservationLocation->getReservableLocations();
 		$this->set('locations', $locations);
 	}
 

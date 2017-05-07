@@ -29,6 +29,13 @@ class ReservationsAppModel extends AppModel {
 	protected $_readableRoomIds = null;
 
 /**
+ * getReadableRoomIdsWithOutPrivate()が何度も繰り返し呼び出された時のための保持変数
+ *
+ * @var array
+ */
+	protected $_readableRoomIdsWithOutPrivate = null;
+
+	/**
  * getReadableRoomIds
  *
  * 読み取り可能なルームのID配列を返す
@@ -57,6 +64,30 @@ class ReservationsAppModel extends AppModel {
 			$roomIds[$communityRoomId] = $communityRoomId;
 		}
 		$this->_readableRoomIds = $roomIds;
+		return $roomIds;
+	}
+
+/**
+ * プライベートルームを除外したアクセス可能なルームIDリスト
+ *
+ * @return array
+ */
+	public function getReadableRoomIdsWithOutPrivate() {
+		if (! is_null($this->_readableRoomIdsWithOutPrivate)) {
+			return $this->_readableRoomIdsWithOutPrivate;
+		}
+
+		$this->Room = ClassRegistry::init('Rooms.Room', true);
+		$condition = $this->Room->getReadableRoomsConditions();
+		$rooms = $this->Room->find('all', $condition);
+		$roomIds = [];
+		foreach($rooms as $room) {
+			if ($room['Room']['space_id'] !== Space::PRIVATE_SPACE_ID) {
+				$roomIds[] = $room['Room']['id'];
+			}
+		}
+		$this->_readableRoomIdsWithOutPrivate = $roomIds;
+
 		return $roomIds;
 	}
 

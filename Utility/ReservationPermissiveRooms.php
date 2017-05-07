@@ -11,6 +11,7 @@
 
 /**
  * ReservationPermissiveRooms Utility
+ * ε(　　　　 v ﾟωﾟ)　＜要整理対象　というか削除候補
  *
  * @author Allcreator <info@allcreator.net>
  * @package NetCommons\Reservations\Utility
