@@ -35,7 +35,7 @@ class ReservationsAppModel extends AppModel {
  */
 	protected $_readableRoomIdsWithOutPrivate = null;
 
-	/**
+/**
  * getReadableRoomIds
  *
  * 読み取り可能なルームのID配列を返す
@@ -81,7 +81,7 @@ class ReservationsAppModel extends AppModel {
 		$condition = $this->Room->getReadableRoomsConditions();
 		$rooms = $this->Room->find('all', $condition);
 		$roomIds = [];
-		foreach($rooms as $room) {
+		foreach ($rooms as $room) {
 			if ($room['Room']['space_id'] !== Space::PRIVATE_SPACE_ID) {
 				$roomIds[] = $room['Room']['id'];
 			}

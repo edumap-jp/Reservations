@@ -380,8 +380,7 @@ class ReservationLocation extends ReservationsAppModel {
 /**
  * 施設データを取得する
  *
- * アクセス可能なルームで予約可能な施設だけに絞り込んで返す
- * とりあえず、すべて取得する
+ * アクセス可能なルームから予約を受け付けてる施設だけに絞り込んで返す
  *
  * @param int $categoryId カテゴリID
  * @return array
@@ -419,6 +418,12 @@ class ReservationLocation extends ReservationsAppModel {
 		return $locations;
 	}
 
+/**
+ * 予約可能な施設を返す
+ *
+ * @param int $categoryId カテゴリID
+ * @return array
+ */
 	public function getReservableLocations($categoryId = null) {
 		$this->loadModels(
 			[
