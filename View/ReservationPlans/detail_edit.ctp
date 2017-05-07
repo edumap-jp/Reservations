@@ -206,7 +206,23 @@ echo $this->element('Reservations.scripts');
 			<div class="form-group" data-reservation-name="selectRoomForOpen">
 				<div class="col-xs-12">
 					<?php
-						echo $this->ReservationExposeTarget->makeSelectExposeTargetHtml($event, $frameId, $vars, $exposeRoomOptions, $myself);
+						//echo $this->ReservationExposeTarget->makeSelectExposeTargetHtml($event, $frameId, $vars, $exposeRoomOptions, $myself);
+					echo $this->NetCommonsForm->label(
+						'ReservationActionPlan.plan_room_id' . Inflector::camelize('room_id'),
+						__d('reservations', 'Category') . $this->element('NetCommons.required'));
+					echo $this->NetCommonsForm->select('ReservationActionPlan.plan_room_id',
+						$exposeRoomOptions, array(
+						//select-expose-targetクラスをもつ要素のchangeをjqで捕まえています
+						'class' => 'form-control select-expose-target',
+						'empty' => false,
+						'required' => true,
+						//value値のoption要素がselectedになる。
+						'value' => $this->request->data['ReservationActionPlan']['plan_room_id'],
+						'data-frame-id' => $frameId,
+						'data-myself' => $myself, // プライベートルーム
+						'escape' => false,
+					));
+
 					?>
 					<?php echo $this->NetCommonsForm->error('ReservationActionPlan.plan_room_id'); ?>
 				</div>

@@ -293,6 +293,7 @@ class ReservationsAppController extends AppController {
 		//spaceNameOfRoomsは、ViewのReservationCommon->getPlanMarkClassName()の中で
 		//どの画面でも利用するので、共通処理としておく。
 		//
+		// ε(　　　　 v ﾟωﾟ)　＜ このコードはカレンダのまま
 		$frameSetting = $this->ReservationFrameSetting->getFrameSetting();
 		//公開対象一覧のoptions配列と自分自身のroom_idとルーム毎空間名配列を取得
 		list($exposeRoomOptions, $myself, $spaceNameOfRooms, $allRoomNames) =

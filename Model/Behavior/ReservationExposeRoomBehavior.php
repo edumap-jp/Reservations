@@ -75,16 +75,16 @@ class ReservationExposeRoomBehavior extends ReservationAppBehavior {
 		// 全会員
 		//
 		// 全会員が、指定したルームのみ表示ONの時表示ＯＫになっているか確認
-		if (! empty($userId)) {
-			//全会員を表すIDは↓これです。
-			$roomId = Space::getRoomIdRoot(Space::COMMUNITY_SPACE_ID);
-			$spaceNameOfRooms[$roomId] = 'member';	//例外的に文字列を渡す
-			$allRoomNames[$roomId] = __d('reservations', 'All the members');
-			//if ($this->_isEnableRoomInFrameSetting($roomId, $frameSetting)) {
-				//ログインしている時、optionに積む
-				$options[$roomId] = __d('reservations', 'All the members');
-			//}
-		}
+		//if (! empty($userId)) {
+		//	//全会員を表すIDは↓これです。
+		//	$roomId = Space::getRoomIdRoot(Space::COMMUNITY_SPACE_ID);
+		//	$spaceNameOfRooms[$roomId] = 'member';	//例外的に文字列を渡す
+		//	$allRoomNames[$roomId] = __d('reservations', 'All the members');
+		//	//if ($this->_isEnableRoomInFrameSetting($roomId, $frameSetting)) {
+		//		//ログインしている時、optionに積む
+		//		$options[$roomId] = __d('reservations', 'All the members');
+		//	//}
+		//}
 
 		return array($options, $myself, $spaceNameOfRooms, $allRoomNames);
 	}
@@ -228,6 +228,14 @@ class ReservationExposeRoomBehavior extends ReservationAppBehavior {
 		if ($roomId) {
 			$spaceNameOfRooms[$roomId] = 'private';
 			$allRoomNames[$roomId] = $this->__getPrivateRoomName($model, $roomId);
+
+			if (!empty($userId)) {
+				$myself = $roomId;
+				//ログインしている時、optionに積む
+				/////$options[$roomId] = $title;
+				$options[$roomId] = $allRoomNames[$roomId];
+			}
+
 		}
 		return array($myself, $options, $spaceNameOfRooms, $allRoomNames);
 	}

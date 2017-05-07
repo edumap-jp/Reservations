@@ -118,7 +118,7 @@ class ReservationPlansController extends ReservationsAppController {
 		'Reservations.ReservationCategory',
 		'Reservations.ReservationShareUsers',
 		'Reservations.ReservationEditDatetime',
-		'Reservations.ReservationExposeTarget',
+		//'Reservations.ReservationExposeTarget',
 		'Reservations.ReservationPlanRrule',
 		'Reservations.ReservationPlanEditRepeatOption',
 		'Groups.GroupUserList',
