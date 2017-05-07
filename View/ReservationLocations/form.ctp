@@ -213,7 +213,7 @@ $dataJson = json_encode($this->request->data);
 
 				<?php
 					//施設管理者
-					echo $this->NetCommonsForm->label(null, __d('reservations', 'Contact'));
+					echo $this->NetCommonsForm->label(null, __d('reservations', 'Approver'));
 				?>
 				<?php
 					$title = false;

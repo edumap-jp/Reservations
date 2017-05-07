@@ -595,7 +595,7 @@ msgstr "施設"
 #: Reservations/View/ReservationPlans/view.ctp:103
 #: Reservations/View/Elements/ReservationPlans/detail_edit_etc_details.ctp:35
 #: Reservations/View/Helper/ReservationDailyHelper.php:141
-msgid "Contact"
+msgid "Approver"
 msgstr "施設管理者"
 
 #: Reservations/View/ReservationPlans/view.ctp:110
@@ -1087,8 +1087,8 @@ msgid "Forth week"
 msgstr "第4週"
 
 #: Reservations/View/Helper/ReservationScheduleHelper.php:141;233
-msgid "Contact:"
-msgstr "連絡先:"
+msgid "Contact"
+msgstr "連絡先"
 
 #: Reservations/View/Helper/ReservationScheduleHelper.php:247;291
 msgid "No plan."
