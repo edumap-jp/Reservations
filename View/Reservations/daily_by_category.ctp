@@ -40,6 +40,11 @@ echo $this->NetCommonsHtml->script(array(
 				<tr>
 					<td></td>
 				</tr>
+				<?php if (Current::read('ReservationFrameSetting.display_timeframe')): ?>
+					<tr>
+						<td></td>
+					</tr>
+				<?php endif ?>
 			</thead>
 
 			<tbody>
@@ -69,7 +74,64 @@ echo $this->NetCommonsHtml->script(array(
 				data-daily-start-time-idx="<?php echo $startTime ?>">
 			<table class="reservation-row-data">
 				<thead>
-					<?php // 時刻と予約の＋ボタン表示 ?>
+					<?php if (Current::read('ReservationFrameSetting.display_timeframe')): ?>
+						<tr>
+							<td style="padding: 0px">
+								<?php
+								// 時間枠を出力
+								$displayTimeframes = [];
+								foreach ($timeframes as $timeframe) {
+									// 時間枠情報をUTCからユーザタイムゾーンに変換。
+									$ncTime = new NetCommonsTime();
+									$start = $ncTime->toUserDatetime($timeframe['ReservationTimeframe']['start_time']);
+									$end = $ncTime->toUserDatetime($timeframe['ReservationTimeframe']['end_time']);
+									$start = date('H:i', strtotime($start));
+									$end = date('H:i', strtotime($end));
+									if ($start > $end) {
+										// Start > Endなら24時またぎなので2つの時間枠にわける
+										$displayTimeframes[] = [
+											'start' => $start,
+											'end' => '24:00',
+											'color' => $timeframe['ReservationTimeframe']['color'],
+											'title' => $timeframe['ReservationTimeframe']['title'],
+										];
+										$displayTimeframes[] = [
+											'start' => '00:00',
+											'end' => $end,
+											'color' => $timeframe['ReservationTimeframe']['color'],
+											'title' => $timeframe['ReservationTimeframe']['title'],
+										];
+									} else {
+										$displayTimeframes[] = [
+											'start' => $start,
+											'end' => $end,
+											'color' => $timeframe['ReservationTimeframe']['color'],
+											'title' => $timeframe['ReservationTimeframe']['title'],
+										];
+									}
+								}
+								?>
+								<div ng-controller="ReservationsHorizontalTimeframe"
+										ng-init="init(<?php echo h(json_encode(['timeframes' => $displayTimeframes]))
+										?>)"
+										style="position: relative;height: 100%;margin-top:0px">
+									<div ng-repeat="timeframe in data.timeframes"
+											ng-style="timeframe.style"
+
+											class="reservation-horizontal-timeframe"
+									>
+										{{timeframe.title}}
+									</div>
+								</div>
+
+							</td>
+							<?php for($i = 1; $i < 24; $i++): ?>
+								<td></td>
+							<?php endfor;?>
+						</tr>
+					<?php endif ?>
+
+				<?php // 時刻と予約の＋ボタン表示 ?>
 					<?php echo $this->ReservationDailyTimeline->makeDailyTimlineHeaderHtml($vars); ?>
 				</thead>
 

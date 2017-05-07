@@ -869,6 +869,15 @@ div.reservation-vertical-timeframe{
 	border-color: #ddd;
 	border-width: 1px;
 }
+div.reservation-horizontal-timeframe{
+	position:absolute;
+	overflow: hidden;
+	height: 100%;
+	border-style: solid;
+	border-color: #ddd;
+	border-width: 1px;
+}
+
 .reservation-vertical-timeline tbody tr > td.reservation-col-head {
 	padding: 4px;
 }
