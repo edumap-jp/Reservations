@@ -33,7 +33,7 @@ class ReservationsAppModel extends AppModel {
  *
  * @var array
  */
-	protected $_readableRoomIdsWithOutPrivate = null;
+	protected $_notPrivateRoomIds = null;
 
 /**
  * getReadableRoomIds
@@ -73,8 +73,8 @@ class ReservationsAppModel extends AppModel {
  * @return array
  */
 	public function getReadableRoomIdsWithOutPrivate() {
-		if (! is_null($this->_readableRoomIdsWithOutPrivate)) {
-			return $this->_readableRoomIdsWithOutPrivate;
+		if (! is_null($this->_notPrivateRoomIds)) {
+			return $this->_notPrivateRoomIds;
 		}
 
 		$this->Room = ClassRegistry::init('Rooms.Room', true);
@@ -86,7 +86,7 @@ class ReservationsAppModel extends AppModel {
 				$roomIds[] = $room['Room']['id'];
 			}
 		}
-		$this->_readableRoomIdsWithOutPrivate = $roomIds;
+		$this->_notPrivateRoomIds = $roomIds;
 
 		return $roomIds;
 	}
