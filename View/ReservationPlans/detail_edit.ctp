@@ -204,25 +204,31 @@ echo $this->element('Reservations.scripts');
 
 			<?php /* 予定の対象空間選択 */ ?>
 			<div class="form-group" data-reservation-name="selectRoomForOpen">
-				<div class="col-xs-12">
+				<div class="col-xs-12" ng-cloak="">
 					<?php
 						//echo $this->ReservationExposeTarget->makeSelectExposeTargetHtml($event, $frameId, $vars, $exposeRoomOptions, $myself);
 					echo $this->NetCommonsForm->label(
 						'ReservationActionPlan.plan_room_id' . Inflector::camelize('room_id'),
 						__d('reservations', 'Category') . $this->element('NetCommons.required'));
-					echo $this->NetCommonsForm->select('ReservationActionPlan.plan_room_id',
-						$exposeRoomOptions, array(
-						//select-expose-targetクラスをもつ要素のchangeをjqで捕まえています
-						'class' => 'form-control select-expose-target',
-						'empty' => false,
-						'required' => true,
-						//value値のoption要素がselectedになる。
-						'value' => $this->request->data['ReservationActionPlan']['plan_room_id'],
-						'data-frame-id' => $frameId,
-						'data-myself' => $myself, // プライベートルーム
-						'escape' => false,
-					));
-
+					//debug($exposeRoomOptions);
+					?>
+					<?php
+					foreach ($locations as $location) {
+						$options = Hash::combine($location['ReservableRoom'], '{n}.Room.id', '{n}.RoomsLanguage.0.name');
+						echo $this->NetCommonsForm->select('ReservationActionPlan.plan_room_id',
+							$options, array(
+								'class' => 'form-control select-expose-target',
+								'empty' => false,
+								'required' => true,
+								//value値のoption要素がselectedになる。
+								'value' => $this->request->data['ReservationActionPlan']['plan_room_id'],
+								'data-frame-id' => $frameId,
+								'data-myself' => $myself, // プライベートルーム
+								'escape' => false,
+								'ng-show' => 'selectLocation.ReservationLocation.id == ' .
+									$location['ReservationLocation']['id']
+							));
+					}
 					?>
 					<?php echo $this->NetCommonsForm->error('ReservationActionPlan.plan_room_id'); ?>
 				</div>
@@ -230,25 +236,26 @@ echo $this->element('Reservations.scripts');
 
 			<?php /* 予定の共有設定 */ ?>
 			<?php
-				$dispValue = 'none';
-				if (!empty($myself)) {
-					if ($this->request->data['ReservationActionPlan']['plan_room_id'] == $myself) {
-						$dispValue = 'block';
-					} else {
-						$keys = array_keys($exposeRoomOptions);
-						if (array_shift($keys) == $myself) {
-							//ルーム選択肢が１つだけで、それがプライベートの時の、特例対応
-							$dispValue = 'block';
-						}
-					}
-				}
+				//$dispValue = 'none';
+				//if (!empty($myself)) {
+				//	if ($this->request->data['ReservationActionPlan']['plan_room_id'] == $myself) {
+				//		$dispValue = 'block';
+				//	} else {
+				//		$keys = array_keys($exposeRoomOptions);
+				//		if (array_shift($keys) == $myself) {
+				//			//ルーム選択肢が１つだけで、それがプライベートの時の、特例対応
+				//			$dispValue = 'block';
+				//		}
+				//	}
+				//}
 			?>
 			<div class="form-group reservation-plan-share_<?php echo $frameId; ?>" data-reservation-name="planShare"
-				 style="display: <?php echo $dispValue; ?>; margin-top:0.5em;">
+				 style="display: <?php //echo $dispValue; ?>; margin-top:0.5em;">
 				<div class="col-xs-12 col-sm-10 col-sm-offset-2">
-					<?php echo $this->element('Reservations.ReservationPlans/edit_plan_share', array('shareUsers', $shareUsers)); ?>
+					<?php //echo $this->element('Reservations.ReservationPlans/edit_plan_share', array('shareUsers', $shareUsers)); ?>
 				</div><!-- col-sm-10おわり -->
-			</div><!-- form-groupおわり-->
+			</div>
+			<!-- form-groupおわり-->
 
 			<?php /* メール通知設定 */ ?>
 			<?php echo $this->element('Reservations.ReservationPlans/detail_edit_mail'); ?>

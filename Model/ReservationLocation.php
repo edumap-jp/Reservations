@@ -13,6 +13,7 @@
  */
 
 App::uses('ReservationsAppModel', 'Reservations.Model');
+App::uses('ReservationLocationOpenText', 'Reservations.Lib');
 
 /**
  * Summary for ReservationLocation Model
@@ -37,6 +38,7 @@ class ReservationLocation extends ReservationsAppModel {
 			),
 			'afterCallback' => false,
 		),
+		'Reservations.ReservationLocationDelete',
 		'Reservations.ReservationValidate',
 		'Reservations.ReservationLocationDelete',
 	);
@@ -173,7 +175,8 @@ class ReservationLocation extends ReservationsAppModel {
 					array_key_exists('start_time', $results[$key][$this->alias]) &&
 					array_key_exists('end_time', $results[$key][$this->alias]) &&
 					array_key_exists('timezone', $results[$key][$this->alias])) {
-				$results[$key][$this->alias]['openText'] = $this->_openText($value);
+				$openText = new ReservationLocationOpenText();
+				$results[$key][$this->alias]['openText'] = $openText->openText($value);
 			}
 		}
 		return $results;
@@ -427,12 +430,22 @@ class ReservationLocation extends ReservationsAppModel {
 	public function getReservableLocations($categoryId = null) {
 		$this->loadModels(
 			[
-				//'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
-				'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable'
+				'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
+				'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable',
+				//'ReservationLocationRoom' => 'Reservations.ReservationLocationRoom'
 			]
 		);
 		$locations = $this->getLocations($categoryId);
 
+		// ルーム情報を locationにまぜこむ
+		$condition = $this->Room->getReadableRoomsConditions();
+		$roomBase = $this->Room->find('all', $condition);
+		foreach ($locations as &$location) {
+			$thisLocationRooms =
+				$this->ReservationLocationsRoom->getReservableRoomsByLocation($location, $roomBase);
+
+			$location['ReservableRoom'] = $thisLocationRooms;
+		}
 		// プライベートルームを除外したルームIDで予約可能かチェック
 		$roomIds = $this->getReadableRoomIdsWithOutPrivate();
 		$reservableLocations = [];
@@ -453,68 +466,6 @@ class ReservationLocation extends ReservationsAppModel {
 			}
 		}
 		return $reservableLocations;
-	}
-
-/**
- * openTextを返す
- *
- * @param array $reservationLocation 施設データ
- * @return string
- */
-	protected function _openText($reservationLocation) {
-		$ret = '';
-		$weekDaysOptions = [
-			'Sun' => __d('holidays', 'Sunday'),
-			'Mon' => __d('holidays', 'Monday'),
-			'Tue' => __d('holidays', 'Tuesday'),
-			'Wed' => __d('holidays', 'Wednesday'),
-			'Thu' => __d('holidays', 'Thursday'),
-			'Fri' => __d('holidays', 'Friday'),
-			'Sat' => __d('holidays', 'Saturday'),
-		];
-		$timeTable = $reservationLocation['ReservationLocation']['time_table'];
-		if ($timeTable === 'Sun|Mon|Tue|Wed|Thu|Fri|Sat') {
-			//毎日
-			$ret = __d('reservations', '毎日');
-		} elseif ($timeTable === 'Mon|Tue|Wed|Thu|Fri') {
-			// 平日
-			$ret = __d('reservations', '平日');
-		} else {
-			$timeTable = explode('|', $timeTable);
-			$weekList = [];
-			foreach ($timeTable as $weekday) {
-				if ($weekday) {
-					$weekList[] = $weekDaysOptions[$weekday];
-				}
-			}
-			$ret = implode(', ', $weekList);
-		}
-
-		//時間
-		$startTime = $reservationLocation['ReservationLocation']['start_time'];
-		$locationTimeZone = new DateTimeZone($reservationLocation['ReservationLocation']['timezone']);
-		$startDate = new DateTime($startTime, new DateTimeZone('UTC'));
-
-		$startDate->setTimezone($locationTimeZone);
-		$reservationLocation['ReservationLocation']['start_time'] = $startDate->format('H:i');
-
-		$endTime = $reservationLocation['ReservationLocation']['end_time'];
-		$endDate = new DateTime($endTime, new DateTimeZone('UTC'));
-		$endDate->setTimezone($locationTimeZone);
-		$reservationLocation['ReservationLocation']['end_time'] = $endDate->format('H:i');
-
-		$ret = sprintf('%s %s - %s',
-			$ret,
-			$reservationLocation['ReservationLocation']['start_time'],
-			$reservationLocation['ReservationLocation']['end_time']
-		);
-		if (AuthComponent::user('timezone') != $reservationLocation['ReservationLocation']['timezone']) {
-			$SiteSetting = new SiteSetting();
-			$SiteSetting->prepare();
-			$ret .= ' ';
-			$ret .= $SiteSetting->defaultTimezones[$reservationLocation['ReservationLocation']['timezone']];
-		}
-		return $ret;
 	}
 
 /**
@@ -562,4 +513,5 @@ class ReservationLocation extends ReservationsAppModel {
 
 		return $data;
 	}
+
 }

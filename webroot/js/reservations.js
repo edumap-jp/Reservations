@@ -713,6 +713,20 @@ NetCommonsApp.controller('ReservationsDetailEdit',
          };
 
        };
+
+       // $scope.initRoomOption = function(options, defaultRoom ) {
+       //    $scope.roomOptions = options;
+       //    console.log($scope.roomOptions);
+       //    $scope.selectRoom = '5';
+       //    // $scope.selectRoom = {5:options[defaultRoom]};
+       //    // $scope.selectRoom = filterFilter($scope.roomOptions, {})
+       //   console.log($scope.selectRoom);
+       //
+       // };
+       // $scope.changeRoomOption = function() {
+       //   console.log($scope.selectRoom);
+       // }
+
        $scope.setLocationKey = function(locationKey) {
           $scope.selectLocation =
               filterFilter($scope.data.locations,
@@ -736,6 +750,7 @@ NetCommonsApp.controller('ReservationsDetailEdit',
          }
        };
        $scope.changeLocation = function() {
+         // console.log($scope.selectLocation);
          // console.log($scope.current);
          // $scope.selectLocation = filterFilter($scope.data.locations, {
          //     ReservationLocation: {key: $scope.ReservationActionPlan.location_key}}

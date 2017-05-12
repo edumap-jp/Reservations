@@ -118,4 +118,50 @@ class ReservationLocationsRoom extends ReservationsAppModel {
 
 		return true;
 	}
+
+/**
+ * 施設で予約を受け付けるルームを返す
+ *
+ * @param array $location ReservationLocation data
+ * @param array $roomBase アクセスユーザがアクセス可能なルーム情報
+ * @return array アクセス可能なルームのうち引数で指定された施設で予約可能なルーム
+ */
+	public function getReservableRoomsByLocation($location, $roomBase) {
+		// 予約を受け付けるルームを制限するなら受け付けるルームIDを取得する
+		if (!$location['ReservationLocation']['use_all_rooms']) {
+			$locationRooms = $this->find(
+				'all',
+				[
+					'conditions' => [
+						'ReservationLocationsRoom.reservation_location_key' => $location['ReservationLocation']['key']
+					]
+				]
+			);
+			$reservableRoomIds = array_keys(
+				Hash::combine($locationRooms, 'ReservationLocationsRoom.id')
+			);
+		}
+
+		$thisLocationRooms = [];
+		foreach ($roomBase as $room) {
+			if ($room['Room']['space_id'] == Space::PRIVATE_SPACE_ID) {
+				if ($location['ReservationLocation']['use_private']) {
+					// 個人的な予約OK ならプライベートルームを選択肢に追加
+					$thisLocationRooms[] = $room;
+				}
+			} else {
+				if ($location['ReservationLocation']['use_all_rooms']) {
+					// 全てのルームから予約受付なら選択肢にルームを追加
+					$thisLocationRooms[] = $room;
+				} else {
+					// 予約を受け付けるルームなら選択肢に追加
+					if (in_array($room['Room']['id'], $reservableRoomIds)) {
+						$thisLocationRooms[] = $room;
+					}
+				}
+			}
+		}
+		return $thisLocationRooms;
+	}
+
 }
