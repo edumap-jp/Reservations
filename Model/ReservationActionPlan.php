@@ -25,6 +25,8 @@ App::uses('ReservationSupport', 'Reservations.Utility');
  */
 class ReservationActionPlan extends ReservationsAppModel {
 
+	protected $_locations = null;
+
 /**
  * use table
  *
@@ -653,6 +655,22 @@ class ReservationActionPlan extends ReservationsAppModel {
 					'message' => __d('reservations', 'Invalid input. (authority)'),
 				),
 			),
+			'location_key' => [
+				'rule1' => [
+					'rule' => ['allowedLocationKey'],
+					'required' => true,
+					'allowEmpty' => false,
+					'message' => __d('reservations', 'Invalid input location')
+				]
+			],
+			//'plan_room_id' => array(
+			//	'rule1' => array(
+			//		'rule' => array('allowedRoomId'),
+			//		'required' => true,
+			//		'allowEmpty' => false,
+			//		'message' => __d('reservations', 'Invalid input. (authority)'),
+			//	),
+			//),
 			'timezone_offset' => array(
 				'rule1' => array(
 					'rule' => array('allowedTimezoneOffset'),
@@ -698,6 +716,64 @@ class ReservationActionPlan extends ReservationsAppModel {
 		$this->_doMergeRruleValidate($isDetailEdit);	//繰返し関連validation
 
 		return parent::beforeValidate($options);
+	}
+
+/**
+ * 予約可能な施設を返す
+ * 何度も呼び出すことを考慮して内部キャッシュ
+ * ε(　　　　 v ﾟωﾟ)　＜ReservationLocation内でキャッシュすればOKなのでは?
+ *
+ * @return array
+ */
+	protected function _getLocations() {
+		if (is_null($this->_locations)) {
+			$this->loadModels(
+				[
+					'ReservationLocation',
+					'Reservations.ReservationLocation',
+				]
+			);
+
+			$this->_locations = $this->ReservationLocation->getReservableLocations();
+		}
+		return $this->_locations;
+	}
+
+/**
+ * 選択した施設が予約可能な施設かチェックする
+ *
+ * @param array $check 入力値 location_key
+ * @return bool
+ */
+	public function allowedLocationKey($check) {
+		//
+		$locationKey = $check['location_key'];
+
+		$locations = $this->_getLocations();
+		$locationKeys = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservableRoom');
+		return array_key_exists($locationKey, $locationKeys);
+	}
+
+/**
+ * allowedRoomId
+ *
+ * 許可されたルームIDかどうか
+ * 予約しようとするユーザのロール、予約する施設により予約可能なルームはことなる。
+ *
+ * @param array $check 入力配列（room_id）
+ * @return bool 成功時true, 失敗時false
+ */
+	public function allowedRoomId($check) {
+		$roomId = $check['room_id'];
+		$locations = $this->_getLocations();
+		$locationRooms = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservableRoom');
+
+		$locationKey = $this->data[$this->alias]['location_key'];
+		$rooms = $locationRooms[$locationKey];
+
+		$reservableRoomIds = Hash::combine($rooms, '{n}.Room.id', '{n}.Room.id');
+		debug($reservableRoomIds);
+		return in_array($roomId, $reservableRoomIds);
 	}
 
 /**

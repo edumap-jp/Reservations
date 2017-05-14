@@ -29,11 +29,11 @@ class ReservationPlanValidateBehavior extends ModelBehavior {
  * @param array $check 入力配列（room_id）
  * @return bool 成功時true, 失敗時false
  */
-	public function allowedRoomId(Model &$model, $check) {
-		$value = array_values($check);
-		$value = $value[0];
-		return (in_array($value, ReservationPermissiveRooms::getCreatableRoomIdList()));
-	}
+	//public function allowedRoomId(Model &$model, $check) {
+	//	$value = array_values($check);
+	//	$value = $value[0];
+	//	//return (in_array($value, ReservationPermissiveRooms::getCreatableRoomIdList()));
+	//}
 
 /**
  * allowedEmailSendTiming
