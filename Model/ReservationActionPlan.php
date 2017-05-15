@@ -25,6 +25,11 @@ App::uses('ReservationSupport', 'Reservations.Utility');
  */
 class ReservationActionPlan extends ReservationsAppModel {
 
+/**
+ * アクセスユーザが予約可能な施設
+ *
+ * @var array
+ */
 	protected $_locations = null;
 
 /**
