@@ -15,6 +15,8 @@
 App::uses('ReservationsAppModel', 'Reservations.Model');
 App::uses('ReservationsComponent', 'Reservations.Controller/Component');
 App::uses('ReservationSupport', 'Reservations.Utility');
+App::uses('ReservationService', 'Reservations.Service');
+App::uses('ReservationRruleParameter', 'Reservations.Parameter');
 
 /**
  * Reservation Action Plan Model
@@ -417,7 +419,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 				'rule3' => array(
 					'rule' => array('validteNotExistReservation'),
 					'message' =>
-						__d('reservations', '既に予約が入っているため、予約できません。'),
+						__d('reservations', 'It has been alreay reserved by someone else.Try different time and date.'),
 					// NC2では予約の入ってる日付を表示してた（繰り返し用だが、単発予約でも表示）
 				),
 				'rule4' => array(
@@ -492,7 +494,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 		if ($startDate != $endDate) {
 			//　日付またぎの予約なら日付毎に分割してチェックする
 			// $startDateから1日ずつたして$endDateまで
-			$endDateUnixtime = strtotime($endDate);
+					$endDateUnixtime = strtotime($endDate);
 			$current = strtotime($startDate);
 			for ($current = $current; $current <= $endDateUnixtime; $current = $current + (24 * 60 * 60)) {
 				if ($current == strtotime($startDate)) {
@@ -544,60 +546,36 @@ class ReservationActionPlan extends ReservationsAppModel {
 	public function validteNotExistReservation($check) {
 		// ε(　　　　 v ﾟωﾟ)　＜ リピート予約に対応させる
 		// この時点ではユーザタイム
+		//debug($this->data);
 		$startDateTime = $this->data[$this->alias]['detail_start_datetime'];
 		$endDateTime = $this->data[$this->alias]['detail_end_datetime'];
 		$inputTimeZone = $this->data[$this->alias]['timezone_offset'];
 		$locationKey = $this->data[$this->alias]['location_key'];
-		// サーバタイムに変換
-		$netCommonsTime = new NetCommonsTime();
-		$startDateTime = $netCommonsTime->toServerDatetime($startDateTime, $inputTimeZone);
-		$endDateTime = $netCommonsTime->toServerDatetime($endDateTime, $inputTimeZone);
 
-		$startDateTime = date('YmdHis', strtotime($startDateTime));
-		$endDateTime = date('YmdHis', strtotime($endDateTime));
-		// 存在チェック
-		$this->loadModels(['ReservationEvent' => 'Reservations.ReservationEvent']);
-		$conditions = [
-			'ReservationEvent.location_key' => $locationKey,
-			// workflow
-			[
-				// isActive
-				// isLatestは承認申請中だけ（差し戻しと一時保存はチェックしない）
-				'OR' => [
-					'ReservationEvent.is_active' => 1,
-					[
-						'ReservationEvent.is_latest' => 1,
-						'ReservationEvent.status' => WorkflowComponent::STATUS_APPROVAL_WAITING,
-					]
-				]
-			],
-			[
-				'OR' => [
-					[
-						// 始点が指定した範囲にあったら時間枠重複
-						'ReservationEvent.dtstart >' => $startDateTime,
-						'ReservationEvent.dtstart <' => $endDateTime,
-					],
-					[
-						// 終点が指定した範囲にあったら時間枠重複
-						'ReservationEvent.dtend >' => $startDateTime,
-						'ReservationEvent.dtend <' => $endDateTime,
+		$rruleParameter = new ReservationRruleParameter();
+		$rruleParameter->setData($this->data);
+		$rrule = $rruleParameter->getRrule();
 
-					],
-					[
-						// 始点、終点ともそれぞれ指定範囲の前と後だったら時間枠重複
-						'ReservationEvent.dtstart <' => $startDateTime,
-						'ReservationEvent.dtend >' => $endDateTime,
-					],
-				]
-			],
-
-		];
-		$exist = $this->ReservationEvent->find('count', ['conditions' => $conditions]);
-		if ($exist) {
-			return false;
+		$reservationService = new ReservationService();
+		$result = $reservationService->getOverlapReservationDate(
+			$locationKey,
+			$startDateTime,
+			$endDateTime,
+			$inputTimeZone,
+			$rrule
+		);
+		if (count($result) > 0) {
+			$ret = __d(
+				'reservations',
+				'It has been alreay reserved by someone else.Try different time and date.'
+			);
+			foreach ($result as $date) {
+				$ret .= "<br />" . $date;
+			}
+			return $ret;
+		} else {
+			return true;
 		}
-		return true;
 	}
 
 /**
@@ -734,8 +712,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 		if (is_null($this->_locations)) {
 			$this->loadModels(
 				[
-					'ReservationLocation',
-					'Reservations.ReservationLocation',
+					'ReservationLocation' => 'Reservations.ReservationLocation',
 				]
 			);
 
@@ -769,7 +746,7 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @return bool 成功時true, 失敗時false
  */
 	public function allowedRoomId($check) {
-		$roomId = $check['room_id'];
+		$roomId = $check['plan_room_id'];
 		$locations = $this->_getLocations();
 		$locationRooms = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservableRoom');
 
@@ -777,7 +754,6 @@ class ReservationActionPlan extends ReservationsAppModel {
 		$rooms = $locationRooms[$locationKey];
 
 		$reservableRoomIds = Hash::combine($rooms, '{n}.Room.id', '{n}.Room.id');
-		debug($reservableRoomIds);
 		return in_array($roomId, $reservableRoomIds);
 	}
 

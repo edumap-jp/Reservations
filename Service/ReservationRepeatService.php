@@ -46,7 +46,14 @@ class ReservationRepeatService {
 			case 'YEARLY':
 				$dateSet = $this->_getRepeatDateSetByYearly($rrule, $startDate);
 				break;
+			default:
+				// $rruleに該当する繰り返しがなければ初日だけ
+				$dateSet = [
+					$startDate
+				];
+				break;
 		}
+		//debug($dateSet);
 		return $dateSet;
 	}
 

@@ -91,7 +91,8 @@ class ReservationService {
 		$startDateTime = date('YmdHis', strtotime($startDateTime));
 		$endDateTime = date('YmdHis', strtotime($endDateTime));
 		// 存在チェック
-		$this->loadModels(['ReservationEvent' => 'Reservations.ReservationEvent']);
+		//$this->loadModels(['ReservationEvent' => 'Reservations.ReservationEvent']);
+		$this->ReservationEvent = ClassRegistry::init('Reservations.ReservationEvent');
 		$conditions = [
 			'ReservationEvent.location_key' => $locationKey,
 			// workflow
@@ -107,25 +108,32 @@ class ReservationService {
 				]
 			],
 			[
-				'OR' => [
-					[
-						// 始点が指定した範囲にあったら時間枠重複
-						'ReservationEvent.dtstart >' => $startDateTime,
-						'ReservationEvent.dtstart <' => $endDateTime,
-					],
-					[
-						// 終点が指定した範囲にあったら時間枠重複
-						'ReservationEvent.dtend >' => $startDateTime,
-						'ReservationEvent.dtend <' => $endDateTime,
-
-					],
-					[
-						// 始点、終点ともそれぞれ指定範囲の前と後だったら時間枠重複
-						'ReservationEvent.dtstart <' => $startDateTime,
-						'ReservationEvent.dtend >' => $endDateTime,
-					],
-				]
-			],
+				'ReservationEvent.dtstart <' => $endDateTime,
+				'ReservationEvent.dtend >' => $startDateTime,
+			]
+			//	'OR' => [
+			//		// 重複している予約は開始が$endDateTimeより前 AND 終了が$startDateTiemより後
+			//		[
+			//			'ReservationEvent.dtstart <' => $endDateTime,
+			//			'ReservationEvent.dtend >' => $startDateTime,
+			//
+			//			// 始点が指定した範囲にあったら時間枠重複
+			//			//'ReservationEvent.dtstart >=' => $startDateTime,
+			//			//'ReservationEvent.dtstart <' => $endDateTime,
+			//		],
+			//		[
+			//			// 終点が指定した範囲にあったら時間枠重複
+			//			//'ReservationEvent.dtend >' => $startDateTime,
+			//			//'ReservationEvent.dtend <=' => $endDateTime,
+			//
+			//		],
+			//		[
+			//			// 始点、終点ともそれぞれ指定範囲の前と後だったら時間枠重複
+			//			'ReservationEvent.dtstart <' => $startDateTime,
+			//			'ReservationEvent.dtend >' => $endDateTime,
+			//		],
+			//	]
+			//],
 
 		];
 		$exist = $this->ReservationEvent->find('count', ['conditions' => $conditions]);

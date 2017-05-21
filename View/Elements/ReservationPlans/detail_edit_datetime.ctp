@@ -79,5 +79,6 @@
 	</div><!-- ng-hide -->
 </div>
 <div class='col-xs-12'>
-	<?php echo $this->NetCommonsForm->error('ReservationActionPlan.detail_start_datetime'); ?>
+	<?php echo $this->NetCommonsForm->error('ReservationActionPlan.detail_start_datetime', null,
+		['escape' => false]); ?>
 </div>

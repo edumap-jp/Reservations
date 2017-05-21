@@ -1331,3 +1331,6 @@ msgid "This mail setting is mail setting common to all facilities. If you select
 msgstr "このメール設定は、全施設共通のメール設定です。<br>"
 "「メール通知機能を使う」にした場合、実際にメール通知するかどうかは、予約登録時に選択します。<br>"
 "また、通知を受け取る権限は、「公開対象」でルームを指定した場合にどの権限までメール通知するかの設定です。"
+
+msgid "It has been alreay reserved by someone else.Try different time and date."
+msgstr "既に予約が入っているため、予約できません。"

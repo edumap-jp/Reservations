@@ -110,6 +110,7 @@ class ReservationRruleEntryBehavior extends ReservationAppBehavior {
 
 /**
  * 周期性登録
+ * ここで繰り返しデータのDB登録してる CommentByRyujiAMANO
  *
  * @param Model &$model 実際のモデル名
  * @param array $planParams planParams
