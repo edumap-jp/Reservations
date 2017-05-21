@@ -358,6 +358,11 @@ class ReservationRepeatServiceTest extends CakeTestCase {
 		);
 	}
 
+/**
+ * 年繰り返しのテスト 開始日での繰り返し
+ *
+ * @return void
+ */
 	public function testYearlyByStartDay() {
 		$startDate = '2017-05-01';
 
