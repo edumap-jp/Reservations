@@ -118,19 +118,6 @@ class ReservationWorkflowBehavior extends WorkflowBehavior {
 	}
 
 /**
- * コンテンツの閲覧権限があるかどうかのチェック
- * - 閲覧権限あり(content_readable)
- *
- * @param Model $model Model using this behavior
- * @return bool true:閲覧可、false:閲覧不可
- */
-	public function canReadWorkflowContent(Model $model) {
-		//$this->log(var_export(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), true), 'debug');
-		throw new Exception(__CLASS__ . "::" . __METHOD__);
-		return Current::permission('content_readable');
-	}
-
-/**
  * コンテンツの作成権限があるかどうかのチェック
  * - 作成権限あり(content_creatable)
  *
