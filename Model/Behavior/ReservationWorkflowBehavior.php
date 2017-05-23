@@ -206,43 +206,4 @@ class ReservationWorkflowBehavior extends WorkflowBehavior {
 		));
 		return ((int)$count === 0);
 	}
-
-/**
- * 時限公開のconditionsを返す
- *
- * @param Model $model 対象モデル
- * @return array
- */
-	protected function _getPublicTypeConditions(Model $model) {
-		//$this->log(var_export(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), true), 'debug');
-
-		$netCommonsTime = new NetCommonsTime();
-		$limitedConditions = array();
-		$limitedConditions[$model->alias . '.public_type'] = self::PUBLIC_TYPE_LIMITED;
-		if ($model->hasField('publish_start')) {
-			$limitedConditions[] = array(
-				'OR' => array(
-					$model->alias . '.publish_start <=' => $netCommonsTime->getNowDatetime(),
-					$model->alias . '.publish_start' => null,
-				)
-			);
-		}
-		if ($model->hasField('publish_end')) {
-			$limitedConditions[] = array(
-				'OR' => array(
-					$model->alias . '.publish_end >=' => $netCommonsTime->getNowDatetime(),
-					$model->alias . '.publish_end' => null,
-				)
-			);
-		}
-
-		$publicTypeConditions = array(
-			'OR' => array(
-				$model->alias . '.public_type' => self::PUBLIC_TYPE_PUBLIC,
-				$limitedConditions,
-			)
-		);
-		return $publicTypeConditions;
-	}
-
 }
