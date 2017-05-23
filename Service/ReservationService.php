@@ -23,6 +23,7 @@ class ReservationService {
  * @param string $endDateTime 終了日時
  * @param string $timezone タイムゾーン
  * @param array $rrule rrule
+ * @param array $ignoreConditions 無視するEventのConditions日付のリスト
  * @return array 予約が重複している日付のリスト
  */
 	public function getOverlapReservationDate(
@@ -30,7 +31,8 @@ class ReservationService {
 		$startDateTime,
 		$endDateTime,
 		$timezone,
-		$rrule
+		$rrule,
+		$ignoreConditions
 	) {
 		$overlapDates = [];
 
@@ -52,7 +54,8 @@ class ReservationService {
 				$locationKey,
 				$checkStartDateTime,
 				$checkEndDateTime,
-				$timezone
+				$timezone,
+				$ignoreConditions
 			)
 			) {
 				// 重複予約があれば重複日リストに追加
@@ -69,13 +72,15 @@ class ReservationService {
  * @param string $startDateTime 開始日時
  * @param string $endDateTime 終了日時
  * @param string $inputTimeZone 入力日時のタイムゾーン
+ * @param array $ignoreConditions 無視するEventのConditions日付のリスト
  * @return bool true 重複有り　false 重複無し
  */
 	protected function _existOverlapReservation(
 		$locationKey,
 		$startDateTime,
 		$endDateTime,
-		$inputTimeZone
+		$inputTimeZone,
+		$ignoreConditions
 	) {
 		// この時点ではユーザタイム
 
@@ -95,6 +100,10 @@ class ReservationService {
 		$this->ReservationEvent = ClassRegistry::init('Reservations.ReservationEvent');
 		$conditions = [
 			'ReservationEvent.location_key' => $locationKey,
+			// 同じ繰り返しIDの予約は重複チェック対象外
+			// ignoreConditions の差し込み
+			$ignoreConditions,
+			//'ReservationEvent.reservation_rrule_id !=' => $rruleId,
 			// workflow
 			[
 				// isActive

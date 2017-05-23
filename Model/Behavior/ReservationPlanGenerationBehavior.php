@@ -227,7 +227,7 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
 			$model->loadModels(['ReservationEvent' => 'Reservations.ReservationEvent']);
 		}
 		// 各種Behaviorはずす FUJI
-		$model->ReservationEvent->Behaviors->unload('Workflow.Workflow');
+		$model->ReservationEvent->Behaviors->unload('Reservations.ReservationWorkflow');
 		$model->ReservationEvent->Behaviors->unload('Workflow.WorkflowComment');
 
 		$model->ReservationEvent->set($eventData);
@@ -257,7 +257,7 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 		// 各種Behavior終わったら戻す FUJI ＝＞ 再load(WF.WF)の発行位置をsave後に変更 HASHI
-		$model->ReservationEvent->Behaviors->load('Workflow.Workflow');
+		$model->ReservationEvent->Behaviors->load('Reservations.ReservationWorkflow');
 
 		// 各種Behavior終わったら戻す FUJI
 		$model->ReservationEvent->Behaviors->load('Workflow.WorkflowComment');

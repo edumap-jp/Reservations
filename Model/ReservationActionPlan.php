@@ -551,9 +551,6 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @return bool
  */
 	public function validteNotExistReservation($check) {
-		// ε(　　　　 v ﾟωﾟ)　＜ リピート予約に対応させる
-		// この時点ではユーザタイム
-		//debug($this->data);
 		$startDateTime = $this->data[$this->alias]['detail_start_datetime'];
 		$endDateTime = $this->data[$this->alias]['detail_end_datetime'];
 		$inputTimeZone = $this->data[$this->alias]['timezone_offset'];
@@ -563,13 +560,65 @@ class ReservationActionPlan extends ReservationsAppModel {
 		$rruleParameter->setData($this->data);
 		$rrule = $rruleParameter->getRrule();
 
+		// 繰り返しでないか、設定した全ての予定の変更時は$rruleIdを渡す（この繰り返し予約は重複チェック対象外になるので）
+		$ignoreConditions = [];
+		if (Hash::get($this->data, 'ReservationActionPlan.origin_event_id')) {
+			if (empty($rrule)) {
+				// 繰り返しでないなら、keyが同じ予約は編集元レコードなので重複チェック時は無視
+				$ignoreConditions = [
+					'ReservationEvent.key != ' => Hash::get($this->data, 'ReservationActionPlan.origin_event_key')
+				];
+
+			} else {
+				switch (Hash::get($this->data, 'ReservationActionPlan.edit_rrule')){
+					case 0:
+						// 一つの予約だけ更新
+						$ignoreConditions = [
+							'ReservationEvent.key != ' =>
+								Hash::get($this->data, 'ReservationActionPlan.origin_event_key')
+						];
+						// ひとつだけの変更なので重複チェックでは繰り返しさせない
+						$rrule = [];
+						break;
+					case 1:
+						// 以降の予約を更新
+						$this->loadModels(['ReservationEvent' => 'Reservations.ReservationEvent']);
+						$origin = $this->ReservationEvent->findById(
+							Hash::get($this->data, 'ReservationActionPlan.origin_event_id'));
+						$ignoreConditions = [
+							'NOT' => [
+								'ReservationEvent.reservation_rrule_id' => Hash::get($this->data,
+									'ReservationActionPlan.origin_rrule_id'),
+								'ReservationEvent.recurrence_event_id !=' => 0,
+								'ReservationEvent.exception_event_id !=' => 0,
+							],
+							'ReservationEvent.dtstart > ' => $origin['ReservationEvent']['dtstart']
+						];
+						break;
+					case 2:
+						// 全ての予約を更新
+						$ignoreConditions = [
+							'NOT' => [
+								'ReservationEvent.rrule_id' =>
+									Hash::get($this->data, 'ReservationActionPlan.origin_rrule_id'),
+								'ReservationEvent.recurrence_event_id !=' => 0,
+								'ReservationEvent.exception_event_id !=' => 0,
+							]
+
+						];
+						break;
+				}
+			}
+		}
+
 		$reservationService = new ReservationService();
 		$result = $reservationService->getOverlapReservationDate(
 			$locationKey,
 			$startDateTime,
 			$endDateTime,
 			$inputTimeZone,
-			$rrule
+			$rrule,
+			$ignoreConditions
 		);
 		if (count($result) > 0) {
 			$ret = __d(
@@ -734,7 +783,8 @@ class ReservationActionPlan extends ReservationsAppModel {
 		);
 
 		foreach ($locations as $location) {
-			if ($this->data['ReservationActionPlan']['location_key'] == $location['ReservationLocation']['key']) {
+			if ($this->data['ReservationActionPlan']['location_key'] ==
+				$location['ReservationLocation']['key']) {
 				// 承認必要か
 				if ($location['ReservationLocation']['use_workflow']) {
 					// 承認必要

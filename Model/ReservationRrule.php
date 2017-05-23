@@ -37,21 +37,21 @@ class ReservationRrule extends ReservationsAppModel {
 		'Reservations.ReservationInsertPlan', //Insert
 		'Reservations.ReservationUpdatePlan', //Update
 		'Reservations.ReservationDeletePlan', //Delete
-		'Blocks.Block' => array(
-			//nameの値がBlockモデルの名称として登録される。
-			'name' => 'ReservationRrule.name',
-			//'loadModels' => array(			//Blockと紐づく（アソシエーションのある）
-			//								//他のモデルがあれば、loadModelsで指定しておくと。
-			//								//ブロックデータ登録時、指定モデルのblock_id,block_key
-			//								//に値を自動セットしてくれる。
-			//								//フロックデータ削除時、指定モデルから削除してくれる。
-			//								//
-			//	'WorkflowComment' => 'Workflow.WorkflowComment',
-			//								//Reservationの場合、WorkflowCommentがそれなので指定する。
-			//								//
-			//								//仕様詳細はBlocks/Model/Behavior/BlockBehavior.php参照のこと。
-			//),
-		),
+		//'Blocks.Block' => array( // 施設予約ではブロック1つなんで削除 RyujiAMANO
+		//	//nameの値がBlockモデルの名称として登録される。
+		//	'name' => 'ReservationRrule.name',
+		//	//'loadModels' => array(			//Blockと紐づく（アソシエーションのある）
+		//	//								//他のモデルがあれば、loadModelsで指定しておくと。
+		//	//								//ブロックデータ登録時、指定モデルのblock_id,block_key
+		//	//								//に値を自動セットしてくれる。
+		//	//								//フロックデータ削除時、指定モデルから削除してくれる。
+		//	//								//
+		//	//	'WorkflowComment' => 'Workflow.WorkflowComment',
+		//	//								//Reservationの場合、WorkflowCommentがそれなので指定する。
+		//	//								//
+		//	//								//仕様詳細はBlocks/Model/Behavior/BlockBehavior.php参照のこと。
+		//	//),
+		//),
 	);
 
 /**
