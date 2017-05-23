@@ -40,7 +40,7 @@ class ReservationLocation extends ReservationsAppModel {
 		),
 		'Reservations.ReservationLocationDelete',
 		'Reservations.ReservationValidate',
-		'Reservations.ReservationLocationDelete',
+		//'Reservations.ReservationLocationDelete',
 	);
 
 /**
@@ -432,12 +432,13 @@ class ReservationLocation extends ReservationsAppModel {
 			[
 				'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
 				'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable',
+				'ReservationLocationsApprovalUser' => 'Reservations.ReservationLocationsApprovalUser',
 				//'ReservationLocationRoom' => 'Reservations.ReservationLocationRoom'
 			]
 		);
 		$locations = $this->getLocations($categoryId);
 
-		// ルーム情報を locationにまぜこむ
+		// ルーム情報、承認者情報を locationにまぜこむ
 		$condition = $this->Room->getReadableRoomsConditions();
 		$roomBase = $this->Room->find('all', $condition);
 		foreach ($locations as &$location) {
@@ -445,6 +446,18 @@ class ReservationLocation extends ReservationsAppModel {
 				$this->ReservationLocationsRoom->getReservableRoomsByLocation($location, $roomBase);
 
 			$location['ReservableRoom'] = $thisLocationRooms;
+			// 承認が必要な施設か
+			if ($location['ReservationLocation']['use_workflow']) {
+				// 承認が必要なら承認ユーザ取得
+				$condition = [
+					'ReservationLocationsApprovalUser.location_key' => $location['ReservationLocation']['key'],
+				];
+				$approvalUsers = $this->ReservationLocationsApprovalUser->find('all', ['conditions' => $condition]);
+				$approvalUserIds = Hash::combine($approvalUsers,
+					'{n}.ReservationLocationsApprovalUser.user_id',
+					'{n}.ReservationLocationsApprovalUser.user_id');
+				$location['approvalUserIds'] = $approvalUserIds;
+			}
 		}
 		// プライベートルームを除外したルームIDで予約可能かチェック
 		$roomIds = $this->getReadableRoomIdsWithOutPrivate();

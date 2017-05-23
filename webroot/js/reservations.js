@@ -703,7 +703,9 @@ NetCommonsApp.controller('ReservationsDetailEdit',
        $scope.rruleUntil;
 
        $scope.initialize = function(data) {
+         console.log(data);
          $scope.data = angular.fromJson(data);
+         console.log($scope.data);
          // console.log($scope.data);
          $scope.locationOptions = $scope.data.locations;
          // console.log($scope.locationOptions);
@@ -711,6 +713,16 @@ NetCommonsApp.controller('ReservationsDetailEdit',
          $scope.ReservationActionPlan = {
            location_key: null
          };
+
+         //送信ボタンセットアップ
+         $scope.buttons = {
+           draft:false,
+           disapproved:false,
+           approvalWaiting:false,
+           published:false,
+         }
+         $scope.setLocationKey($scope.data.ReservationActionPlan.location_key);
+
 
        };
 
@@ -731,6 +743,53 @@ NetCommonsApp.controller('ReservationsDetailEdit',
           $scope.selectLocation =
               filterFilter($scope.data.locations,
                   {ReservationLocation: {key: locationKey}})[0];
+          $scope.setupButtons();
+
+       };
+
+       $scope.setupButtons = function(){
+         console.log($scope.selectLocation);
+         //    承認不要のケースもあるな
+         if ($scope.selectLocation.ReservationLocation.use_workflow){
+           if ($scope.selectLocation.approvalUserIds.hasOwnProperty(Number($scope.data.userId))) {
+             // 承認ユーザ
+             // 要承認　承認権限ありなら　一時保存と公開　ただしステータスが公開待ち(2)の時だけ一時保存→差し戻し
+             if($scope.data.event.ReservationEvent.status == 2){
+               $scope.buttons = {
+                 draft:false,
+                 disapproved:true,
+                 approvalWaiting:false,
+                 published:true,
+               }
+
+             }else{
+               $scope.buttons = {
+                 draft:true,
+                 disapproved:false,
+                 approvalWaiting:false,
+                 published:true,
+               }
+             }
+           }else{
+             // 要承認　承認権限なしなら　一時保存と公開申請
+             $scope.buttons = {
+               draft:true,
+               disapproved:false,
+               approvalWaiting:true,
+               published:false,
+             }
+           }
+         }else{
+           // 承認不要なら一時保存と公開
+           $scope.buttons = {
+             draft:true,
+             disapproved:false,
+             approvalWaiting:false,
+             published:true,
+           }
+
+         }
+
        };
 
        // 施設カテゴリ選択
@@ -750,6 +809,7 @@ NetCommonsApp.controller('ReservationsDetailEdit',
          }
        };
        $scope.changeLocation = function() {
+         $scope.setupButtons();
          // console.log($scope.selectLocation);
          // console.log($scope.current);
          // $scope.selectLocation = filterFilter($scope.data.locations, {

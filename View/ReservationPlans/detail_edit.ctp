@@ -12,7 +12,9 @@ echo $this->element('Reservations.scripts');
 ?>
 
 <article ng-controller='ReservationsDetailEdit' class='block-setting-body'
-	ng-init="initialize(<?php echo h(json_encode(array('frameId' => Current::read('Frame.id'), 'locations' => $locations))); ?>)">
+	ng-init="initialize(<?php echo h(json_encode(array('frameId' => Current::read('Frame.id'), 'locations' => $locations, 'event' => $event, 'ReservationActionPlan' => $this->request->data['ReservationActionPlan'], 'userId' =>
+			Current::read('User.id')))
+	); ?>)">
 
 	<?php /* 画面見出し */ ?>
 	<?php echo $this->element('Reservations.ReservationPlans/detail_edit_heading'); ?>
@@ -273,14 +275,16 @@ echo $this->element('Reservations.scripts');
 			<hr />
 			<div data-reservation-name="inputCommentArea">
 				<div class="col-xs-12">
-					<?php echo $this->Workflow->inputComment('ReservationEvent.status'); ?>
+					<?php echo $this->Workflow->inputComment('event.ReservationEvent.status', false); ?>
 				</div><!-- col-xs-12おわり -->
 			</div><!-- inputCommentAreaおわり -->
 
 		</div><!-- panel-bodyを閉じる -->
 
-		<div class="panel-footer text-center">
+		<div class="panel-footer text-center" ng-cloak="">
+
 			<?php echo $this->ReservationPlan->makeEditButtonHtml('ReservationActionPlan.status', $vars, $event); ?>
+
 		</div><!--panel-footerの閉じるタグ-->
 	<?php echo $this->NetCommonsForm->end(); ?>
 

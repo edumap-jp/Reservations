@@ -120,7 +120,7 @@ class ReservationPlanHelper extends AppHelper {
  */
 	public function makeEditButtonHtml($statusFieldName, $vars, $event) {
 		//save,tempsaveのoptionsでpath指定するため、Workflowヘルパーのbuttons()を参考に実装した。
-		$status = Hash::get($this->_View->data, $statusFieldName);
+		//$status = Hash::get($this->_View->data, $statusFieldName);
 		$options = array(
 			'controller' => 'reservations',
 			'action' => 'index',
@@ -130,71 +130,63 @@ class ReservationPlanHelper extends AppHelper {
 				'month' => $vars['month'],
 			)
 		);
+
+		$ret = '';
+
+		// キャンセルボタン
 		if (isset($vars['returnUrl'])) {
 			$cancelUrl = $vars['returnUrl'];
 		} else {
 			$cancelUrl = $this->ReservationUrl->getReservationUrl($options);
 		}
-
-		//キャンセル、一時保存、決定ボタンのoption生成
-		list($cancelOptions, $saveTempOptions, $saveOptions) =
-			$this->_generateBtnOptions($status, $event);
-
-		return $this->Button->cancelAndSaveAndSaveTemp($cancelUrl, $cancelOptions,
-			$saveTempOptions, $saveOptions);
-	}
-
-/**
- * _generateBtnOptions
- *
- * ボタンのオプション生成
- *
- * @param int $status 承認ステータス
- * @param array $event 予約
- * @return array ３ボタンのオプション
- */
-	protected function _generateBtnOptions($status, $event) {
 		$cancelOptions = array(
 			'ng-click' => 'sending=true',
 			'ng-class' => '{disabled: sending}',
 		);
 
-		// 施設予約は登録先がどこになるかわからないので
-		// とりあえずボタンは全て「公開」のボタンにする
-		// それを「公開」扱いにするか「承認依頼」扱いにするかは
-		// POSTされたプログラムのほうでやる
+		$ret .= $this->Button->cancel( __d('net_commons', 'Cancel'), $cancelUrl, $cancelOptions);
+
+		// 一時保存　差し戻しボタン非表示なら表示
+		$saveTempOptions = array(
+			'label' => __d('net_commons', 'Save temporally'),
+			'class' => 'btn btn-info' . $this->Button->getButtonSize() . ' btn-workflow',
+			'name' => 'save_' . WorkflowComponent::STATUS_IN_DRAFT,
+			'ng-class' => '{disabled: sending}',
+			'ng-show' => 'buttons.draft'
+		);
+		$ret .= $this->Button->button(__d('net_commons', 'Save temporally'), $saveTempOptions);
+
+		// 差し戻し　承認者でステータスが公開待ちなら　差し戻しボタン表示
+		$saveTempOptions = array(
+			'label' => __d('net_commons', 'Disapproval'),
+			'class' => 'btn btn-warning' . $this->Button->getButtonSize() . ' btn-workflow',
+			'name' => 'save_' . WorkflowComponent::STATUS_DISAPPROVED,
+			'ng-class' => '{disabled: sending}',
+			'ng-show' => 'buttons.disapproved',
+		);
+		$ret .= $this->Button->button(__d('net_commons', 'Disapproval'), $saveTempOptions);
+
+		// 公開申請　承認者でなければ公開申請表示
+		$saveOptions = array(
+			'label' => __d('net_commons', 'OK'),
+			'class' => 'btn btn-primary' . $this->Button->getButtonSize() . ' btn-workflow',
+			'name' => 'save_' . WorkflowComponent::STATUS_APPROVAL_WAITING,
+			'ng-class' => '{disabled: sending}',
+			'ng-show' => 'buttons.approvalWaiting'
+		);
+		$ret .= $this->Button->button(__d('net_commons', 'OK'), $saveOptions);
+
+		// 公開　承認者なら公開ボタンを表示
 		$saveOptions = array(
 			'label' => __d('net_commons', 'OK'),
 			'class' => 'btn btn-primary' . $this->Button->getButtonSize() . ' btn-workflow',
 			'name' => 'save_' . WorkflowComponent::STATUS_PUBLISHED,
-			'ng-class' => '{disabled: sending}'
+			'ng-class' => '{disabled: sending}',
+			'ng-show' => 'buttons.published'
 		);
-		// 現在の予定のルームで公開権限があって、かつステータスが承認依頼なら、一時保存じゃなくて
-		// 差し戻しボタンになるかんじ
-		// 現在登録されている予定のルームの権限を調べる
-		$isPublishable = false;
-		$status = null;
-		$roomId = Hash::get($event, 'ReservationEvent.room_id');
-		$status = Hash::get($event, 'ReservationEvent.status');
-		if (! empty($roomId)) {
-			$isPublishable = ReservationPermissiveRooms::isPublishable($roomId);
-		}
-		if ($isPublishable && $status === WorkflowComponent::STATUS_APPROVAL_WAITING) {
-			$saveTempOptions = array(
-				'label' => __d('net_commons', 'Disapproval'),
-				'class' => 'btn btn-warning' . $this->Button->getButtonSize() . ' btn-workflow',
-				'name' => 'save_' . WorkflowComponent::STATUS_DISAPPROVED,
-				'ng-class' => '{disabled: sending}'
-			);
-		} else {
-			$saveTempOptions = array(
-				'label' => __d('net_commons', 'Save temporally'),
-				'class' => 'btn btn-info' . $this->Button->getButtonSize() . ' btn-workflow',
-				'name' => 'save_' . WorkflowComponent::STATUS_IN_DRAFT,
-				'ng-class' => '{disabled: sending}'
-			);
-		}
-		return array($cancelOptions, $saveTempOptions, $saveOptions);
+		$ret .= $this->Button->button(__d('net_commons', 'OK'), $saveOptions);
+
+		return $ret;
 	}
 
 /**
