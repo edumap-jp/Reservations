@@ -118,19 +118,6 @@ class ReservationWorkflowBehavior extends WorkflowBehavior {
 	}
 
 /**
- * コンテンツの作成権限があるかどうかのチェック
- * - 作成権限あり(content_creatable)
- *
- * @param Model $model Model using this behavior
- * @return bool true:作成可、false:作成不可
- */
-	public function canCreateWorkflowContent(Model $model) {
-		//$this->log(var_export(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), true), 'debug');
-		throw new Exception(__CLASS__ . "::" . __METHOD__);
-		return Current::permission('content_creatable');
-	}
-
-/**
  * コンテンツの編集権限があるかどうかのチェック
  * - 編集権限あり(content_editable)
  * - 自分自身のコンテンツ
