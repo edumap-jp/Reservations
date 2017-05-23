@@ -127,9 +127,7 @@ class ReservationWorkflowBehavior extends WorkflowBehavior {
  * @return bool true:編集可、false:編集不可
  */
 	public function canEditWorkflowContent(Model $model, $data) {
-		//$this->log(var_export(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), true), 'debug');
-		throw new Exception(__CLASS__ . "::" . __METHOD__);
-
+		 // ε(　　　　 v ﾟωﾟ)　＜ReservationEventで使われてる
 		if (Current::permission('content_editable')) {
 			return true;
 		}
@@ -142,42 +140,5 @@ class ReservationWorkflowBehavior extends WorkflowBehavior {
 		return ((int)$data[$model->alias]['created_user'] === (int)Current::read('User.id'));
 	}
 
-/**
- * コンテンツの公開権限があるかどうかのチェック
- * - 公開権限あり(content_publishable) and 編集権限あり(content_editable)
- * - 自分自身のコンテンツ＋一度も公開されていない
- *
- * @param Model $model Model using this behavior
- * @param array $data コンテンツデータ
- * @return bool true:削除可、false:削除不可
- */
-	public function canDeleteWorkflowContent(Model $model, $data) {
-		//$this->log(var_export(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), true), 'debug');
-		throw new Exception(__CLASS__ . "::" . __METHOD__);
 
-		if (! $this->canEditWorkflowContent($model, $data)) {
-			return false;
-		}
-		if (Current::permission('content_publishable')) {
-			return true;
-		}
-		if (! isset($data[$model->alias])) {
-			$data[$model->alias] = $data;
-		}
-
-		$conditions = array(
-			'is_active' => true,
-		);
-		if ($model->hasField('key') && isset($data[$model->alias]['key'])) {
-			$conditions['key'] = $data[$model->alias]['key'];
-		} else {
-			return false;
-		}
-
-		$count = $model->find('count', array(
-			'recursive' => -1,
-			'conditions' => $conditions
-		));
-		return ((int)$count === 0);
-	}
 }
