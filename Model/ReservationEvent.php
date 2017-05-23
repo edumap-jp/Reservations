@@ -38,7 +38,8 @@ class ReservationEvent extends ReservationsAppModel {
 		'Reservations.ReservationDeletePlan',	//Delete用
 		'Reservations.ReservationSearchPlan',	//Search用
 		'Reservations.ReservationRoleAndPerm', //施設予約役割・権限
-		'Workflow.Workflow',
+		//'Workflow.Workflow',
+		'Reservations.ReservationWorkflow',
 		'Workflow.WorkflowComment',
 		'Wysiwyg.Wysiwyg' => array(
 			'fields' => array('description'),
@@ -330,8 +331,8 @@ class ReservationEvent extends ReservationsAppModel {
 /**
  * 自分もふくめた兄弟一覧を取得
  *
- * @param interger $rruleId 兄弟が共通にもつrruleのid
- * @param interger $needLatest 最新に限定するかどうか。0:最新に限定しない。1:最新に限定する。
+ * @param int $rruleId 兄弟が共通にもつrruleのid
+ * @param int $needLatest 最新に限定するかどうか。0:最新に限定しない。1:最新に限定する。
  * @param int $languageId 言語ID
  * @return array 兄弟一覧の配列
  */

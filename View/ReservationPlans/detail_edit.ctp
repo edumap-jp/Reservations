@@ -275,7 +275,7 @@ echo $this->element('Reservations.scripts');
 			<hr />
 			<div data-reservation-name="inputCommentArea">
 				<div class="col-xs-12">
-					<?php echo $this->Workflow->inputComment('event.ReservationEvent.status', false); ?>
+					<?php echo $this->Workflow->inputComment('ReservationEvent.status'); ?>
 				</div><!-- col-xs-12おわり -->
 			</div><!-- inputCommentAreaおわり -->
 

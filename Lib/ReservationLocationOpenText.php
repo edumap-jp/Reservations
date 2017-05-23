@@ -59,6 +59,10 @@ class ReservationLocationOpenText {
 		$endDate = new DateTime($endTime, new DateTimeZone('UTC'));
 		$endDate->setTimezone($locationTimeZone);
 		$reservationLocation['ReservationLocation']['end_time'] = $endDate->format('H:i');
+		// endで00:00は24:00あつかい
+		if ($reservationLocation['ReservationLocation']['end_time'] == '00:00') {
+			$reservationLocation['ReservationLocation']['end_time'] = '24:00';
+		}
 
 		$ret = sprintf('%s %s - %s',
 			$ret,

@@ -168,12 +168,12 @@ class ReservationPlanHelper extends AppHelper {
 
 		// 公開申請　承認者でなければ公開申請表示
 		$saveOptions = array(
-			'label' => __d('net_commons', 'OK'),
 			'class' => 'btn btn-primary' . $this->Button->getButtonSize() . ' btn-workflow',
 			'name' => 'save_' . WorkflowComponent::STATUS_APPROVAL_WAITING,
 			'ng-class' => '{disabled: sending}',
 			'ng-show' => 'buttons.approvalWaiting'
 		);
+		// デバッグ時は 'OK' を'承認申請'とかにかえとくとわかりやすい
 		$ret .= $this->Button->button(__d('net_commons', 'OK'), $saveOptions);
 
 		// 公開　承認者なら公開ボタンを表示

@@ -9,7 +9,11 @@
 
 App::uses('WorkflowBehavior', 'Workflow.Model/Behavior');
 
+/**
+ * Class ReservationWorkflowBehavior
+ */
 class ReservationWorkflowBehavior extends WorkflowBehavior {
+
 /**
  * beforeValidate is called before a model is validated, you can use this callback to
  * add behavior validation rules into a models validate array. Returning false
@@ -34,7 +38,7 @@ class ReservationWorkflowBehavior extends WorkflowBehavior {
 	public function getWorkflowConditions(Model $model, $conditions = array()) {
 		$this->log(var_export(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), true), 'debug');
 
-		// TODO 施設予約にあわせて変更する
+		// ε(　　　　 v ﾟωﾟ)　＜ 施設予約にあわせて変更する
 		if (Current::permission('content_editable')) {
 			$activeConditions = array();
 			$latestConditons = array(
@@ -127,7 +131,7 @@ class ReservationWorkflowBehavior extends WorkflowBehavior {
  * @return bool true:編集可、false:編集不可
  */
 	public function canEditWorkflowContent(Model $model, $data) {
-		 // ε(　　　　 v ﾟωﾟ)　＜ReservationEventで使われてる
+		// ε(　　　　 v ﾟωﾟ)　＜ ReservationEventで使われてる
 		if (Current::permission('content_editable')) {
 			return true;
 		}
@@ -139,6 +143,4 @@ class ReservationWorkflowBehavior extends WorkflowBehavior {
 		}
 		return ((int)$data[$model->alias]['created_user'] === (int)Current::read('User.id'));
 	}
-
-
 }

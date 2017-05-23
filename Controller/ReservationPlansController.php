@@ -361,11 +361,7 @@ class ReservationPlansController extends ReservationsAppController {
 				ReservationsComponent::CALENDAR_XDEBUG_MAX_NESTING_LEVEL);
 		}
 
-		//登録処理
-		//注) getStatus()はsave_Nからの単純取得ではなく施設予約独自status取得をしている.
-		//なのでControllerにきた直後のここで、request->dataをすり替えておくのが望ましい.
-		//HASHI
-		//
+		// 押されたボタンからステータスをセット
 		$status = $this->ReservationActionPlan->getStatus($this->request->data);
 		$this->request->data['ReservationActionPlan']['status'] = $status;
 		$this->ReservationActionPlan->set($this->request->data);

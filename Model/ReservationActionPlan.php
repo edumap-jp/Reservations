@@ -446,7 +446,6 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @return bool
  */
 	public function validteUseLocationTimeRange($check) {
-				// ε(　　　　 v ﾟωﾟ)　＜ タイムゾーン対応
 		$locationKey = $this->data[$this->alias]['location_key'];
 		$startDateTime = $this->data[$this->alias]['detail_start_datetime'] . ':00';
 		$endDateTime = $this->data[$this->alias]['detail_end_datetime'] . ':00';
@@ -484,6 +483,14 @@ class ReservationActionPlan extends ReservationsAppModel {
 			new DateTimeZone('UTC'));
 		$locationEndTime->setTimezone($locationTimeZone);
 		$locationEndTime = $locationEndTime->format('H:i');
+		if ($locationStartTime == '00:00' && $locationStartTime == $locationEndTime) {
+			// 00:00-00:00は00:00-24:00にする
+			$locationEndTime = '24:00';
+		}
+		//
+		//$length = strtotime($locationEndTime) = strtotime($locationStartTime);
+		//$locationEndTime = strtotime($locationStartTime) + $length;
+		//
 
 		// 予約を日付毎に分割する
 		// 以下、日付毎にチェックする
@@ -623,13 +630,18 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		//CakeLog::debug("request_data[" . print_r($this->data, true) . "]");
 		$isDetailEdit = (isset($this->data['ReservationActionPlan']['is_detail']) &&
 			$this->data['ReservationActionPlan']['is_detail']) ? true : false;
 		//$this->_doMergeDisplayParamValidate($isDetailEdit);	//画面パラメータ関連validation
 		$this->_doMergeTitleValidate($isDetailEdit);	//タイトル関連validation
 		$this->_doMergeDatetimeValidate($isDetailEdit);	//日付時刻関連validation
 		$this->validate = Hash::merge($this->validate, array(	//コンテンツ関連validation
+			'status' => [
+				'rule1' => [
+					'rule' => ['validateStatus'],
+					'message' => __d('net_commons', 'Invalid request.'),
+				]
+			],
 			'plan_room_id' => array(
 				'rule1' => array(
 					'rule' => array('allowedRoomId'),
@@ -699,6 +711,50 @@ class ReservationActionPlan extends ReservationsAppModel {
 		$this->_doMergeRruleValidate($isDetailEdit);	//繰返し関連validation
 
 		return parent::beforeValidate($options);
+	}
+
+/**
+ * statusのチェック
+ *
+ * @param array $check checkする値
+ * @return bool
+ */
+	public function validateStatus($check) {
+		// 選ばれた施設による
+		$locations = $this->_getLocations();
+
+		$statusesForEditor = array(
+			WorkflowComponent::STATUS_APPROVAL_WAITING,
+			WorkflowComponent::STATUS_IN_DRAFT
+		);
+		$statusesForPublisher = array(
+			WorkflowComponent::STATUS_PUBLISHED,
+			WorkflowComponent::STATUS_IN_DRAFT,
+			WorkflowComponent::STATUS_DISAPPROVED
+		);
+
+		foreach ($locations as $location) {
+			if ($this->data['ReservationActionPlan']['location_key'] == $location['ReservationLocation']['key']) {
+				// 承認必要か
+				if ($location['ReservationLocation']['use_workflow']) {
+					// 承認必要
+					// 承認者か
+					if (in_array(Current::read('User.id'), $location['approvalUserIds'])) {
+						//承認者
+						$allowList = $statusesForPublisher;
+					} else {
+						//承認権限無し
+						$allowList = $statusesForEditor;
+					}
+				} else {
+					// 承認不要
+					$allowList = $statusesForPublisher;
+				}
+
+				$stauts = $check['status'];
+				return in_array($stauts, $allowList);
+			}
+		}
 	}
 
 /**
@@ -945,39 +1001,9 @@ class ReservationActionPlan extends ReservationsAppModel {
  *
  * @param array $data POSTされたデータ
  * @return string 成功時 $status, 失敗時 例外をthrowする。
- * @throws InternalErrorException
  */
 	public function getStatus($data) {
-		$keys = array_keys($data);
-		foreach ($keys as $key) {
-			if (preg_match('/^save_(\d+)$/', $key, $matches) === 1) {
-				//return $matches[1];
-
-				////////////////////////////////////////
-				//施設予約でのstatus取得の考え方)
-				//save_NのNをまず取り出し、下記ルールを適用。空間によってはstatusを切り替える。
-				//
-				//status が、STATUS_PUBLISHED（1）承認済＝発行済 又は STATUS_APPROVAL_WAITING （2）承認待ち の時
-				//＝＞status値は、現ユーザが指定空間でcontent publish権限あるならPUBLISHED、権限ないならAPPROVED
-				//status が、STATUS_IN_DRAFT（3） 一時保存 又は STATUS_DISAPPROVED（4）差し戻し の時
-				//＝＞status値は、そのまま使う。
-
-				$status = $matches[1];
-				$roomId = $data['ReservationActionPlan']['plan_room_id'];
-				$checkStatus = array(
-					WorkflowComponent::STATUS_PUBLISHED, WorkflowComponent::STATUS_APPROVAL_WAITING
-				);
-				if (in_array($status, $checkStatus)) {
-					$status = WorkflowComponent::STATUS_APPROVAL_WAITING;
-					if (ReservationPermissiveRooms::isPublishable($roomId)) {
-						$status = WorkflowComponent::STATUS_PUBLISHED;
-					}
-				}
-				return $status;
-			}
-		}
-		//マッチするものが無い場合例外throw
-		throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		return $this->_getStatus($data);
 	}
 
 /**
