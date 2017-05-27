@@ -104,8 +104,8 @@ class ReservationDailyTimelineHelper extends ReservationMonthlyHelper {
 		$id = 'plan' . (string)$cnt;
 		//print_r($id);
 
-		if ($fromTime !== $plan['ReservationEvent']['fromTime'] ||
-				$toTime !==	$plan['ReservationEvent']['toTime']) {
+		//if ($fromTime !== $plan['ReservationEvent']['fromTime'] ||
+		//		$toTime !==	$plan['ReservationEvent']['toTime']) {
 			$reservationPlanMark = $this->ReservationCommon->getPlanMarkClassName($vars, $plan);
 			$url = $this->ReservationUrl->makePlanShowUrl($year, $month, $day, $plan);
 
@@ -146,7 +146,7 @@ class ReservationDailyTimelineHelper extends ReservationMonthlyHelper {
 			$this->_timelineData[$cnt]['fromTime'] = $plan['ReservationEvent']['fromTime'];
 			$this->_timelineData[$cnt]['toTime'] = $plan['ReservationEvent']['toTime'];
 			$cnt++;
-		}
+		//}
 
 		return $html;
 	}

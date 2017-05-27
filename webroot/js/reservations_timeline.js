@@ -102,6 +102,10 @@ NetCommonsApp.controller('ReservationsHorizonTimelinePlan', ['$scope', function(
    */
   $scope.setTimelinePos = function(id, fromTime, toTime, locationKey, eventId) {
     //var planObj = document.getElementById('plan' + String(id));
+    if (toTime == '00:00') {
+      // 終了時刻が00:00ならそれは24:00のこと
+      toTime = '24:00';
+    }
     var planObj = $('div[data-event-id=' + eventId + ']')[0];
 
     var start = fromTime.split(':');
