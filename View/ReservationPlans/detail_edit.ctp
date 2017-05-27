@@ -146,8 +146,8 @@ echo $this->element('Reservations.scripts');
 							// 施設の絞り込み, カテゴリなし　を追加
 							$locationCategories = Hash::merge(
 								[
-									'all' => __d('reservations', '--施設の絞り込み--'),
-									'' => __d('reservations', 'カテゴリ無し')
+									'all' => __d('reservations', '-- search for institutions --'),
+									'' => __d('reservations', 'no category')
 								],
 								$locationCategories
 							);
@@ -190,12 +190,12 @@ echo $this->element('Reservations.scripts');
 								]
 							);
 						?>
-                        <?php echo __d('reservations', '【使用時間】'); ?>
+                        <?php echo __d('reservations', '[Available]'); ?>
                         {{selectLocation.ReservationLocation.openText}}
                         <a href="" data-toggle="popover" data-placement="bottom" title="" data-trigger="focus" data-content="
                         <dl>
-                        <dt><?php echo __d('reservations', '利用時間'); ?></dt><dd>{{selectLocation.ReservationLocation.openText}}</dd>
-                        <dt><?php echo __d('reservations', '施設管理者'); ?></dt><dd>{{selectLocation.ReservationLocation.contact}}</dd>
+                        <dt><?php echo __d('reservations', 'Available'); ?></dt><dd>{{selectLocation.ReservationLocation.openText}}</dd>
+                        <dt><?php echo __d('reservations', 'Approver'); ?></dt><dd>{{selectLocation.ReservationLocation.contact}}</dd>
                         </dl>
                         <p>{{selectLocation.ReservationLocation.description}}</p>
 						" data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d('reservations', '詳細'); ?></a>

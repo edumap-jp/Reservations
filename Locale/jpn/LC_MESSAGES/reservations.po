@@ -1337,3 +1337,6 @@ msgstr "既に予約が入っているため、予約できません。"
 
 msgid "Inform other members by e-mail?"
 msgstr "メールで通知する"
+
+msgid "-- search for institutions --"
+msgstr "--施設の絞り込み--"
