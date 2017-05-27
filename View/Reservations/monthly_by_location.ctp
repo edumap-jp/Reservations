@@ -59,6 +59,8 @@ echo $this->element('Reservations.scripts');
 				</tr>
 			</thead>
 			<tbody>
+				<?php $vars['currentLocationKey'] = $vars['location_key']; ?>
+
 				<?php echo $this->ReservationMonthly->makeLargeMonthyBodyHtml($vars); ?>
 				<?php $reservationLinePlans = $this->ReservationMonthly->getLineData() ?>
 			</tbody>
