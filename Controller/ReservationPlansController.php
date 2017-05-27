@@ -306,11 +306,15 @@ class ReservationPlansController extends ReservationsAppController {
  * @return void
  */
 	public function edit() {
-		$frameId = Current::read('Frame.id');
-		if (! $frameId) {
-			$this->setAction('can_not_edit');
-			return;
-		}
+		//Current::write('Frame.id', 0);
+		//$frameId = Current::read('Frame.id');
+		//if(!$frameId){
+			//Current::write('Frame.id', 0);
+		//}
+		//if (! $frameId) {
+		//	$this->setAction('can_not_edit');
+		//	return;
+		//}
 		if ($this->request->is('post')) {
 			$this->_reservationPost();
 		}
@@ -534,7 +538,7 @@ class ReservationPlansController extends ReservationsAppController {
 		$this->set('exposeRoomOptions', $this->_exposeRoomOptions);
 		$this->set('myself', $this->_myself);
 		$this->set('emailOptions', $this->_emailOptions);
-		$this->set('frameId', Current::read('Frame.id'));
+		$this->set('frameId', Current::read('Frame.id', 0));
 		$this->set('languageId', Current::read('Language.id'));
 
 		//$this->request->data['ReservationFrameSettingSelectRoom'] =

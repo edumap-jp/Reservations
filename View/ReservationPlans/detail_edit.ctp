@@ -9,6 +9,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 echo $this->element('Reservations.scripts');
+//$frameId = isset($frameId) ? $frameId : null;
 ?>
 
 <article ng-controller='ReservationsDetailEdit' class='block-setting-body'
@@ -71,6 +72,7 @@ echo $this->element('Reservations.scripts');
 				}
 
 				$useTime = 'useTime[' . $frameId . ']';
+				//$useTime = 'useTime';
 			?>
 
 			<?php /* 繰り返しパターンの場合の繰り返し編集オプション */
@@ -126,10 +128,14 @@ echo $this->element('Reservations.scripts');
 					<?php echo $this->element('Reservations.ReservationPlans/detail_edit_repeat_items', array('useTime' => $useTime)); ?>
 				</div>
 			</div><!-- end form-group-->
+
+			<?php if (empty($event) ||
+				$event['ReservationEvent']['created_user'] == Current::read('User.id')): ?>
+
             <div class='form-group' >
                 <div class='col-xs-12'>
 					<?php
-					echo $this->NetCommonsForm->label('', __d('reservations', '施設'), array(
+					echo $this->NetCommonsForm->label('', __d('reservations', 'Location'), array(
 						'required' => true));
 					?>
                     <div class='col-xs-12'>
@@ -192,7 +198,7 @@ echo $this->element('Reservations.scripts');
                         <dt><?php echo __d('reservations', '施設管理者'); ?></dt><dd>{{selectLocation.ReservationLocation.contact}}</dd>
                         </dl>
                         <p>{{selectLocation.ReservationLocation.description}}</p>
-" data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d('reservations', '詳細'); ?></a>
+						" data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d('reservations', '詳細'); ?></a>
                         <?php
 							$html = '<script type="text/javascript">' .
 							'$(function () { $(\'[data-toggle="popover"]\').popover({html: true}) });</script>';
@@ -262,6 +268,44 @@ echo $this->element('Reservations.scripts');
 				</div><!-- col-sm-10おわり -->
 			</div>
 			<!-- form-groupおわり-->
+
+			<?php else: // 編集中のユーザと作成者が異なる（つまり承認者による編集）?>
+				<div class="col-xs-12 col-sm-12">
+					<?php
+					echo $this->NetCommonsForm->hidden('ReservationActionPlan.plan_room_id');
+					echo $this->NetCommonsForm->hidden('ReservationActionPlan.location_key');
+
+					$ReservationLocation = ClassRegistry::init('Reservations.ReservationLocation');
+					$locationKey = $this->request->data['ReservationActionPlan']['location_key'];
+					$result = $ReservationLocation->getByKey($locationKey);
+					$thisLocation = [
+						$locationKey => $result['ReservationLocation']['location_name']
+					];
+					echo $this->NetCommonsForm->input('ReservationActionPlan.location_key', [
+						'type' => 'select',
+						'disabled',
+						'options' => $thisLocation,
+						'label' => __d('reservations', 'Location')
+					]);
+
+					$Room = ClassRegistry::init('Rooms.Room');
+					$roomId = $this->request->data['ReservationActionPlan']['plan_room_id'];
+					$result = $Room->findById($roomId);
+					$thisRoom = [
+						$roomId => $result['RoomsLanguage'][0]['name']
+					];
+
+					echo $this->NetCommonsForm->input('ReservationActionPlan.plan_room_id', [
+						'type' => 'select',
+						'disabled',
+						'options' => $thisRoom,
+						'label' => __d('reservations', 'Category')
+					]);
+
+					?>
+				</div>
+			<?php endif?>
+
 
 			<?php /* メール通知設定 */ ?>
 			<?php echo $this->element('Reservations.ReservationPlans/detail_edit_mail'); ?>

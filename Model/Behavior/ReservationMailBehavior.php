@@ -88,7 +88,7 @@ class ReservationMailBehavior extends ReservationAppBehavior {
 		}
 
 		// パーミッション情報をターゲットルームのものにすり替え
-		ReservationPermissiveRooms::setCurrentPermission($eventRoomId);
+		//ReservationPermissiveRooms::setCurrentPermission($eventRoomId);
 		// カレントのルームIDなどをすり替え
 		Current::$current['Room']['id'] = $eventRoomId;
 		Current::$current['Block']['id'] = $eventBlockId;
@@ -129,7 +129,7 @@ class ReservationMailBehavior extends ReservationAppBehavior {
 		Current::$current['Room']['id'] = $originalRoomId;
 		Current::$current['Block']['id'] = $originalBlockId;
 		Current::$current['Block']['key'] = $originalBlockKey;
-		ReservationPermissiveRooms::recoverCurrentPermission();
+		//ReservationPermissiveRooms::recoverCurrentPermission();
 	}
 
 /**

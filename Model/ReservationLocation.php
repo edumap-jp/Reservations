@@ -432,9 +432,13 @@ class ReservationLocation extends ReservationsAppModel {
  * 予約可能な施設を返す
  *
  * @param int $categoryId カテゴリID
+ * @param int $userId ユーザID
  * @return array
  */
-	public function getReservableLocations($categoryId = null) {
+	public function getReservableLocations($categoryId = null, $userId = null) {
+		if (! $userId) {
+			$userId = Current::read('User.id');
+		}
 		$this->loadModels(
 			[
 				'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
@@ -446,7 +450,7 @@ class ReservationLocation extends ReservationsAppModel {
 		$locations = $this->getLocations($categoryId);
 
 		// ルーム情報、承認者情報を locationにまぜこむ
-		$condition = $this->Room->getReadableRoomsConditions();
+		$condition = $this->Room->getReadableRoomsConditions([], $userId);
 		$roomBase = $this->Room->find('all', $condition);
 		foreach ($locations as &$location) {
 			$thisLocationRooms =

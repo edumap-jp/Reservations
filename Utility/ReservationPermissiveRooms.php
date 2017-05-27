@@ -189,44 +189,45 @@ class ReservationPermissiveRooms {
  * @return void
  */
 	public static function setCurrentPermission($roomId) {
-		if (! empty(self::$backupPermissions)) {
-			return;
-		}
-		// ここが呼ばれるってことは絶対にroomInfosが絶対あることが前提
-		$useWorkflow = self::$roomPermRoles['roomInfos'][$roomId]['use_workflow'];
-
-		self::$backupPermissions['current'] = Hash::get(Current::$current, 'Permission');
-		self::$backupPermissions['permission'] = Current::$permission;
-
-		// 承認不要のときは作成権限があれば発行できる
-		if ($useWorkflow == false) {
-			Current::$current['Permission']['content_publishable']['value'] =
-				self::$roomPermRoles['roomInfos'][$roomId]['content_creatable_value'];
-		} else {
-			Current::$current['Permission']['content_publishable']['value'] =
-				self::$roomPermRoles['roomInfos'][$roomId]['content_publishable_value'];
-		}
-		Current::$current['Permission']['content_editable']['value'] =
-			self::$roomPermRoles['roomInfos'][$roomId]['content_editable_value'];
-		Current::$current['Permission']['content_creatable']['value'] =
-			self::$roomPermRoles['roomInfos'][$roomId]['content_creatable_value'];
-
-		$pathKey = $roomId . '.Permission.%s.value';
-		Current::$permission = Hash::insert(
-			Current::$permission,
-			sprintf($pathKey, 'content_publishable'),
-			Current::$current['Permission']['content_publishable']['value']
-		);
-		Current::$permission = Hash::insert(
-			Current::$permission,
-			sprintf($pathKey, 'content_editable'),
-			Current::$current['Permission']['content_editable']['value']
-		);
-		Current::$permission = Hash::insert(
-			Current::$permission,
-			sprintf($pathKey, 'content_creatable'),
-			Current::$current['Permission']['content_creatable']['value']
-		);
+		return;
+		//if (! empty(self::$backupPermissions)) {
+		//	return;
+		//}
+		//// ここが呼ばれるってことは絶対にroomInfosが絶対あることが前提
+		//$useWorkflow = self::$roomPermRoles['roomInfos'][$roomId]['use_workflow'];
+		//
+		//self::$backupPermissions['current'] = Hash::get(Current::$current, 'Permission');
+		//self::$backupPermissions['permission'] = Current::$permission;
+		//
+		//// 承認不要のときは作成権限があれば発行できる
+		//if ($useWorkflow == false) {
+		//	Current::$current['Permission']['content_publishable']['value'] =
+		//		self::$roomPermRoles['roomInfos'][$roomId]['content_creatable_value'];
+		//} else {
+		//	Current::$current['Permission']['content_publishable']['value'] =
+		//		self::$roomPermRoles['roomInfos'][$roomId]['content_publishable_value'];
+		//}
+		//Current::$current['Permission']['content_editable']['value'] =
+		//	self::$roomPermRoles['roomInfos'][$roomId]['content_editable_value'];
+		//Current::$current['Permission']['content_creatable']['value'] =
+		//	self::$roomPermRoles['roomInfos'][$roomId]['content_creatable_value'];
+		//
+		//$pathKey = $roomId . '.Permission.%s.value';
+		//Current::$permission = Hash::insert(
+		//	Current::$permission,
+		//	sprintf($pathKey, 'content_publishable'),
+		//	Current::$current['Permission']['content_publishable']['value']
+		//);
+		//Current::$permission = Hash::insert(
+		//	Current::$permission,
+		//	sprintf($pathKey, 'content_editable'),
+		//	Current::$current['Permission']['content_editable']['value']
+		//);
+		//Current::$permission = Hash::insert(
+		//	Current::$permission,
+		//	sprintf($pathKey, 'content_creatable'),
+		//	Current::$current['Permission']['content_creatable']['value']
+		//);
 	}
 /**
  * recoverCurrentPermission
@@ -238,9 +239,10 @@ class ReservationPermissiveRooms {
  * @return void
  */
 	public static function recoverCurrentPermission() {
-		Current::$current['Permission'] = Hash::get(self::$backupPermissions, 'current', array());
-		Current::$permission = Hash::get(self::$backupPermissions, 'permission', array());
-
-		self::$backupPermissions = array();
+		return;
+		//Current::$current['Permission'] = Hash::get(self::$backupPermissions, 'current', array());
+		//Current::$permission = Hash::get(self::$backupPermissions, 'permission', array());
+		//
+		//self::$backupPermissions = array();
 	}
 }

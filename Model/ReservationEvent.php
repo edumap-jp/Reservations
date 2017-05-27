@@ -321,9 +321,9 @@ class ReservationEvent extends ReservationsAppModel {
  * @return bool True if there are no errors
  */
 	public function validates($options = array()) {
-		if (Hash::get($this->data, 'ReservationEvent.room_id')) {
-			ReservationPermissiveRooms::setCurrentPermission($this->data['ReservationEvent']['room_id']);
-		}
+		//if (Hash::get($this->data, 'ReservationEvent.room_id')) {
+		//	ReservationPermissiveRooms::setCurrentPermission($this->data['ReservationEvent']['room_id']);
+		//}
 		return parent::validates($options);
 	}
 
@@ -372,27 +372,30 @@ class ReservationEvent extends ReservationsAppModel {
  * @return bool
  */
 	public function canDeleteContent($data) {
-		// 発行済み状態を取得
-		$isPublished = Hash::get($data, 'ReservationEvent.is_published');
-
-		// 予定の対象ルームIDを取得
-		$roomId = Hash::get($data, 'ReservationEvent.room_id');
-
-		// データの対象空間での発行権限を取得
-		$canPublish = ReservationPermissiveRooms::isPublishable($roomId);
-
-		// データの編集権限を取得
-		$canEdit = $this->canEditWorkflowContent($data);
-
-		// 発行済みだと
-		if ($isPublished) {
-			// 発行権限と編集権限の両方がないと削除できない
-			return ($canPublish && $canEdit);
-		} else {
-			// 未発行の場合
-			// 編集権限さえあれば良い
-			return $canEdit;
-		}
+		$permissionPolicy = new ReservationEventPermissionPolicy($data);
+		$userId = Current::read('User.id');
+		return $permissionPolicy->canEdit($userId);
+		//// 発行済み状態を取得
+		//$isPublished = Hash::get($data, 'ReservationEvent.is_published');
+		//
+		//// 予定の対象ルームIDを取得
+		//$roomId = Hash::get($data, 'ReservationEvent.room_id');
+		//
+		//// データの対象空間での発行権限を取得
+		//$canPublish = ReservationPermissiveRooms::isPublishable($roomId);
+		//
+		//// データの編集権限を取得
+		//$canEdit = $this->canEditWorkflowContent($data);
+		//
+		//// 発行済みだと
+		//if ($isPublished) {
+		//	// 発行権限と編集権限の両方がないと削除できない
+		//	return ($canPublish && $canEdit);
+		//} else {
+		//	// 未発行の場合
+		//	// 編集権限さえあれば良い
+		//	return $canEdit;
+		//}
 	}
 /**
  * getEventById

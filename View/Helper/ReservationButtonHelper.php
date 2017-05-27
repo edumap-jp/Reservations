@@ -8,7 +8,7 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 App::uses('AppHelper', 'View/Helper');
-App::uses('ReservationPermissiveRooms', 'Reservations.Utility');
+//App::uses('ReservationPermissiveRooms', 'Reservations.Utility');
 
 /**
  * Reservation Many kind Button Helper

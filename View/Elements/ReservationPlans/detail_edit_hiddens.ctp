@@ -20,6 +20,8 @@
 
 		$originRruleId = $event['ReservationRrule']['id'];
 		$originRruleKey = $event['ReservationRrule']['key'];
+
+		$originCreatedUser = $event['ReservationEvent']['created_user'];
 	} else {
 		if (!empty($this->request->data['ReservationActionPlan']['origin_event_id'])) {
 			$originEventId = $this->request->data['ReservationActionPlan']['origin_event_id'];
@@ -40,6 +42,8 @@
 		if (!empty($this->request->data['ReservationActionPlan']['origin_rrule_key'])) {
 			$originRruleKey = $this->request->data['ReservationActionPlan']['origin_rrule_key'];
 		}
+
+		$originCreatedUser = Hash::get($this->request->data, 'ReservationActionPlan.origin_created_user');
 	}
 	echo $this->NetCommonsForm->hidden('ReservationActionPlan.origin_event_id', array('value' => $originEventId));
 	echo $this->NetCommonsForm->hidden('ReservationActionPlan.origin_event_key', array('value' => $originEventKey));
@@ -48,6 +52,9 @@
 
 	echo $this->NetCommonsForm->hidden('ReservationActionPlan.origin_rrule_id', array('value' => $originRruleId));
 	echo $this->NetCommonsForm->hidden('ReservationActionPlan.origin_rrule_key', array('value' => $originRruleKey));
+
+	echo $this->NetCommonsForm->hidden('ReservationActionPlan.origin_created_user',
+		array('value' => $originCreatedUser));
 
 	//兄弟event数
 	$countEventSiblings = 0;

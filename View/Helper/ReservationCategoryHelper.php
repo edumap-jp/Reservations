@@ -45,8 +45,18 @@ class ReservationCategoryHelper extends AppHelper {
 				$vars['roomsLanguages'],
 				'{n}.RoomsLanguages[room_id=' . $event['ReservationEvent']['room_id'] . ']');
 			$roomLang = Hash::extract($roomLangs, '{n}[language_id=' . Current::read('Language.id') . ']');
-			$roomName = $this->ReservationCommon->decideRoomName(
-				Hash::get($roomLang, '0.name'), $planMarkClassName);
+			if (empty($roomLang)) {
+				// 承認者はアクセス権のないルーム情報をみることがありえる。
+				$RoomsLanguage = ClassRegistry::init('Rooms.RoomsLanguage');
+				$roomLang = $RoomsLanguage->find('first', ['conditions' => [
+					'RoomsLanguage.language_id' => Current::read('Language.id'),
+					'RoomsLanguage.room_id' => $event['ReservationEvent']['room_id']
+				]]);
+				$roomName = $roomLang['RoomsLanguage']['name'];
+			} else {
+				$roomName = Hash::get($roomLang, '0.name');
+			}
+			$roomName = $this->ReservationCommon->decideRoomName($roomName, $planMarkClassName);
 		}
 		$html = '';
 		$html .= '<span class="reservation-plan-mark ' . $planMarkClassName . '"></span>';

@@ -88,7 +88,7 @@ class ReservationAppBehavior extends ModelBehavior {
  */
 	public function afterValidate(Model $model) {
 		if ($model->alias == 'ReservationEvent') {
-			ReservationPermissiveRooms::recoverCurrentPermission();
+			//ReservationPermissiveRooms::recoverCurrentPermission();
 		}
 	}
 

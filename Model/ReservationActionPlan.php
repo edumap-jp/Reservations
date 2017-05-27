@@ -822,7 +822,10 @@ class ReservationActionPlan extends ReservationsAppModel {
 				]
 			);
 
-			$this->_locations = $this->ReservationLocation->getReservableLocations();
+			$userId = Hash::get($this->data,
+				'ReservationActionPlan.origin_created_user',
+				Current::read('User.id'));
+			$this->_locations = $this->ReservationLocation->getReservableLocations(null, $userId);
 		}
 		return $this->_locations;
 	}
