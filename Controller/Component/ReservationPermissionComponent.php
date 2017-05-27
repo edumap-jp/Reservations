@@ -13,6 +13,7 @@ App::uses('Component', 'Controller');
 App::uses('NetCommonsTime', 'NetCommons.Utility');
 App::uses('Block', 'Blocks.Model');
 App::uses('ReservationPermissiveRooms', 'Reservations.Utility');
+App::uses('ReservationEventPermissionPolicy', 'Reservations.Policy');
 
 /**
  * ReservationPermission Component
@@ -35,25 +36,36 @@ class ReservationPermissionComponent extends Component {
  */
 	public function startup(Controller $controller) {
 		$this->controller = $controller;
+
+		$permissionPolicy = new ReservationEventPermissionPolicy($this->controller->eventData);
 		// add -> どこか一つでもcreatableな空間を持っている人なら
 		// view -> 対象の空間に参加しているなら
 		//         ただし、対象空間がプライベートのときに限り、共有者となっているなら
 		// edit -> 対象空間での編集権限を持っているか、対象予定の作成者なら
 		// delete -> 対象空間での編集権限を持っているか、対象予定の作成者なら
+
+		// add いずれかの施設に予約できれば
+		// view 公開されてるルームのアクセス権あるか、その施設の承認者なら
+		// edit 予約した本人か　承認者
+		// delete 予約した本人か　承認者
+		$userId = Current::read('User.id');
 		switch ($controller->action) {
 			case 'add':
-				if ($this->_hasCreatableRoom()) {
+				if ($this->_canCreate()) {
 					return;
 				}
 				break;
 			case 'edit':
 			case 'delete':
-				if ($this->_canEditEvent()) {
+				if ($permissionPolicy->canEdit($userId)) {
 					return;
 				}
+				//if ($this->_canEditEvent()) {
+				//	return;
+				//}
 				break;
 			case 'view':
-				if ($this->_canReadEvent()) {
+				if ($permissionPolicy->canRead($userId)) {
 					return;
 				}
 				break;
@@ -63,16 +75,22 @@ class ReservationPermissionComponent extends Component {
 	}
 
 /**
- * Creatable権限を持っているルームが一つでもあるか
+ * 予約可能な施設がひとつでもあるか
  *
  * @return bool
  */
-	protected function _hasCreatableRoom() {
-		$rooms = ReservationPermissiveRooms::getCreatableRoomIdList();
-		if (empty($rooms)) {
-			return false;
+	protected function _canCreate() {
+		$locations = $this->controller->ReservationLocation->getReservableLocations();
+		if (count($locations)) {
+			// 予約可能な施設がひとつでもあればadd権限あり
+			return true;
 		}
-		return true;
+		return false;
+		//$rooms = ReservationPermissiveRooms::getCreatableRoomIdList();
+		//if (empty($rooms)) {
+		//	return false;
+		//}
+		//return true;
 	}
 /**
  * 対象のイベントは存在するか
@@ -86,49 +104,4 @@ class ReservationPermissionComponent extends Component {
 		return true;
 	}
 
-/**
- * _canReadEvent
- * 対象のイベントルームに参加しているか
- *
- * @return bool
- */
-	protected function _canReadEvent() {
-		if (! $this->_existEvent()) {
-			return false;
-		}
-		//$roomPermRoles = $this->controller->roomPermRoles;
-		$reservationEv = $this->controller->eventData['ReservationEvent'];
-		$shareUsersIds = Hash::extract(
-			$this->controller->shareUsers, '{n}.ReservationEventShareUser.share_user');
-
-		// ルームに参加している
-		if (in_array($reservationEv['room_id'], ReservationPermissiveRooms::getAccessibleRoomIdList())) {
-			return true;
-		}
-		// 参加してなくても対象ルームがプライベートで共有者であればOK
-		if (in_array(Current::read('User.id'), $shareUsersIds)) {
-			return true;
-		}
-		return false;
-	}
-/**
- * 対象のイベントに対して編集権限を持っているか
- *
- * @return bool
- */
-	protected function _canEditEvent() {
-		if (! $this->_existEvent()) {
-			return false;
-		}
-		$reservationEv = $this->controller->eventData['ReservationEvent'];
-		if (ReservationPermissiveRooms::isEditable($reservationEv['room_id'])) {
-			return true;
-		}
-		if (ReservationPermissiveRooms::isCreatable($reservationEv['room_id'])) {
-			if ($reservationEv['created_user'] == Current::read('User.id')) {
-				return true;
-			}
-		}
-		return false;
-	}
 }
