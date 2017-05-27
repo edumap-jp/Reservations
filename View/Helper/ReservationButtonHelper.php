@@ -39,6 +39,7 @@ class ReservationButtonHelper extends AppHelper {
 		'NetCommons.LinkButton',
 		'Reservations.ReservationCommon',
 		'Reservations.ReservationUrl',
+		'Reservations.ReservationWorkflow',
 	);
 
 /**
@@ -192,27 +193,30 @@ class ReservationButtonHelper extends AppHelper {
  * @return string 編集ボタンHTML
  */
 	public function getEditButton($vars, $event) {
-		// FIXME
-		// フレームIDがないと編集できないため仮処置
-		$frameId = Current::read('Frame.id');
-		if (! $frameId) {
+		if (!$this->ReservationWorkflow->canEdit($event)) {
 			return '';
 		}
-
-		$roomId = $event['ReservationEvent']['room_id'];
-		// それ以外の時
-		$canEdit = ReservationPermissiveRooms::isEditable($roomId);
-		$canCreate = ReservationPermissiveRooms::isCreatable($roomId);
-		// 表示ルームにおける自分の権限がeditable以上なら無条件に編集可能
-		// creatbleのとき=自分が作ったデータならOK
-		if (!$canCreate) {
-			return '';
-		}
-		if (!$canEdit) {
-			if ($event['ReservationEvent']['created_user'] != Current::read('User.id')) {
-				return '';
-			}
-		}
+		//// FIXME
+		//// フレームIDがないと編集できないため仮処置
+		//$frameId = Current::read('Frame.id');
+		//if (! $frameId) {
+		//	return '';
+		//}
+		//
+		//$roomId = $event['ReservationEvent']['room_id'];
+		//// それ以外の時
+		//$canEdit = ReservationPermissiveRooms::isEditable($roomId);
+		//$canCreate = ReservationPermissiveRooms::isCreatable($roomId);
+		//// 表示ルームにおける自分の権限がeditable以上なら無条件に編集可能
+		//// creatbleのとき=自分が作ったデータならOK
+		//if (!$canCreate) {
+		//	return '';
+		//}
+		//if (!$canEdit) {
+		//	if ($event['ReservationEvent']['created_user'] != Current::read('User.id')) {
+		//		return '';
+		//	}
+		//}
 		$html = $this->Button->editLink('', array(
 			'controller' => 'reservation_plans',
 			'action' => 'edit',
