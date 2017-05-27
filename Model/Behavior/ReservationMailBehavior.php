@@ -38,9 +38,10 @@ class ReservationMailBehavior extends ReservationAppBehavior {
 	public function sendWorkflowAndNoticeMail(Model &$model, $eventId, $isMyPrivateRoom) {
 		$model->loadModels([
 			'Block' => 'Blocks.Block',
-			'ReservationEvent' => 'Reservations.ReservationEvent'
+			'ReservationEvent' => 'Reservations.ReservationEvent',
+			'ReservationLocation' => 'Reservations.ReservationLocation'
 		]);
-		$model->ReservationEvent->Behaviors->load('Mails.MailQueue');
+		$model->ReservationEvent->Behaviors->load('Reservations.ReservationMailQueue');
 
 		// 指定されたイベント情報を取得
 		$data = $model->ReservationEvent->getEventById($eventId);
@@ -58,7 +59,12 @@ class ReservationMailBehavior extends ReservationAppBehavior {
 		$reservationEvent = $data['ReservationEvent'];
 		$model->ReservationEvent->setAddEmbedTagValue('X-SUBJECT', $reservationEvent['title']);
 		$model->ReservationEvent->setAddEmbedTagValue('X-CONTACT', $reservationEvent['contact']);
-		$model->ReservationEvent->setAddEmbedTagValue('X-LOCATION', $reservationEvent['location']);
+
+		// 施設名に置き換え
+		$location = $model->ReservationLocation->getByKey($data['ReservationEvent']['location_key']);
+		$model->ReservationEvent->setAddEmbedTagValue('X-LOCATION',
+			$location['ReservationLocation']['location_name']);
+
 		$model->ReservationEvent->setAddEmbedTagValue('X-BODY', $reservationEvent['description']);
 
 		// すり替え前にオリジナルルームID,オリジナルのBlockID,オリジナルのBlockKeyを確保
@@ -110,13 +116,14 @@ class ReservationMailBehavior extends ReservationAppBehavior {
 
 		if ($isMailSend) {
 			// メールキュー作成
+			$model->ReservationEvent->setSetting('workflowType', 'workflow');
 			$model->ReservationEvent->saveQueue();
-			// キューからメール送信
 			MailSend::send();
+			//}
 		}
 
 		$model->ReservationEvent->Behaviors->unload('Mails.IsMailSend');
-		$model->ReservationEvent->Behaviors->unload('Mails.MailQueue');
+		$model->ReservationEvent->Behaviors->unload('Reservations.ReservationMailQueue');
 
 		// すり替えものをリカバー
 		Current::$current['Room']['id'] = $originalRoomId;

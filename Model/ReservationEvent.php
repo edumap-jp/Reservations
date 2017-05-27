@@ -45,7 +45,7 @@ class ReservationEvent extends ReservationsAppModel {
 			'fields' => array('description'),
 		),
 		// 自動でメールキューの登録, 削除。ワークフロー利用時はWorkflow.Workflowより下に記述する
-		'Mails.MailQueue' => array(
+		'Reservations.ReservationMailQueue' => array(
 			'embedTags' => array(
 				'X-SUBJECT' => 'title',
 				'X-LOCATION' => 'location',
@@ -160,7 +160,8 @@ class ReservationEvent extends ReservationsAppModel {
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 		// すぐはずす
-		$this->Behaviors->unload('Mails.MailQueue');
+		//$this->Behaviors->unload('Mails.MailQueue');
+		$this->Behaviors->unload('Reservations.ReservationMailQueue');
 		$this->Behaviors->unload('Mails.MailQueueDelete');
 		$this->Behaviors->unload('Topics.Topics');
 	}

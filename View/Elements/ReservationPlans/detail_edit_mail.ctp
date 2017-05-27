@@ -16,10 +16,19 @@
 		$checkMailStyle = "style='display: none;'";
 	}
 ?>
-<?php
-echo $this->NetCommonsForm->hidden('ReservationActionPlan.enable_email', array('value' => false));
-echo $this->NetCommonsForm->hidden('ReservationActionPlan.email_send_timing', array('value' => 5));
-?>
+<div class="col-xs-12 col-sm-12">
+	<?php
+	echo $this->NetCommonsForm->inlineCheckbox('ReservationActionPlan.enable_email', ['label' =>
+	__d(
+		'reservations',
+		'Inform other members by e-mail?'
+	)]);
+
+	//echo $this->NetCommonsForm->hidden('ReservationActionPlan.enable_email', array('value' => false));
+	echo $this->NetCommonsForm->hidden('ReservationActionPlan.email_send_timing', array('value' => 5));
+	?>
+
+</div>
 <!--
 <div class="form-group" data-reservation-name="checkMail" <?php echo $checkMailStyle; ?>>
 	<div class="col-xs-12">
