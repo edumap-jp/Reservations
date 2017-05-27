@@ -93,7 +93,9 @@ class ReservationLocationReservable extends ReservationsAppModel {
 
 		$roomIds = $this->getReadableRoomIdsWithOutPrivate();
 		$userId = Current::read('User.id');
-
+		if (!$userId) {
+			return [];
+		}
 		// 個人的な予約OKな施設
 		if ($location['ReservationLocation']['use_private']) {
 			// マイルームが使えるならOK
