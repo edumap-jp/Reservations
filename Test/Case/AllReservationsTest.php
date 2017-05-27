@@ -28,6 +28,11 @@ class AllReservationsTest extends NetCommonsTestSuite {
 		$plugin = preg_replace('/^All([\w]+)Test$/', '$1', __CLASS__);
 		$suite = new NetCommonsTestSuite(sprintf('All %s Plugin tests', $plugin));
 		//$suite->addTestDirectoryRecursive(CakePlugin::path($plugin) . 'Test' . DS . 'Case');
+		$basePath = CakePlugin::path($plugin) . 'Test' . DS . 'Case';
+		$suite->addTestDirectoryRecursive($basePath . DS . 'Service');
+		$suite->addTestDirectoryRecursive($basePath . DS . 'Utility');
+		//$suite->addTestDirectoryRecursive($basePath . DS . 'Model');
+		//$suite->addTestDirectoryRecursive($basePath . DS . 'Controller');
 		return $suite;
 	}
 }
