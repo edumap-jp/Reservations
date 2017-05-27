@@ -189,7 +189,8 @@ class ReservationMailBehavior extends ReservationAppBehavior {
 			'controller' => 'reservation_plans',
 			'action' => 'view',
 			'block_id' => '',
-			'frame_id' => Current::read('Frame.id'),
+			// メールを受け取ったユーザが必ずしもこのフレームにアクセスできるとは限らないのでFrameIdは入れない
+			//'frame_id' => Current::read('Frame.id'),
 			'key' => $data['ReservationEvent']['key']
 		));
 		$url = NetCommonsUrl::url($url, true);
