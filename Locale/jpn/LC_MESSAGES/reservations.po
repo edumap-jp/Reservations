@@ -1334,3 +1334,6 @@ msgstr "このメール設定は、全施設共通のメール設定です。<br
 
 msgid "It has been alreay reserved by someone else.Try different time and date."
 msgstr "既に予約が入っているため、予約できません。"
+
+msgid "Inform other members by e-mail?"
+msgstr "メールで通知する"
