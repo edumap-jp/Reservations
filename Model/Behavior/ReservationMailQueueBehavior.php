@@ -9,6 +9,9 @@
 
 App::uses('MailQueueBehavior', 'Mails.Model/Behavior');
 
+/**
+ * Class ReservationMailQueueBehavior
+ */
 class ReservationMailQueueBehavior extends MailQueueBehavior {
 
 /**

@@ -7,6 +7,9 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  */
 
+/**
+ * Class ReservationEventPermissionPolicy
+ */
 class ReservationEventPermissionPolicy {
 
 /**
