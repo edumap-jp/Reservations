@@ -144,12 +144,18 @@ class ReservationMonthlyHelper extends AppHelper {
 		if (! empty($label)) {
 			$html .= '<small>' . $label . '</small>&nbsp;';
 		}
-		$title = $this->TitleIcon->titleIcon($plan['ReservationEvent']['title_icon']) .
-			h(mb_strimwidth($plan['ReservationEvent']['title'], 0, 20, '...'));
-		$html .= $this->NetCommonsHtml->link($title, $url, array(
-			'class' => 'reservation-line-link',
-			'escape' => false
-		));
+
+		if ($this->ReservationWorkflow->canRead($plan)) {
+			$title = $this->TitleIcon->titleIcon($plan['ReservationEvent']['title_icon']) .
+				h(mb_strimwidth($plan['ReservationEvent']['title'], 0, 20, '...'));
+			$html .= $this->NetCommonsHtml->link($title, $url, array(
+				'class' => 'reservation-line-link',
+				'escape' => false
+			));
+		} else {
+			$html .= $this->_getNotRedablePlanHtml($plan);
+		}
+
 		$html .= '</div>';
 		$this->_lineData[$this->_week][$this->_linePlanCnt]['id'] = $plan['ReservationEvent']['id'];
 		$this->_lineData[$this->_week][$this->_linePlanCnt]['fromCell'] = $this->_celCnt;
@@ -181,10 +187,13 @@ class ReservationMonthlyHelper extends AppHelper {
 		//$id = '';
 
 		foreach ($plans as $plan) {
-			//※roomIdが一致するデータ
-			if (!$this->_isTargetPlan($roomId, $vars, $plan)) {
+			if ($vars['currentLocationKey'] !== $plan['ReservationEvent']['location_key']) {
 				continue;
 			}
+			////※roomIdが一致するデータ
+			//if (!$this->_isTargetPlan($roomId, $vars, $plan)) {
+			//	continue;
+			//}
 
 			$url = $this->ReservationUrl->makePlanShowUrl($year, $month, $day, $plan, true);
 			$checkStartDate = $nctm->toUserDatetime($plan['ReservationEvent']['dtstart']);

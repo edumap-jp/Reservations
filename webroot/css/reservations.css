@@ -102,7 +102,8 @@
 
 .reservation-col-day-line > div {
 	/*padding: 3px;*/
-	position:relative !important;
+	/*position:relative !important;*/
+	position:absolute !important;
 	padding-top:2px;
 }
 
