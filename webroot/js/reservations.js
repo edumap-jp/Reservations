@@ -709,6 +709,10 @@ NetCommonsApp.controller('ReservationsDetailEdit',
 
        $scope.rruleUntil;
 
+       $scope.debugShow = function() {
+         console.log($scope.data.ReservationActionPlan.plan_room_id);
+       }
+
        $scope.initialize = function(data) {
          console.log(data);
          $scope.data = angular.fromJson(data);

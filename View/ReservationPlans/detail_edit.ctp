@@ -227,10 +227,14 @@ echo $this->element('Reservations.scripts');
 								'data-frame-id' => $frameId,
 								'data-myself' => $myself, // プライベートルーム
 								'escape' => false,
+								'ng-model' => 'data.ReservationActionPlan.plan_room_id',
+								'ng-change' => 'debugShow()',
 								'ng-show' => 'selectLocation.ReservationLocation.id == ' .
 									$location['ReservationLocation']['id']
 							));
 					}
+					$this->NetCommonsForm->unlockField('ReservationActionPlan.plan_room_id');
+					echo $this->NetCommonsForm->hidden('ReservationActionPlan.plan_room_id', ['ng-value' => 'data.ReservationActionPlan.plan_room_id']);
 					?>
 					<?php echo $this->NetCommonsForm->error('ReservationActionPlan.plan_room_id'); ?>
 				</div>
