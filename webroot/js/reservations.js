@@ -364,7 +364,7 @@ NetCommonsApp.controller('ReservationsWeeklyTimelinePlan', ['$scope', function($
 
   $scope.setTimelinePos = function(elementId, fromTime, toTime) {
     console.log(toTime);
-    if (toTime == '00:00'){
+    if (toTime == '00:00') {
       // 終端の00:00は24:00のこと
       toTime = '24:00';
     }
@@ -709,9 +709,9 @@ NetCommonsApp.controller('ReservationsDetailEdit',
 
        $scope.rruleUntil;
 
-       $scope.debugShow = function() {
-         console.log($scope.data.ReservationActionPlan.plan_room_id);
-       }
+       // $scope.debugShow = function() {
+       //   console.log($scope.data.ReservationActionPlan.plan_room_id);
+       // }
 
        $scope.initialize = function(data) {
          console.log(data);

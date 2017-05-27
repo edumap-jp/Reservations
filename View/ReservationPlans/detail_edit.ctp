@@ -228,7 +228,7 @@ echo $this->element('Reservations.scripts');
 								'data-myself' => $myself, // プライベートルーム
 								'escape' => false,
 								'ng-model' => 'data.ReservationActionPlan.plan_room_id',
-								'ng-change' => 'debugShow()',
+								//'ng-change' => 'debugShow()',
 								'ng-show' => 'selectLocation.ReservationLocation.id == ' .
 									$location['ReservationLocation']['id']
 							));
