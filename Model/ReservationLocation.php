@@ -489,7 +489,9 @@ class ReservationLocation extends ReservationsAppModel {
 		// 何度も同じ施設で確認だすからキャッシュしとく
 		if (!isset($this->_locations[$locationKey])) {
 			//$this->ReservationLocation = ClassRegistry::init('Reservations.ReservationLocation');
-			$this->loadModels(['ReservationLocationsApprovalUser' => 'Reservations.ReservationLocationsApprovalUser']);
+			$this->loadModels([
+				'ReservationLocationsApprovalUser' => 'Reservations.ReservationLocationsApprovalUser'
+			]);
 			//$this->ReservationLocationsApprovalUser = ClassRegistry::init(
 			//	'Reservations.ReservationLocationsApprovalUser'
 			//);

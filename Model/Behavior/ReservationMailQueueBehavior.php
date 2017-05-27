@@ -157,7 +157,8 @@ class ReservationMailQueueBehavior extends MailQueueBehavior {
 		// 施設の承認者にメールする
 		// 予約の施設取得
 		$this->ReservationLocation = ClassRegistry::init('Reservations.ReservationLocation');
-		$location = $this->ReservationLocation->getByKey($model->data['ReservationEvent']['location_key']);
+		$locationKey = $model->data['ReservationEvent']['location_key'];
+		$location = $this->ReservationLocation->getByKey($locationKey);
 		// 施設の承認者取得
 		$approvalUserIds = $location['approvalUserIds'];
 
