@@ -363,6 +363,11 @@ NetCommonsApp.controller('ReservationsWeeklyTimelinePlan', ['$scope', function($
   };
 
   $scope.setTimelinePos = function(elementId, fromTime, toTime) {
+    console.log(toTime);
+    if (toTime == '00:00'){
+      // 終端の00:00は24:00のこと
+      toTime = '24:00';
+    }
     // var planObj = document.getElementById('plan' + String(id));
     var planObj = document.getElementById(elementId);
 
