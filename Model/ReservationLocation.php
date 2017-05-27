@@ -66,6 +66,13 @@ class ReservationLocation extends ReservationsAppModel {
 	);
 
 /**
+ * 施設キャッシュ用
+ *
+ * @var array
+ */
+	protected $_locations = [];
+
+/**
  * Called during validation operations, before validation. Please note that custom
  * validation rules can be defined in $validate.
  *
@@ -470,6 +477,38 @@ class ReservationLocation extends ReservationsAppModel {
 			}
 		}
 		return $reservableLocations;
+	}
+
+/**
+ * 施設キーを元に施設情報を返す（内部キャッシュ有り）
+ *
+ * @param string $locationKey 施設キー
+ * @return mixed
+ */
+	public function getByKey($locationKey) {
+		// 何度も同じ施設で確認だすからキャッシュしとく
+		if (!isset($this->_locations[$locationKey])) {
+			//$this->ReservationLocation = ClassRegistry::init('Reservations.ReservationLocation');
+			$this->loadModels(['ReservationLocationsApprovalUser' => 'Reservations.ReservationLocationsApprovalUser']);
+			//$this->ReservationLocationsApprovalUser = ClassRegistry::init(
+			//	'Reservations.ReservationLocationsApprovalUser'
+			//);
+			$conditions = [
+				'ReservationLocation.key' => $locationKey,
+			];
+			$location = $this->find(
+				'first',
+				[
+					'conditions' =>
+						$conditions
+				]
+			);
+			$location['approvalUserIds'] =
+				$this->ReservationLocationsApprovalUser->getApprovalUserIdsByLocation($location);
+			$this->_locations[$locationKey] = $location;
+
+		}
+		return $this->_locations[$locationKey];
 	}
 
 /**
