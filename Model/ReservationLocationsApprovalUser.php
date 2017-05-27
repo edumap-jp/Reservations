@@ -43,6 +43,13 @@ class ReservationLocationsApprovalUser extends ReservationsAppModel {
 	);
 
 /**
+ * 施設の承認者idリスト ReservationLocation.keyをキーにもつ配列
+ *
+ * @var array
+ */
+	protected $_approvalUserIds = [];
+
+/**
  * Called during validation operations, before validation. Please note that custom
  * validation rules can be defined in $validate.
  *
@@ -102,8 +109,37 @@ class ReservationLocationsApprovalUser extends ReservationsAppModel {
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 			}
 		}
-
 		return true;
+	}
+
+/**
+ * 施設の承認者ID一覧を返す
+ *
+ * @param array $location ReservationLocation data
+ * @return array 承認者ID一覧
+ */
+	public function getApprovalUserIdsByLocation($location) {
+		$locationKey = $location['ReservationLocation']['key'];
+		$useWorkflow = $location['ReservationLocation']['use_workflow'];
+
+		if (!isset($this->_approvalUserIds[$locationKey])) {
+			$approvalUserIds = [];
+			if ($useWorkflow) {
+				// 承認が必要なら承認ユーザ取得
+				$condition = [
+					'ReservationLocationsApprovalUser.location_key' =>
+						$locationKey,
+				];
+				$approvalUsers = $this->find('all',
+					['conditions' => $condition]);
+				$approvalUserIds = Hash::combine($approvalUsers,
+					'{n}.ReservationLocationsApprovalUser.user_id',
+					'{n}.ReservationLocationsApprovalUser.user_id');
+			}
+			$this->_approvalUserIds[$locationKey] =
+				$approvalUserIds;
+		}
+		return $this->_approvalUserIds[$locationKey];
 	}
 
 }

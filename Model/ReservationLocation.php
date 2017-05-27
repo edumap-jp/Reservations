@@ -446,20 +446,9 @@ class ReservationLocation extends ReservationsAppModel {
 				$this->ReservationLocationsRoom->getReservableRoomsByLocation($location, $roomBase);
 
 			$location['ReservableRoom'] = $thisLocationRooms;
-			// 承認が必要な施設か
-			if ($location['ReservationLocation']['use_workflow']) {
-				// 承認が必要なら承認ユーザ取得
-				$condition = [
-					'ReservationLocationsApprovalUser.location_key' =>
-						$location['ReservationLocation']['key'],
-				];
-				$approvalUsers = $this->ReservationLocationsApprovalUser->find('all',
-					['conditions' => $condition]);
-				$approvalUserIds = Hash::combine($approvalUsers,
-					'{n}.ReservationLocationsApprovalUser.user_id',
-					'{n}.ReservationLocationsApprovalUser.user_id');
-				$location['approvalUserIds'] = $approvalUserIds;
-			}
+			// 承認ユーザ取得
+			$location['approvalUserIds'] =
+				$this->ReservationLocationsApprovalUser->getApprovalUserIdsByLocation($location);
 		}
 		// プライベートルームを除外したルームIDで予約可能かチェック
 		$roomIds = $this->getReadableRoomIdsWithOutPrivate();

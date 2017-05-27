@@ -32,7 +32,9 @@ class ReservationMonthlyHelper extends AppHelper {
 		'Reservations.ReservationButton',
 		'Reservations.ReservationUrl',
 		'Reservations.ReservationPlan',
+		'Reservations.ReservationWorkflow',
 		'NetCommons.TitleIcon',
+		'Users.DisplayUser',
 	);
 
 /**
@@ -301,16 +303,23 @@ class ReservationMonthlyHelper extends AppHelper {
 			$html .= '</p>';
 		}
 		$html .= '<h3 class="reservation-plan-title">';
-		if (isset($options['short_title'])) {
-			$title = h(mb_strimwidth($plan['ReservationEvent']['title'], 0, 20, '...'));
+
+		if ($this->ReservationWorkflow->canRead($plan)) {
+			if (isset($options['short_title'])) {
+				$title = h(mb_strimwidth($plan['ReservationEvent']['title'], 0, 20, '...'));
+			} else {
+				$title = h($plan['ReservationEvent']['title']);
+			}
+			$html .= $this->NetCommonsHtml->link(
+				$this->TitleIcon->titleIcon($plan['ReservationEvent']['title_icon']) . $title,
+				$url,
+				array('escape' => false)
+			);
+
 		} else {
-			$title = h($plan['ReservationEvent']['title']);
+			$html .= $this->_getNotRedablePlanHtml($plan);
 		}
-		$html .= $this->NetCommonsHtml->link(
-			$this->TitleIcon->titleIcon($plan['ReservationEvent']['title_icon']) . $title,
-			$url,
-			array('escape' => false)
-		);
+
 		$html .= '</h3></div>';
 		return $html;
 	}
@@ -707,5 +716,17 @@ class ReservationMonthlyHelper extends AppHelper {
 			}
 		}
 		return true;
+	}
+
+/**
+ * 詳細閲覧不可の予約のHTML
+ *
+ * @param array $plan ReservationEvent data
+ * @return string html
+ */
+	protected function _getNotRedablePlanHtml($plan) {
+		$html = '<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span> ';
+		$html .= $this->DisplayUser->handleLink($plan);
+		return $html;
 	}
 }

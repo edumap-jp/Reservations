@@ -28,7 +28,8 @@ class ReservationDailyTimelineHelper extends ReservationMonthlyHelper {
 		'Reservations.ReservationButton',
 		'Reservations.ReservationCommon',
 		'Reservations.ReservationUrl',
-		'Reservations.ReservationUrl',
+		'Reservations.ReservationWorkflow',
+		'Users.DisplayUser',
 	);
 
 /**
@@ -115,8 +116,14 @@ class ReservationDailyTimelineHelper extends ReservationMonthlyHelper {
 
 			$html .= '<div class="reservation-common-margin-padding">';
 
-			$htmlClass = 'reservation-plan-clickable text-left reservation-plan-show';
-			$html .= '<div><p class="' . $htmlClass . '" data-url="' . $url . '">';
+			if ($this->ReservationWorkflow->canRead($plan)) {
+				$htmlClass = 'reservation-plan-clickable text-left reservation-plan-show';
+				$html .= '<div><p class="' . $htmlClass . '" data-url="' . $url . '">';
+			} else {
+				//$htmlClass = 'reservation-plan-clickable text-left reservation-plan-show';
+				$htmlClass = '';
+				$html .= '<div><p class="' . $htmlClass . '" >';
+			}
 			// 時間表示なくてもタイムラインならわかるので時間非表示
 			//$html .= '<small>';
 			//$html .= h($plan['ReservationEvent']['fromTime']) . '-' . h($plan['ReservationEvent']['toTime']);
@@ -124,7 +131,13 @@ class ReservationDailyTimelineHelper extends ReservationMonthlyHelper {
 
 			// ワークフロー（一時保存/承認待ち、など）のマーク
 			$html .= $this->ReservationCommon->makeWorkFlowLabel($plan['ReservationEvent']['status']);
-			$html .= '<small>' . h($plan['ReservationEvent']['title']) . '</small>';
+
+			if ($this->ReservationWorkflow->canRead($plan)) {
+				$html .= '<small>' . h($plan['ReservationEvent']['title']) . '</small>';
+			} else {
+				$html .= $this->_getNotRedablePlanHtml($plan);
+			}
+
 			$html .= '</div></div>';
 			$html .= '</p></div>';
 

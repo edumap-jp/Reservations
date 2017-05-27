@@ -40,14 +40,16 @@ class ReservationSearchPlanBehavior extends ReservationAppBehavior {
  */
 	public function getPlans(Model &$model, $vars, $planParams, $order = array()) {
 		// 探すのはis_activeかis_latestのものだけでよい
+		// 予約データ取得時は	ルーム無視
 		$baseOptions = array(
 			'conditions' => array(
-				array(
-					'OR' => array(
-						'ReservationEvent.is_active' => true,
-						'ReservationEvent.is_latest' => true,
-					)
-				)
+				$model->getWorkflowConditions()
+				//array(
+				//	'OR' => array(
+				//		'ReservationEvent.is_active' => true,
+				//		'ReservationEvent.is_latest' => true,
+				//	)
+				//)
 			),
 			'recursive' => 1,		//belongTo, hasOne, hasMany関係をもつ１階層上下を対象にする。
 			//'order' => array($model->alias . '.start_date'),
@@ -83,25 +85,26 @@ class ReservationSearchPlanBehavior extends ReservationAppBehavior {
 
 		//表示対象となるルームIDの一覧を取得し、IN条件を追加する.
 		//
-		$eventDotRoomId = $model->alias . '.room_id';
+		//$eventDotRoomId = $model->alias . '.room_id';
 
 		//施設予約用の役割・権限情報一式取得
-		if (!$model->Behaviors->hasMethod('prepareCalRoleAndPerm')) {
-			$model->Behaviors->load('Reservations.ReservationRoleAndPerm');
-		}
-		$calRoleAndPerm = $model->prepareCalRoleAndPerm();
+		//if (!$model->Behaviors->hasMethod('prepareCalRoleAndPerm')) {
+		//	$model->Behaviors->load('Reservations.ReservationRoleAndPerm');
+		//}
+		//$calRoleAndPerm = $model->prepareCalRoleAndPerm();
 
 		//専用の各参照配列に代入
-		$readableRoomIds = &$calRoleAndPerm['readableRoomIds'];
+		//$readableRoomIds = &$calRoleAndPerm['readableRoomIds'];
 		//$rooms = &$calRoleAndPerm['rooms'];
 		//$roleOfRooms = &$calRoleAndPerm['roleOfRooms'];
 		//$roomInfos = &$calRoleAndPerm['roomInfos'];
 
 		$options = $baseOptions;
-		$options['conditions'][$eventDotRoomId] = $readableRoomIds;
+		//$options['conditions'][$eventDotRoomId] = $readableRoomIds;
 
 		////$plans = $model->getWorkflowContents('all', $options);
 		$plans = $model->find('all', $options);
+		return $plans;
 		/*
 		CakeLog::debug("DBG: options[" . print_r($options, true) . "]\n");
 		foreach ($plans as $plan) {
@@ -124,14 +127,16 @@ class ReservationSearchPlanBehavior extends ReservationAppBehavior {
 		//スクリーニング方法をReservationEventのGetableEvnet()を使う方法に変えた HASHI
 		//FUJI$roomPermRoles = $model->prepareCalRoleAndPerm();
 		//FUJIReservationPermissiveRooms::$roomPermRoles = $roomPermRoles;
-		$plans = $model->screenPlansUsingGetable($plans);
+		//  FIND時に取得するデータを制限するので、スクリーニング不要
+		//$plans = $model->screenPlansUsingGetable($plans); //
 
-		$sharePlans = $this->_getSharePlans($model, $vars, $baseOptions);
+		//$sharePlans = $this->_getSharePlans($model, $vars, $baseOptions);
 		/////////////////////////////////////////
 		//通常予定と仲間の予定をマージする。
-		$mergedPlans = $this->__mergePlans($plans, $sharePlans, $order);
+		//$sharePlans = [];
+		//$mergedPlans = $this->__mergePlans($plans, $sharePlans, $order);
 
-		return $mergedPlans;
+		//return $mergedPlans;
 	}
 
 /**

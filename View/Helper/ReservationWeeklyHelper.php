@@ -33,7 +33,9 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 		'Reservations.ReservationDaily',
 		'Reservations.ReservationMonthly',
 		'Reservations.ReservationPlan',
+		'Reservations.ReservationWorkflow',
 		'NetCommons.TitleIcon',
+		'Users.DisplayUser',
 	);
 
 /**

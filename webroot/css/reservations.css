@@ -1108,3 +1108,12 @@ div.reservation-horizontal-timeframe{
 .reservation-radio-timeline .form-radio-outer > .radio:last-child {
 	margin-bottom: 4px;
 }
+/*閲覧できないルームの予約*/
+.reservation-plan-mark-not-readable-room{
+	/*background: #FF0000;*/
+	border-left-color: #ddd;
+}
+
+.reservation-plan-line.reservation-lineplan-not-readable-room{
+	background: #cccccc;
+}

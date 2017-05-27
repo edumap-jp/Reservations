@@ -84,22 +84,31 @@ class ReservationCommonHelper extends AppHelper {
 		// 共有された、にフラグが立っている
 		// 「週表示」などで予定ではなく表題を表示するときに呼ばれることがある
 		// そんなときにはplan=nullでルームIDだけ指定されてくることがあるので存在チェックが欠かせない
-		if (empty($vars['spaceNameOfRooms'][$roomId]) ||
-			$plan['ReservationEvent']['pseudo_friend_share_plan']) {
-			$html = $prefix . 'share';
-			return $html;
-		}
+		//if (empty($vars['spaceNameOfRooms'][$roomId]) ||
+		//	$plan['ReservationEvent']['pseudo_friend_share_plan']) {
+		//	$html = $prefix . 'share';
+		//	return $html;
+		//}
 		//public,group,member,privateに該当しなかったら「仲間の予定」となるよう、初期値を指定しておく。
-		$html = $prefix . 'share';
-		if (preg_match('/^(public|group|member|private)$/', $vars['spaceNameOfRooms'][$roomId]) === 1) {
-			$html = $prefix . $vars['spaceNameOfRooms'][$roomId];
-		}
-		if ($vars['spaceNameOfRooms'][$roomId] === 'private' && $plan !== null) {
-			if ($plan['ReservationEvent']['is_share']) {
-				//「共有した予定」なのでshareグリフを追加しておく。
-				$html .= ' glyphicon glyphicon-share';
+		//$html = $prefix . 'share';
+		if (isset($vars['spaceNameOfRooms'][$roomId])) {
+			if (preg_match(
+					'/^(public|group|member|private)$/',
+					$vars['spaceNameOfRooms'][$roomId]
+				) === 1
+			) {
+				$html = $prefix . $vars['spaceNameOfRooms'][$roomId];
 			}
+		} else {
+			// 予め取得してあるルーム情報に存在しないってことは閲覧権限のないルームに公開された予約。
+			$html = $prefix . 'not-readable-room';
 		}
+		//if ($vars['spaceNameOfRooms'][$roomId] === 'private' && $plan !== null) {
+		//	if ($plan['ReservationEvent']['is_share']) {
+		//		//「共有した予定」なのでshareグリフを追加しておく。
+		//		$html .= ' glyphicon glyphicon-share';
+		//	}
+		//}
 		return $html;
 	}
 

@@ -218,7 +218,7 @@ class ReservationsAppController extends AppController {
 		);
 
 		//if (isset($vars['sort'])) { //スケジュールでソートする場合
-		//	if ($vars['sort'] === 'member') { //メンバー順
+		//	if ($vars['sort'] === 'member') { //メンバー順se
 		//		//$order = array('TrackableCreator' . '.username');
 		//		$order = array('TrackableCreator' . '.handlename');
 		//	} else { //時間順

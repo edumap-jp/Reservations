@@ -416,9 +416,9 @@ class ReservationEvent extends ReservationsAppModel {
 			$event = array();
 			return array(); //add
 		}
-		if (! $this->_isGetableEvent($event)) {
-			return array();
-		}
+		//if (! $this->_isGetableEvent($event)) {
+		//	return array();
+		//}
 		return $event;
 	}
 
@@ -451,7 +451,7 @@ class ReservationEvent extends ReservationsAppModel {
 		}
 		// 新しいもの順にチェック
 		foreach ($events as $event) {
-			if ($this->_isGetableEvent($event)) {
+			//if ($this->_isGetableEvent($event)) {
 				// 発行済みデータかどうかチェックし、値を追加する
 				$conditions[$this->alias . '.is_active'] = true;
 				$options = array(
@@ -483,87 +483,88 @@ class ReservationEvent extends ReservationsAppModel {
 					}
 				}
 				return $event;
-			}
+			//}
 		}
 		// 該当のものが見つからなかったってこと
 		return array();
 	}
 
-/**
- * screenPlansUsingGetable($plans);
- *
- * 見てもよいイベント情報のみフィルターで通す
- *
- * @param array $plans plans
- * @return array フィルター済のplans配列
- */
-	public function screenPlansUsingGetable($plans) {
-		$screendPlans = array();
-		foreach ($plans as $event) {
-			if ($this->_isGetableEvent($event)) {
-				$screendPlans[] = $event;
-			}
-		}
-		return $screendPlans;
-	}
+	///**
+	// * screenPlansUsingGetable($plans);
+	// *
+	// * 見てもよいイベント情報のみフィルターで通す
+	// *
+	// * @param array $plans plans
+	// * @return array フィルター済のplans配列
+	// */
+	//	public function screenPlansUsingGetable($plans) {
+	//		$screendPlans = array();
+	//		foreach ($plans as $event) {
+	//			if ($this->_isGetableEvent($event)) {
+	//				$screendPlans[] = $event;
+	//			}
+	//		}
+	//		return $screendPlans;
+	//	}
 
-/**
- * _isGetableEvent
- *
- * 見てもよいイベント情報なのか判断する
- *
- * @param array &$event reservation event data
- * @return bool
- */
-	protected function _isGetableEvent(&$event) {
-		// eventの空間取り出す
-		$roomId = $event['ReservationEvent']['room_id'];
-		// 作成者取り出す
-		$userId = $event['ReservationEvent']['created_user'];
-		// eventの空間でcreatableでかつ作成者または編集者以上
-		if ((ReservationPermissiveRooms::isCreatable($roomId) && $userId == Current::read('User.id')) ||
-			ReservationPermissiveRooms::isEditable($roomId)) {
-			// is_latestのものを返す
-			if ($event['ReservationEvent']['is_latest']) {
-				// 共有予定フラグを立てておく
-				$this->_setSharedFlag($event);
-				return true;
-			}
-		} else {
-			// 上記以外
-			// is_activeのものを返す
-			if ($event['ReservationEvent']['is_active']) {
-				// 共有予定フラグを立てておく
-				$this->_setSharedFlag($event);
-				return true;
-			}
-		}
-		return false;
-	}
+	///**
+	// * _isGetableEvent
+	// *
+	// * 見てもよいイベント情報なのか判断する
+	// *
+	// * @param array &$event reservation event data
+	// * @return bool
+	// */
+	//	protected function _isGetableEvent(&$event) {
+	//		// eventの空間取り出す
+	//		$roomId = $event['ReservationEvent']['room_id'];
+	//		// 作成者取り出す
+	//		$userId = $event['ReservationEvent']['created_user'];
+	//		// eventの空間でcreatableでかつ作成者または編集者以上
+	//		if ((ReservationPermissiveRooms::isCreatable($roomId) && $userId == Current::read('User.id')) ||
+	//			ReservationPermissiveRooms::isEditable($roomId)) {
+	//			// is_latestのものを返す
+	//			if ($event['ReservationEvent']['is_latest']) {
+	//				// 共有予定フラグを立てておく
+	//				$this->_setSharedFlag($event);
+	//				return true;
+	//			}
+	//		} else {
+	//			// 上記以外
+	//			// is_activeのものを返す
+	//			if ($event['ReservationEvent']['is_active']) {
+	//				// 共有予定フラグを立てておく
+	//				$this->_setSharedFlag($event);
+	//				return true;
+	//			}
+	//		}
+	//		return false;
+	//	}
 
-/**
- * _setSharedFlag
- *
- * 共有した、共有された予定である場合は、フラグを設定しておく
- *
- * @param array &$event イベント情報
- * @return void
- */
-	protected function _setSharedFlag(&$event) {
-		$event[$this->alias]['pseudo_friend_share_plan'] = false; // 共有された
-		$event[$this->alias]['is_share'] = false; // 共有した
-		$userId = Current::read('User.id');
-		if (! empty($userId)) {
-			$share = Hash::extract($event, 'ReservationEventShareUser.{n}[share_user=' . $userId . ']');
-			if (! empty($share)) {
-				$event[$this->alias]['pseudo_friend_share_plan'] = true;
-			} else {
-				if (! empty($event['ReservationEventShareUser'])) {
-					$event[$this->alias]['is_share'] = true;
-				}
-			}
-		}
-	}
+	///**
+	// * _setSharedFlag
+	// *
+	// * 共有した、共有された予定である場合は、フラグを設定しておく
+	// *
+	// * @param array &$event イベント情報
+	// * @return void
+	// */
+	//	protected function _setSharedFlag(&$event) {
+	//		$event[$this->alias]['pseudo_friend_share_plan'] = false; // 共有された
+	//		$event[$this->alias]['is_share'] = false; // 共有した
+	//		$userId = Current::read('User.id');
+	//		if (! empty($userId)) {
+	//			$share = Hash::extract($event, 'ReservationEventShareUser.{n}[share_user=' . $userId . ']');
+	//			if (! empty($share)) {
+	//				$event[$this->alias]['pseudo_friend_share_plan'] = true;
+	//			} else {
+	//				if (! empty($event['ReservationEventShareUser'])) {
+	//					$event[$this->alias]['is_share'] = true;
+	//				}
+	//			}
+	//		}
+	//	}
+
 /**
  * prepareActiveForUpd
  *

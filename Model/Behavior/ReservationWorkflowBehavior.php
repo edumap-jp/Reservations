@@ -36,39 +36,18 @@ class ReservationWorkflowBehavior extends WorkflowBehavior {
  * @return array Conditions data
  */
 	public function getWorkflowConditions(Model $model, $conditions = array()) {
-		$this->log(var_export(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5), true), 'debug');
-
-		// ε(　　　　 v ﾟωﾟ)　＜ 施設予約にあわせて変更する
-		if (Current::permission('content_editable')) {
-			$activeConditions = array();
-			$latestConditons = array(
-				$model->alias . '.is_latest' => true,
-			);
-		} elseif (Current::permission('content_creatable')) {
-			$activeConditions = array(
-				$model->alias . '.is_active' => true,
-				$model->alias . '.created_user !=' => Current::read('User.id'),
-			);
-			// 時限公開条件追加
-			if ($model->hasField('public_type')) {
-				$publicTypeConditions = $this->_getPublicTypeConditions($model);
-				$activeConditions[] = $publicTypeConditions;
-			}
-			$latestConditons = array(
-				$model->alias . '.is_latest' => true,
-				$model->alias . '.created_user' => Current::read('User.id'),
-			);
-		} else {
-			// 時限公開条件追加
-			$activeConditions = array(
-				$model->alias . '.is_active' => true,
-			);
-			if ($model->hasField('public_type')) {
-				$publicTypeConditions = $this->_getPublicTypeConditions($model);
-				$activeConditions[] = $publicTypeConditions;
-			}
-			$latestConditons = array();
-		}
+		// is_active = 1は常に表示
+		$activeConditions = [
+			$model->alias . '.is_active' => true,
+		];
+		// latestは自分の予約か公開待ち
+		$latestConditons = [
+			$model->alias . '.is_latest' => true,
+			'OR' => [
+				$model->alias . '.status' => WorkflowComponent::STATUS_APPROVAL_WAITING,
+				$model->alias . '.created_user' => Current::read('User.id')
+			]
+		];
 
 		if ($model->hasField('language_id')) {
 			if (Current::read('Plugin.is_m17n') === false && $model->hasField('is_origin')) {
@@ -91,13 +70,14 @@ class ReservationWorkflowBehavior extends WorkflowBehavior {
 			$langConditions = array();
 		}
 
-		$conditions = Hash::merge(
-			array(
-				$langConditions,
-				array('OR' => array($activeConditions, $latestConditons))
-			),
+		$conditions = [
+			$langConditions,
+			'OR' => [
+				$activeConditions,
+				$latestConditons
+			],
 			$conditions
-		);
+		];
 
 		return $conditions;
 	}

@@ -28,6 +28,7 @@ class ReservationDailyHelper extends ReservationMonthlyHelper {
 		'Form',
 		'Reservations.ReservationCommon',
 		'Reservations.ReservationUrl',
+		'Reservations.ReservationWorkflow',
 	);
 
 /**
