@@ -243,9 +243,14 @@ echo $this->element('Reservations.scripts');
 						<?php
 						echo $this->NetCommonsForm->input('ReservationActionPlan.csv_file', [
 							'label' => __d('reservations', 'Please designate CSV file for import.'),
-							'type' => 'file'
+							'type' => 'file',
+							'error' => false,
 							]);
 						?>
+						<?php echo $this->NetCommonsForm->error('ReservationActionPlan.csv_file',
+							null,
+							['escape' => false]
+							); ?>
 
 					</div>
 

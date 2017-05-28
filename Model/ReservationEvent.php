@@ -680,4 +680,27 @@ class ReservationEvent extends ReservationsAppModel {
 			)
 		);
 	}
+
+/**
+ * 指定されたルームの予約を一括削除
+ *
+ * @param int $roomId roomId
+ * @return bool
+ */
+	public function deleteEventByRoomId($roomId) {
+		$conditions = $this->getWorkflowConditions(['ReservationEvent.room_id' => $roomId]);
+		$deleteEvent = $this->find('all', [
+			'conditions' => $conditions,
+			'fields' => ['ReservationEvent.key']
+		]);
+		$keys = Hash::combine($deleteEvent, '{n}.ReservationEvent.key', '{n}.ReservationEvent.key');
+		$deleteConditions = [
+			'ReservationEvent.key' => $keys,
+		];
+		if ($this->deleteAll($deleteConditions)) {
+			return true;
+		}
+		return false;
+	}
+
 }

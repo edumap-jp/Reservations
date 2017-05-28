@@ -55,6 +55,7 @@ class ReservationImportController extends ReservationsAppController {
 		'Reservations.ReservationImport',
 		'Reservations.ReservationActionPlan',
 		'Reservations.ReservationCsvRecord',
+		'Reservations.ReservationEvent',
 		//'Workflow.WorkflowComment',
 	);
 
@@ -210,7 +211,22 @@ class ReservationImportController extends ReservationsAppController {
 		$path = $this->request->data['ReservationActionPlan']['csv_file']['tmp_name'];
 		$csvFile = new CsvFileReader($path);
 
+		// ここから登録開始
 		$this->ReservationActionPlan->begin();
+
+		if ($this->request->data['ReservationActionPlan']['delete_room_events']) {
+			// 公開先の全予約を削除してからインポート
+			$roomId = $this->request->data['ReservationActionPlan']['plan_room_id'];
+			if (!$this->ReservationEvent->deleteEventByRoomId($roomId)) {
+				$this->ReservationActionPlan->validationErrors['delete_room_events'] =
+					__d('reservations', 'Delete failed.');
+				$this->NetCommons->handleValidationError(
+					$this->ReservationActionPlan->validationErrors,
+					__d('reservations', 'Delete failed.')
+				);
+				return;
+			}
+		}
 		$errors = [];
 		$result = true;
 		foreach ($csvFile as $index => $item) {
@@ -230,12 +246,14 @@ class ReservationImportController extends ReservationsAppController {
 					//$this->ReservationActionPlan->validationErrors['csv_file'][] =
 					//	__d('reservations', '%d行目:%s', $index, $errorMessage);
 					$errors['csv_file'][] =
-						__d('reservations', '%d行目:%s', $index, $errorMessage);
+						__d('reservations', 'Line %d : %s', $index, $errorMessage);
 				}
 				$result = false;
 				continue; // 次の行へ
 
 			}
+
+			$this->ReservationActionPlan->create();
 
 			$this->request->data['ReservationActionPlan']['timezone_offset'] =
 				Current::read('User.timezone');
@@ -253,6 +271,18 @@ class ReservationImportController extends ReservationsAppController {
 				$this->ReservationCsvRecord->convertActionPlanData($csvRecord)
 			);
 
+			if ($this->request->data['ReservationActionPlan']['skip_duplicate_events']) {
+				// 同じ予約を無視する設定なら→同じ予約があるか探す
+				// 同じタイトル、日時の予約があったら、このCSVデータは保存しないでスキップ
+				if ($this->_existDuplicateEvent($this->request->data)) {
+					//$errorMessage = __d('reservations', '件名と予約日時が一致する予約がありました')
+					//$errors['csv_file'][] =
+					//	__d('reservations', '%d行目:%s', $index, $errorMessage);
+					// 特にメッセージいらないかな?
+					continue;
+				}
+			}
+
 			$this->ReservationActionPlan->set($this->request->data);
 
 			//校正用配列の準備
@@ -267,10 +297,10 @@ class ReservationImportController extends ReservationsAppController {
 						// location_key, room_id以外のバリデーションエラーはCSVレコード単位のエラー
 						$errorMessage = implode('', $err);
 						$errors['csv_file'][] =
-							__d('reservations', '%d行目:%s', $index, $errorMessage);
+							__d('reservations', 'Line %d : %s', $index, $errorMessage);
 					}
 				}
-
+				$result = false;
 				//$this->NetCommons->handleValidationError($this->ReservationActionPlan->validationErrors);
 				continue;
 			}
@@ -280,7 +310,8 @@ class ReservationImportController extends ReservationsAppController {
 				$this->_myself);
 			if (!$eventId) {
 				$errors['csv_file'][] =
-					__d('reservations', '%d行目:%s', $index, __d('reservations', '登録できませんでした。'));
+					__d('reservations', 'Line %d : %s', $index,
+						__d('reservations', 'Registration failed.'));
 				$result = false;
 			}
 
@@ -298,6 +329,30 @@ class ReservationImportController extends ReservationsAppController {
 
 		$url = NetCommonsUrl::backToPageUrl();
 		$this->redirect($url);
+	}
+
+/**
+ * 件名、予約日時、施設が同じ予約が存在するか?
+ * CSVインポートで「件名と予約日時が一致するデータは無視する」のときに利用。
+ *
+ * @param array $data ReservationActionPlan
+ * @return bool
+ */
+	protected function _existDuplicateEvent($data) {
+		$ncTime = new NetCommonsTime();
+		$start = $ncTime->toServerDatetime($data['ReservationActionPlan']['detail_start_datetime']);
+		$start = date('YmdHis', strtotime($start));
+		$end = $ncTime->toServerDatetime($data['ReservationActionPlan']['detail_end_datetime']);
+		$end = date('YmdHis', strtotime($end));
+		$conditions = [
+			'ReservationEvent.title' => $data['ReservationActionPlan']['title'],
+			'ReservationEvent.dtstart' => $start,
+			'ReservationEvent.dtend' => $end,
+			'ReservationEvent.location_key' => $data['ReservationActionPlan']['location_key'],
+		];
+		$conditions = $this->ReservationEvent->getWorkflowConditions($conditions);
+		$count = $this->ReservationEvent->find('count', ['conditions' => $conditions]);
+		return ($count > 0);
 	}
 
 /**

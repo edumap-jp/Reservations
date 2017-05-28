@@ -1352,3 +1352,9 @@ msgstr "インポートファイルを指定してください"
 
 msgid "Please select csv file."
 msgstr "CSVファイルを選択してください。"
+
+msgid "Line %d : %s"
+msgstr "%d行目 : %s"
+
+msgid "Registration failed."
+msgstr "登録できませんでした。"
