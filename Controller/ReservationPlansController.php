@@ -46,7 +46,7 @@ class ReservationPlansController extends ReservationsAppController {
 	public $roomPermRoles = array();
 
 /**
- * calenar information
+ * reservation information
  *
  * @var array
  */
@@ -618,24 +618,6 @@ class ReservationPlansController extends ReservationsAppController {
 		//eメール通知の選択options配列を取得
 		$this->_emailOptions = $this->ReservationActionPlan->getNoticeEmailOption();
 		return $vars;
-	}
-
-/**
- * getMailSettingInfo
- *
- * メール設定情報の取得
- *
- * @return array メール設定情報の配列
- */
-	public function getMailSettingInfo() {
-		$mailSettingInfo = $this->MailSetting->find('first', array(
-			'conditions' => array(
-				$this->MailSetting->alias . '.plugin_key' => 'reservations',
-				$this->MailSetting->alias . '.block_key' => Current::read('Block.key'),
-			),
-			'recursive' => 1,	//belongTo, hasOne, hasMany まで求める
-		));
-		return $mailSettingInfo;
 	}
 
 /**

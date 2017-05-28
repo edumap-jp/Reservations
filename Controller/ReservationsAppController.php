@@ -46,6 +46,7 @@ class ReservationsAppController extends AppController {
 		'Reservations.ReservationEventSelectRoom',
 		'Rooms.Room',
 		'Rooms.RoomsLanguages', //pending
+		'Mails.MailSetting',
 	);
 
 /**
@@ -330,6 +331,24 @@ class ReservationsAppController extends AppController {
 			CakeSession::read('Config.userAgent') . 'reservations.' . $frameId, $currentPath
 		);
 		$vars['returnUrl'] = $currentPath;
+	}
+
+/**
+ * getMailSettingInfo
+ *
+ * メール設定情報の取得
+ *
+ * @return array メール設定情報の配列
+ */
+	public function getMailSettingInfo() {
+		$mailSettingInfo = $this->MailSetting->find('first', array(
+			'conditions' => array(
+				$this->MailSetting->alias . '.plugin_key' => 'reservations',
+				$this->MailSetting->alias . '.block_key' => Current::read('Block.key'),
+			),
+			'recursive' => 1,	//belongTo, hasOne, hasMany まで求める
+		));
+		return $mailSettingInfo;
 	}
 
 }

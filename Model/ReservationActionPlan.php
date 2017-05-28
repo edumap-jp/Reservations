@@ -973,6 +973,69 @@ class ReservationActionPlan extends ReservationsAppModel {
 	}
 
 /**
+ * saveReservationPlan
+ *
+ * 予定データ登録
+ *
+ * @param array $data POSTされたデータ
+ * @param bool $isMyPrivateRoom isMyPrivateRoom
+ * @return bool 成功時true, 失敗時false
+ * @throws InternalErrorException
+ */
+	public function saveImportRecord($data, $isMyPrivateRoom) {
+		$eventId = 0;
+		//$this->aditionalData = $data['WorkflowComment'];
+
+		try {
+			//備忘）
+			//選択したTZを考慮したUTCへの変換は、この
+			//convertToPlanParamFormat()の中でcallしている、
+			//_setAndMergeDateTime()がさらにcallしている、
+			//_setAndMergeDateTimeDetail()で行っています。
+			//
+			$planParam = $this->convertToPlanParamFormat($data);
+
+			//CakeLog::debug("DBG: request_data[" . print_r($data, true) . "]");
+
+			//call元の_reservationPost()の最初でgetStatus($data)の結果が
+			//$data['ReservationActionPlan']['status']に代入されているので
+			//ここは、その値を引っ張ってくるだけに直す。
+			////$status = $this->getStatus($data);
+			$status = $data['ReservationActionPlan']['status'];
+
+			$eventId = $this->insertPlan($planParam, $isMyPrivateRoom);
+
+			if ($this->isOverMaxRruleIndex) {
+				CakeLog::info("save(ReservationPlanの内部で施設予約のrruleIndex回数超過が" .
+					"発生している。強制rollbackし、画面にINDEXオーバーであることを" .
+					"出す流れに乗せ、例外は投げないようにする。");
+				$this->rollback();
+				return false;
+			}
+
+			// メールやらなんやらが動作する前にはブロックをちゃんと用意しておかねばならない
+			$this->Reservation->prepareBlock(
+				$data['ReservationActionPlan']['plan_room_id'],
+				Current::read('Language.id'),
+				'reservations');
+
+			// 承認メール、公開通知メールの送信
+			$this->sendWorkflowAndNoticeMail($eventId, $isMyPrivateRoom);
+
+			$this->saveReservationTopics($eventId);
+
+			$this->_enqueueEmail($data);
+
+			//$this->commit();
+
+		} catch (Exception $ex) {
+
+			return false;
+		}
+		return $eventId;
+	}
+
+/**
  * convertToPlanParamFormat
  *
  * 予定データ登録

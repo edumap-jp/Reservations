@@ -8,6 +8,8 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+
+App::uses('ReservationSupport', 'Reservations.Utility');
 ?>
 <?php /* 予定の繰り返しチェックボックス */ ?>
 <div class="form-group" data-reservation-name="checkRrule">

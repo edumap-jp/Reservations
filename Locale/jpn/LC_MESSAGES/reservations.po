@@ -1340,3 +1340,15 @@ msgstr "メールで通知する"
 
 msgid "-- search for institutions --"
 msgstr "--施設の絞り込み--"
+
+msgid "Delete all reservation items and import."
+msgstr "公開対象の全予約を削除してインポートする"
+
+msgid "The duplicate subject name and reservation time are disregarded."
+msgstr "件名と予約日時が一致するデータは無視する"
+
+msgid "Please designate CSV file for import."
+msgstr "インポートファイルを指定してください"
+
+msgid "Please select csv file."
+msgstr "CSVファイルを選択してください。"

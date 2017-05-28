@@ -259,16 +259,17 @@ class ReservationSupport {
 		$wdayIndex = intval($date->format('w'));	//0-6
 		$wdays = explode('|', ReservationsComponent::CALENDAR_REPEAT_WDAY);
 
-		$rooms = array_keys($exposeRoomOptions);
-		if (in_array(Current::read('Room.id'), $rooms)) {
-			//公開対象ルーム一覧にCurrentのRoom.idが存在する
-			$planRoomId = Current::read('Room.id');
-		} else {
-			//公開対象ルーム一覧にCurrentのRoom.idが存在しない時は、親
-			//のペアレント(パブリック、プライベート）の仮想room_idを
-			//セットする。
-			$planRoomId = Current::read('Room.parent_id');
-		}
+		$planRoomId = Current::read('Room.id');
+		//$rooms = array_keys($exposeRoomOptions);
+		//if (in_array(Current::read('Room.id'), $rooms)) {
+		//	//公開対象ルーム一覧にCurrentのRoom.idが存在する
+		//	$planRoomId = Current::read('Room.id');
+		//} else {
+		//	//公開対象ルーム一覧にCurrentのRoom.idが存在しない時は、親
+		//	//のペアレント(パブリック、プライベート）の仮想room_idを
+		//	//セットする。
+		//	$planRoomId = Current::read('Room.parent_id');
+		//}
 
 		$initialCapForView = array(
 			'GroupsUser' => array(),	//共有なし
