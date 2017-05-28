@@ -51,7 +51,8 @@ class ReservationCsvRecord extends AppModel {
 			'is_allday' => array(
 				'rule1' => array(
 					'rule' => array('inList', [0, 1, null]),
-					'message' => __d('reservations', '「利用時間の制限なし」は0, 1またはnullにしてください。'),
+					'message' => __d('reservations',
+						'「利用時間の制限なし」は0, 1またはnullにしてください。'),
 				),
 
 			),
@@ -133,8 +134,10 @@ class ReservationCsvRecord extends AppModel {
 	public function convertActionPlanData($csvRecord) {
 		$data = [];
 		$data['title'] = $csvRecord['title'];
-		$startDatetime = $this->_getDatetiemFromCsvData($csvRecord['start_date'], $csvRecord['start_time']);
-		$endDatetime = $this->_getDatetiemFromCsvData($csvRecord['start_date'], $csvRecord['end_time']);
+		$startDatetime =
+			$this->_getDatetiemFromCsvData($csvRecord['start_date'], $csvRecord['start_time']);
+		$endDatetime =
+			$this->_getDatetiemFromCsvData($csvRecord['start_date'], $csvRecord['end_time']);
 		if ($startDatetime >= $endDatetime) {
 			// 開始、終了が逆点してるときは、終点がホントは24時間後
 			$endDatetime = date('Y-m-d H:i',

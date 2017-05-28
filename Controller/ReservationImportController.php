@@ -207,7 +207,8 @@ class ReservationImportController extends ReservationsAppController {
 			$this->NetCommons->handleValidationError($this->ReservationActionPlan->validationErrors);
 			return;
 		}
-		$csvFile = new CsvFileReader($this->request->data['ReservationActionPlan']['csv_file']['tmp_name']);
+		$path = $this->request->data['ReservationActionPlan']['csv_file']['tmp_name'];
+		$csvFile = new CsvFileReader($path);
 
 		$this->ReservationActionPlan->begin();
 		$errors = [];
@@ -236,7 +237,8 @@ class ReservationImportController extends ReservationsAppController {
 
 			}
 
-			$this->request->data['ReservationActionPlan']['timezone_offset'] = Current::read('User.timezone');
+			$this->request->data['ReservationActionPlan']['timezone_offset'] =
+				Current::read('User.timezone');
 			$this->request->data['ReservationActionPlan']['enable_time'] = 1;
 			$this->request->data['ReservationActionPlan']['is_detail'] = 1;
 			$this->request->data['ReservationActionPlan']['is_repeat'] = 0;
