@@ -351,7 +351,7 @@ class Reservation extends ReservationsAppModel {
 		}
 
 		// ない場合は作成する
-		if (! $this->_saveReservation()) {
+		if (! $this->_saveReservation($block)) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
