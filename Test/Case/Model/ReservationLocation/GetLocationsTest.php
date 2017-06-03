@@ -38,6 +38,9 @@ class ReservationLocationGetLocationsTest extends ReservationsGetTest {
 		'plugin.reservations.reservation_rrule',
 		'plugin.reservations.reservation_timeframe',
 		'plugin.workflow.workflow_comment',
+		'plugin.categories.category',
+		'plugin.categories.categories_language',
+		'plugin.categories.category_order',
 	);
 
 /**
