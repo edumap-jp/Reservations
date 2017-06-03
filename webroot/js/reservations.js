@@ -714,9 +714,9 @@ NetCommonsApp.controller('ReservationsDetailEdit',
        // }
 
        $scope.initialize = function(data) {
-         console.log(data);
+         // console.log(data);
          $scope.data = angular.fromJson(data);
-         console.log($scope.data);
+         // console.log($scope.data);
          // console.log($scope.data);
          $scope.locationOptions = $scope.data.locations;
          // console.log($scope.locationOptions);

@@ -35,6 +35,7 @@
     "require": {
         "cakedc/migrations":            "~2.2",
         "netcommons/blocks":            "@dev",
+        "netcommons/categories":        "@dev",
         "netcommons/frames":            "@dev",
         "netcommons/groups":            "@dev",
         "netcommons/holidays":          "@dev",

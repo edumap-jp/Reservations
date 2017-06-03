@@ -452,13 +452,13 @@ class ReservationLocation extends ReservationsAppModel {
 		// ルーム情報、承認者情報を locationにまぜこむ
 		$condition = $this->Room->getReadableRoomsConditions([], $userId);
 		$roomBase = $this->Room->find('all', $condition);
-		foreach ($locations as &$location) {
+		foreach ($locations as $key => $location) {
 			$thisLocationRooms =
 				$this->ReservationLocationsRoom->getReservableRoomsByLocation($location, $roomBase);
 
-			$location['ReservableRoom'] = $thisLocationRooms;
+			$locations[$key]['ReservableRoom'] = $thisLocationRooms;
 			// 承認ユーザ取得
-			$location['approvalUserIds'] =
+			$locations[$key]['approvalUserIds'] =
 				$this->ReservationLocationsApprovalUser->getApprovalUserIdsByLocation($location);
 		}
 		// プライベートルームを除外したルームIDで予約可能かチェック
