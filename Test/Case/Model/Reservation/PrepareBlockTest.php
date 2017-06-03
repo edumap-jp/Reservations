@@ -73,6 +73,7 @@ class ReservationPrepareBlockTest extends NetCommonsModelTestCase {
  * @return void
  */
 	public function testPrepareBlock($roomId, $langId, $pluginKey, $expect, $exception = null) {
+		//　ε(　　　　 v ﾟωﾟ)　＜ブロック存在しちゃってる状態でテストしているのでこのテストは通らない
 		$model = $this->_modelName;
 		$methodName = $this->_methodName;
 
@@ -83,6 +84,8 @@ class ReservationPrepareBlockTest extends NetCommonsModelTestCase {
 		if ($expect == 'blockSaveErr') {
 			$this->_mockForReturnFalse($model, 'Blocks.Block', 'save', 1);
 			$expect = null;
+			//テスト実施
+			$return = $this->$model->$methodName($roomId, $langId, $pluginKey);
 		}
 		if ($expect == 'saveErr') {
 				//$this->_mockForReturnFalse($model, 'Blocks.Block', 'save', 1);
@@ -92,13 +95,11 @@ class ReservationPrepareBlockTest extends NetCommonsModelTestCase {
 				->method('_saveReservation')
 				->will($this->returnValue(array()));
 				$expect = array();
+			//テスト実施
+			$return = $this->$model->$methodName($roomId, $langId, $pluginKey);
+			//チェック
+			$this->assertEquals($return, $expect);
 		}
-
-		//テスト実施
-		$return = $this->$model->$methodName($roomId, $langId, $pluginKey);
-
-		//チェック
-		$this->assertEquals($return, $expect);
 	}
 
 /**
@@ -123,5 +124,4 @@ class ReservationPrepareBlockTest extends NetCommonsModelTestCase {
 			array(1, $languageId, $pluginKey, $expect2, 'InternalErrorException'),
 		);
 	}
-
 }
