@@ -42,6 +42,7 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
 		'plugin.categories.category',
 		'plugin.categories.categories_language',
 		'plugin.categories.category_order',
+		'plugin.user_roles.user_role_setting',
 	);
 
 /**
