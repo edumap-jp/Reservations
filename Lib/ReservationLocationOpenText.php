@@ -69,7 +69,8 @@ class ReservationLocationOpenText {
 			$reservationLocation['ReservationLocation']['start_time'],
 			$reservationLocation['ReservationLocation']['end_time']
 		);
-		if (AuthComponent::user('timezone') != $reservationLocation['ReservationLocation']['timezone']) {
+		if (Current::read('User.timezone') !=
+			$reservationLocation['ReservationLocation']['timezone']) {
 			$SiteSetting = new SiteSetting();
 			$SiteSetting->prepare();
 			$ret .= ' ';
