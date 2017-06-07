@@ -310,6 +310,18 @@ echo $this->element('Reservations.scripts');
 			<?php /* メール通知設定 */ ?>
 			<?php echo $this->element('Reservations.ReservationPlans/detail_edit_mail'); ?>
 
+			<?php // カレンダに記入 ?>
+			<div class="col-xs-12 col-sm-12">
+				<?php
+				echo $this->NetCommonsForm->inlineCheckbox('ReservationActionPlan.use_calendar',
+					['label' =>
+					__d(
+						'reservations',
+						'Register to Calendar?'
+					)]);
+				?>
+			</div>
+
 			<br />
 
 			<?php /* その他詳細設定 */ ?>
