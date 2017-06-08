@@ -123,24 +123,32 @@ class ReservationValidateBehavior extends ModelBehavior {
 	}
 
 /**
- * Checks  timezone offset
+ * Checks  timezone
  *
  * @param object $model use model
- * @param array $check 入力配列. timezone_offset（-12.0 - +12.0）の数値
+ * @param array $check 入力配列. timezone ID
  * @return bool
  */
-	public function checkTimezoneOffset($model, $check) {
+	public function checkTimezone($model, $check) {
 		$value = array_values($check);
 		$value = $value[0];
 
-		if (!is_numeric($value)) {
-			return false;
+		$SiteSetting = new SiteSetting();
+		$SiteSetting->prepare();
+
+		if (isset($SiteSetting->defaultTimezones[$value])) {
+			return true;
 		}
-		$fval = floatval($value);
-		if ($fval < -12.0 || 12.0 < $fval) {
-			return false;
-		}
-		return true;
+		return false;
+		//
+		//if (!is_numeric($value)) {
+		//	return false;
+		//}
+		//$fval = floatval($value);
+		//if ($fval < -12.0 || 12.0 < $fval) {
+		//	return false;
+		//}
+		//return true;
 	}
 
 /**

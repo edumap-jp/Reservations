@@ -32,7 +32,7 @@ class ReservationEventValidateTest extends NetCommonsValidateTest {
 		'plugin.reservations.reservation_event_content',
 		'plugin.reservations.reservation_event_share_user',
 		'plugin.reservations.reservation_frame_setting',
-		'plugin.reservations.reservation_frame_setting_select_room',
+
 		'plugin.reservations.reservation_rrule',
 		'plugin.workflow.workflow_comment',
 		'plugin.rooms.rooms_language4test',
@@ -100,9 +100,9 @@ class ReservationEventValidateTest extends NetCommonsValidateTest {
 				'message' => __d('reservations', 'Out of range value.')),
 			array('data' => $data, 'field' => 'end_time', 'value' => 'a',
 				'message' => __d('reservations', 'Invalid value.')),
-			array('data' => $data, 'field' => 'timezone_offset', 'value' => 'a',
+			array('data' => $data, 'field' => 'timezone', 'value' => 'a',
 				'message' => __d('reservations', 'Invalid value.')),
-			array('data' => $data, 'field' => 'timezone_offset', 'value' => '-13', //範囲外
+			array('data' => $data, 'field' => 'timezone', 'value' => '-13', //範囲外
 				'message' => __d('reservations', 'Invalid value.')),
 			array('data' => $data, 'field' => 'recurrence_event_id', 'value' => 'a',
 				'message' => __d('net_commons', 'Invalid request.')),

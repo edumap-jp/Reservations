@@ -10,12 +10,12 @@
  */
 ?>
 <?php
-	$tzTbl = ReservationsComponent::getTzTbl();
-	$options = Hash::combine($tzTbl, '{s}.2', '{s}.0');
-	echo $this->NetCommonsForm->label('ReservationActionPlan.timezone_offset' . Inflector::camelize('timezone'), __d('reservations', 'Time zone'));
-	echo $this->NetCommonsForm->select('ReservationActionPlan.timezone_offset', $options, array(
-		'value' => Current::read('User.timezone'),	//valueは初期値
-		'class' => 'form-control',
-		'empty' => false,
-		'required' => true,
-	));
+	//$tzTbl = ReservationsComponent::getTzTbl();
+	//$options = Hash::combine($tzTbl, '{s}.2', '{s}.0');
+	//echo $this->NetCommonsForm->label('ReservationActionPlan.timezone' . Inflector::camelize('timezone'), __d('reservations', 'Time zone'));
+	//echo $this->NetCommonsForm->select('ReservationActionPlan.timezone', $options, array(
+	//	'value' => Current::read('User.timezone'),	//valueは初期値
+	//	'class' => 'form-control',
+	//	'empty' => false,
+	//	'required' => true,
+	//));

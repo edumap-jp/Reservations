@@ -285,7 +285,7 @@ class ReservationSupport {
 				'detail_end_datetime' =>
 					substr($toYmdHiOfLastHour, 0, 10) . ' ' . substr($toYmdHiOfLastHour, 11),
 				'plan_room_id' => $planRoomId,
-				'timezone_offset' => (new NetCommonsTime())->getUserTimezone(),
+				'timezone' => (new NetCommonsTime())->getUserTimezone(),
 				//'timezone' => (new NetCommonsTime())->getUserTimezone(),
 				'is_detail' => 0,
 				'location' => '',
@@ -375,17 +375,17 @@ class ReservationSupport {
  * @param double $tzOffsetVal timezoneのoffset値(-12.0 - 12.0)
  * @return string timezoneId
  */
-	public function convTzOffset2TzId($tzOffsetVal) {
-		$tzId = (new NetCommonsTime())->getUserTimezone(); //初期値
-		$tzTbl = ReservationsComponent::getTzTbl();
-		foreach ($tzTbl as $tzInfo) {
-			if ($tzInfo[ReservationsComponent::CALENDAR_TIMEZONE_OFFSET_VAL] == $tzOffsetVal) {
-				$tzId = $tzInfo[ReservationsComponent::CALENDAR_TIMEZONE_ID];
-				break;
-			}
-		}
-		return $tzId;
-	}
+	//public function convTzOffset2TzId($tzOffsetVal) {
+	//	$tzId = (new NetCommonsTime())->getUserTimezone(); //初期値
+	//	$tzTbl = ReservationsComponent::getTzTbl();
+	//	foreach ($tzTbl as $tzInfo) {
+	//		if ($tzInfo[ReservationsComponent::CALENDAR_timezone_VAL] == $tzOffsetVal) {
+	//			$tzId = $tzInfo[ReservationsComponent::CALENDAR_TIMEZONE_ID];
+	//			break;
+	//		}
+	//	}
+	//	return $tzId;
+	//}
 
 /**
  * __makeCapForViewSubset
@@ -403,7 +403,9 @@ class ReservationSupport {
  */
 	private function __makeCapForViewSubset($event, $userStartDatetime, $userEndDatetime,
 		$isDetail, $wdays, $wdayIndex, $tmArray) {
-		$tzId = $this->convTzOffset2TzId($event['ReservationEvent']['timezone_offset']);
+		//$tzId = $this->convTzOffset2TzId($event['ReservationEvent']['timezone']);
+		//$tzId = Current::read(('User.timezone'));
+		$tzId = $event['ReservationEvent']['timezone'];
 		$capForView = array(
 			'ReservationActionPlan' => array(
 				'edit_rrule' => 0,	//tableにはない項目なのでinitと同じ値
@@ -418,7 +420,7 @@ class ReservationSupport {
 				//YYYY-MM-DD hh:mm
 				'detail_end_datetime' => substr($userEndDatetime, 0, 16),
 				'plan_room_id' => $event['ReservationEvent']['room_id'],
-				'timezone_offset' => $tzId,
+				'timezone' => $tzId,
 				'is_detail' => $isDetail,
 				'location' => $event['ReservationEvent']['location'],
 				'contact' => $event['ReservationEvent']['contact'],

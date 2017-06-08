@@ -83,6 +83,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 		*/
 		'Reservations.ReservationMail',
 		'Reservations.ReservationTopics',
+		// 'Reservations.RegistCalendar',
 	);
 	// @codingStandardsIgnoreStart
 	// $_schemaはcakePHP2の予約語だが、宣言するとphpcsが警告を出すので抑止する。
@@ -152,7 +153,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 			'type' => 'string', 'default' => ''),	//YYYY-MM-DD or YYYY-MM-DD hh:mm
 		'first_sib_cap_detail_end_datetime' => array(
 			'type' => 'string', 'default' => ''), //YYYY-MM-DD or YYYY-MM-DD hh:mm
-		'first_sib_cap_timezone_offset' => array('type' => 'string', 'default' => ''),
+		'first_sib_cap_timezone' => array('type' => 'string', 'default' => ''),
 		*/
 
 		//タイトル
@@ -189,7 +190,8 @@ class ReservationActionPlan extends ReservationsAppModel {
 		//<input type="hidden" value="3" name="data[GroupsUser][1][user_id]">
 
 		//タイムゾーン
-		'timezone_offset' => array('type' => 'string', 'default' => ''),
+		'timezone' => array('type' => 'string', 'default' => ''),
+		'timezone' => array('type' => 'string', 'default' => ''),
 
 		//詳細フラグ(1/0) (hidden. 画面表示時点で、detail(or easy)かはわかるので値を指定しておく。
 		'is_detail' => array('type' => 'integer', 'null' => false, 'default' => '0', 'unsigned' => false),
@@ -464,7 +466,8 @@ class ReservationActionPlan extends ReservationsAppModel {
 		$locationTimeZone = new DateTimeZone($location['ReservationLocation']['timezone']);
 
 		// 予約時間を施設のタイムゾーンの時間に変換
-		$planTimeZone = new DateTimeZone($this->data[$this->alias]['timezone_offset']);
+		// This timezone offset is id.
+		$planTimeZone = new DateTimeZone($this->data[$this->alias]['timezone']);
 		$startDateTime = new DateTime($startDateTime, $planTimeZone);
 		$startDateTime->setTimezone($locationTimeZone);
 		$startDateTime = $startDateTime->format('Y-m-d H:i:s');
@@ -553,7 +556,8 @@ class ReservationActionPlan extends ReservationsAppModel {
 	public function validteNotExistReservation($check) {
 		$startDateTime = $this->data[$this->alias]['detail_start_datetime'];
 		$endDateTime = $this->data[$this->alias]['detail_end_datetime'];
-		$inputTimeZone = $this->data[$this->alias]['timezone_offset'];
+		// This timezone offset is id.
+		$inputTimeZone = $this->data[$this->alias]['timezone'];
 		$locationKey = $this->data[$this->alias]['location_key'];
 
 		$rruleParameter = new ReservationRruleParameter();
@@ -715,7 +719,8 @@ class ReservationActionPlan extends ReservationsAppModel {
 			//		'message' => __d('reservations', 'Invalid input. (authority)'),
 			//	),
 			//),
-			'timezone_offset' => array(
+			// This timezone offset is id.
+			'timezone' => array(
 				'rule1' => array(
 					'rule' => array('allowedTimezoneOffset'),
 					'required' => false,
@@ -919,6 +924,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 
 				//$this->insertPlan($planParam);
 				$eventId = $this->insertPlan($planParam, $isMyPrivateRoom);
+				//$this->updateCalendar($planParam);
 			} else {	//PLAN_EDIT
 				//変更処理
 				//CakeLog::debug("DBG: PLAN_MODIFY case.");
@@ -1060,8 +1066,11 @@ class ReservationActionPlan extends ReservationsAppModel {
 			////$planParam['status'] = $this->getStatus($data);
 			$planParam['language_id'] = Current::read('Language.id');
 			$planParam['room_id'] = $data[$this->alias]['plan_room_id'];
-			$planParam['timezone_offset'] = $this->_getTimeZoneOffsetNum(
-				$data[$this->alias]['timezone_offset']);
+			//このtimezoneは数値(ここで変換されてる)
+			//$planParam['timezone'] = $this->_getTimeZoneOffsetNum(
+			//	$data[$this->alias]['timezone']);
+			$planParam['timezone'] = $data[$this->alias]['timezone'];
+			$planParam['timezone'] = $data[$this->alias]['timezone'];
 			$planParam = $this->_setAndMergeDateTime($planParam, $data);
 			$planParam = $this->_setAndMergeRrule($planParam, $data);
 
@@ -1120,27 +1129,6 @@ class ReservationActionPlan extends ReservationsAppModel {
  */
 	public function getStatus($data) {
 		return $this->_getStatus($data);
-	}
-
-/**
- * _getTimeZoneOffsetNum
- *
- * timezoneID文字列(ex.Asia/Tokyo)からタイムゾーン数値(ex.-12.0,- 12.0)に変換
- *
- * @param string $timezoneOffset タイムゾーンオフセット文字列
- * @return float 成功時 対応するタイムゾーンオフセット数値, 失敗時 例外をthrowする。
- * @throws InternalErrorException
- */
-	protected function _getTimeZoneOffsetNum($timezoneOffset) {
-		//$tzTblの形式 '_TZ_GMTP9' => array("(GMT+9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk", 9.0, "Asia/Tokyo"),
-		$tzTbl = ReservationsComponent::getTzTbl();
-		foreach ($tzTbl as $tzData) {
-			if ($tzData[2] === $timezoneOffset) {
-				return $tzData[1];
-			}
-		}
-		//マッチするものが無い場合例外throw
-		throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 	}
 
 /**
@@ -1276,22 +1264,23 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @return void
  */
 	private function __compareTz($cap, $originEvent, &$timeRepeatModCnt) {
-		$tzTbl = ReservationsComponent::getTzTbl();
-		$originTzId = '';
-		foreach ($tzTbl as $tzInfo) {
-			//dobule と stringで、型が違うので == で比較すること
-			if ($tzInfo[ReservationsComponent::CALENDAR_TIMEZONE_OFFSET_VAL] ==
-			$originEvent['ReservationEvent']['timezone_offset']) {
-				$originTzId = $tzInfo[ReservationsComponent::CALENDAR_TIMEZONE_ID];
-				break;
-			}
-		}
-		if ($originTzId != $cap['timezone_offset']) {
+		//$tzTbl = ReservationsComponent::getTzTbl();
+		//$originTzId = '';
+		//foreach ($tzTbl as $tzInfo) {
+		//	//dobule と stringで、型が違うので == で比較すること
+		//	if ($tzInfo[ReservationsComponent::CALENDAR_timezone_VAL] ==
+		//	$originEvent['ReservationEvent']['timezone']) {
+		//		$originTzId = $tzInfo[ReservationsComponent::CALENDAR_TIMEZONE_ID];
+		//		break;
+		//	}
+		//}
+		$originTzId = $originEvent['ReservationEvent']['timezone'];
+		if ($originTzId != $cap['timezone']) {
 			//選択したＴＺが変更されている。
 			//CakeLog::debug("DBG: 選択したＴＺが変更されている。");
 			++$timeRepeatModCnt;
 			//CakeLog::debug("DBG: TZに変更あり！ originTzId=[" . $originTzId .
-			//	"] VS cap[timezone_offset]=[" . $cap['timezone_offset'] . "]");
+			//	"] VS cap[timezone]=[" . $cap['timezone'] . "]");
 		}
 	}
 
@@ -1314,13 +1303,13 @@ class ReservationActionPlan extends ReservationsAppModel {
 			$nctm = new NetCommonsTime();
 
 			$serverStartDatetime = $nctm->toServerDatetime($cap['detail_start_datetime'] . ':00',
-				$cap['timezone_offset']);
+				$cap['timezone']);
 			$startDate = ReservationTime::stripDashColonAndSp(substr($serverStartDatetime, 0, 10));
 			$startTime = ReservationTime::stripDashColonAndSp(substr($serverStartDatetime, 11, 8));
 			$capDtstart = $startDate . $startTime;
 
 			$serverEndDatetime = $nctm->toServerDatetime(
-				$cap['detail_end_datetime'] . ':00', $cap['timezone_offset']);
+				$cap['detail_end_datetime'] . ':00', $cap['timezone']);
 			$endDate = ReservationTime::stripDashColonAndSp(substr($serverEndDatetime, 0, 10));
 			$endTime = ReservationTime::stripDashColonAndSp(substr($serverEndDatetime, 11, 8));
 			$capDtend = $endDate . $endTime;
@@ -1332,7 +1321,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 			$ymd = substr($cap['detail_start_datetime'], 0, 10);	//YYYY-MM-DD
 			list($serverStartDateZero, $serverNextDateZero) =
 				(new ReservationTime())->convUserDate2SvrFromToDateTime(
-					$ymd, $cap['timezone_offset']);
+					$ymd, $cap['timezone']);
 			$startDate = ReservationTime::stripDashColonAndSp(substr($serverStartDateZero, 0, 10));
 			$startTime = ReservationTime::stripDashColonAndSp(substr($serverStartDateZero, 11, 8));
 			$capDtstart = $startDate . $startTime;
@@ -1352,7 +1341,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 			CakeLog::debug("DBG: dtstar,dtendに変更あり！ POSTオリジナル enable_time[" .
 				$cap['enable_time'] . "] detail_start_datetime[" . $cap['detail_start_datetime'] .
 				"] detail_end_datetime[" . $cap['detail_end_datetime'] .
-				"] timezone_offset[" . $cap['timezone_offset'] . "]  => サーバ系 capDtstart[" .
+				"] timezone[" . $cap['timezone'] . "]  => サーバ系 capDtstart[" .
 				$capDtstart . "] capDtend[" . $capDtend . "] VS origin dtstart[" .
 				$originEvent['ReservationEvent']['dtstart'] . "] dtend[" .
 				$originEvent['ReservationEvent']['dtend'] . "]");
@@ -1416,4 +1405,3 @@ class ReservationActionPlan extends ReservationsAppModel {
 		return true;
 	}
 }
-

@@ -116,7 +116,7 @@ class ReservationsAppModel extends AppModel {
 			$nctm = new NetCommonsTime();
 
 			$serverStartDatetime = $nctm->toServerDatetime(
-			$data[$this->alias]['detail_start_datetime'] . ':00', $data[$this->alias]['timezone_offset']);
+			$data[$this->alias]['detail_start_datetime'] . ':00', $data[$this->alias]['timezone']);
 			$planParam['start_date'] =
 				ReservationTime::stripDashColonAndSp(substr($serverStartDatetime, 0, 10));
 			$planParam['start_time'] =
@@ -125,7 +125,7 @@ class ReservationsAppModel extends AppModel {
 
 			$serverEndDatetime =
 				$nctm->toServerDatetime($data[$this->alias]['detail_end_datetime'] . ':00',
-				$data[$this->alias]['timezone_offset']);
+				$data[$this->alias]['timezone']);
 			$planParam['end_date'] =
 				ReservationTime::stripDashColonAndSp(substr($serverEndDatetime, 0, 10));
 			$planParam['end_time'] = ReservationTime::stripDashColonAndSp(substr($serverEndDatetime, 11, 8));
@@ -138,7 +138,7 @@ class ReservationsAppModel extends AppModel {
 				(new ReservationTime())->convUserFromTo2SvrFromTo(
 					$data[$this->alias]['detail_start_datetime'],
 					$data[$this->alias]['detail_end_datetime'],
-					$data[$this->alias]['timezone_offset'],
+					$data[$this->alias]['timezone'],
 					$planParam['is_allday']);
 
 			$planParam['start_date'] = ReservationTime::stripDashColonAndSp(substr($serverStartDate, 0, 10));
@@ -264,7 +264,7 @@ class ReservationsAppModel extends AppModel {
 		//untilDateSの翌日00:00:00を作り出し、サーバー系に直す
 		$nctm = new NetCommonsTime();
 		$svrNxtDayOfUntilDtS =
-			$nctm->toServerDatetime($nextDayOfUntilDateS, $data[$this->alias]['timezone_offset']);
+			$nctm->toServerDatetime($nextDayOfUntilDateS, $data[$this->alias]['timezone']);
 		$ymdHis = ReservationTime::dt2CalDt($svrNxtDayOfUntilDtS);
 		$rrule['UNTIL'] = substr($ymdHis, 0, 8) . 'T' . substr($ymdHis, 8);
 	}

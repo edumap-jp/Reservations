@@ -102,7 +102,7 @@
 		'easy_hour_minute_to' => '',
 		'detail_start_datetime' => '',
 		'detail_end_datetime' => '',
-		'timezone_offset' => '',
+		'timezone' => '',
 	);
 	foreach ($sibFieldVals as $field => $val) {
 		$fieldName = 'firstSibCap' . Inflector::camelize($field);	//変数名組立

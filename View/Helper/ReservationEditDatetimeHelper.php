@@ -84,7 +84,7 @@ class ReservationEditDatetimeHelper extends AppHelper {
 
 		$calTime = new ReservationTime();
 		$dttmObj = $calTime->getDtObjWithTzDateTimeString(
-			$this->request->data['ReservationActionPlan']['timezone_offset'],
+			$this->request->data['ReservationActionPlan']['timezone'],
 			$dtValue
 		);
 		$dtValue = $dttmObj->format('Y-m-d H-i');

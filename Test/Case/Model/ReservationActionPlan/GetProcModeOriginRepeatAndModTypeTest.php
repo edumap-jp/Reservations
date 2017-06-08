@@ -32,7 +32,7 @@ class ReservationActionPlanGetProcModeOriginRepeatAndModTypeTest extends NetComm
 		'plugin.reservations.reservation_event_content',
 		'plugin.reservations.reservation_event_share_user',
 		'plugin.reservations.reservation_frame_setting',
-		'plugin.reservations.reservation_frame_setting_select_room',
+
 		'plugin.reservations.reservation_rrule',
 		'plugin.workflow.workflow_comment',
 		'plugin.rooms.rooms_language4test',
@@ -140,7 +140,7 @@ class ReservationActionPlanGetProcModeOriginRepeatAndModTypeTest extends NetComm
 				'location' => '',
 				'contact' => '',
 				'description' => '',
-				'timezone_offset' => 'Asia/Tokyo',
+				'timezone' => 'Asia/Tokyo',
 			),
 			'ReservationActionPlanForDisp' => array(
 				'detail_start_datetime' => '2016-07-28 11:00',
@@ -165,7 +165,7 @@ class ReservationActionPlanGetProcModeOriginRepeatAndModTypeTest extends NetComm
 		$eventData = array(
 				'ReservationEvent' => array(
 				'id' => 49,
-				'timezone_offset' => 9.0,
+				'timezone' => 9.0,
 				'enable_time' => 0,
 				'dtstart' => '20160630150000',
 				'dtend' => '20160701150000',
@@ -253,7 +253,7 @@ class ReservationActionPlanGetProcModeOriginRepeatAndModTypeTest extends NetComm
 
 		$data5 = $this->__getData();
 		$data5['ReservationActionPlan']['origin_event_id'] = 1;
-		$data5['ReservationActionPlan']['timezone_offset'] = 'Asia/Bangkok'; //timezoneの変更
+		$data5['ReservationActionPlan']['timezone'] = 'Asia/Bangkok'; //timezoneの変更
 
 		$data6 = $this->__getData();
 		$data6['ReservationActionPlan']['origin_event_id'] = 1;

@@ -14,7 +14,7 @@
 <?php echo $this->NetCommonsForm->hidden('ReservationActionPlan.easy_hour_minute_to', array('value' => '' )); ?>
 <?php echo $this->NetCommonsForm->hidden('ReservationActionPlan.detail_start_datetime', array('value' => '' )); ?>
 <?php echo $this->NetCommonsForm->hidden('ReservationActionPlan.detail_end_datetime', array('value' => '' )); ?>
-<?php echo $this->NetCommonsForm->hidden('ReservationActionPlan.timezone_offset', array('value' => Current::read('User.timezone') )); ?>
+<?php echo $this->NetCommonsForm->hidden('ReservationActionPlan.timezone', array('value' => Current::read('User.timezone') )); ?>
 <?php echo $this->NetCommonsForm->hidden('ReservationActionPlan.is_detail', array('value' => '0' )); ?>
 
 <?php echo $this->NetCommonsForm->hidden('ReservationActionPlan.location', array('value' => '' )); ?>

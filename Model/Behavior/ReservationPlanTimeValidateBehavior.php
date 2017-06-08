@@ -147,19 +147,28 @@ class ReservationPlanTimeValidateBehavior extends ModelBehavior {
  * 許可されたタイムゾーンオフセットかどうか
  *
  * @param Model &$model モデル変数
- * @param array $check 入力配列（timezone_offset）
+ * @param array $check 入力配列（timezone）
  * @return bool 成功時true, 失敗時false
  */
 	public function allowedTimezoneOffset(Model &$model, $check) {
 		$value = array_values($check);
 		$value = $value[0];
-		$tzTbl = ReservationsComponent::getTzTbl();
-		foreach ($tzTbl as $tzData) {
-			if ($tzData[2] === $value) {
-				return true;
-			}
+
+		$SiteSetting = new SiteSetting();
+		$SiteSetting->prepare();
+
+		if (isset($SiteSetting->defaultTimezones[$value])) {
+			return true;
 		}
 		return false;
+		//
+		//$tzTbl = ReservationsComponent::getTzTbl();
+		//foreach ($tzTbl as $tzData) {
+		//	if ($tzData[2] === $value) {
+		//		return true;
+		//	}
+		//}
+		//return false;
 	}
 
 /**
@@ -220,7 +229,7 @@ class ReservationPlanTimeValidateBehavior extends ModelBehavior {
 		list($serverStartDateZero, $serverNextDateZero) =
 			(new ReservationTime())->convUserDate2SvrFromToDateTime(
 				$model->data[$model->alias]['easy_start_date'],
-				$model->data[$model->alias]['timezone_offset']);
+				$model->data[$model->alias]['timezone']);
 
 		if ($model->data[$model->alias]['easy_hour_minute_from'] < $serverStartDateZero ||
 			$serverNextDateZero < $model->data[$model->alias]['easy_hour_minute_to']) {
