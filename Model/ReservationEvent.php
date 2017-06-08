@@ -281,9 +281,9 @@ class ReservationEvent extends ReservationsAppModel {
 					'message' => __d('reservations', 'Invalid value.'),
 				),
 			),
-			'timezone_offset' => array(
+			'timezone' => array(
 				'rule1' => array(
-					'rule' => array('checkTimezoneOffset'),
+					'rule' => array('checkTimezone'),
 					'message' => __d('reservations', 'Invalid value.'),
 				),
 			),

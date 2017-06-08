@@ -110,6 +110,7 @@ class ReservationsSchema extends CakeSchema {
 		'end_time' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 6, 'collate' => 'utf8_general_ci', 'comment' => '終了時刻 (hhmmss形式)', 'charset' => 'utf8'),
 		'dtend' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 14, 'collate' => 'utf8_general_ci', 'comment' => '終了日時 (YYYYMMDDhhmmss形式) iReservationのDTENDからTとZをはずしたもの', 'charset' => 'utf8'),
 		'timezone_offset' => array('type' => 'float', 'null' => false, 'default' => '0.0', 'length' => '3,1', 'unsigned' => false, 'comment' => 'タイムゾーンオフセット-12.0～+12.0'),
+		'timezone' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'location_key' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'status' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 4, 'unsigned' => false, 'comment' => '公開状況  1:公開中>、2:公 開申請中、3:下書き中、4:差し戻し'),
 		'is_active' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => 'アクティブなコンテンツかどうか 0:アクティブでない 1:アクティブ'),
@@ -118,28 +119,10 @@ class ReservationsSchema extends CakeSchema {
 		'exception_event_id' => array('type' => 'integer', 'null' => false, 'default' => '0', 'unsigned' => false, 'comment' => '1以上のとき、例外（削除）イベントidを指す。vreservationの EXDATE機能実現のための項目'),
 		'is_enable_mail' => array('type' => 'boolean', 'null' => false, 'default' => '0', 'comment' => 'イベント前にメール通知するかどうか 0:通知しない 1:通知する'),
 		'email_send_timing' => array('type' => 'integer', 'null' => false, 'default' => '0', 'unsigned' => false, 'comment' => 'イベントN分前メール通知の値N。単位は分。'),
+		'calendar_key' => array('type' => 'string', 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'created_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'unsigned' => false, 'comment' => '作成者'),
 		'created' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '作成日時'),
 		'modified_user' => array('type' => 'integer', 'null' => true, 'default' => '0', 'unsigned' => false, 'comment' => '更新者'),
-		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '更新日時'),
-		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1)
-		),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
-	);
-
-/**
- * reservation_frame_setting_select_rooms table
- *
- * @var array
- */
-	public $reservation_frame_setting_select_rooms = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary', 'comment' => 'ID'),
-		'reservation_frame_setting_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'comment' => '施設予約フレームセッティングのid'),
-		'room_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'comment' => 'ルームID'),
-		'created_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'comment' => '作成者'),
-		'created' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '作成日時'),
-		'modified_user' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'comment' => '更新者'),
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '更新日時'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)

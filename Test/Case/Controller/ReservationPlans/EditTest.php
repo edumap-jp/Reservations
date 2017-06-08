@@ -33,7 +33,7 @@ class ReservationPlansControllerEditTest extends WorkflowControllerEditTest {
 		'plugin.reservations.reservation_event_content',
 		'plugin.reservations.reservation_event_share_user',
 		'plugin.reservations.reservation_frame_setting',
-		'plugin.reservations.reservation_frame_setting_select_room',
+
 		'plugin.reservations.reservation_rrule',
 		'plugin.workflow.workflow_comment',
 		'plugin.rooms.rooms_language4test',
@@ -161,7 +161,7 @@ class ReservationPlansControllerEditTest extends WorkflowControllerEditTest {
 				'location' => 'locationText',
 				'contact' => '',
 				'description' => '',
-				'timezone_offset' => 'Asia/Tokyo',
+				'timezone' => 'Asia/Tokyo',
 			),
 			'WorkflowComment' => array(
 				'comment' => 'WorkflowComment save test'),
@@ -432,7 +432,7 @@ class ReservationPlansControllerEditTest extends WorkflowControllerEditTest {
 	public function dataProviderEditPost() {
 		$data = $this->__getData(1);
 		$data2 = $this->__getData(2);
-		//unset($data2['ReservationActionPlan']['timezone_offset']); //timezoneの設定が無いケース（ReservationActionPlan.php:926行目でおちる）
+		//unset($data2['ReservationActionPlan']['timezone']); //timezoneの設定が無いケース（ReservationActionPlan.php:926行目でおちる）
 
 		$data4 = $this->__getData(4);
 
