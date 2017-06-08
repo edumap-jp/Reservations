@@ -1358,3 +1358,58 @@ msgstr "%d行目 : %s"
 
 msgid "Registration failed."
 msgstr "登録できませんでした。"
+
+# ===================================
+# CSVインポート画面
+# ===================================
+
+msgid "Download format"
+msgstr "フォーマットのダウンロード"
+
+msgid "/reservations/locale/eng/reservation_import.csv"
+msgstr "/reservations/locale/jpn/reservation_import.csv"
+
+msgid "Explanations of items"
+msgstr "各項目の説明"
+
+msgid "Item"
+msgstr "項目"
+
+msgid "All-day event"
+msgstr "利用時間の制限なし"
+
+msgid "Day"
+msgstr "予約日"
+
+msgid "Start time"
+msgstr "開始時間"
+
+msgid "End time"
+msgstr "終了時間"
+
+msgid "* Mandatory item(s)"
+msgstr "※必須入力項目"
+
+msgid "&lt;Options&gt;<br>0 : Set event time(default)<br>1 : All-day event"
+msgstr "<選択肢><br>0 : 制限あり(デフォルト)<br>1 : 制限なし"
+
+msgid "Enter in the form of yyyymmdd.<br>ex）20170607"
+msgstr "yyyymmdd形式で入力して下さい。<br>例）20170607"
+
+msgid "Enter in the form of hhnnss.<br>"
+    "ex）090000<br>* When setting all-day event, enter \'null\' instead."
+msgstr "hhmmss形式で入力して下さい。<br>"
+    "例）090000<br>※利用時間の制限なしの場合、「null」としてください。"
+
+msgid "Enter in the form of hhnnss.<br>ex）180000<br>* When"
+    "setting all-day event, enter \'null\' instead."
+msgstr "hhmmss形式で入力して下さい。<br>例）180000<br>"
+    "※利用時間の制限なしの場合、「null」としてください。"
+
+
+msgid "To see details of import file item settings, please see below.<br />"
+    "<strong>Further, for itesm that have no settings, enter 'null' instead of blank spaces.</strong><br />"
+    "Also, in the case of no setting (setting of 'null') or outside range setting, <span class=\"text-primary\">it is changed to</span> 'no setting'."
+msgstr "インポートファイルへの設定項目の詳細は、下記を参照ください。<br />"
+    "<strong>なお、各項目を無指定とする場合、空白の代わりに文字列「null」を設定してください。</strong><br />"
+    "また、無指定(「null」指定）または指定外の設定をした場合、<span class=\"text-primary\">未設定</span> とします。"

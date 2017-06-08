@@ -13,33 +13,52 @@ echo $this->element('Reservations.scripts');
 ?>
 
 <article class="block-setting-body">
-	<?php echo $this->BlockTabs->main(ReservationSettingsComponent::MAIN_TAB_IMPORT_RESERVATIONS); ?>
+	<?php echo $this->BlockTabs->main(
+		ReservationSettingsComponent::MAIN_TAB_IMPORT_RESERVATIONS
+	); ?>
 
 	<div class="tab-content">
 
 		<article ng-controller='ReservationsDetailEdit' class='block-setting-body'
-				ng-init="initialize(<?php echo h(json_encode(array('frameId' => Current::read('Frame.id'), 'locations' => $locations, 'event' => $event, 'ReservationActionPlan' => $this->request->data['ReservationActionPlan'], 'userId' =>
-						Current::read('User.id')))
+				ng-init="initialize(<?php echo h(
+					json_encode(
+						array(
+							'frameId' => Current::read('Frame.id'),
+							'locations' => $locations,
+							'event' => $event,
+							'ReservationActionPlan' => $this->request->data['ReservationActionPlan'],
+							'userId' =>
+								Current::read('User.id')
+						)
+					)
 				); ?>)">
 
 			<div class='panel panel-default'>
 				<?php
 				$options = array(
 					'inputDefaults' => array(
-						'label' => false,	//以降のinput要素のlabelをデフォルト抑止。必要なら各inputで明示指定する。
-						'div' => false,	//以降のinput要素のdivをデフォルト抑止。必要なら各inputで明示指定する。
+						'label' => false, //以降のinput要素のlabelをデフォルト抑止。必要なら各inputで明示指定する。
+						'div' => false, //以降のinput要素のdivをデフォルト抑止。必要なら各inputで明示指定する。
 					),
 					'class' => 'form-horizontal',
 					'type' => 'file',
 				);
-				echo $this->NetCommonsForm->create('ReservationActionPlan', $options);	//<!-- <form class="form-horizontal"> --> <!-- これで<div class-"form-group row"のrowを省略できる -->
+				echo $this->NetCommonsForm->create(
+					'ReservationActionPlan',
+					$options
+				);
 
 				?>
 				<?php echo $this->element('Reservations.ReservationPlans/required_hiddens'); ?>
 				<?php
-				echo $this->element('Reservations.ReservationPlans/detail_edit_hiddens', array(
-					'event' => $event, 'eventSiblings' => $eventSiblings, 'firstSib' => $firstSib,
-				));
+				echo $this->element(
+					'Reservations.ReservationPlans/detail_edit_hiddens',
+					array(
+						'event' => $event,
+						'eventSiblings' => $eventSiblings,
+						'firstSib' => $firstSib,
+					)
+				);
 				?>
 				<div class='panel-body'>
 					<?php $this->NetCommonsForm->unlockField('ReservationActionPlan.edit_rrule'); ?>
@@ -53,7 +72,8 @@ echo $this->element('Reservations.scripts');
 						!empty($this->request->data['ReservationActionPlan']['first_sib_event_key']) &&
 						!empty($this->request->data['ReservationActionPlan']['first_sib_year']) &&
 						!empty($this->request->data['ReservationActionPlan']['first_sib_month']) &&
-						!empty($this->request->data['ReservationActionPlan']['first_sib_day'])) {
+						!empty($this->request->data['ReservationActionPlan']['first_sib_day'])
+					) {
 						$firstSibEventId = $this->request->data['ReservationActionPlan']['first_sib_event_id'];
 						$firstSibEventKey = $this->request->data['ReservationActionPlan']['first_sib_event_key'];
 						$firstSibYear = $this->request->data['ReservationActionPlan']['first_sib_year'];
@@ -80,7 +100,8 @@ echo $this->element('Reservations.scripts');
 
 					$isRecurrence = false;
 					if ((!empty($event) && !empty($event['ReservationEvent']['recurrence_event_id'])) ||
-						!empty($this->request->data['ReservationActionPlan']['origin_event_recurrence'])) {
+						!empty($this->request->data['ReservationActionPlan']['origin_event_recurrence'])
+					) {
 						$isRecurrence = true;
 					}
 
@@ -89,23 +110,34 @@ echo $this->element('Reservations.scripts');
 					?>
 
 
-
 					<div class="reservation-select-location">
-						<div class='form-group' >
+						<div class='form-group'>
 							<div class='col-xs-12'>
 								<?php
-								echo $this->NetCommonsForm->label('', __d('reservations', 'Location'), array(
-									'required' => true));
+								echo $this->NetCommonsForm->label(
+									'',
+									__d('reservations', 'Location'),
+									array(
+										'required' => true
+									)
+								);
 								?>
 								<div class='col-xs-12'>
 
 									<?php
 									//  カテゴリ絞り込み
-									$locationCategories = Hash::combine($categories, '{n}.Category.id', '{n}.CategoriesLanguage.name');
+									$locationCategories = Hash::combine(
+										$categories,
+										'{n}.Category.id',
+										'{n}.CategoriesLanguage.name'
+									);
 									// 施設の絞り込み, カテゴリなし　を追加
 									$locationCategories = Hash::merge(
 										[
-											'all' => __d('reservations', '-- search for institutions --'),
+											'all' => __d(
+												'reservations',
+												'-- search for institutions --'
+											),
 											'' => __d('reservations', 'no category')
 										],
 										$locationCategories
@@ -114,9 +146,14 @@ echo $this->element('Reservations.scripts');
 									//        0 => 'カテゴリ無し',
 									//        1 => '会議室',
 									//];
-									$this->NetCommonsForm->unlockField('ReservationLocation.category_id');
-									$this->NetCommonsForm->unlockField('ReservationActionPlan.location_key');
-									echo $this->NetCommonsForm->input('ReservationLocation.category_id',
+									$this->NetCommonsForm->unlockField(
+										'ReservationLocation.category_id'
+									);
+									$this->NetCommonsForm->unlockField(
+										'ReservationActionPlan.location_key'
+									);
+									echo $this->NetCommonsForm->input(
+										'ReservationLocation.category_id',
 										[
 											'label' => false,
 											'options' => $locationCategories,
@@ -126,7 +163,11 @@ echo $this->element('Reservations.scripts');
 									);
 									?>
 									<!--施設選択-->
-									<?php $locationOptions = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservationLocation.location_name'); ?>
+									<?php $locationOptions = Hash::combine(
+										$locations,
+										'{n}.ReservationLocation.key',
+										'{n}.ReservationLocation.location_name'
+									); ?>
 									<?php
 									echo $this->NetCommonsForm->input(
 										'ReservationActionPlan.location_key',
@@ -151,13 +192,18 @@ echo $this->element('Reservations.scripts');
 									?>
 									<?php echo __d('reservations', '[Available]'); ?>
 									{{selectLocation.ReservationLocation.openText}}
-									<a href="" data-toggle="popover" data-placement="bottom" title="" data-trigger="focus" data-content="
+									<a href="" data-toggle="popover" data-placement="bottom"
+											title="" data-trigger="focus" data-content="
                         <dl>
                         <dt><?php echo __d('reservations', 'Available'); ?></dt><dd>{{selectLocation.ReservationLocation.openText}}</dd>
                         <dt><?php echo __d('reservations', 'Approver'); ?></dt><dd>{{selectLocation.ReservationLocation.contact}}</dd>
                         </dl>
                         <p>{{selectLocation.ReservationLocation.description}}</p>
-						" data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d('reservations', '詳細'); ?></a>
+						"
+											data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d(
+											'reservations',
+											'詳細'
+										); ?></a>
 									<?php
 									$html = '<script type="text/javascript">' .
 										'$(function () { $(\'[data-toggle="popover"]\').popover({html: true}) });</script>';
@@ -175,15 +221,26 @@ echo $this->element('Reservations.scripts');
 								<?php
 								//echo $this->ReservationExposeTarget->makeSelectExposeTargetHtml($event, $frameId, $vars, $exposeRoomOptions, $myself);
 								echo $this->NetCommonsForm->label(
-									'ReservationActionPlan.plan_room_id' . Inflector::camelize('room_id'),
-									__d('reservations', 'Category') . $this->element('NetCommons.required'));
+									'ReservationActionPlan.plan_room_id' . Inflector::camelize(
+										'room_id'
+									),
+									__d('reservations', 'Category') . $this->element(
+										'NetCommons.required'
+									)
+								);
 								//debug($exposeRoomOptions);
 								?>
 								<?php
 								foreach ($locations as $location) {
-									$options = Hash::combine($location['ReservableRoom'], '{n}.Room.id', '{n}.RoomsLanguage.0.name');
-									echo $this->NetCommonsForm->select('ReservationActionPlan.plan_room_id',
-										$options, array(
+									$options = Hash::combine(
+										$location['ReservableRoom'],
+										'{n}.Room.id',
+										'{n}.RoomsLanguage.0.name'
+									);
+									echo $this->NetCommonsForm->select(
+										'ReservationActionPlan.plan_room_id',
+										$options,
+										array(
 											'class' => 'form-control select-expose-target',
 											'empty' => false,
 											'required' => true,
@@ -196,12 +253,20 @@ echo $this->element('Reservations.scripts');
 											//'ng-change' => 'debugShow()',
 											'ng-show' => 'selectLocation.ReservationLocation.id == ' .
 												$location['ReservationLocation']['id']
-										));
+										)
+									);
 								}
-								$this->NetCommonsForm->unlockField('ReservationActionPlan.plan_room_id');
-								echo $this->NetCommonsForm->hidden('ReservationActionPlan.plan_room_id', ['ng-value' => 'data.ReservationActionPlan.plan_room_id']);
+								$this->NetCommonsForm->unlockField(
+									'ReservationActionPlan.plan_room_id'
+								);
+								echo $this->NetCommonsForm->hidden(
+									'ReservationActionPlan.plan_room_id',
+									['ng-value' => 'data.ReservationActionPlan.plan_room_id']
+								);
 								?>
-								<?php echo $this->NetCommonsForm->error('ReservationActionPlan.plan_room_id'); ?>
+								<?php echo $this->NetCommonsForm->error(
+									'ReservationActionPlan.plan_room_id'
+								); ?>
 							</div>
 						</div><!-- end form-group-->
 
@@ -220,7 +285,8 @@ echo $this->element('Reservations.scripts');
 						//	}
 						//}
 						?>
-						<div class="form-group reservation-plan-share_<?php echo $frameId; ?>" data-reservation-name="planShare"
+						<div class="form-group reservation-plan-share_<?php echo $frameId; ?>"
+								data-reservation-name="planShare"
 								style="display: <?php //echo $dispValue; ?>; margin-top:0.5em;">
 							<div class="col-xs-12 col-sm-10 col-sm-offset-2">
 								<?php //echo $this->element('Reservations.ReservationPlans/edit_plan_share', array('shareUsers', $shareUsers)); ?>
@@ -232,26 +298,64 @@ echo $this->element('Reservations.scripts');
 
 					<div class="reservation-import-rules col-xs-12 col-sm-12">
 						<?php
-						echo $this->NetCommonsForm->inlineCheckbox('ReservationActionPlan.delete_room_events',
-							['label' => __d('reservations', 'Delete all reservation items and import.')]);
-						echo $this->NetCommonsForm->inlineCheckbox('ReservationActionPlan.skip_duplicate_events',
-							['label' => __d('reservations', 'The duplicate subject name and reservation time are disregarded.')]);
+						echo $this->NetCommonsForm->inlineCheckbox(
+							'ReservationActionPlan.delete_room_events',
+							[
+								'label' => __d(
+									'reservations',
+									'Delete all reservation items and import.'
+								)
+							]
+						);
+						echo $this->NetCommonsForm->inlineCheckbox(
+							'ReservationActionPlan.skip_duplicate_events',
+							[
+								'label' => __d(
+									'reservations',
+									'The duplicate subject name and reservation time are disregarded.'
+								)
+							]
+						);
 						?>
 					</div>
 
 					<div class="reservation-import-file  col-xs-12 col-sm-12">
 						<?php
-						echo $this->NetCommonsForm->input('ReservationActionPlan.csv_file', [
-							'label' => __d('reservations', 'Please designate CSV file for import.'),
-							'type' => 'file',
-							'error' => false,
-							]);
+						echo $this->NetCommonsForm->input(
+							'ReservationActionPlan.csv_file',
+							[
+								'label' => __d(
+									'reservations',
+									'Please designate CSV file for import.'
+								),
+								'type' => 'file',
+								'error' => false,
+							]
+						);
 						?>
-						<?php echo $this->NetCommonsForm->error('ReservationActionPlan.csv_file',
+						<?php echo $this->NetCommonsForm->error(
+							'ReservationActionPlan.csv_file',
 							null,
 							['escape' => false]
-							); ?>
+						); ?>
 
+					</div>
+
+					<div class="text-right">
+						<?php echo $this->NetCommonsHtml->link(
+							__d('reservations', 'Download format'),
+							__d('reservations', '/reservations/locale/eng/reservation_import.csv'),
+							[
+								'class' =>
+									'btn 
+						btn-default 
+						btn-sm'
+							]
+						); ?>
+						<button type="button" class="btn btn-default btn-sm" data-toggle="modal"
+								data-target="#reservationsExplanationsOfItems">
+							<?php echo __d('reservations', 'Explanations of items'); ?>
+						</button>
 					</div>
 
 				</div><!-- panel-bodyを閉じる -->
@@ -262,7 +366,7 @@ echo $this->element('Reservations.scripts');
 						__d('net_commons', 'Cancel'),
 						__d('net_commons', 'OK')
 
-					);?>
+					); ?>
 
 				</div><!--panel-footerの閉じるタグ-->
 				<?php echo $this->NetCommonsForm->end(); ?>
@@ -278,3 +382,108 @@ echo $this->element('Reservations.scripts');
 
 	</div><!--end tab-content-->
 </article>
+
+
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="reservationsExplanationsOfItems" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="<?php echo __d(
+					'net_commons',
+					'Close'
+				) ?>"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"><?php echo __d(
+						'reservations',
+						'Explanations of items'
+					); ?></h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					<?php
+					echo __d(
+						'reservations',
+						'To see details of import file item settings, please see below.<br />' .
+						'<strong>Further, for itesm that have no settings, enter \'null\' instead of blank spaces.</strong><br />' .
+						'Also, in the case of no setting (setting of \'null\') or outside range setting, <span class="text-primary">it is changed to</span> \'no setting\'.'
+					); ?>
+				</p>
+				<table class="table">
+
+					<thead>
+					<tr>
+						<th><?php echo __d('reservations', 'Item')?></th>
+						<th><?php echo __d('reservations', 'Description')?></th>
+					</tr>
+
+					</thead>
+					<tbody>
+					<tr>
+						<td><?php echo __d('reservations', 'Title'); ?></td>
+						<td>
+							<div class="text-danger"><?php echo __d(
+									'reservations',
+									'* Mandatory item(s)'
+								); ?></div>
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo __d('reservations', 'All-day event'); ?></td>
+						<td>
+							<div>
+								<?php echo __d('reservations',
+									'&lt;Options&gt;<br>0 : Set event time(default)<br>1 : All-day event');?>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo __d('reservations', 'Day'); ?></td>
+						<td>
+							<div class="text-danger"><?php echo __d(
+									'reservations',
+									'* Mandatory item(s)'
+								); ?></div>
+							<?php echo __d(
+								'reservations',
+								'Enter in the form of yyyymmdd.<br>ex）20170607'
+							); ?>
+
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo __d('reservations', 'Start time'); ?></td>
+						<td><?php echo __d(
+								'reservations',
+								'Enter in the form of hhnnss.<br>' .
+								'ex）090000<br>* When setting all-day event, enter \'null\' instead.'
+							); ?>
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo __d('reservations', 'End time'); ?></td>
+						<td><?php echo __d(
+								'reservations',
+								'Enter in the form of hhnnss.<br>ex）180000<br>* When' .
+							'setting all-day event, enter \'null\' instead.'
+							); ?>
+						</td>
+					</tr>
+					<tr>
+						<td><?php echo __d('reservations', 'Contact'); ?></td>
+						<td><?php echo __d('reservations', '-'); ?></td>
+					</tr>
+					<tr>
+						<td><?php echo __d('reservations', 'Details'); ?></td>
+						<td><?php echo __d('reservations', '-'); ?></td>
+					</tr>
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
