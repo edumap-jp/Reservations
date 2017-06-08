@@ -100,9 +100,9 @@ class ReservationEventValidateTest extends NetCommonsValidateTest {
 				'message' => __d('reservations', 'Out of range value.')),
 			array('data' => $data, 'field' => 'end_time', 'value' => 'a',
 				'message' => __d('reservations', 'Invalid value.')),
-			array('data' => $data, 'field' => 'timezone_offset', 'value' => 'a',
+			array('data' => $data, 'field' => 'timezone', 'value' => 'a',
 				'message' => __d('reservations', 'Invalid value.')),
-			array('data' => $data, 'field' => 'timezone_offset', 'value' => '-13', //範囲外
+			array('data' => $data, 'field' => 'timezone', 'value' => '-13', //範囲外
 				'message' => __d('reservations', 'Invalid value.')),
 			array('data' => $data, 'field' => 'recurrence_event_id', 'value' => 'a',
 				'message' => __d('net_commons', 'Invalid request.')),

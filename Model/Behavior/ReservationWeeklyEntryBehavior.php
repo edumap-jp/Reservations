@@ -69,7 +69,7 @@ class ReservationWeeklyEntryBehavior extends ReservationAppBehavior {
 		$result = ReservationSupport::isRepeatable(
 			$model->rrule,
 			($eventData['ReservationEvent']['start_date'] . $eventData['ReservationEvent']['start_time']),
-			$eventData['ReservationEvent']['timezone_offset'],
+			$eventData['ReservationEvent']['timezone'],
 			$model->isOverMaxRruleIndex
 		);
 		if (! $result) {
@@ -174,7 +174,7 @@ class ReservationWeeklyEntryBehavior extends ReservationAppBehavior {
 		$svrEndTime = $date->format('His');
 
 		if (!ReservationSupport::isRepeatable($model->rrule, ($svrStartDate . $svrStartTime),
-			$eventData['ReservationEvent']['timezone_offset'], $model->isOverMaxRruleIndex)) {
+			$eventData['ReservationEvent']['timezone'], $model->isOverMaxRruleIndex)) {
 			return true;
 		}
 

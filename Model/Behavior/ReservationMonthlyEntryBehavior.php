@@ -122,7 +122,7 @@ class ReservationMonthlyEntryBehavior extends ReservationAppBehavior {
 			svrEndTime[" . $svrEndTime . "]");
 
 		if (!ReservationSupport::isRepeatable($model->rrule, ($svrStartDate . $svrStartTime),
-			$eventData['ReservationEvent']['timezone_offset'], $model->isOverMaxRruleIndex)) {
+			$eventData['ReservationEvent']['timezone'], $model->isOverMaxRruleIndex)) {
 			CakeLog::debug("DBG: 繰返しがとまったので、callから復帰する。");
 			//繰返しがとまったので、callから復帰する。
 			return true;
@@ -185,7 +185,7 @@ class ReservationMonthlyEntryBehavior extends ReservationAppBehavior {
 			svrEndDate[" . $svrEndDate . "] svrEndTime[" . $svrEndTime . "]");
 
 		if (!ReservationSupport::isRepeatable($model->rrule, ($svrStartDate . $svrStartTime),
-			$eventData['ReservationEvent']['timezone_offset'], $model->isOverMaxRruleIndex)) {
+			$eventData['ReservationEvent']['timezone'], $model->isOverMaxRruleIndex)) {
 
 			CakeLog::debug("DBG: isRepeatable() がFALSEを返したので、
 				繰返しをとめて復帰します。");

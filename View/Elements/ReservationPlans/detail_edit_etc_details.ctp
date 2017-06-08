@@ -57,12 +57,12 @@
 			<div class="col-xs-12">
 				<?php
 				// タイムゾーン
-				$planTimeZone = Hash::get($this->request->data, 'ReservationActionPlan.timezone_offset');
+				$planTimeZone = Hash::get($this->request->data, 'ReservationActionPlan.timezone');
 				if ($planTimeZone != Current::read('User.timezone')) {
 					// ユーザのタイムゾーンと異なっていたらタイムゾーン選択ドロップダウン表示
 					$SiteSetting = new SiteSetting();
 					$SiteSetting->prepare();
-					echo $this->NetCommonsForm->input('ReservationActionPlan.timezone_offset', [
+					echo $this->NetCommonsForm->input('ReservationActionPlan.timezone', [
 						'label' => __d('reservations', 'Time zone'),
 						'options' => $SiteSetting->defaultTimezones,
 						'type' => 'select',
@@ -70,20 +70,20 @@
 					]);
 				} else {
 					// 新規登録ならタイムゾーンは現在のユーザのタイムゾーンにする
-					echo $this->NetCommonsForm->hidden('ReservationActionPlan.timezone_offset');
+					echo $this->NetCommonsForm->hidden('ReservationActionPlan.timezone');
 				}
 				?>
 				<?php
 				//$tzTbl = ReservationsComponent::getTzTbl();
 				//$options = Hash::combine($tzTbl, '{s}.2', '{s}.0');
-				//echo $this->NetCommonsForm->label('ReservationActionPlan.timezone_offset' . Inflector::camelize('timezone'), __d('reservations', 'Time zone'));
-				//echo $this->NetCommonsForm->select('ReservationActionPlan.timezone_offset', $options, array(
-				//'value' => $this->request->data['ReservationActionPlan']['timezone_offset'],
+				//echo $this->NetCommonsForm->label('ReservationActionPlan.timezone' . Inflector::camelize('timezone'), __d('reservations', 'Time zone'));
+				//echo $this->NetCommonsForm->select('ReservationActionPlan.timezone', $options, array(
+				//'value' => $this->request->data['ReservationActionPlan']['timezone'],
 				//'class' => 'form-control',
 				//'empty' => false,
 				//'required' => true,
 				//));
-				//echo $this->NetCommonsForm->error('ReservationActionPlan.timezone_offset');
+				//echo $this->NetCommonsForm->error('ReservationActionPlan.timezone');
 			?>
 			</div>
 		</div><!-- form-groupおわり-->

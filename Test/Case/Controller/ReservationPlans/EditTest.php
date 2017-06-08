@@ -161,7 +161,7 @@ class ReservationPlansControllerEditTest extends WorkflowControllerEditTest {
 				'location' => 'locationText',
 				'contact' => '',
 				'description' => '',
-				'timezone_offset' => 'Asia/Tokyo',
+				'timezone' => 'Asia/Tokyo',
 			),
 			'WorkflowComment' => array(
 				'comment' => 'WorkflowComment save test'),
@@ -432,7 +432,7 @@ class ReservationPlansControllerEditTest extends WorkflowControllerEditTest {
 	public function dataProviderEditPost() {
 		$data = $this->__getData(1);
 		$data2 = $this->__getData(2);
-		//unset($data2['ReservationActionPlan']['timezone_offset']); //timezoneの設定が無いケース（ReservationActionPlan.php:926行目でおちる）
+		//unset($data2['ReservationActionPlan']['timezone']); //timezoneの設定が無いケース（ReservationActionPlan.php:926行目でおちる）
 
 		$data4 = $this->__getData(4);
 

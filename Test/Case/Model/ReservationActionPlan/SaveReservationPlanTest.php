@@ -141,7 +141,7 @@ class ReservationActionPlanSaveReservationPlanTest extends NetCommonsModelTestCa
 				'location' => '',
 				'contact' => '',
 				'description' => '',
-				'timezone_offset' => 'Asia/Tokyo',
+				'timezone' => 'Asia/Tokyo',
 			),
 			'ReservationActionPlanForDisp' => array(
 				'detail_start_datetime' => '2016-07-28 11:00',
@@ -292,7 +292,7 @@ class ReservationActionPlanSaveReservationPlanTest extends NetCommonsModelTestCa
 		$data = $this->__getData();
 
 		$data2 = $this->__getData();
-		$data2['ReservationActionPlan']['timezone_offset'] = 'aaa/bbb';
+		$data2['ReservationActionPlan']['timezone'] = 'aaa/bbb';
 
 		$data3 = $this->__getData();
 		unset($data3['save_1']);

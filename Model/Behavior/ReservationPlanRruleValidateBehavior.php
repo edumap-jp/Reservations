@@ -157,7 +157,7 @@ class ReservationPlanRruleValidateBehavior extends ReservationValidateAppBehavio
 		//開始日（時刻）をサーバー系に直す
 		$nctm = new NetCommonsTime();
 		$serverStartDate = $nctm->toServerDatetime(
-			$startDate, $model->data[$model->alias]['timezone_offset']);
+			$startDate, $model->data[$model->alias]['timezone']);
 		//until日の翌日を求める
 		//Y-m-d H:i:s形式にする。
 		$untilDateStr = $model->data[$model->alias]['rrule_until'] . ' 00:00:00';
@@ -169,7 +169,7 @@ class ReservationPlanRruleValidateBehavior extends ReservationValidateAppBehavio
 			(int)$yearOfNextDay, (int)$monthOfNextDay, (int)$nextDay);
 		//untilDateの翌日00:00:00を作り出し、サーバー系に直す
 		$svrNxtDayOfUntilDt = $nctm->toServerDatetime(
-			$nextDayOfUntilDate, $model->data[$model->alias]['timezone_offset']);
+			$nextDayOfUntilDate, $model->data[$model->alias]['timezone']);
 		if ($svrNxtDayOfUntilDt <= $serverStartDate) {
 			return __d('reservations', 'Invalid input. Term end date is earlier than the start date.');
 		}

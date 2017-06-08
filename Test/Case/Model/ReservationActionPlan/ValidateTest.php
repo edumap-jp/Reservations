@@ -133,7 +133,7 @@ class ReservationActionPlanValidateTest extends NetCommonsValidateTest {
 				'location' => '',
 				'contact' => '',
 				'description' => '',
-				'timezone_offset' => 'Asia/Tokyo',
+				'timezone' => 'Asia/Tokyo',
 			),
 			'ReservationActionPlanForDisp' => array(
 				'detail_start_datetime' => '2016-07-28 11:00',
@@ -268,7 +268,7 @@ class ReservationActionPlanValidateTest extends NetCommonsValidateTest {
 			//beforeValidate
 			array('data' => $data, 'field' => 'plan_room_id', 'value' => 'aaa',
 				'message' => __d('reservations', 'Invalid input. (authority)')),
-			array('data' => $data, 'field' => 'timezone_offset', 'value' => 'aaa',
+			array('data' => $data, 'field' => 'timezone', 'value' => 'aaa',
 				'message' => __d('reservations', 'Invalid input. (timezone)')),
 			array('data' => $data, 'field' => 'is_detail', 'value' => 'a',
 				'message' => __d('reservations', 'Invalid input. (detail)')),

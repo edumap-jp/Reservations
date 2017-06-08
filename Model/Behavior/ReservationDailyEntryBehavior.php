@@ -104,7 +104,7 @@ class ReservationDailyEntryBehavior extends ReservationAppBehavior {
 		$svrEndTime = $date->format('His');
 
 		if (!ReservationSupport::isRepeatable($model->rrule, ($svrStartDate . $svrStartTime),
-			$eventData['ReservationEvent']['timezone_offset'], $model->isOverMaxRruleIndex)) {
+			$eventData['ReservationEvent']['timezone'], $model->isOverMaxRruleIndex)) {
 			return true;
 		}
 

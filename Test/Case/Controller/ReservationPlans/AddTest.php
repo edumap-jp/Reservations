@@ -146,7 +146,7 @@ class ReservationPlansControllerAddTest extends WorkflowControllerAddTest {
 				'location' => '',
 				'contact' => '',
 				'description' => '',
-				'timezone_offset' => 'Asia/Tokyo',
+				'timezone' => 'Asia/Tokyo',
 			),
 			'WorkflowComment' => array(
 				'comment' => 'WorkflowComment save test'
@@ -323,7 +323,7 @@ class ReservationPlansControllerAddTest extends WorkflowControllerAddTest {
 		//繰り返し回数不正
 		$data['ReservationActionPlan']['is_repeat'] = 1;
 		$data['ReservationActionPlan']['rrule_count'] = 1;
-		$data['ReservationActionPlan']['timezone_offset'] = 'Australia/Adelaide'; //timezoneが変わるルート
+		$data['ReservationActionPlan']['timezone'] = 'Australia/Adelaide'; //timezoneが変わるルート
 		$result = array(
 			'data' => $data,
 			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id']),
