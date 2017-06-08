@@ -30,7 +30,6 @@ class ReservationLocationGetLocationsTest extends ReservationsGetTest {
 		'plugin.reservations.reservation_event_content',
 		'plugin.reservations.reservation_event_share_user',
 		'plugin.reservations.reservation_frame_setting',
-		'plugin.reservations.reservation_frame_setting_select_room',
 		'plugin.reservations.reservation_location',
 		'plugin.reservations.reservation_location_reservable',
 		'plugin.reservations.reservation_locations_approval_user',

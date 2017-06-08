@@ -12,7 +12,6 @@
 App::uses('NetCommonsControllerTestCase', 'NetCommons.TestSuite');
 App::uses('ReservationsComponent', 'Reservations.Controller/Component');
 App::uses('ReservationFrameSettingFixture', 'Reservations.Test/Fixture');
-App::uses('ReservationFrameSettingSelectRoomFixture', 'Reservations.Test/Fixture');
 
 /**
  * ReservationFrameSettingsController Test Case
@@ -34,7 +33,7 @@ class ReservationFrameSettingsControllerEditTest extends NetCommonsControllerTes
 		'plugin.reservations.reservation_event_content',
 		'plugin.reservations.reservation_event_share_user',
 		'plugin.reservations.reservation_frame_setting',
-		'plugin.reservations.reservation_frame_setting_select_room',
+
 		'plugin.reservations.reservation_rrule',
 		'plugin.workflow.workflow_comment',
 		'plugin.rooms.rooms_language4test',
