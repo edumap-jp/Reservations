@@ -83,7 +83,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 		*/
 		'Reservations.ReservationMail',
 		'Reservations.ReservationTopics',
-		// 'Reservations.RegistCalendar',
+		 'Reservations.RegistCalendar',
 	);
 	// @codingStandardsIgnoreStart
 	// $_schemaはcakePHP2の予約語だが、宣言するとphpcsが警告を出すので抑止する。
@@ -924,7 +924,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 
 				//$this->insertPlan($planParam);
 				$eventId = $this->insertPlan($planParam, $isMyPrivateRoom);
-				//$this->updateCalendar($planParam);
+				$this->updateCalendar($planParam);
 			} else {	//PLAN_EDIT
 				//変更処理
 				//CakeLog::debug("DBG: PLAN_MODIFY case.");

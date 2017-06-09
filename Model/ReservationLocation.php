@@ -395,36 +395,43 @@ class ReservationLocation extends ReservationsAppModel {
  * @return array
  */
 	public function getLocations($categoryId = null) {
-		// ログインユーザが参加してるルームを取得
-		$accessibleRoomIds = $this->getReadableRoomIds();
-		$this->loadModels([
-			'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
-			//'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable'
-		]);
-		$locationsRooms = $this->ReservationLocationsRoom->find('all', ['conditions' => [
-			'room_id' => $accessibleRoomIds,
-		]]);
-		$locationKeys = Hash::combine($locationsRooms,
-			'{n}.ReservationLocationsRoom.reservation_location_key',
-			'{n}.ReservationLocationsRoom.reservation_location_key'
-			);
-		// そのルームからの予約を受け付ける施設を取得
-		$options = [
-			'conditions' => [
-				'language_id' => Current::read('Language.id'),
-				'OR' => [
-					'use_all_rooms' => 1, // 全てのルームから予約を受け付ける施設
-					'ReservationLocation.key' => $locationKeys
-				]
-			],
-			'order' => 'ReservationLocation.weight ASC'
-		];
-		if (isset($categoryId)) {
-			$options['conditions']['category_id'] = $categoryId;
-		}
+		static $locationsByCategoryId = [];
 
-		$locations = $this->find('all', $options);
-		return $locations;
+		$categoryId = is_null($categoryId) ? 0 : $categoryId;
+		if (!isset($locationsByCategoryId[$categoryId])){
+			// ログインユーザが参加してるルームを取得
+			$accessibleRoomIds = $this->getReadableRoomIds();
+			$this->loadModels([
+				'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
+				//'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable'
+			]);
+			$locationsRooms = $this->ReservationLocationsRoom->find('all', ['conditions' => [
+				'room_id' => $accessibleRoomIds,
+			]]);
+			$locationKeys = Hash::combine($locationsRooms,
+				'{n}.ReservationLocationsRoom.reservation_location_key',
+				'{n}.ReservationLocationsRoom.reservation_location_key'
+			);
+			// そのルームからの予約を受け付ける施設を取得
+			$options = [
+				'conditions' => [
+					'language_id' => Current::read('Language.id'),
+					'OR' => [
+						'use_all_rooms' => 1, // 全てのルームから予約を受け付ける施設
+						'ReservationLocation.key' => $locationKeys
+					]
+				],
+				'order' => 'ReservationLocation.weight ASC'
+			];
+			if ($categoryId) {
+				$options['conditions']['category_id'] = $categoryId;
+			}
+
+			$locations = $this->find('all', $options);
+
+			$locationsByCategoryId[$categoryId] = $locations;
+		}
+		return $locationsByCategoryId[$categoryId];
 	}
 
 /**

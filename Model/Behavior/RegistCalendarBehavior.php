@@ -56,7 +56,7 @@ class RegistCalendarBehavior extends ReservationAppBehavior {
 				//calenar_keyを TaskContentにsave(update)しておく。
 				$data[$model->alias]['calendar_key'] = $calendarKey;
 
-				//$savedData = $model->save($data, false);
+				$savedData = $model->save($data, false);
 
 				if ($savedData === false) {
 					throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));

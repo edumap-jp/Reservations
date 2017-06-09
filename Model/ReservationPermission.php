@@ -237,6 +237,7 @@ class ReservationPermission extends ReservationsAppModel {
  * @return void
  */
 	protected function _setBlockSetting(&$roomBlocks) {
+
 		foreach ($roomBlocks as &$roomBlock) {
 			$blockKey = Hash::get($roomBlock, 'Block.key');
 			$roomId = Hash::get($roomBlock, 'Block.room_id');
