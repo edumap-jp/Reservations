@@ -139,7 +139,7 @@ class ReservationImportController extends ReservationsAppController {
 		if ($this->request->is(array('post', 'put'))) {
 			$this->_reservationPost();
 		} else {
-			$this->request->data['ReservationActionPlan']['timezone_offset'] = 'Asia/Tokyo';
+			$this->request->data['ReservationActionPlan']['timezone'] = 'Asia/Tokyo';
 		}
 		$this->_reservationGet(ReservationsComponent::PLAN_ADD);
 	}
@@ -255,7 +255,7 @@ class ReservationImportController extends ReservationsAppController {
 
 			$this->ReservationActionPlan->create();
 
-			$this->request->data['ReservationActionPlan']['timezone_offset'] =
+			$this->request->data['ReservationActionPlan']['timezone'] =
 				Current::read('User.timezone');
 			$this->request->data['ReservationActionPlan']['enable_time'] = 1;
 			$this->request->data['ReservationActionPlan']['is_detail'] = 1;

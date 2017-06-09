@@ -387,7 +387,7 @@ class ReservationAppBehavior extends ModelBehavior {
 			'contact',
 			'description',
 			'is_allday',
-			'timezone_offset',
+			'timezone',
 			'linked_model',
 			'linked_content_key',
 			'enable_email',
@@ -433,7 +433,8 @@ class ReservationAppBehavior extends ModelBehavior {
 			'end_date' => $planParams['end_date'],
 			'end_time' => $planParams['end_time'],
 			'dtend' => $planParams['end_date'] . $planParams['end_time'],
-			'timezone_offset' => $planParams['timezone_offset'],
+			'timezone' => $planParams['timezone'],
+			'timezone' => Hash::get($planParams, 'timezone'),
 			'status' => $planParams['status'],
 			'enable_email' => $planParams['enable_email'],
 			'email_send_timing' => $planParams['email_send_timing'],
@@ -464,7 +465,7 @@ class ReservationAppBehavior extends ModelBehavior {
 		$eventData['ReservationEvent']['end_date'] = $params['end_date'];
 		$eventData['ReservationEvent']['end_time'] = $params['end_time'];
 		$eventData['ReservationEvent']['dtend'] = $params['dtend'];
-		$eventData['ReservationEvent']['timezone_offset'] = $params['timezone_offset'];
+		$eventData['ReservationEvent']['timezone'] = $params['timezone'];
 		$eventData['ReservationEvent']['status'] = $params['status'];
 
 		$eventData['ReservationEvent']['location'] = $params['location'];
@@ -476,9 +477,9 @@ class ReservationAppBehavior extends ModelBehavior {
 
 		$eventData['ReservationEvent']['location_key'] = $params['location_key'];
 
-		//保存するモデルをここで替える
-		$eventData['ReservationEventContent']['linked_model'] = $params['linked_model'];
-		$eventData['ReservationEventContent']['linked_content_key'] = $params['linked_content_key'];
+		////保存するモデルをここで替える
+		//$eventData['ReservationEventContent']['linked_model'] = $params['linked_model'];
+		//$eventData['ReservationEventContent']['linked_content_key'] = $params['linked_content_key'];
 
 		//workflowcommentなどの追加拡張データはここで追加する。
 		//
@@ -530,13 +531,13 @@ class ReservationAppBehavior extends ModelBehavior {
 		//注: 他のモデルの組み込みBehaviorをcallする場合、第一引数に$modelの指定はいらない。
 
 		//関連コンテンツの登録
-		if (isset($eventData['ReservationEventContent']) &&
-			$eventData['ReservationEventContent']['linked_model'] !== '') {
-			if (!(isset($model->ReservationEventContent))) {
-				$model->loadModels(['ReservationEventContent' => 'Reservation.ReservationEventContent']);
-			}
-			$model->ReservationEventContent->saveLinkedData($eventData, $createdUserWhenUpd);
-		}
+		//if (isset($eventData['ReservationEventContent']) &&
+		//	$eventData['ReservationEventContent']['linked_model'] !== '') {
+		//	if (!(isset($model->ReservationEventContent))) {
+		//		$model->loadModels(['ReservationEventContent' => 'Reservation.ReservationEventContent']);
+		//	}
+		//	$model->ReservationEventContent->saveLinkedData($eventData, $createdUserWhenUpd);
+		//}
 	}
 
 /**

@@ -30,10 +30,10 @@ class ReservationPlansControllerAddTest extends WorkflowControllerAddTest {
 		'plugin.reservations.block_setting_for_reservation',
 		'plugin.reservations.reservation',
 		'plugin.reservations.reservation_event',
-		'plugin.reservations.reservation_event_content',
+		//'plugin.reservations.reservation_event_content',,
 		'plugin.reservations.reservation_event_share_user',
 		'plugin.reservations.reservation_frame_setting',
-		'plugin.reservations.reservation_frame_setting_select_room',
+
 		'plugin.reservations.reservation_rrule',
 		'plugin.workflow.workflow_comment',
 		'plugin.rooms.rooms_language4test',
@@ -146,7 +146,7 @@ class ReservationPlansControllerAddTest extends WorkflowControllerAddTest {
 				'location' => '',
 				'contact' => '',
 				'description' => '',
-				'timezone_offset' => 'Asia/Tokyo',
+				'timezone' => 'Asia/Tokyo',
 			),
 			'WorkflowComment' => array(
 				'comment' => 'WorkflowComment save test'
@@ -323,7 +323,7 @@ class ReservationPlansControllerAddTest extends WorkflowControllerAddTest {
 		//繰り返し回数不正
 		$data['ReservationActionPlan']['is_repeat'] = 1;
 		$data['ReservationActionPlan']['rrule_count'] = 1;
-		$data['ReservationActionPlan']['timezone_offset'] = 'Australia/Adelaide'; //timezoneが変わるルート
+		$data['ReservationActionPlan']['timezone'] = 'Australia/Adelaide'; //timezoneが変わるルート
 		$result = array(
 			'data' => $data,
 			'urlOptions' => array('frame_id' => $data['Frame']['id'], 'block_id' => $data['Block']['id']),

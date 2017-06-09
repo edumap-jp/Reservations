@@ -291,6 +291,42 @@ class ReservationsComponent extends CalendarsComponent {
  * @val integer
  */
 	const CALENDAR_TIMEZONE_AREA_NAME = 0;
-	const CALENDAR_TIMEZONE_OFFSET_VAL = 1;
+	const CALENDAR_TIMEZONE_VAL = 1;
 	const CALENDAR_TIMEZONE_ID = 2;
+
+	//protected static $_tzTbl = null;
+
+/**
+ * getTzTbl
+ *
+ * カレンダータイムゾーン情報配列取得関数
+ *
+ * @return array カレンダータイムゾーン情報配列取得関数
+ */
+	//public static function getTzTbl() {
+	//	if (self::$_tzTbl == null){
+	//		self::$_tzTbl = [];
+	//		$SiteSetting = new SiteSetting();
+	//		$SiteSetting->prepare();
+	//		$originTimezone = date_default_timezone_get();
+	//		$baseTime = time();
+	//		foreach ($SiteSetting->defaultTimezones as $timezone => $timezoneName) {
+	//			date_default_timezone_set($timezone);
+	//			while (date('I', $baseTime)) {
+	//				//サマータイム中
+	//				$baseTime += 30 * 24 * 60 * 60; // 30日ずつずらして、サマータイムぬけるまで調整
+	//			}
+	//			$offsetSec = date('Z', $baseTime);
+	//			$offset = $offsetSec / 3600;
+	//			self::$_tzTbl[$timezone] = [
+	//				$timezoneName,
+	//				$offset,
+	//				$timezone
+	//			];
+	//		}
+	//		// UTCに戻す
+	//		date_default_timezone_set($originTimezone);
+	//	}
+	//	return self::$_tzTbl;
+	//}
 }

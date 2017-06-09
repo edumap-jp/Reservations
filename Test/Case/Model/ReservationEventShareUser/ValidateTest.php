@@ -28,10 +28,10 @@ class ReservationEventShareUserValidateTest extends NetCommonsValidateTest {
 	public $fixtures = array(
 		'plugin.reservations.reservation',
 		'plugin.reservations.reservation_event',
-		'plugin.reservations.reservation_event_content',
+		//'plugin.reservations.reservation_event_content',,
 		'plugin.reservations.reservation_event_share_user',
 		'plugin.reservations.reservation_frame_setting',
-		'plugin.reservations.reservation_frame_setting_select_room',
+
 		'plugin.reservations.reservation_rrule',
 		'plugin.workflow.workflow_comment',
 	);

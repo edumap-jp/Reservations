@@ -63,7 +63,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
 		//	$startDate . $startTime . "]");
 
 		if (!ReservationSupport::isRepeatable($model->rrule,
-			($startDate . $startTime), $eventData['ReservationEvent']['timezone_offset'],
+			($startDate . $startTime), $eventData['ReservationEvent']['timezone'],
 			$model->isOverMaxRruleIndex)) {
 			//CakeLog::debug("DBG: isRepeatable() がFALSEを返した. よって復帰する.");
 			//insertYearly()は再帰callされるが、ここ(isRepeatable()===falseになった時、復帰する。
@@ -444,7 +444,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
 		//	$svrEndDate . "] svrEndTime[" . $svrEndTime . "]");
 
 		if (!ReservationSupport::isRepeatable($model->rrule, ($svrStartDate . $svrStartTime),
-			$eventData['ReservationEvent']['timezone_offset'], $model->isOverMaxRruleIndex)) {
+			$eventData['ReservationEvent']['timezone'], $model->isOverMaxRruleIndex)) {
 			//繰返しがとまったので、callから復帰する。
 			return true;
 		}
@@ -532,7 +532,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
 		//	$svrEndDate . "] svrEndTime[" . $svrEndTime . "]");
 
 		if (!ReservationSupport::isRepeatable($model->rrule, ($svrStartDate . $svrStartTime),
-			$eventData['ReservationEvent']['timezone_offset'], $model->isOverMaxRruleIndex)) {
+			$eventData['ReservationEvent']['timezone'], $model->isOverMaxRruleIndex)) {
 			//CakeLog::debug("DBG: 繰返しがとまったので、復帰する。");
 
 			//繰返しがとまったので、復帰する。

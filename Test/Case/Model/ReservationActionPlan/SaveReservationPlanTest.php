@@ -31,10 +31,10 @@ class ReservationActionPlanSaveReservationPlanTest extends NetCommonsModelTestCa
 		'plugin.reservations.block_setting_for_reservation',
 		'plugin.reservations.reservation',
 		'plugin.reservations.reservation_event',
-		'plugin.reservations.reservation_event_content',
+		//'plugin.reservations.reservation_event_content',,
 		'plugin.reservations.reservation_event_share_user',
 		'plugin.reservations.reservation_frame_setting',
-		'plugin.reservations.reservation_frame_setting_select_room',
+
 		'plugin.reservations.reservation_rrule',
 		'plugin.workflow.workflow_comment',
 		'plugin.rooms.rooms_language4test',
@@ -141,7 +141,7 @@ class ReservationActionPlanSaveReservationPlanTest extends NetCommonsModelTestCa
 				'location' => '',
 				'contact' => '',
 				'description' => '',
-				'timezone_offset' => 'Asia/Tokyo',
+				'timezone' => 'Asia/Tokyo',
 			),
 			'ReservationActionPlanForDisp' => array(
 				'detail_start_datetime' => '2016-07-28 11:00',
@@ -292,7 +292,7 @@ class ReservationActionPlanSaveReservationPlanTest extends NetCommonsModelTestCa
 		$data = $this->__getData();
 
 		$data2 = $this->__getData();
-		$data2['ReservationActionPlan']['timezone_offset'] = 'aaa/bbb';
+		$data2['ReservationActionPlan']['timezone'] = 'aaa/bbb';
 
 		$data3 = $this->__getData();
 		unset($data3['save_1']);

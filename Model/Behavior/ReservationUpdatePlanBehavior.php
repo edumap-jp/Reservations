@@ -81,9 +81,9 @@ class ReservationUpdatePlanBehavior extends ReservationAppBehavior {
 
 		list($eventData, $rruleData) = $this->setEventDataAndRruleData($model, $newPlan);
 
-		//timezone_offsetがなければ、reservation_eventテーブルからセットする。
-		if (!isset($planParams['timezone_offset'])) {
-			$planParams['timezone_offset'] = $eventData['ReservationEvent']['timezone_offset'];
+		//timezoneがなければ、reservation_eventテーブルからセットする。
+		if (!isset($planParams['timezone'])) {
+			$planParams['timezone'] = $eventData['ReservationEvent']['timezone'];
 		}
 
 		//「全更新」、「指定以降更新」、「この予定のみ更新or元予定に繰返しなし」
@@ -426,18 +426,18 @@ class ReservationUpdatePlanBehavior extends ReservationAppBehavior {
 			$createdUserWhenUpd
 		);
 
-		//関連コンテンツ(reservation_event_contents)の更新
-		//
-		if (!empty($eventData['ReservationEvent']['ReservationEventContent']['linked_model'])) {
-			if (!(isset($model->ReservationEventContent))) {
-				$model->loadModels(['ReservationEventContent' => 'Reservations.ReservationEventContent']);
-			}
-			//saveLinkedData()は、内部で
-			//modelとcontent_key一致データなし=> insert
-			//modelとcontent_key一致データあり=> update
-			//と登録・変更を適宜区別して実行する関数である。
-			$model->ReservationEventContent->saveLinkedData($eventData, $createdUserWhenUpd);
-		}
+		////関連コンテンツ(reservation_event_contents)の更新
+		////
+		//if (!empty($eventData['ReservationEvent']['ReservationEventContent']['linked_model'])) {
+		//	if (!(isset($model->ReservationEventContent))) {
+		//		$model->loadModels(['ReservationEventContent' => 'Reservations.ReservationEventContent']);
+		//	}
+		//	//saveLinkedData()は、内部で
+		//	//modelとcontent_key一致データなし=> insert
+		//	//modelとcontent_key一致データあり=> update
+		//	//と登録・変更を適宜区別して実行する関数である。
+		//	$model->ReservationEventContent->saveLinkedData($eventData, $createdUserWhenUpd);
+		//}
 
 		return $eventData;
 	}
@@ -713,7 +713,7 @@ class ReservationUpdatePlanBehavior extends ReservationAppBehavior {
 		//$event['ReservationEvent']['end_date'] = 20160616
 		//$event['ReservationEvent']['end_time'] = 090000
 		//$event['ReservationEvent']['dtend'] = 20160616090000
-		//$event['ReservationEvent']['timezone_offset'] = 9.0
+		//$event['ReservationEvent']['timezone'] = 9.0
 
 		//statusは、編集画面のsave_Nを元に施設予約拡張新statusになっているので、
 		//それを代入する。

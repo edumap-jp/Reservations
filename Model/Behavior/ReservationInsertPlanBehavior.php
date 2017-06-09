@@ -183,13 +183,13 @@ class ReservationInsertPlanBehavior extends ReservationAppBehavior {
 			$createdUserWhenUpd);
 		//注: 他のモデルの組み込みBehaviorをcallする場合、第一引数に$modelの指定はいらない。
 
-		//関連コンテンツの登録
-		if ($eventData['ReservationEventContent']['linked_model'] !== '') {
-			if (!(isset($model->ReservationEventContent))) {
-				$model->loadModels(['ReservationEventContent' => 'Reservations.ReservationEventContent']);
-			}
-			$model->ReservationEventContent->saveLinkedData($eventData, $createdUserWhenUpd);
-		}
+		////関連コンテンツの登録
+		//if ($eventData['ReservationEventContent']['linked_model'] !== '') {
+		//	if (!(isset($model->ReservationEventContent))) {
+		//		$model->loadModels(['ReservationEventContent' => 'Reservations.ReservationEventContent']);
+		//	}
+		//	$model->ReservationEventContent->saveLinkedData($eventData, $createdUserWhenUpd);
+		//}
 
 		return $eventData;
 	}

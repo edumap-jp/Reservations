@@ -11,7 +11,6 @@
 
 App::uses('NetCommonsSaveTest', 'NetCommons.TestSuite');
 App::uses('ReservationFrameSettingFixture', 'Reservations.Test/Fixture');
-App::uses('ReservationFrameSettingSelectRoomFixture', 'Reservations.Test/Fixture');
 
 /**
  * ReservationFrameSetting::saveFrameSetting()のテスト
@@ -30,10 +29,10 @@ class ReservationFrameSettingSaveFrameSettingTest extends NetCommonsSaveTest {
 		'plugin.reservations.block_setting_for_reservation',
 		'plugin.reservations.reservation',
 		'plugin.reservations.reservation_event',
-		'plugin.reservations.reservation_event_content',
+		//'plugin.reservations.reservation_event_content',,
 		'plugin.reservations.reservation_event_share_user',
 		'plugin.reservations.reservation_frame_setting',
-		'plugin.reservations.reservation_frame_setting_select_room',
+
 		'plugin.reservations.reservation_rrule',
 		'plugin.workflow.workflow_comment',
 	);

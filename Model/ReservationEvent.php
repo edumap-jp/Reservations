@@ -123,19 +123,6 @@ class ReservationEvent extends ReservationsAppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'ReservationEventContent' => array(
-			'className' => 'ReservationEventContent',
-			'foreignKey' => 'reservation_event_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => array('id' => 'ASC'),
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
 	);
 
 /**
@@ -281,9 +268,9 @@ class ReservationEvent extends ReservationsAppModel {
 					'message' => __d('reservations', 'Invalid value.'),
 				),
 			),
-			'timezone_offset' => array(
+			'timezone' => array(
 				'rule1' => array(
-					'rule' => array('checkTimezoneOffset'),
+					'rule' => array('checkTimezone'),
 					'message' => __d('reservations', 'Invalid value.'),
 				),
 			),
