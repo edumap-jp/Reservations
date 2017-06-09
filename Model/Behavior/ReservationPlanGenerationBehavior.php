@@ -269,11 +269,11 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
 			$newEventKey = $eventData['ReservationEvent']['key'];
 		}
 
-		//reservation_event_contentsをcopyする
-		foreach ($eventData['ReservationEvent']['ReservationEventContent'] as &$content) {
-			$content = $this->__copyEventContentData($model, $content,
-				$eventData['ReservationEvent']['id'], $createdUserWhenUpd);
-		}
+		////reservation_event_contentsをcopyする
+		//foreach ($eventData['ReservationEvent']['ReservationEventContent'] as &$content) {
+		//	$content = $this->__copyEventContentData($model, $content,
+		//		$eventData['ReservationEvent']['id'], $createdUserWhenUpd);
+		//}
 
 		if ($isMyPrivateRoom) {
 			//変更後の公開ルームidが、「編集者・承認者（＝ログイン者）のプライベート」なので
@@ -311,50 +311,50 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
  * @return int 生成成功時 新しい$contentを返す。失敗時 InternalErrorExceptionを投げる。
  * @throws InternalErrorException
  */
-	private function __copyEventContentData(&$model, $content,
-									$reservationEventId, $createdUserWhenUpd) {
-		//ReservationEventContentには、status, is_latest, is_activeはない
-
-		$contentData = array();
-		$contentData['ReservationEventContent'] = $content;
-
-		//次世代データの新規登録
-		$originContentId = $contentData['ReservationEventContent']['id'];
-		$contentData['ReservationEventContent']['id'] = null;
-		$contentData['ReservationEventContent']['reservation_event_id'] = $reservationEventId;
-
-		//作成日と作成者は、元予定のreservation_event_contentsのものを継承する、、が！例外がある。
-		//例外追加１）
-		//変更後の公開ルームidが、「元予定生成者の＊ルーム」から「編集者・承認者(＝ログイン者）の
-		//プライベート」に変化していた場合、created_userを、元予定生成者「から」編集者・承認者(＝ログイン者）
-		//「へ」に変更すること。
-		//＝＞これを考慮したcreatedUserWhenUpdを使えばよい。
-		if ($createdUserWhenUpd !== null) {
-			$contentData['ReservationEventContent']['created_user'] = $createdUserWhenUpd;
-		}
-
-		$contentData['ReservationEventContent']['modified_user'] = null;
-		$contentData['ReservationEventContent']['modified'] = null;
-
-		if (!isset($model->ReservationEventContent)) {
-			$model->loadModels(['ReservationEventContent' => 'Reservations.ReservationEventContent']);
-		}
-		$model->ReservationEventContent->set($contentData);
-		if (!$model->ReservationEventContent->validates()) {	//ReservationEventContentのチェック
-			$model->validationErrors = Hash::merge(
-				$model->validationErrors, $model->ReservationEventContent->validationErrors);
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
-		$contentData = $model->ReservationEventContent->save($contentData, false);
-		if (!$contentData) { //保存のみ
-			CakeLog::error("変更時に指定された元コンテンツ(reservation_event_content_id=[" .
-				$originContentId . "])のCOPYに失敗");
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
-
-		$content = $contentData['ReservationEventContent'];
-		return $content;
-	}
+	//private function __copyEventContentData(&$model, $content,
+	//								$reservationEventId, $createdUserWhenUpd) {
+	//	//ReservationEventContentには、status, is_latest, is_activeはない
+	//
+	//	$contentData = array();
+	//	$contentData['ReservationEventContent'] = $content;
+	//
+	//	//次世代データの新規登録
+	//	$originContentId = $contentData['ReservationEventContent']['id'];
+	//	$contentData['ReservationEventContent']['id'] = null;
+	//	$contentData['ReservationEventContent']['reservation_event_id'] = $reservationEventId;
+	//
+	//	//作成日と作成者は、元予定のreservation_event_contentsのものを継承する、、が！例外がある。
+	//	//例外追加１）
+	//	//変更後の公開ルームidが、「元予定生成者の＊ルーム」から「編集者・承認者(＝ログイン者）の
+	//	//プライベート」に変化していた場合、created_userを、元予定生成者「から」編集者・承認者(＝ログイン者）
+	//	//「へ」に変更すること。
+	//	//＝＞これを考慮したcreatedUserWhenUpdを使えばよい。
+	//	if ($createdUserWhenUpd !== null) {
+	//		$contentData['ReservationEventContent']['created_user'] = $createdUserWhenUpd;
+	//	}
+	//
+	//	$contentData['ReservationEventContent']['modified_user'] = null;
+	//	$contentData['ReservationEventContent']['modified'] = null;
+	//
+	//	if (!isset($model->ReservationEventContent)) {
+	//		$model->loadModels(['ReservationEventContent' => 'Reservations.ReservationEventContent']);
+	//	}
+	//	$model->ReservationEventContent->set($contentData);
+	//	if (!$model->ReservationEventContent->validates()) {	//ReservationEventContentのチェック
+	//		$model->validationErrors = Hash::merge(
+	//			$model->validationErrors, $model->ReservationEventContent->validationErrors);
+	//		throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+	//	}
+	//	$contentData = $model->ReservationEventContent->save($contentData, false);
+	//	if (!$contentData) { //保存のみ
+	//		CakeLog::error("変更時に指定された元コンテンツ(reservation_event_content_id=[" .
+	//			$originContentId . "])のCOPYに失敗");
+	//		throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+	//	}
+	//
+	//	$content = $contentData['ReservationEventContent'];
+	//	return $content;
+	//}
 
 /**
  * __copyEventShareUserData
@@ -470,7 +470,7 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
 			//event配下の配下関連テーブルだけ追加しておく
 			//
 			$event['ReservationEventShareUser'] = $eventData['ReservationEventShareUser'];
-			$event['ReservationEventContent'] = $eventData['ReservationEventContent'];
+			//$event['ReservationEventContent'] = $eventData['ReservationEventContent'];
 		}
 		return $plan;
 	}

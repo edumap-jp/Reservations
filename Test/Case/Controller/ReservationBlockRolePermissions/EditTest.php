@@ -32,7 +32,7 @@ class ReservationBlockRolePermissionsControllerEditTest extends BlockRolePermiss
 		'plugin.reservations.block_setting_for_reservation',
 		'plugin.reservations.reservation',
 		'plugin.reservations.reservation_event',
-		'plugin.reservations.reservation_event_content',
+		//'plugin.reservations.reservation_event_content',,
 		'plugin.reservations.reservation_event_share_user',
 		'plugin.reservations.reservation_frame_setting',
 

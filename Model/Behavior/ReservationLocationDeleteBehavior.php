@@ -77,13 +77,13 @@ class ReservationLocationDeleteBehavior extends ReservationAppBehavior {
 		);
 		$reserveIds = array_values($reserveIds);
 
-		// ReservationEventContent 削除
-		$conditions = [
-			$model->ReservationEventContent->alias . '.reservation_event_id' => $reserveIds
-		];
-		if (!$model->ReservationEventContent->deleteAll($conditions)) {
-			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
-		}
+		//// ReservationEventContent 削除
+		//$conditions = [
+		//	$model->ReservationEventContent->alias . '.reservation_event_id' => $reserveIds
+		//];
+		//if (!$model->ReservationEventContent->deleteAll($conditions)) {
+		//	throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
+		//}
 
 		// ReservationEventShareUser 削除
 		$conditions = [
