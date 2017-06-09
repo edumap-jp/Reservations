@@ -123,19 +123,6 @@ class ReservationEvent extends ReservationsAppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'ReservationEventContent' => array(
-			'className' => 'ReservationEventContent',
-			'foreignKey' => 'reservation_event_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => array('id' => 'ASC'),
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
 	);
 
 /**

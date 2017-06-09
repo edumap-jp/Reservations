@@ -477,9 +477,9 @@ class ReservationAppBehavior extends ModelBehavior {
 
 		$eventData['ReservationEvent']['location_key'] = $params['location_key'];
 
-		//保存するモデルをここで替える
-		$eventData['ReservationEventContent']['linked_model'] = $params['linked_model'];
-		$eventData['ReservationEventContent']['linked_content_key'] = $params['linked_content_key'];
+		////保存するモデルをここで替える
+		//$eventData['ReservationEventContent']['linked_model'] = $params['linked_model'];
+		//$eventData['ReservationEventContent']['linked_content_key'] = $params['linked_content_key'];
 
 		//workflowcommentなどの追加拡張データはここで追加する。
 		//
@@ -531,13 +531,13 @@ class ReservationAppBehavior extends ModelBehavior {
 		//注: 他のモデルの組み込みBehaviorをcallする場合、第一引数に$modelの指定はいらない。
 
 		//関連コンテンツの登録
-		if (isset($eventData['ReservationEventContent']) &&
-			$eventData['ReservationEventContent']['linked_model'] !== '') {
-			if (!(isset($model->ReservationEventContent))) {
-				$model->loadModels(['ReservationEventContent' => 'Reservation.ReservationEventContent']);
-			}
-			$model->ReservationEventContent->saveLinkedData($eventData, $createdUserWhenUpd);
-		}
+		//if (isset($eventData['ReservationEventContent']) &&
+		//	$eventData['ReservationEventContent']['linked_model'] !== '') {
+		//	if (!(isset($model->ReservationEventContent))) {
+		//		$model->loadModels(['ReservationEventContent' => 'Reservation.ReservationEventContent']);
+		//	}
+		//	$model->ReservationEventContent->saveLinkedData($eventData, $createdUserWhenUpd);
+		//}
 	}
 
 /**
