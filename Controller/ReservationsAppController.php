@@ -226,7 +226,7 @@ class ReservationsAppController extends AppController {
 		//		$order = array('ReservationEvent' . '.dtstart');
 		//	}
 		//} else {
-		$order = array('ReservationEvent' . '.start_date');
+		$order = array('ReservationEvent' . '.dtstart');
 		//}
 
 		$vars['parentIdType'] = array(	//これも共通なので含めておく。
