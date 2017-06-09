@@ -426,18 +426,18 @@ class ReservationUpdatePlanBehavior extends ReservationAppBehavior {
 			$createdUserWhenUpd
 		);
 
-		//関連コンテンツ(reservation_event_contents)の更新
-		//
-		if (!empty($eventData['ReservationEvent']['ReservationEventContent']['linked_model'])) {
-			if (!(isset($model->ReservationEventContent))) {
-				$model->loadModels(['ReservationEventContent' => 'Reservations.ReservationEventContent']);
-			}
-			//saveLinkedData()は、内部で
-			//modelとcontent_key一致データなし=> insert
-			//modelとcontent_key一致データあり=> update
-			//と登録・変更を適宜区別して実行する関数である。
-			$model->ReservationEventContent->saveLinkedData($eventData, $createdUserWhenUpd);
-		}
+		////関連コンテンツ(reservation_event_contents)の更新
+		////
+		//if (!empty($eventData['ReservationEvent']['ReservationEventContent']['linked_model'])) {
+		//	if (!(isset($model->ReservationEventContent))) {
+		//		$model->loadModels(['ReservationEventContent' => 'Reservations.ReservationEventContent']);
+		//	}
+		//	//saveLinkedData()は、内部で
+		//	//modelとcontent_key一致データなし=> insert
+		//	//modelとcontent_key一致データあり=> update
+		//	//と登録・変更を適宜区別して実行する関数である。
+		//	$model->ReservationEventContent->saveLinkedData($eventData, $createdUserWhenUpd);
+		//}
 
 		return $eventData;
 	}

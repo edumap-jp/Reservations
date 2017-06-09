@@ -315,7 +315,6 @@ class ReservationLocation extends ReservationsAppModel {
 			'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable',
 			'ReservationLocationsApprovalUser' => 'Reservations.ReservationLocationsApprovalUser',
 			'ReservationEvent' => 'Reservations.ReservationEvent',
-			'ReservationEventContent' => 'Reservations.ReservationEventContent',
 			'ReservationEventShareUser' => 'Reservations.ReservationEventShareUser',
 			'ReservationFrameSetting' => 'Reservations.ReservationFrameSetting',
 		]);
