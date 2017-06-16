@@ -603,7 +603,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 						// 全ての予約を更新
 						$ignoreConditions = [
 							'NOT' => [
-								'ReservationEvent.rrule_id' =>
+								'ReservationEvent.reservation_rrule_id' =>
 									Hash::get($this->data, 'ReservationActionPlan.origin_rrule_id'),
 								'ReservationEvent.recurrence_event_id !=' => 0,
 								'ReservationEvent.exception_event_id !=' => 0,
