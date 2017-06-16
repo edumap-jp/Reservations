@@ -71,6 +71,7 @@ class ReservationEvent extends ReservationsAppModel {
 		'M17n.M17n' => array(
 			'keyField' => false,
 		),
+		'Reservations.RegistCalendar',
 	);
 
 /**

@@ -392,6 +392,7 @@ class ReservationAppBehavior extends ModelBehavior {
 			'linked_content_key',
 			'enable_email',
 			'email_send_timing',
+			'use_calendar'
 		);
 		foreach ($keys as $key) {
 			if (isset($planParams[$key])) {
@@ -434,7 +435,7 @@ class ReservationAppBehavior extends ModelBehavior {
 			'end_time' => $planParams['end_time'],
 			'dtend' => $planParams['end_date'] . $planParams['end_time'],
 			'timezone' => $planParams['timezone'],
-			'timezone' => Hash::get($planParams, 'timezone'),
+			//'timezone' => Hash::get($planParams, 'timezone'),
 			'status' => $planParams['status'],
 			'enable_email' => $planParams['enable_email'],
 			'email_send_timing' => $planParams['email_send_timing'],
@@ -476,6 +477,8 @@ class ReservationAppBehavior extends ModelBehavior {
 		$eventData['ReservationEvent']['email_send_timing'] = $params['email_send_timing'];
 
 		$eventData['ReservationEvent']['location_key'] = $params['location_key'];
+
+		$eventData['ReservationEvent']['use_calendar'] = $params['use_calendar'];
 
 		////保存するモデルをここで替える
 		//$eventData['ReservationEventContent']['linked_model'] = $params['linked_model'];

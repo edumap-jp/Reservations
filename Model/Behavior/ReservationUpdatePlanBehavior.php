@@ -412,6 +412,9 @@ class ReservationUpdatePlanBehavior extends ReservationAppBehavior {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
+		//$planParams['rrule']か $rruleData['ReservationRrule']で繰り返しわたせる。
+		$model->ReservationEvent->updateCalendar($eventData, $rruleData);
+
 		//採番されたidをeventDataにセットしておく
 		$eventData['ReservationEvent']['id'] = $model->ReservationEvent->id;
 

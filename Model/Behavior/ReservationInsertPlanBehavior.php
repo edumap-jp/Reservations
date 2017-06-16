@@ -148,11 +148,14 @@ class ReservationInsertPlanBehavior extends ReservationAppBehavior {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
-		if (!$model->ReservationEvent->save($eventData, false)) {	//保存のみ
+		if (!$savedData = $model->ReservationEvent->save($eventData, false)) {	//保存のみ
 			$model->validationErrors = Hash::merge(
 				$model->validationErrors, $model->ReservationEvent->validationErrors);
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
+
+		// $planParams['rrule']か $rruleDataで繰り返し参照できる
+		$model->ReservationEvent->updateCalendar($savedData, $rruleData);
 
 		//施設予約独自の例外追加１）
 		//変更後の公開ルームidが、「元予定生成者の＊ルーム」から「編集者・承認者(＝ログイン者）の
