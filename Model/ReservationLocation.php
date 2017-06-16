@@ -450,7 +450,7 @@ class ReservationLocation extends ReservationsAppModel {
 				'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
 				'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable',
 				'ReservationLocationsApprovalUser' => 'Reservations.ReservationLocationsApprovalUser',
-				//'ReservationLocationRoom' => 'Reservations.ReservationLocationRoom'
+				'Room' => 'Rooms.Room',
 			]
 		);
 		$locations = $this->getLocations($categoryId);
