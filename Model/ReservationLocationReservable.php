@@ -141,7 +141,8 @@ class ReservationLocationReservable extends ReservationsAppModel {
 							'RolesRoomsUser.room_id' => $roomIds,
 						),
 					));
-					$this->_roleKeys = Hash::combine($rolesRoomsUsers, '{n}.RolesRoom.role_key', '{n}.RolesRoom.role_key');
+					$this->_roleKeys = Hash::combine($rolesRoomsUsers,
+						'{n}.RolesRoom.role_key', '{n}.RolesRoom.role_key');
 				}
 
 				$conditions = [

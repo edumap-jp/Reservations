@@ -30,7 +30,8 @@ class RegistCalendarBehavior extends ReservationAppBehavior {
 		$data[$model->alias]['end_datetime'] =
 			date('Y-m-d H:i:s', strtotime($data[$model->alias]['dtend']));
 
-		$data['save_1'] = true; // save_1がセットされてないとカレンダ登録されないので…
+		// save_1がセットされてないとカレンダ登録されないので…
+		$data['save_1'] = true;
 
 		if ($cmd === 'save') {
 			//実施期間設定あり&&カレンダー登録する

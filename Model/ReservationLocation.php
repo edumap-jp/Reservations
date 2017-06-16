@@ -395,10 +395,10 @@ class ReservationLocation extends ReservationsAppModel {
  * @return array
  */
 	public function getLocations($categoryId = null) {
-		static $locationsByCategoryId = [];
+		static $locations = [];
 
 		$categoryId = is_null($categoryId) ? 0 : $categoryId;
-		if (!isset($locationsByCategoryId[$categoryId])){
+		if (!isset($locations[$categoryId])) {
 			// ログインユーザが参加してるルームを取得
 			$accessibleRoomIds = $this->getReadableRoomIds();
 			$this->loadModels([
@@ -429,9 +429,9 @@ class ReservationLocation extends ReservationsAppModel {
 
 			$locations = $this->find('all', $options);
 
-			$locationsByCategoryId[$categoryId] = $locations;
+			$locations[$categoryId] = $locations;
 		}
-		return $locationsByCategoryId[$categoryId];
+		return $locations[$categoryId];
 	}
 
 /**
