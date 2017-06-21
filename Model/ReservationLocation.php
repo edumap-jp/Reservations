@@ -427,9 +427,9 @@ class ReservationLocation extends ReservationsAppModel {
 				$options['conditions']['category_id'] = $categoryId;
 			}
 
-			$locations = $this->find('all', $options);
+			$result = $this->find('all', $options);
 
-			$locations[$categoryId] = $locations;
+			$locations[$categoryId] = $result;
 		}
 		return $locations[$categoryId];
 	}
