@@ -313,8 +313,12 @@ echo $this->element('Reservations.scripts');
 			<?php // カレンダに記入 ?>
 			<div class="col-xs-12 col-sm-12">
 				<?php
-				$this->request->data['ReservationActionPlan']['use_calendar'] =
-					($this->request->data['ReservationActionPlan']['calendar_key']) ? true : false;
+				if (Hash::get($this->request->data, 'ReservationActionPlan.calendar_key',
+					false)) {
+					$this->request->data['ReservationActionPlan']['use_calendar'] = true;
+				} else {
+					$this->request->data['ReservationActionPlan']['use_calendar'] = false;
+				}
 				echo $this->NetCommonsForm->inlineCheckbox('ReservationActionPlan.use_calendar',
 					['label' =>
 					__d(
