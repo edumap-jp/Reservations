@@ -99,7 +99,7 @@ class ReservationRruleParameter {
 			$this->_rrule['BYDAY'] = $data['rrule_byday']['MONTHLY'];
 		}
 		if ($data['rrule_bymonthday']['MONTHLY']) {
-			$this->_rrule['BYMONTHDAY'] = $data['rrule_byday']['MONTHLY'];
+			$this->_rrule['BYMONTHDAY'] = $data['rrule_bymonthday']['MONTHLY'];
 		}
 	}
 
