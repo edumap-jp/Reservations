@@ -96,15 +96,30 @@ class ReservationEventPermissionPolicy {
 
 			$readableRooomIds = $this->_getReadableRoomIds($userId);
 			$publishedRoomId = $data['ReservationEvent']['room_id'];
-
-			if (!in_array($publishedRoomId, $readableRooomIds)) {
+			if ($publishedRoomId == 0) {
+				// 指定無し
+				if (!$location['ReservationLocation']['use_all_rooms']) {
+					//　施設で利用可能なルームのいずれにもアクセスできるなら見られない
+					$LocationsRoom = ClassRegistry::init('Reservations.ReservationLocationsRoom');
+					$count = $LocationsRoom->find('count', [
+						'conditions' => [
+							'reservation_location_key' => $location['ReservationLocation']['key'],
+							'room_id' => $readableRooomIds
+						]
+					]);
+					if ($count == 0) {
+						// ユーザがアクセスできるルームで利用可のグループ無し
+						return false;
+					}
+				}
+			} elseif (!in_array($publishedRoomId, $readableRooomIds)) {
 				// 承認者でないなら→予約の公開ルームにアクセス権無いと見られない
 				return false;
 			}
 
 			$status = $data['ReservationEvent']['status'];
 			if ($status == WorkflowComponent::STATUS_PUBLISHED) {
-				//「公開」になってない予約は承認者でなくても見られる
+				//「公開」になってる予約は承認者でなくても見られる
 				return true;
 			}
 
@@ -124,7 +139,7 @@ class ReservationEventPermissionPolicy {
 			$this->Room = ClassRegistry::init('Rooms.Room');
 			$condition = $this->Room->getReadableRoomsConditions([], $userId);
 			$readableRooms = $this->Room->find('all', $condition);
-			$readableRooomIds = Hash::combine($readableRooms, '{n}.Room.id');
+			$readableRooomIds = Hash::combine($readableRooms, '{n}.Room.id', '{n}.Room.id');
 
 			$this->_readableRoomIds[$userId] = $readableRooomIds;
 		}

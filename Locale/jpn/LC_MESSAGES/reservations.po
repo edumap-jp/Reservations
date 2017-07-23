@@ -1413,3 +1413,6 @@ msgid "To see details of import file item settings, please see below.<br />"
 msgstr "インポートファイルへの設定項目の詳細は、下記を参照ください。<br />"
     "<strong>なお、各項目を無指定とする場合、空白の代わりに文字列「null」を設定してください。</strong><br />"
     "また、無指定(「null」指定）または指定外の設定をした場合、<span class=\"text-primary\">未設定</span> とします。"
+    
+msgid "-- not specified --"
+msgstr "-- 指定しない --"

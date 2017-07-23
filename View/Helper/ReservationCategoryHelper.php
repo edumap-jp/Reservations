@@ -38,7 +38,10 @@ class ReservationCategoryHelper extends AppHelper {
 		$pseudoPlan = $this->ReservationCommon->makePseudoPlanFromEvent($vars, $event);
 		$planMarkClassName = $this->ReservationCommon->getPlanMarkClassName($vars, $pseudoPlan);
 
-		if ($event['ReservationEvent']['room_id'] == Space::getRoomIdRoot(Space::COMMUNITY_SPACE_ID)) {
+		if ($event['ReservationEvent']['room_id'] == 0) {
+			// 指定無し
+			$roomName = __d('reservations', '-- not specified --');
+		} elseif ($event['ReservationEvent']['room_id'] == Space::getRoomIdRoot(Space::COMMUNITY_SPACE_ID)) {
 			$roomName = __d('reservations', 'All the members');
 		} else {
 			$roomLangs = Hash::extract(
