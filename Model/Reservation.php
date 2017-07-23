@@ -342,6 +342,7 @@ class Reservation extends ReservationsAppModel {
  * @throws InternalErrorException
  */
 	public function saveBlock() {
+		$this->Block->create();
 		$block = $this->Block->save(array(
 			'room_id' => Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID),
 			'plugin_key' => Inflector::underscore($this->plugin),
