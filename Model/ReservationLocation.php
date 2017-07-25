@@ -427,7 +427,6 @@ class ReservationLocation extends ReservationsAppModel {
 			}
 		}
 
-
 		$locations = $this->find('all', $options);
 		return $locations;
 	}
