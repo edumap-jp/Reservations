@@ -8,9 +8,37 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  * @copyright Copyright 2014, NetCommons Project
  */
+/* @var $this View */
+
+// '' => 'カテゴリ選択'
+// '0' => カテゴリ無し
+// 　となるように事前準備
+$categories = $this->get('categories');
+array_unshift($categories,
+	[
+		'Category' => [
+			'id' => null,
+		],
+		'CategoriesLanguage' => [
+			'name' => __d('categories', 'Select Category')
+		]
+	],
+	[
+		'Category' => [
+			'id' => '0',
+		],
+		'CategoriesLanguage' => [
+			'name' => __d('reservations', 'no category')
+		]
+	]
+	);
+$this->set('categories', $categories);
+if (!isset($this->params['named']['category_id'])) {
+	$this->request->params['named']['category_id'] = '';
+}
 
 echo $this->Category->dropDownToggle(array(
-	'empty' => true,
+	'empty' => false,
 	'displayMenu' => true,
 	'url' => array(
 		'?' => array(

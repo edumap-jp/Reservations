@@ -391,7 +391,7 @@ class ReservationLocation extends ReservationsAppModel {
  *
  * アクセス可能なルームから予約を受け付けてる施設だけに絞り込んで返す
  *
- * @param int $categoryId カテゴリID
+ * @param int $categoryId カテゴリID 0を指定したときは例外的にカテゴリ未指定を返す
  * @return array
  */
 	public function getLocations($categoryId = null) {
@@ -420,8 +420,13 @@ class ReservationLocation extends ReservationsAppModel {
 			'order' => 'ReservationLocation.weight ASC'
 		];
 		if (isset($categoryId)) {
-			$options['conditions']['category_id'] = $categoryId;
+			if ($categoryId != 0) {
+				$options['conditions']['category_id'] = $categoryId;
+			} else {
+				$options['conditions']['category_id'] = null;
+			}
 		}
+
 
 		$locations = $this->find('all', $options);
 		return $locations;
