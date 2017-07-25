@@ -99,6 +99,9 @@ class ReservationCommonHelper extends AppHelper {
 			) {
 				$html = $prefix . $vars['spaceNameOfRooms'][$roomId];
 			}
+		} elseif ($roomId == 0) {
+			// 指定無し
+			$html = $prefix . 'not-selected-room';
 		} else {
 			// 予め取得してあるルーム情報に存在しないってことは閲覧権限のないルームに公開された予約。
 			$html = $prefix . 'not-readable-room';

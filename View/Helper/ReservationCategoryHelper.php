@@ -41,6 +41,7 @@ class ReservationCategoryHelper extends AppHelper {
 		if ($event['ReservationEvent']['room_id'] == 0) {
 			// 指定無し
 			$roomName = __d('reservations', '-- not specified --');
+			$planMarkClassName = 'reservation-plan-mark-not-selected-room';
 		} elseif ($event['ReservationEvent']['room_id'] == Space::getRoomIdRoot(Space::COMMUNITY_SPACE_ID)) {
 			$roomName = __d('reservations', 'All the members');
 		} else {

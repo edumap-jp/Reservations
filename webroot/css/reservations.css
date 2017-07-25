@@ -142,7 +142,6 @@
 	border-left-color: #d9534f;
 }
 
-
 .reservation-plan-mark-share {
 	border-left-color: #e888ec;
 }
@@ -1117,4 +1116,12 @@ div.reservation-horizontal-timeframe{
 
 .reservation-plan-line.reservation-lineplan-not-readable-room{
 	background: #cccccc;
+}
+
+/*利用グループ指定無し*/
+.reservation-plan-mark-not-selected-room{
+	border-left-color: #d9534f;
+}
+.reservation-lineplan-not-selected-room {
+	background-color: #d9534f;
 }

@@ -861,6 +861,10 @@ class ReservationActionPlan extends ReservationsAppModel {
  */
 	public function allowedRoomId($check) {
 		$roomId = $check['plan_room_id'];
+		if ($roomId == 0) {
+			// 公開先指定無し
+			return true;
+		}
 		$locations = $this->_getLocations();
 		$locationRooms = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservableRoom');
 
