@@ -53,6 +53,13 @@ class ReservationEventPermissionPolicy {
 			return true;
 		} else {
 			// 他の人の予約
+			// block_permission_editable なら見られる
+			if (Current::read('Room.space_id') != Space::PRIVATE_SPACE_ID) {
+				if (Current::read('Permission.block_permission_editable.value')) {
+					return true;
+				}
+			}
+
 			$location = $this->_getLocationByKey($data['ReservationEvent']['location_key']);
 			$approvalUserIds = $location['approvalUserIds'];
 
@@ -83,6 +90,13 @@ class ReservationEventPermissionPolicy {
 			return true;
 		} else {
 			// 他の人の予約
+
+			// block_permission_editable なら見られる
+			if (Current::read('Room.space_id') != Space::PRIVATE_SPACE_ID) {
+				if (Current::read('Permission.block_permission_editable.value')) {
+					return true;
+				}
+			}
 
 			$location = $this->_getLocationByKey($data['ReservationEvent']['location_key']);
 			$approvalUserIds = $location['approvalUserIds'];
