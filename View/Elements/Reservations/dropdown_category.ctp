@@ -53,6 +53,6 @@ echo $this->Category->dropDownToggle(array(
 	),
 ));
 // ムリヤリnamedを書き換えたので元にもどす
-if ($originCategoryId === null) {
+if (isset($originCategoryId)) {
 	$this->request->params['named']['category_id'] = null;
 }
