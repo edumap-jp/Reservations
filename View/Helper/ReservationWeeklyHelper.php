@@ -163,17 +163,26 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 		$html = '<tr>';
 		// タイムラインとカテゴリ別表時と共通だ。このヘッダ
 		$className = '';
-		$colSpan = 1;
+		//$colSpan = 1;
+		$displayTimeframe = false;
 		if ($vars['style'] == ReservationsComponent::RESERVATION_STYLE_LACATION_WEEKLY) {
 			if (Current::read('ReservationFrameSetting.display_timeframe')) {
-				$className = 'with-timeframe';
-				$colSpan = 2;
+				$displayTimeframe = true;
+				//$className = 'with-timeframe';
+				//$colSpan = 2;
 				//$html .= '<td style="width:50px" rowspan="2">&nbsp;</td>';
 			}
 		}
 
-		$html .= '<td rowspan="2" class="reservation-col-head ' . $className . '" colspan="' .
-			$colSpan . '"></td>';
+		if ($displayTimeframe) {
+			//$html .= '<td rowspan="2" class="reservation-col-head ' . $className . '" colspan="' . $colSpan . '"></td>';
+			// 1つのセルにまとめると日付行と時間行でズレが発生する（Macでは発生しないので注意！！WinChromeで発生を確認）
+			$html .= '<td rowspan="2" class="reservation-col-head" style="border-right:none"></td>';
+			$html .= '<td rowspan="2" class="reservation-col-head" style="border-left:none"></td>';
+		} else {
+			//$html .= '<td rowspan="2" class="reservation-col-head ' . $className . '" colspan="' . $colSpan . '"></td>';
+			$html .= '<td rowspan="2" class="reservation-col-head"></td>';
+		}
 		for ($i = 0; $i < 7; $i++) {
 			$timestamp = mktime(0, 0, 0, $firstMonth, ($firstDay + $i ), $firstYear);
 			$years[$i] = date('Y', $timestamp);

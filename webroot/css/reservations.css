@@ -858,7 +858,7 @@ padding-right:3px;
 	padding-bottom: 10px;
 }
 .reservation-vertical-timeline thead td.reservation-col-head.with-timeframe {
-	width:100px;
+	/*width:100px;*/
 }
 /* 時間枠 */
 div.reservation-vertical-timeframe{
