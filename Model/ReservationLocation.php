@@ -144,7 +144,7 @@ class ReservationLocation extends ReservationsAppModel {
 						'message' => __d('net_commons', 'Invalid request.'),
 					),
 				),
-		));
+			));
 
 		return parent::beforeValidate($options);
 	}
@@ -210,6 +210,18 @@ class ReservationLocation extends ReservationsAppModel {
 		return $newLocation;
 	}
 
+	public function validateSelectUser($check) {
+		if ($this->data['ReservationLocation']['use_workflow']) {
+			// 承認必要なら承認者必須
+			$users = Hash::get($this->data, 'ReservationLocationsApprovalUser', false);
+			if ($users) {
+				return (count($users) > 0);
+			}
+			return false;
+		}
+		return true;
+	}
+
 /**
  * 施設データの登録
  *
@@ -232,9 +244,14 @@ class ReservationLocation extends ReservationsAppModel {
 
 			// 先にvalidate 失敗したらfalse返す
 			$this->set($data);
+			$this->validate['use_workflow']['seleceUserRule'] = [
+				'rule' => ['validateSelectUser'],
+				'message' => __d('net_commons', 'Please input %s.', __d('reservations', 'Approver')),
+			];
 			if (!$this->validates($data)) {
 				return false;
 			}
+
 			$savedData = $this->save($data, false);
 			if (! $savedData) {
 				//このsaveで失敗するならvalidate以外なので例外なげる

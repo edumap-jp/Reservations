@@ -177,6 +177,7 @@ $dataJson = json_encode($this->request->data);
 							'1' => __d('reservations', 'Need approval reservations'),
 							'0' => __d('blocks', 'Not need approval'),
 						],
+						'error' => false,
 						'default' => Hash::get($this->request->data, 'ReservationLocation.use_workflow'),
 					]);
 				?>
@@ -225,9 +226,13 @@ $dataJson = json_encode($this->request->data);
 						$selectUsers = null;
 					}
 					echo $this->GroupUserList->select($title, $pluginModel, $roomId, $selectUsers);
-				?>
 
-				<?php
+				?>
+				<div style="margin-top: -15px">
+					<?php echo $this->NetCommonsForm->error('ReservationLocation.use_workflow');?>
+				</div>
+
+					<?php
 					// 施設説明 WYSIWYG
 					echo $this->NetCommonsForm->wysiwyg(
 						'ReservationLocation.detail',
@@ -289,5 +294,3 @@ $dataJson = json_encode($this->request->data);
 		<?php endif ?>
 	</article>
 </div>
-
-
