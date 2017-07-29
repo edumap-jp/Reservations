@@ -15,6 +15,19 @@ echo $this->NetCommonsHtml->script(array(
 ));
 
 ?>
+<script>
+  $(function(){
+    // タイムライン幅を画面サイズにあわせて調整する
+	var timeTableWidth = $('.reservation-daily-locations-table').width();
+	var headWidth = $('.reservation-row-head').width();
+
+	$('.reservation-horizon-timeline').width(timeTableWidth - headWidth);
+	//pull-left reservation-row-head
+	//text-center table-responsive pull-right reservation-horizon-timeline ng-scope
+  });
+</script>
+
+
 
 <article ng-controller="ReservationsDetailEdit" class="block-setting-body">
 	<?php
