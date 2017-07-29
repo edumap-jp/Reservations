@@ -1416,3 +1416,6 @@ msgstr "インポートファイルへの設定項目の詳細は、下記を参
     
 msgid "-- not specified --"
 msgstr "-- 指定しない --"
+
+msgid "Location not found in select category."
+msgstr "選択したカテゴリに登録されている施設はありません。"

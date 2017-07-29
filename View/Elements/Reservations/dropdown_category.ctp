@@ -34,8 +34,8 @@ array_unshift($categories,
 	);
 $this->set('categories', $categories);
 // CategoryHelper用にムリヤリcategory_id=""をセット
-if (!isset($this->params['named']['category_id'])) {
-	$originCategoryId = null;
+if (!isset($this->request->params['named']['category_id'])) {
+	$isOverwrite = true;
 	$this->request->params['named']['category_id'] = '';
 }
 
@@ -53,6 +53,6 @@ echo $this->Category->dropDownToggle(array(
 	),
 ));
 // ムリヤリnamedを書き換えたので元にもどす
-if (isset($originCategoryId)) {
-	$this->request->params['named']['category_id'] = null;
+if (isset($isOverwrite)) {
+	unset($this->request->params['named']['category_id']);
 }

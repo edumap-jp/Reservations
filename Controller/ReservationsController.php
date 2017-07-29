@@ -136,6 +136,29 @@ class ReservationsController extends ReservationsAppController {
 		$categoryId = Hash::get($this->request->params['named'], 'category_id');
 
 		$locations = $this->ReservationLocation->getLocations($categoryId);
+		if (empty($locations) && in_array($style,
+				[ReservationsComponent::RESERVATION_STYLE_LACATION_WEEKLY,
+					ReservationsComponent::RESERVATION_STYLE_LACATION_MONTHLY
+				])) {
+
+			$this->NetCommons->setFlashNotification(
+				__d('reservations', 'Location not found in select category.'),
+				array(
+					'class' => 'info',
+				)
+			);
+
+			$url = array(
+				'?' => array(
+					'frame_id' => Current::read('Frame.id'),
+					'style' => $this->request->query('style'),
+					'year' => $this->request->query('year'),
+					'month' => $this->request->query('month'),
+					'day' => $this->request->query('day'),
+				)
+			);
+			$this->redirect($url);
+		}
 		$this->set('locations', $locations);
 
 		$this->_storeRedirectPath($vars);
@@ -144,6 +167,8 @@ class ReservationsController extends ReservationsAppController {
 		ReservationPermissiveRooms::setRoomPermRoles($roomPermRoles);
 
 		$ctpName = $this->_getCtpAndVars($style, $vars);
+
+
 
 		$frameId = Current::read('Frame.id');
 		$languageId = Current::read('Language.id');
