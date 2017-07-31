@@ -1125,3 +1125,9 @@ div.reservation-horizontal-timeframe{
 .reservation-lineplan-not-selected-room {
 	background-color: #d9534f;
 }
+
+/*カテゴリ別日表示で利用。
+タイムラインのレスポンシブルテーブルにスマホサイズのときにボーダーがついてしまうのでこれで抑止*/
+.reservation-horizon-timeline{
+	border: none;
+}

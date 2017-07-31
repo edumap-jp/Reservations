@@ -19,14 +19,21 @@ echo $this->NetCommonsHtml->script(array(
   $(function(){
     // タイムライン幅を画面サイズにあわせて調整する
 	var timeTableWidth = $('.reservation-daily-locations-table').width();
+	console.log(timeTableWidth);
 	var headWidth = $('.reservation-row-head').width();
-
-	$('.reservation-horizon-timeline').width(timeTableWidth - headWidth);
+    console.log(headWidth);
+    var timelineWidth = timeTableWidth - headWidth;
+    console.log(timelineWidth);
+	$('.reservation-horizon-timeline').width(timelineWidth);
 	//pull-left reservation-row-head
 	//text-center table-responsive pull-right reservation-horizon-timeline ng-scope
   });
 </script>
-
+<style>
+	.reservation-horizon-timeline{
+		border: none;
+	}
+</style>
 
 
 <article ng-controller="ReservationsDetailEdit" class="block-setting-body">
