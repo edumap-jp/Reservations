@@ -259,7 +259,8 @@ class ReservationSupport {
 		$wdayIndex = intval($date->format('w'));	//0-6
 		$wdays = explode('|', ReservationsComponent::CALENDAR_REPEAT_WDAY);
 
-		$planRoomId = Current::read('Room.id');
+		//$planRoomId = Current::read('Room.id');
+		$planRoomId = '0'; // '0'＝指定しない 文字列にしないとAngularがSelectOptionと同じと判定しない
 		//$rooms = array_keys($exposeRoomOptions);
 		//if (in_array(Current::read('Room.id'), $rooms)) {
 		//	//公開対象ルーム一覧にCurrentのRoom.idが存在する
