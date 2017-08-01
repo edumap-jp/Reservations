@@ -103,10 +103,8 @@ class ReservationPlanHelper extends AppHelper {
 		//日跨ぎ（ユーザー時刻で同一日ではない）
 		if ($startUserDate != $endUserDate && $plan['ReservationEvent']['is_allday'] == false) {
 			// 翌日0時までは当日扱いにする
-			$startUserUnixtime = strtotime($this->_convertUserTime
-			($plan['ReservationEvent']['dtstart']));
-			$endUserUnixtime = strtotime($this->_convertUserTime
-			($plan['ReservationEvent']['dtend']));
+			$startUserUnixtime = strtotime($this->_convertUserTime($plan['ReservationEvent']['dtstart']));
+			$endUserUnixtime = strtotime($this->_convertUserTime($plan['ReservationEvent']['dtend']));
 			if ((($startUserUnixtime + 24 * 60 * 60) > $endUserUnixtime) &&
 				date('Hi', $endUserUnixtime) == '0000'){
 				return false;
@@ -117,6 +115,12 @@ class ReservationPlanHelper extends AppHelper {
 		return false;
 	}
 
+/**
+ * サーバータイムゾーンのYmdHisデータからユーザタイムゾーンへの変換
+ *
+ * @param string $YmdHis YmdHis形式の日時
+ * @return string
+ */
 	protected function _convertUserTime($YmdHis) {
 		$nctm = new NetCommonsTime();
 		$serverDatetime = ReservationTime::addDashColonAndSp($YmdHis);
@@ -125,7 +129,7 @@ class ReservationPlanHelper extends AppHelper {
 		return $userDatetime;
 	}
 
-	/**
+/**
  * makeEditButtonHtml
  *
  * 編集画面のボタンHTML生成

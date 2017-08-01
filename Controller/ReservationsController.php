@@ -168,8 +168,6 @@ class ReservationsController extends ReservationsAppController {
 
 		$ctpName = $this->_getCtpAndVars($style, $vars);
 
-
-
 		$frameId = Current::read('Frame.id');
 		$languageId = Current::read('Language.id');
 		$this->set(compact('frameId', 'languageId', 'vars'));

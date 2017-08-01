@@ -210,6 +210,12 @@ class ReservationLocation extends ReservationsAppModel {
 		return $newLocation;
 	}
 
+/**
+ * 施設管理者のバリデート
+ *
+ * @param array $check チェック対象データ
+ * @return bool
+ */
 	public function validateSelectUser($check) {
 		if ($this->data['ReservationLocation']['use_workflow']) {
 			// 承認必要なら承認者必須
