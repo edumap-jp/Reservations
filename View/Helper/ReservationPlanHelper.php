@@ -106,7 +106,7 @@ class ReservationPlanHelper extends AppHelper {
 			$startUserUnixtime = strtotime($this->_convertUserTime($plan['ReservationEvent']['dtstart']));
 			$endUserUnixtime = strtotime($this->_convertUserTime($plan['ReservationEvent']['dtend']));
 			if ((($startUserUnixtime + 24 * 60 * 60) > $endUserUnixtime) &&
-				date('Hi', $endUserUnixtime) == '0000'){
+				date('Hi', $endUserUnixtime) == '0000') {
 				return false;
 			}
 			return true;
