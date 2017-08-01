@@ -40,7 +40,7 @@ class ReservationLocation extends ReservationsAppModel {
 		),
 		'Reservations.ReservationLocationDelete',
 		'Reservations.ReservationValidate',
-		//'Reservations.ReservationLocationDelete',
+		'Reservations.ReservationLocationValidate',
 	);
 
 /**
@@ -208,24 +208,6 @@ class ReservationLocation extends ReservationsAppModel {
 			]
 		);
 		return $newLocation;
-	}
-
-/**
- * 施設管理者のバリデート
- *
- * @param array $check チェック対象データ
- * @return bool
- */
-	public function validateSelectUser($check) {
-		if ($this->data['ReservationLocation']['use_workflow']) {
-			// 承認必要なら承認者必須
-			$users = Hash::get($this->data, 'ReservationLocationsApprovalUser', false);
-			if ($users) {
-				return (count($users) > 0);
-			}
-			return false;
-		}
-		return true;
 	}
 
 /**
