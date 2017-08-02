@@ -162,7 +162,7 @@ class ReservationWeeklyHelper extends ReservationMonthlyHelper {
 		/* 曜日 */
 		$html = '<tr>';
 		// タイムラインとカテゴリ別表時と共通だ。このヘッダ
-		$className = '';
+		//$className = '';
 		//$colSpan = 1;
 		$displayTimeframe = false;
 		if ($vars['style'] == ReservationsComponent::RESERVATION_STYLE_LACATION_WEEKLY) {
