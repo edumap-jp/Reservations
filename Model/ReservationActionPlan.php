@@ -477,7 +477,6 @@ class ReservationActionPlan extends ReservationsAppModel {
 			//繰り返しの日付リストを生成
 			$repeatService = new ReservationRepeatService();
 
-
 			$repeatDateSet = $repeatService->getRepeatDateSet($rrule, $startDate);
 
 		} else {
