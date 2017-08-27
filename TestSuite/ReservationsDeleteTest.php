@@ -20,7 +20,7 @@ App::uses('NetCommonsDeleteTest', 'NetCommons.TestSuite');
  * @package NetCommons\Reservations\TestSuite
  * @codeCoverageIgnore
  */
-class ReservationsDeleteTest extends NetCommonsDeleteTest {
+abstract class ReservationsDeleteTest extends NetCommonsDeleteTest {
 
 /**
  * Fixtures
