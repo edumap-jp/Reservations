@@ -20,7 +20,7 @@ App::uses('NetCommonsGetTest', 'NetCommons.TestSuite');
  * @package NetCommons\Reservations\TestSuite
  * @codeCoverageIgnore
  */
-class ReservationsGetTest extends NetCommonsGetTest {
+abstract class ReservationsGetTest extends NetCommonsGetTest {
 
 /**
  * Fixtures
