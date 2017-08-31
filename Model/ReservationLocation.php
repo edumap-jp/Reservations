@@ -40,7 +40,7 @@ class ReservationLocation extends ReservationsAppModel {
 		),
 		'Reservations.ReservationLocationDelete',
 		'Reservations.ReservationValidate',
-		//'Reservations.ReservationLocationDelete',
+		'Reservations.ReservationLocationValidate',
 	);
 
 /**
@@ -144,7 +144,7 @@ class ReservationLocation extends ReservationsAppModel {
 						'message' => __d('net_commons', 'Invalid request.'),
 					),
 				),
-		));
+			));
 
 		return parent::beforeValidate($options);
 	}
@@ -232,9 +232,14 @@ class ReservationLocation extends ReservationsAppModel {
 
 			// 先にvalidate 失敗したらfalse返す
 			$this->set($data);
+			$this->validate['use_workflow']['seleceUserRule'] = [
+				'rule' => ['validateSelectUser'],
+				'message' => __d('net_commons', 'Please input %s.', __d('reservations', 'Approver')),
+			];
 			if (!$this->validates($data)) {
 				return false;
 			}
+
 			$savedData = $this->save($data, false);
 			if (! $savedData) {
 				//このsaveで失敗するならvalidate以外なので例外なげる
@@ -391,47 +396,44 @@ class ReservationLocation extends ReservationsAppModel {
  *
  * アクセス可能なルームから予約を受け付けてる施設だけに絞り込んで返す
  *
- * @param int $categoryId カテゴリID
+ * @param int $categoryId カテゴリID 0を指定したときは例外的にカテゴリ未指定を返す
  * @return array
  */
 	public function getLocations($categoryId = null) {
-		static $locations = [];
-
-		$categoryId = is_null($categoryId) ? 0 : $categoryId;
-		if (!isset($locations[$categoryId])) {
-			// ログインユーザが参加してるルームを取得
-			$accessibleRoomIds = $this->getReadableRoomIds();
-			$this->loadModels([
-				'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
-				//'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable'
-			]);
-			$locationsRooms = $this->ReservationLocationsRoom->find('all', ['conditions' => [
-				'room_id' => $accessibleRoomIds,
-			]]);
-			$locationKeys = Hash::combine($locationsRooms,
-				'{n}.ReservationLocationsRoom.reservation_location_key',
-				'{n}.ReservationLocationsRoom.reservation_location_key'
+		// ログインユーザが参加してるルームを取得
+		$accessibleRoomIds = $this->getReadableRoomIds();
+		$this->loadModels([
+			'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
+			//'ReservationLocationReservable' => 'Reservations.ReservationLocationReservable'
+		]);
+		$locationsRooms = $this->ReservationLocationsRoom->find('all', ['conditions' => [
+			'room_id' => $accessibleRoomIds,
+		]]);
+		$locationKeys = Hash::combine($locationsRooms,
+			'{n}.ReservationLocationsRoom.reservation_location_key',
+			'{n}.ReservationLocationsRoom.reservation_location_key'
 			);
-			// そのルームからの予約を受け付ける施設を取得
-			$options = [
-				'conditions' => [
-					'language_id' => Current::read('Language.id'),
-					'OR' => [
-						'use_all_rooms' => 1, // 全てのルームから予約を受け付ける施設
-						'ReservationLocation.key' => $locationKeys
-					]
-				],
-				'order' => 'ReservationLocation.weight ASC'
-			];
-			if ($categoryId) {
+		// そのルームからの予約を受け付ける施設を取得
+		$options = [
+			'conditions' => [
+				'language_id' => Current::read('Language.id'),
+				'OR' => [
+					'use_all_rooms' => 1, // 全てのルームから予約を受け付ける施設
+					'ReservationLocation.key' => $locationKeys
+				]
+			],
+			'order' => 'ReservationLocation.weight ASC'
+		];
+		if (isset($categoryId)) {
+			if ($categoryId != 0) {
 				$options['conditions']['category_id'] = $categoryId;
+			} else {
+				$options['conditions']['category_id'] = null;
 			}
-
-			$result = $this->find('all', $options);
-
-			$locations[$categoryId] = $result;
 		}
-		return $locations[$categoryId];
+
+		$locations = $this->find('all', $options);
+		return $locations;
 	}
 
 /**

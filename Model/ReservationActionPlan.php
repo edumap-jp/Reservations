@@ -452,6 +452,10 @@ class ReservationActionPlan extends ReservationsAppModel {
 		$startDateTime = $this->data[$this->alias]['detail_start_datetime'] . ':00';
 		$endDateTime = $this->data[$this->alias]['detail_end_datetime'] . ':00';
 
+		$rruleParameter = new ReservationRruleParameter();
+		$rruleParameter->setData($this->data);
+		$rrule = $rruleParameter->getRrule();
+
 		// 施設情報を取得
 		$this->loadModels(
 			[
@@ -465,85 +469,49 @@ class ReservationActionPlan extends ReservationsAppModel {
 		$reservableTimeTable = explode('|', $location['ReservationLocation']['time_table']);
 		$locationTimeZone = new DateTimeZone($location['ReservationLocation']['timezone']);
 
-		// 予約時間を施設のタイムゾーンの時間に変換
-		// This timezone offset is id.
-		$planTimeZone = new DateTimeZone($this->data[$this->alias]['timezone']);
-		$startDateTime = new DateTime($startDateTime, $planTimeZone);
-		$startDateTime->setTimezone($locationTimeZone);
-		$startDateTime = $startDateTime->format('Y-m-d H:i:s');
-
-		$endDateTime = new DateTime($endDateTime, $planTimeZone);
-		$endDateTime->setTimezone($locationTimeZone);
-		$endDateTime = $endDateTime->format('Y-m-d H:i:s');
-
-		// 施設の利用可能時刻をUTCから施設のタイムゾーンに変換
-		$locationStartTime = new DateTime($location['ReservationLocation']['start_time'],
-			new DateTimeZone('UTC'));
-		$locationStartTime->setTimezone($locationTimeZone);
-		$locationStartTime = $locationStartTime->format('H:i');
-
-		$locationEndTime = new DateTime($location['ReservationLocation']['end_time'],
-			new DateTimeZone('UTC'));
-		$locationEndTime->setTimezone($locationTimeZone);
-		$locationEndTime = $locationEndTime->format('H:i');
-		if ($locationStartTime == '00:00' && $locationStartTime == $locationEndTime) {
-			// 00:00-00:00は00:00-24:00にする
-			$locationEndTime = '24:00';
-		}
-		//
-		//$length = strtotime($locationEndTime) = strtotime($locationStartTime);
-		//$locationEndTime = strtotime($locationStartTime) + $length;
-		//
-
-		// 予約を日付毎に分割する
-		// 以下、日付毎にチェックする
-		// 　曜日の制約OKかをチェック
-		// 　施設の利用可能時刻におさまってるかチェック
 		$startDate = date('Y-m-d', strtotime($startDateTime));
-		$endDate = date('Y-m-d', strtotime($endDateTime));
-		if ($startDate != $endDate) {
-			//　日付またぎの予約なら日付毎に分割してチェックする
-			// $startDateから1日ずつたして$endDateまで
-					$endDateUnixtime = strtotime($endDate);
-			$current = strtotime($startDate);
-			for ($current = $current; $current <= $endDateUnixtime; $current = $current + (24 * 60 * 60)) {
-				if ($current == strtotime($startDate)) {
-					// 開始日
-					$startUnixTime = strtotime($startDateTime);
-				} else {
-					$startUnixTime = $current;
-				}
-				if ($current == strtotime($endDate)) {
-					// 終了日
-					$endUnixTime = strtotime($endDateTime);
-				} else {
-					$endUnixTime = $current + (24 * 60 * 60);
-				}
-				$result = $this->_isReservableLocationTimeRane(
-					$startUnixTime,
-					$endUnixTime,
-					$locationStartTime,
-					$locationEndTime,
-					$reservableTimeTable
-				);
-				if (!$result) {
-					return false;
-				}
-			}
-			return true;
+		$startTime = date('H:i:s', strtotime($startDateTime));
+		$timeLength = strtotime($endDateTime) - strtotime($startDateTime); // 予約の時間幅
+		// 繰り返し予約なら繰り返し日付を生成
+		if ($rrule) {
+			//繰り返しの日付リストを生成
+			$repeatService = new ReservationRepeatService();
+
+			$repeatDateSet = $repeatService->getRepeatDateSet($rrule, $startDate);
+
 		} else {
-			// 予約OKな曜日か
+			// 繰り返しで無ければ1日だけ配列にいれる
+			$repeatDateSet = [$startDate];
+		}
+		// 繰り返し日ごとに予約可能日時かチェック
+		$ngDates = [];
+		foreach ($repeatDateSet as $checkDate) {
+			// 繰り返し生成日付＋時刻でチェックする開始日時、終了日時を生成
+			$checkStartDateTime = $checkDate . ' ' . $startTime;
+			$checkEndDateTime = date('Y-m-d H:i:s', strtotime($checkStartDateTime) + $timeLength);
 
-			$startUnixTime = strtotime($startDateTime);
-			$endUnixTime = strtotime($endDateTime);
-
-			return $this->_isReservableLocationTimeRane(
-				$startUnixTime,
-				$endUnixTime,
-				$locationStartTime,
-				$locationEndTime,
+			if (!$this->_validateLocationTimeRange(
+				$checkStartDateTime,
+				$checkEndDateTime,
+				$location,
+				$locationTimeZone,
 				$reservableTimeTable
+			)
+			) {
+				// 予約NG日があったらNG日リストに追加
+				$ngDates[] = $checkDate;
+			}
+		}
+		if ($ngDates) {
+			// ERROR
+			$ret = __d(
+				'reservations',
+				'Invalid reservation time range.'
 			);
+			$ret .= implode('<br />', $ngDates);
+			return $ret;
+		} else {
+			return true;
 		}
 	}
 
@@ -861,6 +829,10 @@ class ReservationActionPlan extends ReservationsAppModel {
  */
 	public function allowedRoomId($check) {
 		$roomId = $check['plan_room_id'];
+		if ($roomId == 0) {
+			// 公開先指定無し
+			return true;
+		}
 		$locations = $this->_getLocations();
 		$locationRooms = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservableRoom');
 
@@ -1404,5 +1376,108 @@ class ReservationActionPlan extends ReservationsAppModel {
 			return false;
 		}
 		return true;
+	}
+
+/**
+ * 施設の予約可能時間かチェック
+ *
+ * @param string $startDateTime Y-m-d H:i:s ユーザタイムゾーン
+ * @param string $endDateTime Y-m-d H:i:s ユーザタイムゾーン
+ * @param array $location 施設情報
+ * @param string $locationTimeZone 施設のタイムゾーン
+ * @param array $reservableTimeTable 予約可能曜日
+ * @return bool
+ */
+	protected function _validateLocationTimeRange(
+		$startDateTime,
+		$endDateTime,
+		$location,
+		$locationTimeZone,
+		$reservableTimeTable
+	) {
+		// 予約時間を施設のタイムゾーンの時間に変換
+		// This timezone offset is id.
+		$planTimeZone = new DateTimeZone($this->data[$this->alias]['timezone']);
+		$startDateTime = new DateTime($startDateTime, $planTimeZone);
+		$startDateTime->setTimezone($locationTimeZone);
+		$startDateTime = $startDateTime->format('Y-m-d H:i:s');
+
+		$endDateTime = new DateTime($endDateTime, $planTimeZone);
+		$endDateTime->setTimezone($locationTimeZone);
+		$endDateTime = $endDateTime->format('Y-m-d H:i:s');
+
+		// 施設の利用可能時刻をUTCから施設のタイムゾーンに変換
+		$locationStartTime = new DateTime(
+			$location['ReservationLocation']['start_time'],
+			new DateTimeZone('UTC')
+		);
+		$locationStartTime->setTimezone($locationTimeZone);
+		$locationStartTime = $locationStartTime->format('H:i');
+
+		$locationEndTime = new DateTime(
+			$location['ReservationLocation']['end_time'],
+			new DateTimeZone('UTC')
+		);
+		$locationEndTime->setTimezone($locationTimeZone);
+		$locationEndTime = $locationEndTime->format('H:i');
+		if ($locationStartTime == '00:00' && $locationStartTime == $locationEndTime) {
+			// 00:00-00:00は00:00-24:00にする
+			$locationEndTime = '24:00';
+		}
+		//
+		//$length = strtotime($locationEndTime) = strtotime($locationStartTime);
+		//$locationEndTime = strtotime($locationStartTime) + $length;
+		//
+
+		// 予約を日付毎に分割する
+		// 以下、日付毎にチェックする
+		// 　曜日の制約OKかをチェック
+		// 　施設の利用可能時刻におさまってるかチェック
+		$startDate = date('Y-m-d', strtotime($startDateTime));
+		$endDate = date('Y-m-d', strtotime($endDateTime));
+		if ($startDate != $endDate) {
+			//　日付またぎの予約なら日付毎に分割してチェックする
+			// $startDateから1日ずつたして$endDateまで
+			$endDateUnixtime = strtotime($endDate);
+			$current = strtotime($startDate);
+			for ($current = $current; $current <= $endDateUnixtime; $current = $current + (24 * 60 * 60)) {
+				if ($current == strtotime($startDate)) {
+					// 開始日
+					$startUnixTime = strtotime($startDateTime);
+				} else {
+					$startUnixTime = $current;
+				}
+				if ($current == strtotime($endDate)) {
+					// 終了日
+					$endUnixTime = strtotime($endDateTime);
+				} else {
+					$endUnixTime = $current + (24 * 60 * 60);
+				}
+				$result = $this->_isReservableLocationTimeRane(
+					$startUnixTime,
+					$endUnixTime,
+					$locationStartTime,
+					$locationEndTime,
+					$reservableTimeTable
+				);
+				if (!$result) {
+					return false;
+				}
+			}
+			return true;
+		} else {
+			// 予約OKな曜日か
+
+			$startUnixTime = strtotime($startDateTime);
+			$endUnixTime = strtotime($endDateTime);
+
+			return $this->_isReservableLocationTimeRane(
+				$startUnixTime,
+				$endUnixTime,
+				$locationStartTime,
+				$locationEndTime,
+				$reservableTimeTable
+			);
+		}
 	}
 }

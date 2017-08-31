@@ -53,6 +53,13 @@ class ReservationEventPermissionPolicy {
 			return true;
 		} else {
 			// 他の人の予約
+			// block_permission_editable なら見られる
+			if (Current::read('Room.space_id') != Space::PRIVATE_SPACE_ID) {
+				if (Current::read('Permission.block_permission_editable.value')) {
+					return true;
+				}
+			}
+
 			$location = $this->_getLocationByKey($data['ReservationEvent']['location_key']);
 			$approvalUserIds = $location['approvalUserIds'];
 
@@ -81,36 +88,72 @@ class ReservationEventPermissionPolicy {
 		if ($userId == $data['ReservationEvent']['created_user']) {
 			// 自分の予約は無条件に見られる。
 			return true;
-		} else {
-			// 他の人の予約
+		}
+		// 他の人の予約
 
-			$location = $this->_getLocationByKey($data['ReservationEvent']['location_key']);
-			$approvalUserIds = $location['approvalUserIds'];
-
-			if (in_array($userId, $approvalUserIds)) {
-				// 承認者はどのルームでも見られる（でないと承認できない）
+		// block_permission_editable なら見られる
+		if (Current::read('Room.space_id') != Space::PRIVATE_SPACE_ID) {
+			if (Current::read('Permission.block_permission_editable.value')) {
 				return true;
 			}
+		}
 
-			// 以降承認者以外の場合のチェック
+		$location = $this->_getLocationByKey($data['ReservationEvent']['location_key']);
+		$approvalUserIds = $location['approvalUserIds'];
 
-			$readableRooomIds = $this->_getReadableRoomIds($userId);
-			$publishedRoomId = $data['ReservationEvent']['room_id'];
+		if (in_array($userId, $approvalUserIds)) {
+			// 承認者はどのルームでも見られる（でないと承認できない）
+			return true;
+		}
 
-			if (!in_array($publishedRoomId, $readableRooomIds)) {
-				// 承認者でないなら→予約の公開ルームにアクセス権無いと見られない
-				return false;
-			}
-
-			$status = $data['ReservationEvent']['status'];
-			if ($status == WorkflowComponent::STATUS_PUBLISHED) {
-				//「公開」になってない予約は承認者でなくても見られる
-				return true;
-			}
-
-			// まだ公開になってない予約は見られない
+		// 以降承認者以外の場合のチェック
+		$publishedRoomId = $data['ReservationEvent']['room_id'];
+		if (!$this->_isReadablePublishedRoomId($publishedRoomId, $userId, $location)) {
 			return false;
 		}
+
+		$status = $data['ReservationEvent']['status'];
+		if ($status == WorkflowComponent::STATUS_PUBLISHED) {
+			//「公開」になってる予約は承認者でなくても見られる
+			return true;
+		}
+
+		// まだ公開になってない予約は見られない
+		return false;
+	}
+
+/**
+ * 予約で公開先となってるRoomIdにたいしてアクセスできるか？
+ *
+ * @param int $publishedRoomId 予約の公開先ルーム　0だと指定無し
+ * @param int $userId ユーザID
+ * @param array $location 施設データ
+ * @return bool
+ */
+	protected function _isReadablePublishedRoomId($publishedRoomId, $userId, $location) {
+		$readableRooomIds = $this->_getReadableRoomIds($userId);
+		//$publishedRoomId = $data['ReservationEvent']['room_id'];
+		if ($publishedRoomId == 0) {
+			// 指定無し
+			if (!$location['ReservationLocation']['use_all_rooms']) {
+				//　施設で利用可能なルームのいずれにもアクセスできないなら見られない
+				$LocationsRoom = ClassRegistry::init('Reservations.ReservationLocationsRoom');
+				$count = $LocationsRoom->find('count', [
+					'conditions' => [
+						'reservation_location_key' => $location['ReservationLocation']['key'],
+						'room_id' => $readableRooomIds
+					]
+				]);
+				if ($count == 0) {
+					// ユーザがアクセスできるルームで利用可のグループ無し
+					return false;
+				}
+			}
+		} elseif (!in_array($publishedRoomId, $readableRooomIds)) {
+			// 承認者でないなら→予約の公開ルームにアクセス権無いと見られない
+			return false;
+		}
+		return true;
 	}
 
 /**
@@ -124,7 +167,7 @@ class ReservationEventPermissionPolicy {
 			$this->Room = ClassRegistry::init('Rooms.Room');
 			$condition = $this->Room->getReadableRoomsConditions([], $userId);
 			$readableRooms = $this->Room->find('all', $condition);
-			$readableRooomIds = Hash::combine($readableRooms, '{n}.Room.id');
+			$readableRooomIds = Hash::combine($readableRooms, '{n}.Room.id', '{n}.Room.id');
 
 			$this->_readableRoomIds[$userId] = $readableRooomIds;
 		}

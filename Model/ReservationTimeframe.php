@@ -310,7 +310,14 @@ class ReservationTimeframe extends ReservationsAppModel {
 			];
 		}
 		// 全時間枠取得
+		$conditions = [];
+		if ($id = Hash::get($this->data, 'ReservationTimeframe.id')) {
+			$conditions = [
+			'ReservationTimeframe.id !=' => $id,
+			];
+		}
 		$timeframes = $this->find('all', [
+			'conditions' => $conditions,
 			'group' => 'ReservationTimeframe.key'
 		]);
 		// start > endなデータは24:00またぎなのでstart-24:00 と 0:00-end のデータとして扱う。

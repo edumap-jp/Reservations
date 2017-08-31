@@ -57,10 +57,11 @@ $displayType = $this->request->data['ReservationFrameSetting']['display_type'];
 				'{n}.Category.id',
 				'{n}.CategoriesLanguage.name'
 			);
-			//施設の絞り込み, カテゴリなし　を追加
+			//施設の絞り込み, 全カテゴリ、カテゴリなし　を追加
 			$locationCategories = Hash::merge(
 				[
 					'' => __d('reservations', 'Display all'),
+					'0' => __d('reservations', 'no category'),
 				],
 				$locationCategories
 			);

@@ -223,6 +223,7 @@ echo $this->element('Reservations.scripts');
 					<?php
 					foreach ($locations as $location) {
 						$options = Hash::combine($location['ReservableRoom'], '{n}.Room.id', '{n}.RoomsLanguage.0.name');
+						$options = [0 => __d('reservations', '-- not specified --')] + $options;
 						echo $this->NetCommonsForm->select('ReservationActionPlan.plan_room_id',
 							$options, array(
 								'class' => 'form-control select-expose-target',
