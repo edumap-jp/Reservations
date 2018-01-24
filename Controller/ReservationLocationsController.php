@@ -334,7 +334,7 @@ class ReservationLocationsController extends ReservationsAppController {
  */
 	public function sort() {
 		if ($this->request->is('post')) {
-			if ($this->ReservationLocationChangeWeight->saveWeights($this->data)) {
+			if ($this->ReservationLocation->saveWeights($this->data)) {
 				$url = NetCommonsUrl::actionUrl(
 					array(
 						'controller' => 'reservation_locations',
