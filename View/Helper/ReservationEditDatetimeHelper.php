@@ -87,7 +87,7 @@ class ReservationEditDatetimeHelper extends AppHelper {
 			$this->request->data['ReservationActionPlan']['timezone'],
 			$dtValue
 		);
-		$dtValue = $dttmObj->format('Y-m-d H-i');
+		$dtValue = $dttmObj->format('Y-m-d H:i');
 
 		$addNgInit = $jsFuncName . "('ReservationActionPlan" . Inflector::camelize($fieldName) . "')";
 
