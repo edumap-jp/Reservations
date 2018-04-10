@@ -106,6 +106,7 @@ class ReservationRoleAndPermBehavior extends ReservationAppBehavior {
 		//2. ログインユーザが所属する各ルームでの役割（role_key）を取得する。
 		$rolesRoomsUsers = $model->RolesRoomsUser->getRolesRoomsUsers(array(
 			'RolesRoomsUser.user_id' => Current::read('User.id'),
+			'RolesRoomsUser.room_id' => $accessibleRoomIds
 		));
 
 		//CakeLog::debug("DBG: rolesRoomsUsers[" . print_r($rolesRoomsUsers, true) . "]");
