@@ -196,6 +196,8 @@ echo $this->element('Reservations.scripts');
                         <dl>
                         <dt><?php echo __d('reservations', 'Available'); ?></dt><dd>{{selectLocation.ReservationLocation.openText}}</dd>
                         <dt><?php echo __d('reservations', 'Approver'); ?></dt><dd>{{selectLocation.ReservationLocation.contact}}</dd>
+                        <dt><?php echo __d('reservations', 'Description'); ?></dt><dd>{{selectLocation
+                        .ReservationLocation.detail}}</dd>
                         </dl>
                         <p>{{selectLocation.ReservationLocation.description}}</p>
 						" data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d('reservations', '詳細'); ?></a>
