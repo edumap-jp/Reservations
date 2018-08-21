@@ -79,6 +79,7 @@ App::uses('ReservationSettingsComponent', 'Reservations.Controller/Component');
 						</tr>
 					<?php endforeach;?>
 				</table>
+				<?php echo $this->element('NetCommons.paginator') ?>
 			</div>
 		<?php else: ?>
 			<?php echo __d('reservations', 'No institution yet registered.'); ?>

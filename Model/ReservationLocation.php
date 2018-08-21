@@ -177,6 +177,9 @@ class ReservationLocation extends ReservationsAppModel {
  * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#afterfind
  */
 	public function afterFind($results, $primary = false) {
+		if (!isset($results[0][$this->alias])) {
+			return $results;
+		}
 		foreach ($results as $key => $value) {
 			if (array_key_exists('time_table', $results[$key][$this->alias]) &&
 					array_key_exists('start_time', $results[$key][$this->alias]) &&
