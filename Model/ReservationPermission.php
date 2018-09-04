@@ -189,7 +189,7 @@ class ReservationPermission extends ReservationsAppModel {
 				'Room.id' => $readableRoomIds
 			),
 			'order' => array(
-				'Room.lft asc'
+				'Room.sort_key asc'
 			)
 		);
 	}

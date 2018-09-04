@@ -68,7 +68,7 @@ class ReservationShareUsersHelper extends AppHelper {
 			$html = '';
 			foreach ($shareUsers as $shareUser) {
 				$html .= $this->DisplayUser->handleLink($shareUser,
-					array('avatar' => true), null, 'User');
+					array('avatar' => true), [], 'User');
 				$html .= ',&nbsp;&nbsp;';
 			}
 			$html = trim($html, ',&nbsp;&nbsp;');
