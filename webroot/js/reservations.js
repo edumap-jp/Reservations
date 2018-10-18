@@ -72,7 +72,16 @@ NetCommonsApp.filter('formatYyyymmdd', function() {
   }
 });
 
-NetCommonsApp.controller('ReservationLocation', ['$scope', function($scope) {
+NetCommonsApp.controller('ReservationLocation',
+    ['$scope', 'NetCommonsWysiwyg', function($scope, NetCommonsWysiwyg) {
+
+  /**
+   * tinymce
+   *
+   * @type {object}
+   */
+  $scope.tinymce = NetCommonsWysiwyg.new();
+
   $scope.init = function(data) {
     $scope.data = data;
 
