@@ -22,7 +22,8 @@ echo $this->NetCommonsHtml->script(array(
 	console.log(timeTableWidth);
 	var headWidth = $('.reservation-row-head').width();
     console.log(headWidth);
-    var timelineWidth = timeTableWidth - headWidth;
+    // -1する事でFireFox,IE,Eageでの罫線ずれを防ぐ
+    var timelineWidth = timeTableWidth - headWidth - 1;
     console.log(timelineWidth);
 	$('.reservation-horizon-timeline').width(timelineWidth);
 	//pull-left reservation-row-head

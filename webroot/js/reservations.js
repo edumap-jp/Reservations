@@ -72,56 +72,65 @@ NetCommonsApp.filter('formatYyyymmdd', function() {
   }
 });
 
-NetCommonsApp.controller('ReservationLocation', ['$scope', function($scope) {
-  $scope.init = function(data) {
-    $scope.data = data;
+NetCommonsApp.controller('ReservationLocation',
+    ['$scope', 'NetCommonsWysiwyg', function($scope, NetCommonsWysiwyg) {
 
-    var boolKeys = ['use_all_rooms', 'use_workflow', 'use_private'];
-    angular.forEach($scope.data.ReservationLocation, function(value, key) {
-      if ($.inArray(key, boolKeys) >= 0) {
+      /**
+   * tinymce
+   *
+   * @type {object}
+   */
+      $scope.tinymce = NetCommonsWysiwyg.new();
 
-        if (value === '1' || value == true) {
-          $scope.data.ReservationLocation[key] = true;
-        } else {
-          $scope.data.ReservationLocation[key] = false;
+      $scope.init = function(data) {
+        $scope.data = data;
+
+        var boolKeys = ['use_all_rooms', 'use_workflow', 'use_private'];
+        angular.forEach($scope.data.ReservationLocation, function(value, key) {
+          if ($.inArray(key, boolKeys) >= 0) {
+
+            if (value === '1' || value == true) {
+              $scope.data.ReservationLocation[key] = true;
+            } else {
+              $scope.data.ReservationLocation[key] = false;
+            }
+          }
+        });
+
+        // postされたbool値変換
+        // if ($scope.data.ReservationLocation.use_all_rooms === '1') {
+        //   $scope.data.ReservationLocation.use_all_rooms = true;
+        // } else {
+        //   $scope.data.ReservationLocation.use_all_rooms = false;
+        // }
+        // // postされたbool値変換
+        // if ($scope.data.ReservationLocation.use_workflow === '1') {
+        //   $scope.data.ReservationLocation.use_workflow = true;
+        // } else {
+        //   $scope.data.ReservationLocation.use_workflow = false;
+        // }
+        // // postされたbool値変換
+        // if ($scope.data.ReservationLocation.use_private === '1') {
+        //   $scope.data.ReservationLocation.use_private = true;
+        // } else {
+        //   $scope.data.ReservationLocation.use_private = false;
+        // }
+
+        console.log($scope.data.ReservationLocation);
+        if ($scope.data.ReservationLocation.start_time == '00:00' &&
+         ($scope.data.ReservationLocation.end_time == '00:00' ||
+         $scope.data.ReservationLocation.end_time == '24:00')) {
+          $scope.allDay = true;
         }
-      }
-    });
-
-    // postされたbool値変換
-    // if ($scope.data.ReservationLocation.use_all_rooms === '1') {
-    //   $scope.data.ReservationLocation.use_all_rooms = true;
-    // } else {
-    //   $scope.data.ReservationLocation.use_all_rooms = false;
-    // }
-    // // postされたbool値変換
-    // if ($scope.data.ReservationLocation.use_workflow === '1') {
-    //   $scope.data.ReservationLocation.use_workflow = true;
-    // } else {
-    //   $scope.data.ReservationLocation.use_workflow = false;
-    // }
-    // // postされたbool値変換
-    // if ($scope.data.ReservationLocation.use_private === '1') {
-    //   $scope.data.ReservationLocation.use_private = true;
-    // } else {
-    //   $scope.data.ReservationLocation.use_private = false;
-    // }
-
-    console.log($scope.data.ReservationLocation);
-    if ($scope.data.ReservationLocation.start_time == '00:00' &&
-        ($scope.data.ReservationLocation.end_time == '00:00' ||
-        $scope.data.ReservationLocation.end_time == '24:00')) {
-      $scope.allDay = true;
-    }
-  };
-  $scope.checkAllDay = function() {
-    if ($scope.allDay) {
-      $scope.data.ReservationLocation.start_time = '00:00';
-      $scope.data.ReservationLocation.end_time = '24:00';
-      console.log($scope.data.ReservationLocation.end_time);
-    }
-  };
-}]);
+      };
+      $scope.checkAllDay = function() {
+        if ($scope.allDay) {
+          $scope.data.ReservationLocation.start_time = '00:00';
+          $scope.data.ReservationLocation.end_time = '24:00';
+          console.log($scope.data.ReservationLocation.end_time);
+        }
+      };
+    }]);
 
 NetCommonsApp.controller('ReservationSchedule', ['$scope', function($scope) {
   $scope.initialize = function(data) {
