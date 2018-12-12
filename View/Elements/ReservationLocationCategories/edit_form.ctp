@@ -10,7 +10,9 @@
  */
 
 echo $this->element('Categories.edit_form_common');
-$categories = NetCommonsAppController::camelizeKeyRecursive($this->data['Categories']);
+// @see https://github.com/NetCommons3/Categories/blob/master/View/Elements/edit_form.ctp よりコピーにて作成。
+//$categories = NetCommonsAppController::camelizeKeyRecursive($this->data['Categories']);
+$categories = $this->data['Categories'];
 ?>
 
 <?php echo $this->element('Blocks.form_hidden'); ?>
