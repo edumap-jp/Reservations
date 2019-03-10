@@ -139,7 +139,7 @@ class ReservationBlockRolePermissionsControllerEditTest extends BlockRolePermiss
 		TestAuthGeneral::login($this);
 
 		$frameId = '6';
-		$blockId = '4';
+		$blockId = '2';
 
 		//テスト実施
 		$url = array(
