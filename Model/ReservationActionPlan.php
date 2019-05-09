@@ -290,7 +290,7 @@ class ReservationActionPlan extends ReservationsAppModel {
  */
 	// 未使用
 	//protected function _doMergeDisplayParamValidate($isDetailEdit) {
-	//	$this->validate = Hash::merge($this->validate, array(
+	//	$this->validate = ValidateMerge::merge($this->validate, array(
 	//		'return_style' => array(
 	//			'rule1' => array(
 	//				'rule' => array('inList', array(
@@ -339,7 +339,7 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @return void
  */
 	protected function _doMergeRruleValidate($isDetailEdit) {
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = ValidateMerge::merge($this->validate, array(
 			'edit_rrule' => array(
 				'rule1' => array(
 					'rule' => array('inList', array(0, 1, 2)),
@@ -373,7 +373,7 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @return void
  */
 	protected function _doMergeDatetimeValidate($isDetailEdit) {
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = ValidateMerge::merge($this->validate, array(
 			'enable_time' => array(
 				'rule1' => array(
 					'rule' => array('inList', array(0, 1)),
@@ -615,7 +615,7 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @return void
  */
 	protected function _doMergeTitleValidate($isDetailEdit) {
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = ValidateMerge::merge($this->validate, array(
 			'title' => array(
 				'rule1' => array(
 					'rule' => array('notBlank'),
@@ -656,7 +656,7 @@ class ReservationActionPlan extends ReservationsAppModel {
 		//$this->_doMergeDisplayParamValidate($isDetailEdit);	//画面パラメータ関連validation
 		$this->_doMergeTitleValidate($isDetailEdit);	//タイトル関連validation
 		$this->_doMergeDatetimeValidate($isDetailEdit);	//日付時刻関連validation
-		$this->validate = Hash::merge($this->validate, array(	//コンテンツ関連validation
+		$this->validate = ValidateMerge::merge($this->validate, array(	//コンテンツ関連validation
 			'status' => [
 				'rule1' => [
 					'rule' => ['validateStatus'],

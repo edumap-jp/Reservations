@@ -52,7 +52,7 @@ class ReservationLocationsRoom extends ReservationsAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = ValidateMerge::merge($this->validate, array(
 			'reservation_location_key' => array(
 				'notBlank' => array(
 					'rule' => array('notBlank'),

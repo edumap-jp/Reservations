@@ -79,7 +79,7 @@ class ReservationEventShareUser extends ReservationsAppModel {
  * @see Model::save()
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = ValidateMerge::merge($this->validate, array(
 			//'calender_event_id' => array(
 			'reservation_event_id' => array(
 				'rule1' => array(

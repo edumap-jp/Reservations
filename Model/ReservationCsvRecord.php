@@ -35,7 +35,7 @@ class ReservationCsvRecord extends AppModel {
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = ValidateMerge::merge($this->validate, array(
 			'title' => array(
 				'rule1' => array(
 					'rule' => array('notBlank'),

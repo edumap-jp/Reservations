@@ -160,7 +160,7 @@ class ReservationEvent extends ReservationsAppModel {
  * @return void
  */
 	protected function _doMergeWorkflowParamValidate() {
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = ValidateMerge::merge($this->validate, array(
 			'language_id' => array(
 				'rule1' => array(
 					'rule' => array('numeric'),
@@ -200,7 +200,7 @@ class ReservationEvent extends ReservationsAppModel {
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate, array(
+		$this->validate = ValidateMerge::merge($this->validate, array(
 			'reservation_rrule_id' => array(
 				'rule1' => array(
 					'rule' => array('numeric'),

@@ -65,7 +65,7 @@ class ReservationTimeframe extends ReservationsAppModel {
  * @return bool
  */
 	public function beforeValidate($options = array()) {
-		$this->validate = Hash::merge($this->validate,
+		$this->validate = ValidateMerge::merge($this->validate,
 			array(
 				'language_id' => array(
 					'numeric' => array(
