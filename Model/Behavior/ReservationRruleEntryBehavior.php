@@ -45,7 +45,7 @@ class ReservationRruleEntryBehavior extends ReservationAppBehavior {
 /**
  * Rruleテーブルへの登録
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams 予定パラメータ
  * @param array $rruleData rruleデータ
  * @param array $eventData eventデータ
@@ -53,7 +53,7 @@ class ReservationRruleEntryBehavior extends ReservationAppBehavior {
  * @return void
  * @throws InternalErrorException
  */
-	public function insertRrule(Model &$model, $planParams, $rruleData, $eventData,
+	public function insertRrule(Model $model, $planParams, $rruleData, $eventData,
 		$createdUserWhenUpd = null) {
 		if (isset($model->rrule)) {	//behaviorメソッドでrruleを渡すための工夫
 			unset($model->rrule);
@@ -112,14 +112,14 @@ class ReservationRruleEntryBehavior extends ReservationAppBehavior {
  * 周期性登録
  * ここで繰り返しデータのDB登録してる CommentByRyujiAMANO
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams planParams
  * @param array $rruleData rruleData
  * @param array $startEventData eventデータ
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return void
  */
-	public function insertPriodEntry(Model &$model, $planParams, $rruleData, $startEventData,
+	public function insertPriodEntry(Model $model, $planParams, $rruleData, $startEventData,
 		$createdUserWhenUpd) {
 		//CakeLog::debug("DBG: In insertPriodEntry(). i set model->rrule[INDEX] to 1.");
 
@@ -159,14 +159,14 @@ class ReservationRruleEntryBehavior extends ReservationAppBehavior {
  *
  * 月用周期性登録
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array &$planParams planParams
  * @param array &$rruleData rruleData
  * @param array &$startEventData eventデータ
  * @param int &$createdUserWhenUpd createdUserWhenUpd
  * @return void
  */
-	protected function _insertMonthlyPriodEntry(Model &$model,
+	protected function _insertMonthlyPriodEntry(Model $model,
 		&$planParams, &$rruleData, &$startEventData, &$createdUserWhenUpd) {
 		if (!$model->Behaviors->hasMethod('insertMonthlyByMonthday')) {
 			$model->Behaviors->load('Reservations.ReservationMonthlyEntry');

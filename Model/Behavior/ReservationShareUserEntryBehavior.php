@@ -34,13 +34,13 @@ class ReservationShareUserEntryBehavior extends ReservationAppBehavior {
 /**
  * 共有ユーザ情報の登録
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $shareUsers shareUsers
  * @param int $eventId eventId
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return void
  */
-	public function insertShareUsers(Model &$model, $shareUsers, $eventId,
+	public function insertShareUsers(Model $model, $shareUsers, $eventId,
 		$createdUserWhenUpd = null) {
 		if (!(isset($model->ReservationEventShareUser))) {
 			$model->ReservationEventShareUser = ClassRegistry::init(
@@ -81,14 +81,14 @@ class ReservationShareUserEntryBehavior extends ReservationAppBehavior {
 /**
  * 共有ユーザ情報の登録
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $shareUsers shareUsers
  * @param int $eventId eventId
  * @param array $oldShareUserDataAry oldShareUserDataAry
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return void
  */
-	public function updateShareUsers(Model &$model, $shareUsers, $eventId, $oldShareUserDataAry,
+	public function updateShareUsers(Model $model, $shareUsers, $eventId, $oldShareUserDataAry,
 		$createdUserWhenUpd = null) {
 		//CakeLog::debug("DBG: IN updateShareUsers(). shareUsers[" .
 		//	print_r($shareUsers, true) . "] eventId[" . $eventId .
@@ -128,13 +128,13 @@ class ReservationShareUserEntryBehavior extends ReservationAppBehavior {
 /**
  * 共有ユーザ情報の削除
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $shareUsers shareUsers
  * @param int $eventId eventId
  * @return void
  * @throws InternalErrorException
  */
-	public function deleteShareUsers(Model &$model, $shareUsers, $eventId) {
+	public function deleteShareUsers(Model $model, $shareUsers, $eventId) {
 		if (!(isset($model->ReservationEventShareUser))) {
 			$model->loadModels(['ReservationEventShareUser' => 'Reservation.ReservationEventShareUser']);
 		}

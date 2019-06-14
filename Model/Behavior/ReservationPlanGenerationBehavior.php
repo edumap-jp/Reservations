@@ -37,7 +37,7 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
 /**
  * 現世代の予定を作り出す
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $data data POSTされたrequest->data配列
  * @param int $originEventId originEventId（現eventのid）
  * @param string $originEventKey originEventKey（現eventのkey）
@@ -45,7 +45,7 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
  * @return int 成功時 現世代予定を返す。失敗時 InternalErrorExceptionを投げる。
  * @throws InternalErrorException
  */
-	public function makeCurGenPlan(Model &$model, $data,
+	public function makeCurGenPlan(Model $model, $data,
 		$originEventId, $originEventKey, $originRruleId) {
 		$action = 'delete';
 		$plan = $this->__makeCommonGenPlan($model, $action, $data, $originRruleId);
@@ -64,7 +64,7 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
 /**
  * 元予定の新世代予定を作り出す
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $data POSTされたrequest->data配列
  * @param string $status status 変更時の施設予約独自の新status
  * @param int $createdUserWhenUpd createdUserWhenUpd
@@ -72,7 +72,7 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
  * @return int 生成成功時 新しく生成した次世代予定($plan)を返す。失敗時 InternalErrorExceptionを投げる。
  * @throws InternalErrorException
  */
-	public function makeNewGenPlan(Model &$model, $data, $status,
+	public function makeNewGenPlan(Model $model, $data, $status,
 		$createdUserWhenUpd, $isMyPrivateRoom) {
 		$action = 'update';
 		$plan = $this->__makeCommonGenPlan($model, $action, $data,
@@ -120,13 +120,13 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
  *
  * 元予定の次世代CalenarRruleを作り出す
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $plan plan
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return int 生成成功時 新しい$planを返す。失敗時 InternalErrorExceptionを投げる。
  * @throws InternalErrorException
  */
-	private function __copyRruleData(Model &$model, $plan, $createdUserWhenUpd) {
+	private function __copyRruleData(Model $model, $plan, $createdUserWhenUpd) {
 		//ReservationRruleには、status, is_latest, is_activeはない。
 
 		$rruleData = array();
@@ -180,7 +180,7 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
  * 元予定の次世代CalenarEventを作り出す
  * なお、対象元となったeventのCOPYの時だけ、newEventId, newEventKeyをセットして返す。
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $event event
  * @param int $reservationRruleId reservationRruleId
  * @param string $status status 変更時の施設予約独自新status
@@ -192,7 +192,7 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
  * @throws InternalErrorException
  * @SuppressWarnings(PHPMD)
  */
-	private function __copyEventData(Model &$model, $event, $reservationRruleId, $status,
+	private function __copyEventData(Model $model, $event, $reservationRruleId, $status,
 		$originEventId, $originEventKey, $createdUserWhenUpd, $isMyPrivateRoom) {
 		//ReservationEventには、status, is_latest, is_activeがある。
 		//
@@ -304,14 +304,14 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
  *
  * 元予定の次世代CalenarEventContentを作り出す
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $content content
  * @param int $reservationEventId reservationEventId
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return int 生成成功時 新しい$contentを返す。失敗時 InternalErrorExceptionを投げる。
  * @throws InternalErrorException
  */
-	//private function __copyEventContentData(&$model, $content,
+	//private function __copyEventContentData($model, $content,
 	//								$reservationEventId, $createdUserWhenUpd) {
 	//	//ReservationEventContentには、status, is_latest, is_activeはない
 	//
@@ -361,14 +361,14 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
  *
  * 元予定の次世代CalenarEventShareUserを作り出す
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $shareUser shareUser
  * @param int $reservationEventId reservationEventId
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return int 生成成功時 新しい$shareUserを返す。失敗時 InternalErrorExceptionを投げる。
  * @throws InternalErrorException
  */
-	private function __copyEventShareUserData(&$model, $shareUser, $reservationEventId,
+	private function __copyEventShareUserData($model, $shareUser, $reservationEventId,
 		$createdUserWhenUpd) {
 		//ReservationEventShareUserには、status, is_latest, is_activeはない
 
@@ -422,14 +422,14 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
  *
  * 共通の世代生成処理
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param string $action action('update' or 'delete')
  * @param array $data data
  * @param int $rruleId rruleId
  * @return array 生成した予定($plan)
  * @throws InternalErrorException
  */
-	private function __makeCommonGenPlan(Model &$model, $action, $data, $rruleId) {
+	private function __makeCommonGenPlan(Model $model, $action, $data, $rruleId) {
 		if (!isset($model->ReservationRrule)) {
 			$model->loadModels(['ReservationRrule' => 'Reservations.ReservationRrule']);
 		}

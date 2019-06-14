@@ -30,7 +30,7 @@ class ReservationSearchPlanBehavior extends ReservationAppBehavior {
  * 予定一覧の取得
  * (共有予定とのマージ処理を簡易化するため$order は key => valの１要素のみ、ASC, DESC指定はないものとする)
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $vars 施設予約設定情報
  * @param array $planParams  予定パラメータ
  * @param array $order ソートパラメータ
@@ -38,7 +38,7 @@ class ReservationSearchPlanBehavior extends ReservationAppBehavior {
  * @throws InternalErrorException
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-	public function getPlans(Model &$model, $vars, $planParams, $order = array()) {
+	public function getPlans(Model $model, $vars, $planParams, $order = array()) {
 		// 探すのはis_activeかis_latestのものだけでよい
 		// 予約データ取得時は	ルーム無視
 		$baseOptions = array(

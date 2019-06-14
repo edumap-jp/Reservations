@@ -36,7 +36,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
 /**
  * 年周期の登録
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams planParams
  * @param ssary $rruleData rruleData
  * @param array $eventData eventデータ(ReservationEventのモデルデータ)
@@ -45,7 +45,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return array $result 結果
  */
-	public function insertYearly(Model &$model, $planParams, $rruleData, $eventData,
+	public function insertYearly(Model $model, $planParams, $rruleData, $eventData,
 		$first = 0, $bymonthday = 0, $createdUserWhenUpd = null) {
 		//CakeLog::debug("DBG: insertYearly(first[" . $first . "] bymonthday[" . $bymonthday . "] start.");
 
@@ -144,13 +144,13 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
 /**
  * 開始と終了の日付、時刻の生成
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @param array $eventData event配列データ
  * @param int $first 最初のデータかどうか. 1:最初 0:最初ではない
  * @param string $userTz ユーザー系タイムゾーンID ('Asia/Tokyo')
  * @return array サーバー系の各日と時と差分日数の配列($startDate, $startTime, $endDate, $endTime, $diffNum)を返す
  */
-	public function setStartEndDateAndTime(Model &$model, $eventData, $first, $userTz) {
+	public function setStartEndDateAndTime(Model $model, $eventData, $first, $userTz) {
 		//NC3では内部はサーバー系時刻になっているのでtimezoneDateはつかわない。
 		$sTime = $eventData['ReservationEvent']['start_date'] .
 			$eventData['ReservationEvent']['start_time']; //catしてYmdHisにする
@@ -226,7 +226,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
 /**
  * 開始・終了の日付と時刻等をセットする。
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @param array $planParams planParams
  * @param array $rruleData rruleData
  * @param array $dtArray サーバ系時刻startDate,startTime,endDate,endTimeをカプセル化した配列
@@ -237,7 +237,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
  * @param array $etcArray userTz(ユーザー系タイムゾーンID)とcreatedUserWhenUpdをカブセル化した配列
  * @return mixed 成功時、array($eventData, サーバ系時刻$startDateTime, サーバ系時刻$endDateTime)を返す。失敗時 falseを返す。
  */
-	public function setStartAndEndDateTimeEtc(Model &$model, $planParams, $rruleData,
+	public function setStartAndEndDateTimeEtc(Model $model, $planParams, $rruleData,
 		$dtArray, $first, $bymonthday, $diffNum, $eventData, $etcArray) {
 		list($startDate, $startTime, $endDate, $endTime) = $dtArray;
 		list($userTz, $createdUserWhenUpd) = $etcArray;
@@ -353,7 +353,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
 /**
  * 年周期の登録（年単位－開始日と同日）
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams planParams
  * @param array $rruleData rruleData
  * @param array $eventData eventデータ(ReservationEventのモデルデータ)
@@ -362,7 +362,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return mixed boolean true:登録せず終了 false:失敗、array 登録成功: array(insertした結果のrEventData, 登録したサーバ系開始年月日時分秒, 登録したサーバ系終了年月日時分秒)
  */
-	public function insertYearlyByMonthday(Model &$model, $planParams, $rruleData, $eventData,
+	public function insertYearlyByMonthday(Model $model, $planParams, $rruleData, $eventData,
 		$bymonthday, $first, $createdUserWhenUpd = null) {
 		//CakeLog::debug("DBG: insertYearlyByMonthday() start. bymonthday[" . $bymonthday .
 		//	"] first[" . $first . "] rrule[INDEX]=[" . $model->rrule['INDEX'] . "]");
@@ -464,7 +464,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
 /**
  * 年周期の登録（年単位－第Ｍ週Ｎ曜日)
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams planParams
  * @param array $rruleData rruleData
  * @param array $eventData eventデータ(ReservationEventのモデルデータ)
@@ -472,7 +472,7 @@ class ReservationYearlyEntryBehavior extends ReservationAppBehavior {
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return mixed boolean true:登録せず終了 false:失敗、array 登録成功: array(insertした結果のrEventData, 登録したサーバ系開始年月日時分秒, 登録したサーバ系終了年月日時分秒)
  */
-	public function insertYearlyByday(Model &$model, $planParams, $rruleData, $eventData,
+	public function insertYearlyByday(Model $model, $planParams, $rruleData, $eventData,
 		$first = 0, $createdUserWhenUpd = null) {
 		//CakeLog::debug("DBG: insertYearlyByday() start. first[" . $first .
 		//	"] rrule[INDEX]=[" . $model->rrule['INDEX'] . "]");

@@ -24,11 +24,11 @@ class ReservationPlanRruleValidateBehavior extends ReservationValidateAppBehavio
  *
  * Rrule規則の繰返しの終了指定チェック（日、週、月、年単位共通）
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param array $check 入力配列
  * @return bool 成功時true, 失敗時false
  */
-	private function __checkRruleTerm(Model &$model, $check) {
+	private function __checkRruleTerm(Model $model, $check) {
 		if (!isset($model->ReservationActionPlan)) {
 			$model->loadModels(['ReservationActionPlan' => 'Reservations.ReservationActionPlan']);
 		}
@@ -87,11 +87,11 @@ class ReservationPlanRruleValidateBehavior extends ReservationValidateAppBehavio
  *
  * Rrule規則のチェック
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param array $check 入力配列
  * @return bool 成功時true, 失敗時false
  */
-	public function checkRrule(Model &$model, $check) {
+	public function checkRrule(Model $model, $check) {
 		$isRepeat = (isset($model->data[$model->alias]['is_repeat']) &&
 			$model->data[$model->alias]['is_repeat']) ? true : false;
 		if (!$isRepeat) {
@@ -118,11 +118,11 @@ class ReservationPlanRruleValidateBehavior extends ReservationValidateAppBehavio
  *
  * NOPチェック関数
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param array $check 入力配列
  * @return bool trueのみ返す
  */
-	public function nopCheck(Model &$model, $check) {
+	public function nopCheck(Model $model, $check) {
 		return true;
 	}
 
@@ -131,11 +131,11 @@ class ReservationPlanRruleValidateBehavior extends ReservationValidateAppBehavio
  *
  * Until日付Pチェック関数
  *
- * @param Model &$model model
+ * @param Model $model model
  * @param string $rruleUntil  UNTILの日付
  * @return string チェックOkなら空文字、チェックNGならエラーメッセージ文字列
  */
-	protected function _checkUntilDate(&$model, $rruleUntil) {
+	protected function _checkUntilDate($model, $rruleUntil) {
 		if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $rruleUntil, $matches) !== 1) {
 			return __d('reservations', 'It is not in the YYYY-MM-DD format.');
 		}

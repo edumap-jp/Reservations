@@ -27,13 +27,13 @@ class ReservationCrudPlanCommonBehavior extends ReservationAppBehavior {
  *
  * RruleDataへのデータ登録共通処理
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @param array $rruleData rruleData
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return array $rruleDataを返す
  * @throws InternalErrorException
  */
-	public function saveRruleData(Model &$model, $rruleData, $createdUserWhenUpd = null) {
+	public function saveRruleData(Model $model, $rruleData, $createdUserWhenUpd = null) {
 		if (!(isset($model->ReservationRrule))) {
 			$model->loadModels(['ReservationRrule' => 'Reservations.ReservationRrule']);
 		}
@@ -66,12 +66,12 @@ class ReservationCrudPlanCommonBehavior extends ReservationAppBehavior {
  *
  * $planParamsデータを整える
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @param array $planParams planParamsデータ
  * @return array $planParamsを返す
  * @throws InternalErrorException
  */
-	public function doArrangeData(Model &$model, $planParams) {
+	public function doArrangeData(Model $model, $planParams) {
 		//開始日付と開始時刻は必須
 		if (!isset($planParams['start_date']) && !isset($planParams['start_time'])) {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
@@ -100,14 +100,14 @@ class ReservationCrudPlanCommonBehavior extends ReservationAppBehavior {
  *
  * 浮きリソースチェック、そして浮きEvent削除またはrruleDataのrruleのUNTIL条件書き換え
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @param array $eventData eventData
  * @param array $rruleData rruleData
  * @param string $baseDtstart ベース開始日付時刻(baseDtstart)
  * @return void
  * @throws InternalErrorException
  */
-	public function auditEventOrRewriteUntil(Model &$model, $eventData, $rruleData, $baseDtstart) {
+	public function auditEventOrRewriteUntil(Model $model, $eventData, $rruleData, $baseDtstart) {
 		//////////////////////////////
 		//(2) eventsを消した後、rruleIdを親にもつeventDataの件数を調べる。
 		// 0件なら、不要となった親(rrule)なので、浮きリソースとならないよう、消す。

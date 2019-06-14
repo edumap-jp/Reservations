@@ -36,7 +36,7 @@ class ReservationWeeklyEntryBehavior extends ReservationAppBehavior {
 /**
  * 週周期の登録
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams planParams
  * @param ssary $rruleData rruleData
  * @param array $eventData eventデータ(ReservationEventのモデルデータ)
@@ -44,7 +44,7 @@ class ReservationWeeklyEntryBehavior extends ReservationAppBehavior {
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return array $result 結果
  */
-	public function insertWeekly(Model &$model, $planParams, $rruleData, $eventData,
+	public function insertWeekly(Model $model, $planParams, $rruleData, $eventData,
 		$first = 0, $createdUserWhenUpd = null) {
 		//CakeLog::debug("DBGXXX: insertWeekly (model, planParams, rruleData, eventData, first[" .
 		//	$first . "]) start. startDateTime [" . $eventData['ReservationEvent']['start_date'] .
@@ -110,7 +110,7 @@ class ReservationWeeklyEntryBehavior extends ReservationAppBehavior {
 /**
  * インターバル用週周期の登録
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams planParams
  * @param ssary $rruleData rruleData
  * @param array $eventData eventデータ(ReservationEventのモデルデータ).
@@ -119,7 +119,7 @@ class ReservationWeeklyEntryBehavior extends ReservationAppBehavior {
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return array $result 結果
  */
-	public function insertWeeklyInterval(Model &$model, $planParams, $rruleData, $eventData,
+	public function insertWeeklyInterval(Model $model, $planParams, $rruleData, $eventData,
 		$interval, $userTz, $createdUserWhenUpd = null) {
 		//CakeLog::debug("DBGX: insertWeeklyInterval(model, planParams, rruleData, eventData, interval[" . $interval . "] userTz[". $userTz . "] eventData[ReservationEvent]=startDateTime [" . $eventData['ReservationEvent']['start_date'] . $eventData['ReservationEvent']['start_time'] . "] endDateTime[" . $eventData['ReservationEvent']['end_date'] . $eventData['ReservationEvent']['end_time'] . "]) start");
 
@@ -202,14 +202,14 @@ class ReservationWeeklyEntryBehavior extends ReservationAppBehavior {
  * 結果は、$eventData['ReservationEvent']のstart_date,time,end_date,timeにサーバ系時刻を
  * セットして返す。
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @param array &$eventData eventデータ
  * @param string &$currentWeek currnetWeek文字列
  * @param int $first 最初のデータかどうか 1:最初である  0:最初ではない
  * @param string $userTz ユーザー系TZ文字列(Asia/Tokyo)
  * @return void
  */
-	public function setStartEndSundayDateAndTime(&$model, &$eventData, &$currentWeek,
+	public function setStartEndSundayDateAndTime($model, &$eventData, &$currentWeek,
 		$first, $userTz) {
 		//開始日の週の日曜日の日付時刻
 		//NC3ではサーバー系時刻なので、timezoneDateはつかわない

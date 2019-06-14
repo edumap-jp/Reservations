@@ -28,12 +28,12 @@ class ReservationTopicsBehavior extends ReservationAppBehavior {
  *
  * 新着設定
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @param int $eventId イベントID（繰り返しの場合は先頭のイベント）
  * @return void
  * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
  */
-	public function saveReservationTopics(Model &$model, $eventId) {
+	public function saveReservationTopics(Model $model, $eventId) {
 		$model->loadModels([
 			'Block' => 'Blocks.Block',
 			'ReservationEvent' => 'Reservations.ReservationEvent'
@@ -98,7 +98,7 @@ class ReservationTopicsBehavior extends ReservationAppBehavior {
  *
  * 新着削除
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @param string $eventKey イベントKey
  * @param bool $isOriginRepeat 繰り返しか
  * @param string $originEventKey 繰り返しの場合のオリジナルのキー
@@ -106,7 +106,7 @@ class ReservationTopicsBehavior extends ReservationAppBehavior {
  * @return void
  * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
  */
-	public function deleteReservationTopics(Model &$model, $eventKey, $isOriginRepeat,
+	public function deleteReservationTopics(Model $model, $eventKey, $isOriginRepeat,
 		$originEventKey, $editRrule) {
 		// 繰り返し系で
 		// 全て削除、以外で

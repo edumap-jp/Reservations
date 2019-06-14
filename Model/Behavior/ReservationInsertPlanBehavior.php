@@ -46,13 +46,13 @@ class ReservationInsertPlanBehavior extends ReservationAppBehavior {
 /**
  * 予定の追加
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams  予定パラメータ
  * @param bool $isMyPrivateRoom isMyPrivateRoom 予定の公開対象が自分のプライベートルームかどうか
  * @return int 追加成功時 $eventId(reservationEvent.id)を返す。追加失敗時 InternalErrorExceptionを投げる。
  * @throws InternalErrorException
  */
-	public function insertPlan(Model &$model, $planParams, $isMyPrivateRoom) {
+	public function insertPlan(Model $model, $planParams, $isMyPrivateRoom) {
 		if (!$model->Behaviors->hasMethod('doArrangeData')) {
 			$model->Behaviors->load('Reservations.ReservationCrudPlanCommon');
 		}
@@ -79,14 +79,14 @@ class ReservationInsertPlanBehavior extends ReservationAppBehavior {
 /**
  * RruleDataへのデータ登録
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @param array $planParams 予定パラメータ
  * @param string $icalUidPart icalUidPart
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return array $rruleDataを返す
  * @throws InternalErrorException
  */
-	public function insertRruleData(Model &$model, $planParams,
+	public function insertRruleData(Model $model, $planParams,
 		$icalUidPart = '', $createdUserWhenUpd = null) {
 		if (!(isset($model->ReservationRrule) && is_callable($model->ReservationRrule->create))) {
 			$model->loadModels([
@@ -118,7 +118,7 @@ class ReservationInsertPlanBehavior extends ReservationAppBehavior {
 /**
  * EventDataへのデータ登録
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @param array $planParams 予定パラメータ
  * @param array $rruleData rruleデータ
  * @param int $createdUserWhenUpd created_userを明示指定する時にnull以外を指定。updatePlanで主に利用されている。
@@ -126,7 +126,7 @@ class ReservationInsertPlanBehavior extends ReservationAppBehavior {
  * @throws InternalErrorException
  * @SuppressWarnings(PHPMD)
  */
-	public function insertEventData(Model &$model, $planParams, $rruleData,
+	public function insertEventData(Model $model, $planParams, $rruleData,
 		$createdUserWhenUpd = null) {
 		if (!(isset($model->ReservationEvent) && is_callable($model->ReservationEvent->create))) {
 			$model->loadModels([
