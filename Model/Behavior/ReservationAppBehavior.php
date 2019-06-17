@@ -97,7 +97,7 @@ class ReservationAppBehavior extends ModelBehavior {
  *
  * 毎回 keyをclearしてから登録します。(初回登録から踏襲するのは、status, is_active, is_latestとします)
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams planParams
  * @param array $rruleData rruleData
  * @param array $eventData eventデータ(ReservationEventのモデルデータ)
@@ -107,7 +107,7 @@ class ReservationAppBehavior extends ModelBehavior {
  * @return array $rEventData
  * @throws InternalErrorException
  */
-	public function insert(Model &$model, $planParams, $rruleData, $eventData, $startTime, $endTime,
+	public function insert(Model $model, $planParams, $rruleData, $eventData, $startTime, $endTime,
 		$createdUserWhenUpd = null) {
 		$this->loadEventAndRruleModels($model);
 		$params = array(
@@ -304,7 +304,7 @@ class ReservationAppBehavior extends ModelBehavior {
 /**
  * RruleDataへのデータ設定
  *
- * @param Model &$model model
+ * @param Model $model model
  * @param array $planParams 予定パラメータ
  * @param array &$rruleData rruleデータ
  * @param string $mode mode insert時:self::CALENDAR_INSERT_MODE(デフォルト値) update時:self::CALENDAR_UPDATE_MODE
@@ -312,7 +312,7 @@ class ReservationAppBehavior extends ModelBehavior {
  * @param int $rruleId rruleId updateの時、このrruleIdをidに使う
  * @return void
  */
-	public function setRruleData(&$model, $planParams, &$rruleData,
+	public function setRruleData($model, $planParams, &$rruleData,
 		$mode = self::CALENDAR_INSERT_MODE, $rruleKey = null, $rruleId = 0) {
 		if (!(isset($model->Reservation))) {
 			$model->loadModels(['Reservation' => 'Reservations.Reservation']);
@@ -494,10 +494,10 @@ class ReservationAppBehavior extends ModelBehavior {
 /**
  * eventとrruleの両モデルをロードする。
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @return void
  */
-	public function loadEventAndRruleModels(Model &$model) {
+	public function loadEventAndRruleModels(Model $model) {
 		if (!isset($model->ReservationEvent)) {
 			$model->loadModels([
 				'ReservationEvent' => 'Reservations.ReservationEvent'
@@ -515,13 +515,13 @@ class ReservationAppBehavior extends ModelBehavior {
  *
  * 関連する(hasMany関係にある）子レコードを登録する
  *
- * @param Model &$model モデル
+ * @param Model $model モデル
  * @param array $planParams planParams
  * @param array $eventData eventData
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return void
  */
-	protected function _insertChidren(&$model, $planParams, $eventData, $createdUserWhenUpd = null) {
+	protected function _insertChidren($model, $planParams, $eventData, $createdUserWhenUpd = null) {
 		//カレンダ共有ユーザ登録
 		if (!$model->Behaviors->hasMethod('insertShareUsers')) {
 			$model->Behaviors->load('Reservations.ReservationShareUserEntry');

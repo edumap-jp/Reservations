@@ -24,11 +24,11 @@ class ReservationValidateAppBehavior extends ModelBehavior {
  *
  * Rrule規則の繰返し周期チェック
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param array $check 入力配列
  * @return bool 成功時true, 失敗時false
  */
-	protected function _checkRepateFreq(Model &$model, $check) {
+	protected function _checkRepateFreq(Model $model, $check) {
 		if (!isset($model->ReservationActionPlan)) {
 			$model->loadModels(['ReservationActionPlan' => 'Reservations.ReservationActionPlan']);
 		}
@@ -70,11 +70,11 @@ class ReservationValidateAppBehavior extends ModelBehavior {
  *
  * 日用Rrule規則の繰返し周期チェック
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param array &$check 入力配列
  * @return bool 成功時true, 失敗時false
  */
-	private function __checkDailyRepateFreq(Model &$model, &$check) {
+	private function __checkDailyRepateFreq(Model $model, &$check) {
 		$min = ReservationsComponent::CALENDAR_RRULE_INTERVAL_DAILY_MIN;
 		$max = ReservationsComponent::CALENDAR_RRULE_INTERVAL_DAILY_MAX;
 		if (! in_array($model->data[$model->alias]['rrule_interval']['DAILY'], range($min, $max))) {
@@ -94,11 +94,11 @@ class ReservationValidateAppBehavior extends ModelBehavior {
  *
  * 週用Rrule規則の繰返し周期チェック
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param array &$check 入力配列
  * @return bool 成功時true, 失敗時false
  */
-	private function __checkWeeklyRepateFreq(Model &$model, &$check) {
+	private function __checkWeeklyRepateFreq(Model $model, &$check) {
 		$min = ReservationsComponent::CALENDAR_RRULE_INTERVAL_WEEKLY_MIN;
 		$max = ReservationsComponent::CALENDAR_RRULE_INTERVAL_WEEKLY_MAX;
 		if (!in_array($model->data[$model->alias]['rrule_interval']['WEEKLY'], range($min, $max))) {
@@ -136,11 +136,11 @@ class ReservationValidateAppBehavior extends ModelBehavior {
  *
  * 月用Rrule規則の繰返し周期チェック
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param array &$check 入力配列
  * @return bool 成功時true, 失敗時false
  */
-	private function __checkMonthlyRepateFreq(Model &$model, &$check) {
+	private function __checkMonthlyRepateFreq(Model $model, &$check) {
 		$min = ReservationsComponent::CALENDAR_RRULE_INTERVAL_MONTHLY_MIN;
 		$max = ReservationsComponent::CALENDAR_RRULE_INTERVAL_MONTHLY_MAX;
 		if (!in_array($model->data[$model->alias]['rrule_interval']['MONTHLY'], range($min, $max))) {
@@ -192,11 +192,11 @@ class ReservationValidateAppBehavior extends ModelBehavior {
  *
  * 年用Rrule規則の繰返し周期チェック
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param array &$check 入力配列
  * @return bool 成功時true, 失敗時false
  */
-	private function __checkYearlyRepateFreq(Model &$model, &$check) {
+	private function __checkYearlyRepateFreq(Model $model, &$check) {
 		$min = ReservationsComponent::CALENDAR_RRULE_INTERVAL_YEARLY_MIN;
 		$max = ReservationsComponent::CALENDAR_RRULE_INTERVAL_YEARLY_MAX;
 		if (!in_array($model->data[$model->alias]['rrule_interval']['YEARLY'], range($min, $max))) {

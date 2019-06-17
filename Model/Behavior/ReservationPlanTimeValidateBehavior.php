@@ -25,12 +25,12 @@ class ReservationPlanTimeValidateBehavior extends ModelBehavior {
  *
  * 開始日（時）と終了日（時）並びチェック
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param array $check 入力値
  * @param string $editType 編集タイプ
  * @return bool 成功時true, 失敗時false
  */
-	public function checkReverseStartEndDateTime(Model &$model, $check, $editType) {
+	public function checkReverseStartEndDateTime(Model $model, $check, $editType) {
 		$startDate = false;
 		$startTime = false;
 		if (!$this->_isYmdHi($model, $model->data[$model->alias]['detail_start_datetime'],
@@ -70,12 +70,12 @@ class ReservationPlanTimeValidateBehavior extends ModelBehavior {
  *
  * 詳細施設予約用日付時刻チェック
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param string $check  入力値（日付 or 日付時刻）
  * @param string $editType 編集タイプ
  * @return bool 成功時true, 失敗時false
  */
-	public function customDatetime(Model &$model, $check, $editType) {
+	public function customDatetime(Model $model, $check, $editType) {
 		$value = array_values($check);
 		$value = $value[0];
 
@@ -106,14 +106,14 @@ class ReservationPlanTimeValidateBehavior extends ModelBehavior {
  *
  * 入力値よりYmd+HiまたはYmdの判定をしつつ、日付と時刻を取り出す
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param string $datetimeStr  入力配列（日付 or 日付時刻）
  * @param string $editType 編集タイプ
  * @param mixed &$date 日付(YYYY:MM:DD)
  * @param mixed &$time 時刻(hh:mm)
  * @return bool 成功時true, 失敗時false
  */
-	protected function _isYmdHi(Model &$model, $datetimeStr, $editType, &$date, &$time) {
+	protected function _isYmdHi(Model $model, $datetimeStr, $editType, &$date, &$time) {
 		$date = false;
 		$time = false;
 		$isDetailEdit = (isset($model->data[$model->alias]['is_detail']) &&
@@ -146,11 +146,11 @@ class ReservationPlanTimeValidateBehavior extends ModelBehavior {
  *
  * 許可されたタイムゾーンオフセットかどうか
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param array $check 入力配列（timezone）
  * @return bool 成功時true, 失敗時false
  */
-	public function allowedTimezoneOffset(Model &$model, $check) {
+	public function allowedTimezoneOffset(Model $model, $check) {
 		$value = array_values($check);
 		$value = $value[0];
 
@@ -176,12 +176,12 @@ class ReservationPlanTimeValidateBehavior extends ModelBehavior {
  *
  * 開始時間と終了時間の並びと範囲チェック
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @param array $check 入力配列
  * @param string $editType 編集タイプ
  * @return bool 成功時true, 失敗時false
  */
-	public function checkReverseStartEndTime(Model &$model, $check, $editType) {
+	public function checkReverseStartEndTime(Model $model, $check, $editType) {
 		$value = array_values($check);
 		$value = $value[0];
 
@@ -206,10 +206,10 @@ class ReservationPlanTimeValidateBehavior extends ModelBehavior {
  *
  * 簡易画面の開始時間と終了時間の並びおよび範囲チェック
  *
- * @param Model &$model モデル変数
+ * @param Model $model モデル変数
  * @return bool 成功時true, 失敗時false
  */
-	protected function _doEasyCheckReverseRange(Model &$model) {
+	protected function _doEasyCheckReverseRange(Model $model) {
 		$fromTo = array('from', 'to');
 		foreach ($fromTo as $keyword) {
 			if (preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):\d{2}$/",

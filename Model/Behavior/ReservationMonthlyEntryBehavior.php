@@ -36,7 +36,7 @@ class ReservationMonthlyEntryBehavior extends ReservationAppBehavior {
 /**
  * 月周期の登録（月単位－各月の指定日）
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams planParams
  * @param array $rruleData rruleData
  * @param array $eventData eventデータ(ReservationEventのモデルデータ)
@@ -45,7 +45,7 @@ class ReservationMonthlyEntryBehavior extends ReservationAppBehavior {
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return mixed boolean true:登録せず終了 false:失敗、array 登録成功: array(登録した開始年月日時分秒, 登録した終了年月日時分秒)
  */
-	public function insertMonthlyByMonthday(Model &$model, $planParams, $rruleData,
+	public function insertMonthlyByMonthday(Model $model, $planParams, $rruleData,
 	$eventData, $bymonthday, $first = 0, $createdUserWhenUpd = null) {
 		CakeLog::debug("DBG: insertMonthlyByMonthday() start. 
 			rrule[INDEX]=[" . $model->rrule['INDEX'] . "]");
@@ -143,7 +143,7 @@ class ReservationMonthlyEntryBehavior extends ReservationAppBehavior {
 /**
  * 月周期の登録（月単位－第Ｎ週Ｍ曜日)
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams planParams
  * @param array $rruleData rruleData
  * @param array $eventData eventデータ(ReservationEventのモデルデータ)
@@ -151,7 +151,7 @@ class ReservationMonthlyEntryBehavior extends ReservationAppBehavior {
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return mixed boolean true:登録せず終了 false:失敗、array 登録成功: array(登録した開始年月日時分秒, 登録した終了年月日時分秒)
  */
-	public function insertMonthlyByDay(Model &$model, $planParams, $rruleData, $eventData,
+	public function insertMonthlyByDay(Model $model, $planParams, $rruleData, $eventData,
 		$first = 0, $createdUserWhenUpd = null) {
 		CakeLog::debug("DBG: insertMonthlyByDay() start. rrule[INDEX]=[" . $model->rrule['INDEX'] . "]");
 		$model->rrule['INDEX']++;
@@ -263,13 +263,13 @@ class ReservationMonthlyEntryBehavior extends ReservationAppBehavior {
  * @param string &$userTz userTz
  * @param int &$currentDay currentDay
  * @param int &$first first
- * @param Model &$model model
+ * @param Model $model model
  * @param int &$interval interval
  * @param int &$intervalDay intervalDay
  * @return void
  */
 	private function __setMonthlyByMonthdayStartDtProc(&$eventData, &$userStartTime,
-		&$startTimestamp, &$userTz, &$currentDay, &$first, &$model, &$interval, &$intervalDay) {
+		&$startTimestamp, &$userTz, &$currentDay, &$first, $model, &$interval, &$intervalDay) {
 		//NC3は内部はサーバー系時刻なのでtimezoneDateはつかわない
 		$sTime = $eventData['ReservationEvent']['start_date'] .
 			$eventData['ReservationEvent']['start_time']; //catしてYmdHisにする

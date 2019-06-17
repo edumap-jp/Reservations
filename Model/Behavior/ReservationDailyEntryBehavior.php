@@ -36,14 +36,14 @@ class ReservationDailyEntryBehavior extends ReservationAppBehavior {
 /**
  * 日単位の周期性登録(１日ごと、２日ごと、、、６日ごと）
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @param array $planParams planParams
  * @param ssary $rruleData rruleData
  * @param array $eventData eventデータ(ReservationEventのモデルデータ)
  * @param int $createdUserWhenUpd createdUserWhenUpd
  * @return array $result 結果
  */
-	public function insertDaily(Model &$model, $planParams, $rruleData, $eventData,
+	public function insertDaily(Model $model, $planParams, $rruleData, $eventData,
 		$createdUserWhenUpd = null) {
 		$model->rrule['INDEX']++;
 

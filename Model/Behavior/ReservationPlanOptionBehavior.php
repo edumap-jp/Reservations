@@ -25,10 +25,10 @@ class ReservationPlanOptionBehavior extends ReservationAppBehavior {
  *
  * メール通知する時の選択selectのoptions配列
  *
- * @param Model &$model 実際のモデル名
+ * @param Model $model 実際のモデル名
  * @return mixed 生成したoptions配列を返す
  */
-	public function getNoticeEmailOption(Model &$model) {
+	public function getNoticeEmailOption(Model $model) {
 		$options = array(
 			'0' => __d('reservations', 'Before 0 minutes'),
 			'5' => __d('reservations', 'Before 5 minutes'),
