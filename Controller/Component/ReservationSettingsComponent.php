@@ -171,7 +171,7 @@ class ReservationSettingsComponent extends Component {
 			return;
 		}
 
-		throw new ForbiddenException('Permission denied');
+		throw new ForbiddenException();
 	}
 
 }
