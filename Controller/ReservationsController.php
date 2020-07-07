@@ -105,7 +105,6 @@ class ReservationsController extends ReservationsAppController {
 	public function index() {
 		$vars = array();
 		$this->setReservationCommonCurrent($vars);
-
 		$this->ReservationEvent->initSetting($this->Workflow);
 
 		$style = $this->getQueryParam('style');
@@ -113,24 +112,9 @@ class ReservationsController extends ReservationsAppController {
 			//style未指定の場合、ReservationFrameSettingモデルのdisplay_type情報から表示するctpを決める。
 
 			$displayType = (int)Current::read('ReservationFrameSetting.display_type');
-			switch($displayType) {
-				case ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_WEEKLY:
-					$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_WEEKLY;
-					$this->_setDefaultCategory();
-					break;
-				case ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_DAILY:
-					$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_DAILY;
-					$this->_setDefaultCategory();
-					break;
-				case ReservationsComponent::RESERVATION_DISP_TYPE_LACATION_MONTHLY:
-					$style = ReservationsComponent::RESERVATION_STYLE_LACATION_MONTHLY;
-					break;
-				case ReservationsComponent::RESERVATION_DISP_TYPE_LACATION_WEEKLY:
-					$style = ReservationsComponent::RESERVATION_STYLE_LACATION_WEEKLY;
-					break;
-				default:
-					$style = ReservationsComponent::RESERVATION_STYLE_DEFAULT;
-			}
+			$style = $this->__getStyleByDisplayType($displayType);
+
+			$this->__setDefaultCategoryWhenDispTypeIsCategory($displayType);
 		}
 
 		$categoryId = Hash::get($this->request->params['named'], 'category_id');
@@ -437,5 +421,46 @@ class ReservationsController extends ReservationsAppController {
 			}
 		}
 		Current::write('ReservationReservable', $reservable);
+	}
+
+/**
+ * __setDefaultCategoryWhenDispTypeIsCategory
+ *
+ * @param int|string $displayType display type
+ * @return void
+ */
+	private function __setDefaultCategoryWhenDispTypeIsCategory($displayType) {
+		if (in_array($displayType, [
+			ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_WEEKLY,
+			ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_DAILY
+		])) {
+			$this->_setDefaultCategory();
+		}
+	}
+
+/**
+ * __getStyleByDisplayType
+ *
+ * @param int|string $displayType display type
+ * @return string
+ */
+	private function __getStyleByDisplayType($displayType) {
+		switch ($displayType) {
+			case ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_WEEKLY:
+				$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_WEEKLY;
+				break;
+			case ReservationsComponent::RESERVATION_DISP_TYPE_CATEGORY_DAILY:
+				$style = ReservationsComponent::RESERVATION_STYLE_CATEGORY_DAILY;
+				break;
+			case ReservationsComponent::RESERVATION_DISP_TYPE_LACATION_MONTHLY:
+				$style = ReservationsComponent::RESERVATION_STYLE_LACATION_MONTHLY;
+				break;
+			case ReservationsComponent::RESERVATION_DISP_TYPE_LACATION_WEEKLY:
+				$style = ReservationsComponent::RESERVATION_STYLE_LACATION_WEEKLY;
+				break;
+			default:
+				$style = ReservationsComponent::RESERVATION_STYLE_DEFAULT;
+		}
+		return $style;
 	}
 }
