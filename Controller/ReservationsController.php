@@ -136,6 +136,13 @@ class ReservationsController extends ReservationsAppController {
 		$categoryId = Hash::get($this->request->params['named'], 'category_id');
 
 		$locations = $this->ReservationLocation->getLocations($categoryId);
+
+		if (empty($locations) && $categoryId === null) {
+			//施設が1つも登録されてない
+			$this->view = 'location_not_found';
+			return;
+		}
+
 		if (empty($locations) && in_array($style,
 				[ReservationsComponent::RESERVATION_STYLE_LACATION_WEEKLY,
 					ReservationsComponent::RESERVATION_STYLE_LACATION_MONTHLY
