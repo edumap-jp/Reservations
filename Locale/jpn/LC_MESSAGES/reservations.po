@@ -1419,3 +1419,6 @@ msgstr "-- 指定しない --"
 
 msgid "Location not found in select category."
 msgstr "選択したカテゴリに登録されている施設はありません。"
+
+msgid "No locations are available."
+msgstr "予約可能な施設がありません。"
