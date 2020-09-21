@@ -156,10 +156,11 @@ class ReservationLocationReservable extends ReservationsAppModel {
 					'ReservationLocationReservable.role_key' => $roleKeys,
 					'room_id' => $roomId,
 				];
-				$reservable = $this->find('first', ['conditions' => $conditions]);
+				$findResult = $this->find('first', ['conditions' => $conditions]);
 				// ユーザがアクセス可能なルーム（プライベートのぞく）のいずれかで予約OKなら予約できる施設
-				if (Hash::get($reservable, 'ReservationLocationReservable.value', false)) {
+				if (Hash::get($findResult, 'ReservationLocationReservable.value', false)) {
 					$reservable = true;
+					return $reservable;
 				}
 			}
 			return $reservable;
