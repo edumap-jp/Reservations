@@ -99,7 +99,6 @@ class ReservationLocationReservable extends ReservationsAppModel {
 		// 個人的な予約OKな施設
 		if ($location['ReservationLocation']['use_private']) {
 			// マイルームが使えるならOK
-			// TODO Currentから取得できるとおもう。
 			$usePrivateRoom = $this->__canUsePrivateRoom();
 			return $usePrivateRoom;
 		}
