@@ -152,6 +152,18 @@ class RolesRoomsUser4testFixture extends RolesRoomsUserFixture {
 		//	'room_id' => '8', //プライベート
 		//),
 		//---add end-----
+		[
+			'id' => '20',
+			'roles_room_id' => '20', // chief_editor
+			'user_id' => '10',
+			'room_id' => '11',
+		],
+		[
+			'id' => '21',
+			'roles_room_id' => '31', // general_user
+			'user_id' => '10',
+			'room_id' => '12',
+		],
 	);
 
 }

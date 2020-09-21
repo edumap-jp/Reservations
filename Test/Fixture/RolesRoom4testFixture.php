@@ -62,6 +62,29 @@ class RolesRoom4testFixture extends RolesRoomFixture {
 		//コミュニティスペース
 		array('id' => '15', 'room_id' => '4', 'role_key' => 'room_administrator'),
 		array('id' => '16', 'room_id' => '4', 'role_key' => 'general_user'),
+
+		[
+			'id' => 20,
+			'room_id' => 11,
+			'role_key' => 'chief_editor'
+		],
+		[
+			'id' => 21,
+			'room_id' => 11,
+			'role_key' => 'general_user'
+		],
+
+		[
+			'id' => 30,
+			'room_id' => 12,
+			'role_key' => 'chief_editor'
+		],
+		[
+			'id' => 31,
+			'room_id' => 12,
+			'role_key' => 'general_user'
+		],
+
 	);
 
 }

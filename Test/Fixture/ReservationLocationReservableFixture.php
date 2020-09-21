@@ -48,18 +48,61 @@ class ReservationLocationReservableFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
-			'id' => 1,
-			'location_key' => 'Lorem ipsum dolor sit amet',
-			'role_key' => 'Lorem ipsum dolor sit amet',
-			'room_id' => 1,
+	public $records = [
+		[
+			//'id' => 1,
+			'location_key' => 'KEY_1',
+			'role_key' => 'chief_editor',
+			'room_id' => null,
 			'value' => 1,
-			'created_user' => 1,
-			'created' => '2017-04-20 09:36:12',
-			'modified_user' => 1,
-			'modified' => '2017-04-20 09:36:12'
-		),
-	);
+		],
+		[
+			//'id' => 2,
+			'location_key' => 'KEY_1',
+			'role_key' => 'general_user',
+			'room_id' => null,
+			'value' => 0,
+		],
+
+		// room 11
+		[
+			//'id' => 1,
+			'location_key' => 'KEY_2',
+			'role_key' => 'chief_editor',
+			'room_id' => 11,
+			'value' => 1,
+		],
+		[
+			//'id' => 2,
+			'location_key' => 'KEY_2',
+			'role_key' => 'general_user',
+			'room_id' => 11,
+			'value' => 0,
+		],
+		// room 12
+		[
+			//'id' => 3,
+			'location_key' => 'KEY_2',
+			'role_key' => 'chief_editor',
+			'room_id' => 12,
+			'value' => 1,
+		],
+		[
+			//'id' => 4,
+			'location_key' => 'KEY_2',
+			'role_key' => 'general_user',
+			'room_id' => 12,
+			'value' => 0,
+		],
+
+		[
+			//'id' => 1,
+			'location_key' => 'KEY_3',
+			'role_key' => 'room_administrator',
+			'room_id' => null,
+			'value' => 1,
+		],
+
+	];
 
 }
