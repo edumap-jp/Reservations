@@ -99,14 +99,8 @@ class ReservationLocationReservable extends ReservationsAppModel {
 		// 個人的な予約OKな施設
 		if ($location['ReservationLocation']['use_private']) {
 			// マイルームが使えるならOK
-			$this->loadModels(['UserRoleSetting' => 'UserRoles.UserRoleSetting']);
-			$userRole = Current::read('User.role_key');
-			$userRoleSetting = $this->UserRoleSetting->find('first', [
-				'conditions' => [
-					'UserRoleSetting.role_key' => $userRole
-				]
-			]);
-			$usePrivateRoom = $userRoleSetting['UserRoleSetting']['use_private_room'];
+			// TODO Currentから取得できるとおもう。
+			$usePrivateRoom = $this->__canUsePrivateRoom();
 			return $usePrivateRoom;
 		}
 
@@ -328,6 +322,31 @@ class ReservationLocationReservable extends ReservationsAppModel {
 		}
 
 		return true;
+	}
+
+/**
+ * Currentユーザはプライベートルームを利用できるか
+ *
+ * @return bool
+ */
+	private function __canUsePrivateRoom() : bool {
+		$usePrivateRoom = Current::read('User.UserRoleSetting.use_private_room');
+
+		// Currentで取得できるはずだが、万一取得できなかったらDBから取得する。
+		if ($usePrivateRoom === null) {
+			$this->loadModels(['UserRoleSetting' => 'UserRoles.UserRoleSetting']);
+			$userRole = Current::read('User.role_key');
+			$userRoleSetting = $this->UserRoleSetting->find(
+				'first',
+				[
+					'conditions' => [
+						'UserRoleSetting.role_key' => $userRole
+					]
+				]
+			);
+			$usePrivateRoom = $userRoleSetting['UserRoleSetting']['use_private_room'];
+		}
+		return $usePrivateRoom;
 	}
 
 }
