@@ -21,6 +21,11 @@ App::uses('ReservationLocationReservable', 'Reservations.Model');
 class ReservationLocationsController extends ReservationsAppController {
 
 /**
+ * @var int 施設編集画面で表示する最大ルーム数
+ */
+	const MAX_ROOMS = 300;
+
+/**
  * layout
  *
  * @var array
@@ -136,7 +141,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		$roomConditions = [
 			//'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
 		];
-		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
+		$this->RoomsForm->setRoomsForCheckbox($roomConditions, ['limit' => self::MAX_ROOMS]);
 
 		$this->view = 'form';
 	}
@@ -296,7 +301,7 @@ class ReservationLocationsController extends ReservationsAppController {
 		$roomConditions = [
 			//'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
 		];
-		$this->RoomsForm->setRoomsForCheckbox($roomConditions);
+		$this->RoomsForm->setRoomsForCheckbox($roomConditions, ['limit' => self::MAX_ROOMS]);
 
 		$this->view = 'form';
 	}
