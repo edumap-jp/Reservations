@@ -481,7 +481,7 @@ class ReservationLocation extends ReservationsAppModel {
 			// 承認ユーザ取得
 			//$locations[$key]['approvalUserIds'] =
 			//	$this->ReservationLocationsApprovalUser->getApprovalUserIdsByLocation($location);
-			$locations[$key]['approvalUserIds'] = $approvalUsers[$locationKey];
+			$locations[$key]['approvalUserIds'] = $approvalUsers[$locationKey] ?? [];
 		}
 		// プライベートルームを除外したルームIDで予約可能かチェック
 		$roomIds = $this->getReadableRoomIdsWithOutPrivate();
