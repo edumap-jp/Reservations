@@ -122,8 +122,8 @@ class ReservationLocationsRoom extends ReservationsAppModel {
 /**
  * getReservableRoomsByLocationKey
  *
- * @param $locationKey
- * @param $userId
+ * @param string $locationKey 施設キー
+ * @param int|string $userId User.id
  * @return array Room data
  */
 	public function getReservableRoomsByLocationKey($locationKey, $userId) : array {
@@ -136,6 +136,13 @@ class ReservationLocationsRoom extends ReservationsAppModel {
 		return $this->getReservableRoomsByLocationAndUserId($location, $userId);
 	}
 
+/**
+ * getReservableRoomsByLocationAndUserId
+ *
+ * @param array $location 施設
+ * @param int|string $userId User.id
+ * @return array
+ */
 	public function getReservableRoomsByLocationAndUserId(array $location, $userId) : array {
 		// roomBase取得
 		$this->loadModels([
@@ -189,76 +196,5 @@ class ReservationLocationsRoom extends ReservationsAppModel {
 		}
 		return $thisLocationRooms;
 	}
-
-/**
- * 指定された施設で予約を受け付けるルームを施設キーをキーにして返す
- *
- * @param array $locations ReservationLocation list
- * @param array $readableRooms room list
- * @return array
- */
-	public function findReservableRoomsByLocations(array $locations, array $readableRooms) : array {
-		// $readableRoomsからプライベートルームを分離
-		$withoutPrivateRooms = [];
-		$privateRooms = [];
-		foreach ($readableRooms as $room) {
-			if ($room['Room']['space_id'] == Space::PRIVATE_SPACE_ID) {
-				$privateRooms[] = $room;
-			} else {
-				$roomId = $room['Room']['id'];
-				$withoutPrivateRooms[$roomId] = $room;
-			}
-		}
-		// use_all_rooms:falseの施設キーリストをつくる
-		$locationKeys = [];
-		foreach ($locations as $location) {
-			if (!$location['ReservationLocation']['use_all_rooms']) {
-				$locationKeys[] = $location['ReservationLocation']['key'];
-			}
-		}
-		// FIND
-		$locationRooms = $this->find(
-			'all',
-			[
-				'conditions' => [
-					'ReservationLocationsRoom.reservation_location_key' => $locationKeys
-				],
-				'recursive' => -1,
-				'fields' => ['ReservationLocationsRoom.reservation_location_key', 'ReservationLocationsRoom.room_id']
-			]
-		);
-		// FIND 結果を施設キーごとにまとめる
-		$reservableRoomIds = [];
-		foreach ($locationRooms as $room) {
-			$locationKey = $room['ReservationLocationsRoom']['reservation_location_key'];
-			$roomId = $room['ReservationLocationsRoom']['room_id'];
-			$reservableRoomIds[$locationKey][] = $roomId;
-		}
-
-		// 施設ごとに予約を受け付けるルームをセット
-		$result = [];
-		foreach ($locations as $location) {
-			$locationKey = $location['ReservationLocation']['key'];
-			$locationResult = [];
-			if ($location['ReservationLocation']['use_all_rooms']) {
-				$locationResult[] = $withoutPrivateRooms;
-			} else {
-				// 予約を受け付けるルームだけをセット
-				$rooms = [];
-				foreach ($reservableRoomIds[$locationKey] as $roomId) {
-					$rooms[] = $withoutPrivateRooms[$roomId];
-				}
-				$locationResult[] = $rooms;
-
-			}
-			if ($location['ReservationLocation']['use_private']) {
-				$locationResult[] = $privateRooms;
-			}
-
-			$result[$locationKey] = array_merge(...$locationResult);
-		}
-		return $result;
-	}
-
 }
 

@@ -35,6 +35,13 @@ class ReservationsAppModel extends AppModel {
  */
 	protected $_notPrivateRoomIds = null;
 
+	protected $_roleKeysWithRoomId = null;
+
+/**
+ * @var array 参加ルーム
+ */
+	private $__joinRooms;
+
 /**
  * getReadableRoomIds
  *
@@ -49,14 +56,14 @@ class ReservationsAppModel extends AppModel {
 		if (! is_null($this->_readableRoomIds)) {
 			return $this->_readableRoomIds;
 		}
-		$this->Room = ClassRegistry::init('Rooms.Room', true);
-		$condition = $this->Room->getReadableRoomsConditions();
-		$roomBase = $this->Room->find('all', $condition);
-		$roomIds = Hash::combine($roomBase, '{n}.Room.id', '{n}.Room.id');
+
+		$rooms = $this->__findJoinRooms();
+
+		$roomIds = Hash::combine($rooms, '{n}.Room.id', '{n}.Room.id');
 		// 施設予約は特別にプライベートスペースIDを入れる
 		// 施設予約は特別に全会員向けルームIDを入れる
 		if (Current::read('User.id')) {
-			if (Hash::extract($roomBase, '{n}.Room[space_id=' . Space::PRIVATE_SPACE_ID . ']')) {
+			if (Hash::extract($rooms, '{n}.Room[space_id=' . Space::PRIVATE_SPACE_ID . ']')) {
 				$privateRoomId = Space::getRoomIdRoot(Space::PRIVATE_SPACE_ID);
 				$roomIds[$privateRoomId] = $privateRoomId;
 			}
@@ -77,9 +84,8 @@ class ReservationsAppModel extends AppModel {
 			return $this->_notPrivateRoomIds;
 		}
 
-		$this->Room = ClassRegistry::init('Rooms.Room', true);
-		$condition = $this->Room->getReadableRoomsConditions();
-		$rooms = $this->Room->find('all', $condition);
+		$rooms = $this->__findJoinRooms();
+
 		$roomIds = [];
 		foreach ($rooms as $room) {
 			if ($room['Room']['space_id'] !== Space::PRIVATE_SPACE_ID) {
@@ -89,6 +95,26 @@ class ReservationsAppModel extends AppModel {
 		$this->_notPrivateRoomIds = $roomIds;
 
 		return $roomIds;
+	}
+
+/**
+ * __findJoinRooms
+ *
+ * @return array|int|null
+ */
+	private function __findJoinRooms() {
+		if ($this->__joinRooms === null) {
+			$this->Room = ClassRegistry::init('Rooms.Room', true);
+			$condition = $this->Room->getReadableRoomsConditions();
+			$this->__joinRooms = $this->Room->find('all', $condition);
+			foreach ($this->__joinRooms as $room) {
+				if ($room['Room']['space_id'] !== Space::PRIVATE_SPACE_ID) {
+					$roomId = $room['Room']['id'];
+					$this->_roleKeysWithRoomId[$roomId] = $room['RolesRoom']['role_key'];
+				}
+			}
+		}
+		return $this->__joinRooms;
 	}
 
 /**
@@ -436,4 +462,5 @@ class ReservationsAppModel extends AppModel {
 		}
 		return false;
 	}
+
 }

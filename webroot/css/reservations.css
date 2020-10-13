@@ -1131,3 +1131,11 @@ div.reservation-horizontal-timeframe{
 .reservation-horizon-timeline{
 	border: none;
 }
+
+/* 「公開対象」ロード中 */
+.reservation-loading-dropdown {
+	background-image: url('../../img/net_commons/loading.svg');
+	background-repeat: no-repeat;
+	background-position: right 5px center;
+	background-size: auto 60%;
+}

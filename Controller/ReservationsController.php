@@ -37,6 +37,7 @@ class ReservationsController extends ReservationsAppController {
 		'Reservations.ReservationEventShareUser',
 		'Reservations.ReservationActionPlan',	//予定CRUDaction専用
 		'Reservations.ReservationLocation',
+		'Reservations.ReservationLocationsRoom',
 		'Reservations.ReservationLocationReservable',
 		'Reservations.ReservationTimeframe',
 		'Holidays.Holiday',
@@ -408,6 +409,9 @@ class ReservationsController extends ReservationsAppController {
 		// カテゴリ別表時
 		// 施設が指定されてないなら、いずれかの施設で予約できれば予約権限ありと判定
 		$reservable = false;
+		// あらかじめ全施設の権限をロードしておく
+		$this->ReservationLocationReservable->loadAll($this->ReservationLocationReservable->getReadableRoomIds());
+
 		foreach ($this->viewVars['locations'] as $location) {
 			if (Current::read('Reservations.accessPrivateRoom')) {
 				// プライベートルーム
@@ -420,6 +424,7 @@ class ReservationsController extends ReservationsAppController {
 				}
 			}
 		}
+
 		Current::write('ReservationReservable', $reservable);
 	}
 
@@ -462,5 +467,66 @@ class ReservationsController extends ReservationsAppController {
 				$style = ReservationsComponent::RESERVATION_STYLE_DEFAULT;
 		}
 		return $style;
+	}
+
+/**
+ * ajaxで施設の公開先ルームを取得する
+ *
+ * @return void
+ */
+	public function fetch_rooms_to_publish_reservation() {
+		// get request params
+		$locationKey = $this->request->query('location_key');
+		// guard
+		if (!$this->__validateLocationKey($locationKey)) {
+			$this->throwBadRequest();
+			return;
+		}
+		// 公開先ルーム取得
+		$rooms = $this->__findRoomsToPublishReservation($locationKey);
+		// jsonで返す
+		$this->__jsonResponse($rooms);
+	}
+
+/**
+ * __validateLocationKey
+ *
+ * @param mixed $locationKey 施設キー
+ * @return bool
+ */
+	private function __validateLocationKey($locationKey) : bool {
+		if (!is_string($locationKey)) {
+			return false;
+		}
+		return true;
+	}
+
+/**
+ * __findRoomsToPublishReservation
+ *
+ * @param string $locationKey 施設キー
+ * @return array
+ */
+	private function __findRoomsToPublishReservation($locationKey) {
+		$userId = Current::read('User.id');
+		return $this->ReservationLocationsRoom->getReservableRoomsByLocationKey($locationKey, $userId);
+	}
+
+/**
+ * __jsonResponse
+ *
+ * @param array $rooms Room data
+ * @return void
+ */
+	private function __jsonResponse(array $rooms) {
+		//  どういう形式にすればいいんだっけ？テンプレートみてみよう
+		$result = [];
+		foreach ($rooms as $room) {
+			$result[] = [
+				'room_id' => $room['Room']['id'],
+				'name' => $room['RoomsLanguage'][0]['name']
+			];
+		}
+		$this->NetCommons->renderJson(['rooms' => $result]);
 	}
 }
