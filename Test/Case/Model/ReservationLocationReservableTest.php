@@ -57,7 +57,12 @@ final class ReservationLocationReservableTest extends NetCommonsModelTestCase {
 		parent::tearDown();
 	}
 
-	public function test個人的な予約を受け付けてる施設はプライベートルームが使えるユーザならルームでの権限がなくても予約可能() {
+/**
+ * 個人的な予約を受け付けてる施設はプライベートルームが使えるユーザならルームでの権限がなくても予約可能
+ *
+ * @return void
+ */
+	public function testReservableWhenUsePrivateRoom() {
 		$userId = 10;
 		Current::write('User.id', $userId);
 		Current::write('User.role_key', 'general_user');
@@ -74,7 +79,13 @@ final class ReservationLocationReservableTest extends NetCommonsModelTestCase {
 		$result = $this->ReservationLocationReservable->isReservableByLocation($location);
 		self::assertTrue($result);
 	}
-	public function test個人的な予約を受け付けてる施設でプライベートルームが使えないユーザならルーム権限もなければ予約不可() {
+
+/**
+ * 個人的な予約を受け付けてる施設でプライベートルームが使えないユーザならルーム権限もなければ予約不可
+ *
+ * @return void
+ */
+	public function testNotReservableWhenNotUsePrivateRoom() {
 		$userId = 11;
 		Current::write('User.id', $userId);
 		Current::write('User.role_key', 'custom_user');
@@ -92,7 +103,12 @@ final class ReservationLocationReservableTest extends NetCommonsModelTestCase {
 		self::assertFalse($result);
 	}
 
-	public function test全てのルームから予約を受け付けている施設はいずれかのルームで権限あれば予約可能() {
+/**
+ * 全てのルームから予約を受け付けている施設はいずれかのルームで権限あれば予約可能
+ *
+ * @return void
+ */
+	public function testReservableWhenHasAnyRoomPermission() {
 		$userId = 10;
 		Current::write('User.id', $userId);
 		Current::write('User.role_key', 'general_user');
@@ -110,7 +126,12 @@ final class ReservationLocationReservableTest extends NetCommonsModelTestCase {
 		self::assertTrue($result);
 	}
 
-	public function test特定のルームのみ予約を受け付けている施設はいずれかのそのルームで権限あれば予約可能() {
+/**
+ * 特定のルームのみ予約を受け付けている施設はいずれかのそのルームで権限あれば予約可能
+ *
+ * @return void
+ */
+	public function testReservableWhenHasRoomPermission() {
 		$userId = 10;
 		Current::write('User.id', $userId);
 		Current::write('User.role_key', 'general_user');
@@ -128,7 +149,12 @@ final class ReservationLocationReservableTest extends NetCommonsModelTestCase {
 		self::assertTrue($result);
 	}
 
-	public function test全てのルームから予約を受け付けている施設でいずれのルーム権限もなければ予約不可() {
+/**
+ * 全てのルームから予約を受け付けている施設でいずれのルーム権限もなければ予約不可
+ *
+ * @return void
+ */
+	public function testNotReservableWhenHasNotAnyRoomPermission() {
 		$userId = 11;
 		Current::write('User.id', $userId);
 		Current::write('User.role_key', 'custom_user');
@@ -147,7 +173,12 @@ final class ReservationLocationReservableTest extends NetCommonsModelTestCase {
 		self::assertFalse($result);
 	}
 
-	public function test特定のルームのみ予約を受け付けている施設でそのルームの権限がなければ予約不可() {
+/**
+ * 特定のルームのみ予約を受け付けている施設でそのルームの権限がなければ予約不可
+ *
+ * @return void
+ */
+	public function testNotReservableWhenHasNotRoomPermision() {
 		$userId = 11;
 		Current::write('User.id', $userId);
 		Current::write('User.role_key', 'custom_user');
@@ -164,6 +195,5 @@ final class ReservationLocationReservableTest extends NetCommonsModelTestCase {
 		$result = $this->ReservationLocationReservable->isReservableByLocation($location);
 
 		self::assertFalse($result);
-
 	}
 }
