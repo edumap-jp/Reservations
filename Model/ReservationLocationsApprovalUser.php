@@ -181,7 +181,10 @@ class ReservationLocationsApprovalUser extends ReservationsAppModel {
 			[
 				'conditions' => $condition,
 				'recursive' => -1,
-				'fields' => ['ReservationLocationsApprovalUser.location_key', 'ReservationLocationsApprovalUser.user_id']
+				'fields' => [
+					'ReservationLocationsApprovalUser.location_key',
+					'ReservationLocationsApprovalUser.user_id'
+				]
 			]
 		);
 		// [location_key => [user_id,...],  ...] 形式にする

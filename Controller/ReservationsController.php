@@ -410,7 +410,9 @@ class ReservationsController extends ReservationsAppController {
 		// 施設が指定されてないなら、いずれかの施設で予約できれば予約権限ありと判定
 		$reservable = false;
 		// あらかじめ全施設の権限をロードしておく
-		$this->ReservationLocationReservable->loadAll($this->ReservationLocationReservable->getReadableRoomIds());
+		$this->ReservationLocationReservable->loadAll(
+			$this->ReservationLocationReservable->getReadableRoomIds()
+		);
 
 		foreach ($this->viewVars['locations'] as $location) {
 			if (Current::read('Reservations.accessPrivateRoom')) {

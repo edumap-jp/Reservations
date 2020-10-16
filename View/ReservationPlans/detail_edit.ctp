@@ -224,7 +224,11 @@ echo $this->element('Reservations.scripts');
 					<?php
 					echo $this->NetCommonsForm->select('ReservationActionPlan.plan_room_id',
 						[], array(
-							'ng-init'=> sprintf('initReservableRooms(%s, %s)', $defaultPublishableRooms, $selectedRoom),
+							'ng-init' => sprintf(
+								'initReservableRooms(%s, %s)',
+								$defaultPublishableRooms,
+								$selectedRoom
+							),
 							'ng-options' =>
 								'room.name for room in roomList track by room.roomId',
 							'class' => 'form-control select-expose-target',

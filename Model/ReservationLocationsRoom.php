@@ -172,7 +172,10 @@ class ReservationLocationsRoom extends ReservationsAppModel {
 					]
 				]
 			);
-			$reservableRoomIds = array_column(array_column($locationRooms, 'ReservationLocationsRoom'), 'room_id');
+			$reservableRoomIds = array_column(
+				array_column($locationRooms, 'ReservationLocationsRoom'),
+				'room_id'
+			);
 		}
 
 		$thisLocationRooms = [];

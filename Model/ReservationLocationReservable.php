@@ -141,7 +141,10 @@ class ReservationLocationReservable extends ReservationsAppModel {
 		} else {
 			// 選択されたルームのみ予約OK
 			$reservable = false;
-			$reservableRoleKeys = $this->__findReservableRoleKeys($location['ReservationLocation']['key'], $roomIds);
+			$reservableRoleKeys = $this->__findReservableRoleKeys(
+				$location['ReservationLocation']['key'],
+				$roomIds
+			);
 			foreach ($roomIds as $roomId) {
 				$roleKey = $this->__findRoleKeyByRoomId($roomId);
 
@@ -441,7 +444,8 @@ class ReservationLocationReservable extends ReservationsAppModel {
 			$locationKey = $data['ReservationLocationReservable']['location_key'];
 			// 全ルームOKの場合はroomId = 0としてセットされる
 			$roomId = (int)$data['ReservationLocationReservable']['room_id'];
-			$reservableRoleKeys[$locationKey][$roomId][] = $data['ReservationLocationReservable']['role_key'];
+			$reservableRoleKeys[$locationKey][$roomId][] =
+				$data['ReservationLocationReservable']['role_key'];
 		}
 		$this->__reservableRoleKeys = $reservableRoleKeys;
 	}
