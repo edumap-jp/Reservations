@@ -31,10 +31,13 @@ class ReservationsAppModel extends AppModel {
 /**
  * getReadableRoomIdsWithOutPrivate()が何度も繰り返し呼び出された時のための保持変数
  *
- * @var array
+ * @var array|null
  */
 	protected $_notPrivateRoomIds = null;
 
+/**
+ * @var array|null アクセスユーザの参加るーむごとのrole_key [room.id => role_key, ...]
+ */
 	protected $_roleKeysWithRoomId = null;
 
 /**
