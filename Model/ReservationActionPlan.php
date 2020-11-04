@@ -840,12 +840,6 @@ class ReservationActionPlan extends ReservationsAppModel {
 		$userId = Current::read('User.id');
 		$rooms = $this->ReservationLocationsRoom->getReservableRoomsByLocationKey($locationKey, $userId);
 		$reservableRoomIds = array_column(array_column($rooms, 'Room'), 'id');
-		//$locations = $this->_getLocations();
-		//$locationRooms = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservableRoom');
-		//
-		//$rooms = $locationRooms[$locationKey];
-
-		//$reservableRoomIds = Hash::combine($rooms, '{n}.Room.id', '{n}.Room.id');
 		return in_array($roomId, $reservableRoomIds);
 	}
 
