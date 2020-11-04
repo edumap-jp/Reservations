@@ -170,9 +170,7 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
 			'UserRoleSetting' => ['use_private_room' => false]
 		]);
 		$locations = $this->ReservationLocation->getReservableLocations($categoryId, $userId);
-		debug($locations);
 		$ids = array_column(array_column($locations, 'ReservationLocation'), 'id');
-		debug($ids);
 		self::assertContains('1', $ids);
 	}
 
@@ -188,7 +186,6 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
 		$locations = $this->ReservationLocation->getReservableLocations($categoryId, $userId);
 		$ids = array_column(array_column($locations, 'ReservationLocation'), 'id');
 
-		debug($ids);
 		// location.id:1はchief_editor以上でないと予約できないので取得されない
 		self::assertNotContains('1', $ids);
 	}
