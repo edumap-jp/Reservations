@@ -50,6 +50,19 @@ class ReservationLocationReservableFixture extends CakeTestFixture {
  */
 	public $records = [
 		[
+			'location_key' => 'location_1',
+			'role_key' => 'chief_editor',
+			'room_id' => null,
+			'value' => 1,
+		],
+		[
+			'location_key' => 'location_1',
+			'role_key' => 'general_user',
+			'room_id' => null,
+			'value' => 0,
+		],
+
+		[
 			//'id' => 1,
 			'location_key' => 'KEY_1',
 			'role_key' => 'chief_editor',

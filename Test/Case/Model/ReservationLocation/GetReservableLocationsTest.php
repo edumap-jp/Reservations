@@ -15,6 +15,8 @@ App::uses('ReservationsGetTest', 'Reservations.TestSuite');
 /**
  * ReservationLocation::getReservableLocations()のテスト
  *
+ * @property ReservationLocation $ReservationLocation
+ *
  * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @package NetCommons\Reservations\Test\Case\Model\ReservationLocation
  */
@@ -65,6 +67,13 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
  */
 	protected $_methodName = 'getReservableLocations';
 
+	public function setUp() {
+		parent::setUp();
+		/** @var ReservationLocationReservable $reservationLocationReservable */
+		$reservationLocationReservable = ClassRegistry::init('Reservations.ReservationLocationReservable');
+		$reservationLocationReservable->clearCache();
+	}
+
 /**
  * getReservableLocations()のテスト
  *
@@ -93,7 +102,7 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
 		//チェック
 		//:Assertを書く
 		// ε(　　　　 v ﾟωﾟ)　＜ ひとまず件数だけチェック
-		$this->assertEquals(3, count($result));
+		$this->assertEquals(4, count($result));
 		//debug($result);
 	}
 
@@ -126,7 +135,7 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
 		//チェック
 		//:Assertを書く
 		// ひとまず件数だけチェック
-		$this->assertEquals(3, count($result));
+		$this->assertEquals(4, count($result));
 
 		// 取得される施設のキーが重複してないことを確認する(Issue897発生時はこれがFailedになる)
 		$keys = [];
@@ -134,5 +143,53 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
 			$this->assertNotContains($location['ReservationLocation']['key'], $keys);
 			$keys[] = $location['ReservationLocation']['key'];
 		}
+	}
+
+	public function test承認が必要な施設は承認者情報つきで取得される() {
+		$categoryId = null;
+		$userId = 1;
+		Current::write('User', [
+			'id' => 1,
+			'timezone' => 'Asia/Tokyo',
+			'role_key' => 'system_administrator',
+		]);
+		$locations = $this->ReservationLocation->getReservableLocations($categoryId, $userId);
+		$idIndexes = array_column(array_column($locations, 'ReservationLocation'), 'id');
+		$id4index = array_search('4', $idIndexes);
+		$expected = ['1'];
+		self::assertSame($expected, $locations[$id4index]['approvalUserIds']);
+	}
+
+	public function testいずれかのルームで予約可能なロール以上であれば予約可能な施設として取得される() {
+		$categoryId = null;
+		$userId = 2; // room.id:2で chief_editor
+		Current::write('User', [
+			'id' => 2,
+			'timezone' => 'Asia/Tokyo',
+			'role_key' => 'general_user',
+			'UserRoleSetting' => ['use_private_room' => false]
+		]);
+		$locations = $this->ReservationLocation->getReservableLocations($categoryId, $userId);
+		debug($locations);
+		$ids = array_column(array_column($locations, 'ReservationLocation'), 'id');
+		debug($ids);
+		self::assertContains('1', $ids);
+	}
+
+	public function testいずれのルームでも施設の予約可能なロールを満たしてない施設は取得されない() {
+		$categoryId = null;
+		$userId = 3; // room.id:2で editor
+		Current::write('User', [
+			'id' => 3,
+			'timezone' => 'Asia/Tokyo',
+			'role_key' => 'general_user',
+			'UserRoleSetting' => ['use_private_room' => false]
+		]);
+		$locations = $this->ReservationLocation->getReservableLocations($categoryId, $userId);
+		$ids = array_column(array_column($locations, 'ReservationLocation'), 'id');
+
+		debug($ids);
+		// location.id:1はchief_editor以上でないと予約できないので取得されない
+		self::assertNotContains('1', $ids);
 	}
 }

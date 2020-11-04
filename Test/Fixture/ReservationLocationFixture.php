@@ -120,6 +120,27 @@ class ReservationLocationFixture extends CakeTestFixture {
 			'modified_user' => 1,
 			'modified' => 1
 		),
+		array(
+			'id' => 4,
+			'key' => 'location_4',
+			'language_id' => 2,
+			'category_id' => 1,
+			'location_name' => 'UseWorkflowLocation',
+			'add_authority' => 0,
+			'time_table' => 'Sun|Mon|Tue|Wed|Thu|Fri|Sat',
+			'start_time' => '2017-05-04 15:00:00',
+			'end_time' => '2017-05-05 15:00:00',
+			'timezone' => 'Asia/Tokyo',
+			'use_private' => 1,
+			'use_auth_flag' => 0,
+			'use_all_rooms' => 1,
+			'use_workflow' => 1,
+			'weight' => 1,
+			'created_user' => 1,
+			'created' => '2017-02-25 08:59:40',
+			'modified_user' => 1,
+			'modified' => 1
+		),
 	);
 
 }

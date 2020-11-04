@@ -85,8 +85,7 @@ class ReservationLocationGetLocationsTest extends ReservationsGetTest {
 
 		//チェック
 		// ε(　　　　 v ﾟωﾟ)　＜ ひとまず件数だけチェック
-		$this->assertEquals(3, count($result));
-		debug($result);
+		$this->assertEquals(4, count($result));
 	}
 
 }

@@ -41,7 +41,7 @@ class ReservationLocationsApprovalUserFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'location_key' => 'Lorem ipsum dolor sit amet',
+			'location_key' => 'location_4',
 			'user_id' => 1,
 			'created_user' => 1,
 			'created' => '2017-04-22 05:04:43',
