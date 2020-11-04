@@ -104,8 +104,9 @@ class ReservationLocationReservable extends ReservationsAppModel {
 		// 個人的な予約OKな施設
 		if ($location['ReservationLocation']['use_private']) {
 			// マイルームが使えるならOK
-			$usePrivateRoom = $this->__canUsePrivateRoom();
-			return $usePrivateRoom;
+			if ($this->__canUsePrivateRoom()) {
+				return true;
+			};
 		}
 
 		if ($location['ReservationLocation']['use_all_rooms']) {
@@ -448,5 +449,9 @@ class ReservationLocationReservable extends ReservationsAppModel {
 				$data['ReservationLocationReservable']['role_key'];
 		}
 		$this->__reservableRoleKeys = $reservableRoleKeys;
+	}
+
+	public function clearCache() {
+		unset($this->__reservableRoleKeys);
 	}
 }
