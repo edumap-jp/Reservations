@@ -464,23 +464,14 @@ class ReservationLocation extends ReservationsAppModel {
 		);
 		$locations = $this->getLocations($categoryId);
 
-		// ルーム情報、承認者情報を locationにまぜこむ
-		//$condition = $this->Room->getReadableRoomsConditions([], $userId);
-		//$roomBase = $this->Room->find('all', $condition);
-
 		// あらかじめ承認ユーザ取得する
 		$approvalUsers = $this->ReservationLocationsApprovalUser->findApprovalUserIdsByLocations(
 			$locations
 		);
-		// 予約をうけつけるルームの取得 全施設一括で取得してマージかけるようにすれば、Find回数減る
-		//$reservableRooms = $this->ReservationLocationsRoom->findReservableRoomsByLocations($locations, $roomBase);
 		foreach ($locations as $key => $location) {
 			$locationKey = $location['ReservationLocation']['key'];
-			//$locations[$key]['ReservableRoom'] = $reservableRooms[$locationKey];
 
-			// 承認ユーザ取得
-			//$locations[$key]['approvalUserIds'] =
-			//	$this->ReservationLocationsApprovalUser->getApprovalUserIdsByLocation($location);
+			// 承認ユーザを配列にセット
 			$locations[$key]['approvalUserIds'] = $approvalUsers[$locationKey] ?? [];
 		}
 		// プライベートルームを除外したルームIDで予約可能かチェック
@@ -491,12 +482,8 @@ class ReservationLocation extends ReservationsAppModel {
 		$this->ReservationLocationReservable->loadAll($roomIds);
 
 		foreach ($locations as $location) {
-			$reservable = false;
 			// いずれかのルームで予約できるなら予約可能な施設とする
 			if ($this->ReservationLocationReservable->isReservableByLocation($location)) {
-				$reservable = true;
-			}
-			if ($reservable) {
 				$reservableLocations[] = $location;
 			}
 		}

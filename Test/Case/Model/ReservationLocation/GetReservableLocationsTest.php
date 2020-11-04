@@ -145,7 +145,12 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
 		}
 	}
 
-	public function test承認が必要な施設は承認者情報つきで取得される() {
+/**
+ * 承認が必要な施設は承認者情報つきで取得される
+ *
+ * @return void
+ */
+	public function testWithApprovalUser() {
 		$categoryId = null;
 		$userId = 1;
 		Current::write('User', [
@@ -160,7 +165,12 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
 		self::assertSame($expected, $locations[$id4index]['approvalUserIds']);
 	}
 
-	public function testいずれかのルームで予約可能なロール以上であれば予約可能な施設として取得される() {
+/**
+ * いずれかのルームで予約可能なロール以上であれば予約可能な施設として取得される
+ *
+ * @return void
+ */
+	public function testGetReservableWhenMoreThanRollInAnyRoom() {
 		$categoryId = null;
 		$userId = 2; // room.id:2で chief_editor
 		Current::write('User', [
@@ -174,7 +184,12 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
 		self::assertContains('1', $ids);
 	}
 
-	public function testいずれのルームでも施設の予約可能なロールを満たしてない施設は取得されない() {
+/**
+ * いずれのルームでも施設の予約可能なロールを満たしてない施設は取得されない
+ *
+ * @return void
+ */
+	public function testNotGetReservableWhenLessRollInEveryRoom() {
 		$categoryId = null;
 		$userId = 3; // room.id:2で editor
 		Current::write('User', [
