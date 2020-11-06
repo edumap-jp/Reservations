@@ -33,10 +33,18 @@ class AllReservationsTest extends NetCommonsTestSuite {
 		$suite->addTestDirectoryRecursive($basePath . DS . 'Utility');
 		//$suite->addTestDirectoryRecursive($basePath . DS . 'Model');
 
-		$suite->addTestFile($basePath . DS . 'Model' . DS . 'ReservationLocation' . DS .
-			'GetLocationsTest.php');
-		$suite->addTestFile($basePath . DS . 'Model' . DS . 'ReservationLocation' . DS .
-			'GetReservableLocationsTest.php');
+		$suite->addTestFile(
+			$basePath . DS . 'Model' . DS . 'ReservationLocation' . DS .
+			'GetLocationsTest.php'
+		);
+		$suite->addTestFile(
+			$basePath . DS . 'Model' . DS . 'ReservationLocation' . DS .
+			'GetReservableLocationsTest.php'
+		);
+
+		$suite->addTestFile(
+			$basePath . DS . 'Model' . DS . 'ReservationLocationReservableTest.php'
+		);
 
 		//$suite->addTestDirectoryRecursive($basePath . DS . 'Controller');
 		return $suite;
