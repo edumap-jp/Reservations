@@ -48,6 +48,15 @@ class ReservationLocationsApprovalUserFixture extends CakeTestFixture {
 			'modified_user' => 1,
 			'modified' => '2017-04-22 05:04:43'
 		),
+		array(
+			'id' => 2,
+			'location_key' => 'location_6',
+			'user_id' => 2,
+			'created_user' => 1,
+			'created' => '2017-04-22 05:04:43',
+			'modified_user' => 1,
+			'modified' => '2017-04-22 05:04:43'
+		),
 	);
 
 }

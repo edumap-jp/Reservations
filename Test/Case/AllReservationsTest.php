@@ -45,6 +45,9 @@ class AllReservationsTest extends NetCommonsTestSuite {
 		$suite->addTestFile(
 			$basePath . DS . 'Model' . DS . 'ReservationLocationReservableTest.php'
 		);
+		$suite->addTestFile(
+			$basePath . DS . 'Model' . DS . 'ReservationLocationsApprovalUserTest.php'
+		);
 
 		//$suite->addTestDirectoryRecursive($basePath . DS . 'Controller');
 		return $suite;
