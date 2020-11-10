@@ -133,7 +133,10 @@ class ReservationLocationsRoom extends ReservationsAppModel {
 		// location取得
 		$location = $this->ReservationLocation->getByKey($locationKey);
 
-		return $this->getReservableRoomsByLocationAndUserId($location, $userId);
+		if ($location) {
+			return $this->getReservableRoomsByLocationAndUserId($location, $userId);
+		}
+		return [];
 	}
 
 /**

@@ -516,6 +516,9 @@ class ReservationLocation extends ReservationsAppModel {
 						$conditions
 				]
 			);
+			if (!$location) {
+				return [];
+			}
 			$location['approvalUserIds'] =
 				$this->ReservationLocationsApprovalUser->getApprovalUserIdsByLocation($location);
 			$this->_locations[$locationKey] = $location;
