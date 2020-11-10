@@ -116,6 +116,18 @@ class ReservationLocationReservableFixture extends CakeTestFixture {
 			'value' => 1,
 		],
 
+		[
+			'location_key' => 'location_5',
+			'role_key' => 'chief_editor',
+			'room_id' => 11,
+			'value' => 1,
+		],
+		[
+			'location_key' => 'location_5',
+			'role_key' => 'general_user',
+			'room_id' => 11,
+			'value' => 1,
+		]
 	];
 
 }

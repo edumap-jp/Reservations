@@ -39,8 +39,8 @@ class ReservationLocationsRoomFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $records = array(
-		array(
+	public $records = [
+		[
 			'id' => 1,
 			'reservation_location_key' => 'Lorem ipsum dolor sit amet',
 			'room_id' => 1,
@@ -48,7 +48,12 @@ class ReservationLocationsRoomFixture extends CakeTestFixture {
 			'created' => '2017-03-24 22:45:24',
 			'modified_user' => 1,
 			'modified' => '2017-03-24 22:45:24'
-		),
-	);
+		],
+		[
+			//'id' => 1,
+			'reservation_location_key' => 'location_5',
+			'room_id' => '11',
+		]
+	];
 
 }
