@@ -207,6 +207,28 @@ class Room4testFixture extends RoomFixture {
 			'in_draft' => '0',
 		],
 
+		// @see ReservationAppModelTest
+		[
+			'id' => 40,
+			'space_id' => Space::COMMUNITY_SPACE_ID,
+			'page_id_top' => '4',
+			'active' => '1',
+			'in_draft' => '0',
+		],
+		[
+			'id' => 41,
+			'space_id' => Space::COMMUNITY_SPACE_ID,
+			'page_id_top' => '4',
+			'active' => '1',
+			'in_draft' => '0',
+		],
+		[
+			'id' => 42,
+			'space_id' => Space::PRIVATE_SPACE_ID,
+			'page_id_top' => '10',
+			'active' => '1',
+			'in_draft' => '0',
+		],
 	);
 
 }

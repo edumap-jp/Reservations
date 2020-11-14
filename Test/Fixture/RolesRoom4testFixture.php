@@ -85,6 +85,22 @@ class RolesRoom4testFixture extends RolesRoomFixture {
 			'role_key' => 'general_user'
 		],
 
+		[
+			'id' => 40,
+			'room_id' => 40,
+			'role_key' => 'chief_editor'
+		],
+		[
+			'id' => 41,
+			'room_id' => 41,
+			'role_key' => 'general_user'
+		],
+		[
+			'id' => 42,
+			'room_id' => 42,
+			'role_key' => 'room_administrator'
+		],
+
 	);
 
 }

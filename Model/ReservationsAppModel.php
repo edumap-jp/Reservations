@@ -36,12 +36,14 @@ class ReservationsAppModel extends AppModel {
 	protected $_notPrivateRoomIds = null;
 
 /**
- * @var array|null アクセスユーザの参加るーむごとのrole_key [room.id => role_key, ...]
+ * @var array|null アクセスユーザの参加るーむごとのrole_key [room.id => role_key, ...] プライベートルームは含まない
+ * @see self::__loadJoinRoomsAndRole
  */
 	protected $_roleKeysWithRoomId = null;
 
 /**
- * @var array 参加ルーム
+ * @var array 参加ルーム プライベートルーム含む
+ * @see self::__loadJoinRoomsAndRole
  */
 	private $__joinRooms;
 
@@ -60,19 +62,9 @@ class ReservationsAppModel extends AppModel {
 			return $this->_readableRoomIds;
 		}
 
-		$rooms = $this->__findJoinRooms();
+		$rooms = $this->__loadJoinRoomsAndRole();
 
-		$roomIds = Hash::combine($rooms, '{n}.Room.id', '{n}.Room.id');
-		// 施設予約は特別にプライベートスペースIDを入れる
-		// 施設予約は特別に全会員向けルームIDを入れる
-		if (Current::read('User.id')) {
-			if (Hash::extract($rooms, '{n}.Room[space_id=' . Space::PRIVATE_SPACE_ID . ']')) {
-				$privateRoomId = Space::getRoomIdRoot(Space::PRIVATE_SPACE_ID);
-				$roomIds[$privateRoomId] = $privateRoomId;
-			}
-			$communityRoomId = Space::getRoomIdRoot(Space::COMMUNITY_SPACE_ID);
-			$roomIds[$communityRoomId] = $communityRoomId;
-		}
+		$roomIds = array_column(array_column($rooms, 'Room'), 'id');
 		$this->_readableRoomIds = $roomIds;
 		return $roomIds;
 	}
@@ -87,7 +79,7 @@ class ReservationsAppModel extends AppModel {
 			return $this->_notPrivateRoomIds;
 		}
 
-		$rooms = $this->__findJoinRooms();
+		$rooms = $this->__loadJoinRoomsAndRole();
 
 		$roomIds = [];
 		foreach ($rooms as $room) {
@@ -103,9 +95,12 @@ class ReservationsAppModel extends AppModel {
 /**
  * __findJoinRooms
  *
- * @return array|int|null
+ * @see self::_roleKeysWithRoomId
+ * @see self::__joinRooms
+ *
+ * @return array|int|null 参加しているルームを返す（プライベートルーム含む）
  */
-	private function __findJoinRooms() {
+	private function __loadJoinRoomsAndRole() {
 		if ($this->__joinRooms === null) {
 			$this->Room = ClassRegistry::init('Rooms.Room', true);
 			$condition = $this->Room->getReadableRoomsConditions();
