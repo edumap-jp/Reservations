@@ -521,7 +521,6 @@ class ReservationsController extends ReservationsAppController {
  * @return void
  */
 	private function __jsonResponse(array $rooms) {
-		//  どういう形式にすればいいんだっけ？テンプレートみてみよう
 		$result = [];
 		foreach ($rooms as $room) {
 			$result[] = [
