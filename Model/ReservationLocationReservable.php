@@ -195,7 +195,8 @@ class ReservationLocationReservable extends ReservationsAppModel {
 		]);
 		$reservableRoleKeys = [];
 		foreach ($findResult as $data) {
-			$roomId = (int)$data['ReservationLocationReservable']['room_id']; // 全ルームOKの施設では0になる
+			// 全ルームOKの施設では0になる
+			$roomId = (int)$data['ReservationLocationReservable']['room_id'];
 			$reservableRoleKeys[$roomId][] = $data['ReservationLocationReservable']['role_key'];
 		}
 
