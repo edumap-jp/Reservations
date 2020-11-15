@@ -69,9 +69,9 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
 
 	public function setUp() {
 		parent::setUp();
-		/** @var ReservationLocationReservable $reservationLocationReservable */
-		$reservationLocationReservable = ClassRegistry::init('Reservations.ReservationLocationReservable');
-		$reservationLocationReservable->clearCache();
+		/** @var ReservationLocationReservable $locationReservable */
+		$locationReservable = ClassRegistry::init('Reservations.ReservationLocationReservable');
+		$locationReservable->clearCache();
 	}
 
 /**
