@@ -77,6 +77,8 @@ class ReservationLocationsRoomTest extends NetCommonsModelTestCase {
 		$expectedIds = [
 			'11', '12'
 		];
+		sort($expectedIds);
+		sort($roomIds);
 		self::assertSame($expectedIds, $roomIds);
 	}
 
