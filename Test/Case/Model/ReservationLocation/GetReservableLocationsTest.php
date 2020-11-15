@@ -67,6 +67,11 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
  */
 	protected $_methodName = 'getReservableLocations';
 
+/**
+ * setUp
+ *
+ * @return void
+ */
 	public function setUp() {
 		parent::setUp();
 		/** @var ReservationLocationReservable $locationReservable */
