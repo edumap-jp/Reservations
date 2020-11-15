@@ -94,12 +94,12 @@ class ReservationRepeatServiceTest extends CakeTestCase {
 		// よって月曜に月曜を指定すると今日の日時。
 		// 火曜に月曜を指定すると次の週の月曜
 		// 土曜を求めると今週の土曜。
-		debug(date('Y-m-d', strtotime('MON'))); // 次の月曜日
-		debug(date('Y-m-d', strtotime('TUE')));
-		debug(date('Y-m-d', strtotime('WED')));
-		debug(date('Y-m-d', strtotime('+0 week', strtotime('2017-05-20'))));
-		debug(date('Y-m-d', strtotime('first WED of 2017-05')));
-		debug(date('Y-m-d', strtotime('last WED of 2017-05')));
+		//debug(date('Y-m-d', strtotime('MON'))); // 次の月曜日
+		//debug(date('Y-m-d', strtotime('TUE')));
+		//debug(date('Y-m-d', strtotime('WED')));
+		//debug(date('Y-m-d', strtotime('+0 week', strtotime('2017-05-20'))));
+		//debug(date('Y-m-d', strtotime('first WED of 2017-05')));
+		//debug(date('Y-m-d', strtotime('last WED of 2017-05')));
 	}
 
 /**
@@ -191,7 +191,7 @@ class ReservationRepeatServiceTest extends CakeTestCase {
 			'COUNT' => 3
 		];
 		$result = $this->ReservationRepeatService->getRepeatDateSet($rrule, $startDate);
-		debug($result);
+		//debug($result);
 		$this->assertCount(3, $result);
 		$lastDay = array_pop($result);
 		$this->assertEquals('2017-07-09', $lastDay);
@@ -205,7 +205,7 @@ class ReservationRepeatServiceTest extends CakeTestCase {
 			'COUNT' => 3
 		];
 		$result = $this->ReservationRepeatService->getRepeatDateSet($rrule, $startDate);
-		debug($result);
+		//debug($result);
 		$this->assertCount(3, $result);
 		$lastDay = array_pop($result);
 		$this->assertEquals('2017-09-10', $lastDay);
@@ -219,7 +219,7 @@ class ReservationRepeatServiceTest extends CakeTestCase {
 			'COUNT' => 3
 		];
 		$result = $this->ReservationRepeatService->getRepeatDateSet($rrule, $startDate);
-		debug($result);
+		//debug($result);
 		$this->assertEquals(
 			[
 				'2017-05-30',
@@ -287,7 +287,7 @@ class ReservationRepeatServiceTest extends CakeTestCase {
 			'UNTIL' => '2017-12-31'
 		];
 		$result = $this->ReservationRepeatService->getRepeatDateSet($rrule, $startDate);
-		debug($result);
+		//debug($result);
 		$this->assertEquals(
 			[
 				'2017-05-30',
@@ -318,7 +318,7 @@ class ReservationRepeatServiceTest extends CakeTestCase {
 			'COUNT' => 5
 		];
 		$result = $this->ReservationRepeatService->getRepeatDateSet($rrule, $startDate);
-		debug($result);
+		//debug($result);
 
 		$this->assertEquals(
 			[
@@ -343,7 +343,7 @@ class ReservationRepeatServiceTest extends CakeTestCase {
 			'UNTIL' => '2022-05-31'
 		];
 		$result = $this->ReservationRepeatService->getRepeatDateSet($rrule, $startDate);
-		debug($result);
+		//debug($result);
 
 		$this->assertEquals(
 			[
@@ -385,8 +385,7 @@ class ReservationRepeatServiceTest extends CakeTestCase {
 				'2019-08-01',
 				'2021-04-01',
 			],
-			$result,
-			debug($result)
+			$result
 		);
 
 		// until
@@ -410,8 +409,7 @@ class ReservationRepeatServiceTest extends CakeTestCase {
 				'2021-04-01',
 				'2021-08-01',
 			],
-			$result,
-			debug($result)
+			$result
 		);
 	}
 
