@@ -51,6 +51,11 @@ class ReservationLocationReservable extends ReservationsAppModel {
 	);
 
 /**
+ * @var array|null [location_key => 予約可能なロール, ...]
+ */
+	private $__reservableRoleKeys;
+
+/**
  * Called during validation operations, before validation. Please note that custom
  * validation rules can be defined in $validate.
  *
@@ -84,86 +89,170 @@ class ReservationLocationReservable extends ReservationsAppModel {
  * @param array $location ReservationLocation data
  * @return bool
  */
-	public function isReservableByLocation($location) {
+	public function isReservableByLocation($location) : bool {
 		$this->loadModels([
 			'RolesRoomsUser' => 'Rooms.RolesRoomsUser',
-			//'RolesRoom' => 'Rooms.RolesRoom',
-			//'Room' => 'Rooms.Room'
 		]);
 
 		$roomIds = $this->getReadableRoomIdsWithOutPrivate();
 		$userId = Current::read('User.id');
 		if (!$userId) {
-			return [];
+			return false;
 		}
 		// 個人的な予約OKな施設
-		if ($location['ReservationLocation']['use_private']) {
+		if ($location['ReservationLocation']['use_private'] && $this->__canUsePrivateRoom()) {
 			// マイルームが使えるならOK
-			$this->loadModels(['UserRoleSetting' => 'UserRoles.UserRoleSetting']);
-			$userRole = Current::read('User.role_key');
-			$userRoleSetting = $this->UserRoleSetting->find('first', [
-				'conditions' => [
-					'UserRoleSetting.role_key' => $userRole
-				]
-			]);
-			$usePrivateRoom = $userRoleSetting['UserRoleSetting']['use_private_room'];
-			return $usePrivateRoom;
+			return true;
 		}
 
 		if ($location['ReservationLocation']['use_all_rooms']) {
-			// 全てのルームで予約Ok
-			// アクセスできる全ルーム（プライベートのぞく）でのロール取得
-			$rolesRoomsUsers = $this->RolesRoomsUser->find('all', array(
-				'recursive' => 0,
-				'conditions' => array(
-					'RolesRoomsUser.user_id' => $userId,
-					'RolesRoomsUser.room_id' => $roomIds,
-				),
-			));
-			$roleKeys = Hash::combine($rolesRoomsUsers, '{n}.RolesRoom.role_key', '{n}.RolesRoom.role_key');
+			return $this->__isReservableByUseAllRoomLocation(
+				$location['ReservationLocation']['key'],
+				$roomIds
+			);
+		}
+		return $this->__isReservableByUseSpecifiedRoomLocation(
+			$location['ReservationLocation']['key'],
+			$roomIds
+		);
+	}
 
-			$conditions = [
-				'ReservationLocationReservable.location_key' => $location['ReservationLocation']['key'],
-				'ReservationLocationReservable.role_key' => $roleKeys,
-				'room_id' => null,
-			];
-			$reservables = $this->find('all', ['conditions' => $conditions]);
+/**
+ * Currentユーザはプライベートルームを利用できるか
+ *
+ * @return bool
+ */
+	private function __canUsePrivateRoom() : bool {
+		$usePrivateRoom = Current::read('User.UserRoleSetting.use_private_room');
 
-			foreach ($reservables as $reservable) {
-				if (Hash::get($reservable, 'ReservationLocationReservable.value')) {
-					// いずれかのロールで予約権限ついてれば予約OK
+		// Currentで取得できるはずだが、万一取得できなかったらDBから取得する。
+		if ($usePrivateRoom === null) {
+			$this->loadModels(['UserRoleSetting' => 'UserRoles.UserRoleSetting']);
+			$userRole = Current::read('User.role_key');
+			$userRoleSetting = $this->UserRoleSetting->find(
+				'first',
+				[
+					'conditions' => [
+						'UserRoleSetting.role_key' => $userRole
+					]
+				]
+			);
+			$usePrivateRoom = $userRoleSetting['UserRoleSetting']['use_private_room'];
+		}
+		return $usePrivateRoom;
+	}
+
+/**
+ * __isReservableByUseAllRoomLocation
+ *
+ * @param string $locationKey 施設キー
+ * @param array $roomIds room_id リスト
+ * @return bool
+ */
+	private function __isReservableByUseAllRoomLocation($locationKey, array $roomIds) : bool {
+		// 全てのルームで予約OK
+		// その施設で予約可能なロールの取得
+		$reservableRoleKeys = $this->__findReservableRoleKeys(
+			$locationKey,
+			null
+		);
+		foreach ($roomIds as $roomId) {
+			// ユーザが参加しているルームでのロール取得
+			$roleKey = $this->__findRoleKeyByRoomId($roomId);
+
+			// 全てのルームで予約OKな施設のロールリストはキー0にある
+			if (isset($reservableRoleKeys[0])) {
+				if (in_array($roleKey, $reservableRoleKeys[0], true)) {
 					return true;
 				}
 			}
-			return false;
-		} else {
-			// 選択されたルームのみ予約OK
-			$reservable = false;
-			foreach ($roomIds as $roomId) {
-				// ルームでのロール取得
-				$rolesRoomsUsers = $this->RolesRoomsUser->find('first', array(
+		}
+		return false;
+	}
+
+/**
+ * __findReservableRoleKeys
+ *
+ * @param string $locationKey 施設キー
+ * @param array|null  $roomIds Room.idリスト nullのときは全ルームで予約を受け付けるときのロールを取得する
+ * @return array [roomId => 予約可能なロールリスト, ...]
+ */
+	private function __findReservableRoleKeys(string $locationKey, array $roomIds = null) {
+		if (isset($this->__reservableRoleKeys[$locationKey])) {
+			return $this->__reservableRoleKeys[$locationKey];
+		}
+		// ロールに対する予約権限取得
+		$conditions = [
+			'ReservationLocationReservable.location_key' => $locationKey,
+			//'ReservationLocationReservable.role_key' => $roleKey,
+			'ReservationLocationReservable.room_id' => $roomIds,
+			'ReservationLocationReservable.value' => 1,
+		];
+		$findResult = $this->find('all', [
+			'conditions' => $conditions,
+			'recursive' => -1,
+			'fields' => ['value', 'room_id', 'role_key']
+		]);
+		$reservableRoleKeys = [];
+		foreach ($findResult as $data) {
+			// 全ルームOKの施設では0になる
+			$roomId = (int)$data['ReservationLocationReservable']['room_id'];
+			$reservableRoleKeys[$roomId][] = $data['ReservationLocationReservable']['role_key'];
+		}
+
+		return $reservableRoleKeys;
+	}
+
+/**
+ * __findRoleKeyByRoomId
+ *
+ * @param int $roomId Room.id
+ * @return string
+ */
+	private function __findRoleKeyByRoomId($roomId) {
+		if (!isset($this->_roleKeysWithRoomId[$roomId])) {
+			$userId = Current::read('User.id');
+			// ルームでのロール取得
+			$rolesRoomsUsers = $this->RolesRoomsUser->find(
+				'first',
+				array(
 					'recursive' => 0,
 					'conditions' => array(
 						'RolesRoomsUser.user_id' => $userId,
 						'RolesRoomsUser.room_id' => $roomId,
 					),
-				));
-				$roleKeys = Hash::get($rolesRoomsUsers, 'RolesRoom.role_key');
+				)
+			);
+			$roleKey = Hash::get($rolesRoomsUsers, 'RolesRoom.role_key');
+			$this->_roleKeysWithRoomId[$roomId] = $roleKey;
+		}
+		return $this->_roleKeysWithRoomId[$roomId];
+	}
 
-				// ロールに対する予約権限取得
-				$conditions = [
-					'ReservationLocationReservable.location_key' => $location['ReservationLocation']['key'],
-					'ReservationLocationReservable.role_key' => $roleKeys,
-					'room_id' => $roomId,
-				];
-				$reservable = $this->find('first', ['conditions' => $conditions]);
-				// ユーザがアクセス可能なルーム（プライベートのぞく）のいずれかで予約OKなら予約できる施設
-				if (Hash::get($reservable, 'ReservationLocationReservable.value', false)) {
-					$reservable = true;
+/**
+ * __isReservableByUseSpecifiedRoomLocation
+ *
+ * @param string $locationKey 施設キー
+ * @param array $roomIds room_id リスト
+ * @return bool
+ */
+	private function __isReservableByUseSpecifiedRoomLocation($locationKey, array $roomIds) : bool {
+		// 選択されたルームのみ予約OK
+		$reservable = false;
+		$reservableRoleKeys = $this->__findReservableRoleKeys(
+			$locationKey,
+			$roomIds
+		);
+		foreach ($roomIds as $roomId) {
+			$roleKey = $this->__findRoleKeyByRoomId($roomId);
+
+			if (isset($reservableRoleKeys[$roomId])) {
+				if (in_array($roleKey, $reservableRoleKeys[$roomId], true)) {
+					return true;
 				}
 			}
-			return $reservable;
 		}
+		return $reservable;
 	}
 
 /**
@@ -329,4 +418,46 @@ class ReservationLocationReservable extends ReservationsAppModel {
 		return true;
 	}
 
+/**
+ * loadAll
+ *
+ * アクセスユーザが参加しているルームで予約可能なロールをすべて取得する
+ *
+ * @param array $userJoinRoomIds アクセスユーザが参加しているルームIDリスト
+ * @return void
+ */
+	public function loadAll(array $userJoinRoomIds) {
+		if ($this->__reservableRoleKeys !== null) {
+			return;
+		}
+		$findResult = $this->find('all', [
+			'conditions' => [
+				'ReservationLocationReservable.value' => 1,
+				'OR' => [
+					['ReservationLocationReservable.room_id' => $userJoinRoomIds],
+					['ReservationLocationReservable.room_id' => null], // 全ルームOKの施設
+				]
+			],
+			'recursive' => -1,
+			'fields' => ['location_key', 'value', 'room_id', 'role_key']
+		]);
+		$reservableRoleKeys = [];
+		foreach ($findResult as $data) {
+			$locationKey = $data['ReservationLocationReservable']['location_key'];
+			// 全ルームOKの場合はroomId = 0としてセットされる
+			$roomId = (int)$data['ReservationLocationReservable']['room_id'];
+			$reservableRoleKeys[$locationKey][$roomId][] =
+				$data['ReservationLocationReservable']['role_key'];
+		}
+		$this->__reservableRoleKeys = $reservableRoleKeys;
+	}
+
+/**
+ * clearCache
+ *
+ * @return void
+ */
+	public function clearCache() {
+		unset($this->__reservableRoleKeys);
+	}
 }

@@ -216,34 +216,38 @@ echo $this->element('Reservations.scripts');
 			<div class="form-group" data-reservation-name="selectRoomForOpen">
 				<div class="col-xs-12" ng-cloak="">
 					<?php
-						//echo $this->ReservationExposeTarget->makeSelectExposeTargetHtml($event, $frameId, $vars, $exposeRoomOptions, $myself);
 					echo $this->NetCommonsForm->label(
 						'ReservationActionPlan.plan_room_id' . Inflector::camelize('room_id'),
 						__d('reservations', 'Category') . $this->element('NetCommons.required'));
-					//debug($exposeRoomOptions);
 					?>
+
 					<?php
-					foreach ($locations as $location) {
-						$options = Hash::combine($location['ReservableRoom'], '{n}.Room.id', '{n}.RoomsLanguage.0.name');
-						$options = [0 => __d('reservations', '-- not specified --')] + $options;
-						echo $this->NetCommonsForm->select('ReservationActionPlan.plan_room_id',
-							$options, array(
-								'class' => 'form-control select-expose-target',
-								'empty' => false,
-								'required' => true,
-								//value値のoption要素がselectedになる。
-								'value' => $this->request->data['ReservationActionPlan']['plan_room_id'],
-								'data-frame-id' => $frameId,
-								'data-myself' => $myself, // プライベートルーム
-								'escape' => false,
-								'ng-model' => 'data.ReservationActionPlan.plan_room_id',
-								//'ng-change' => 'debugShow()',
-								'ng-show' => 'selectLocation.ReservationLocation.id == ' .
-									$location['ReservationLocation']['id']
-							));
-					}
+					echo $this->NetCommonsForm->select('ReservationActionPlan.plan_room_id',
+						[], array(
+							'ng-init' => sprintf(
+								'initReservableRooms(%s, %s)',
+								$defaultPublishableRooms,
+								$selectedRoom
+							),
+							'ng-options' =>
+								'room.name for room in roomList track by room.roomId',
+							'class' => 'form-control select-expose-target',
+							'empty' => false,
+							'required' => true,
+							//value値のoption要素がselectedになる。
+							//'value' => $this->request->data['ReservationActionPlan']['plan_room_id'],
+							'data-frame-id' => $frameId,
+							'data-myself' => $myself, // プライベートルーム
+							'escape' => false,
+							'ng-model' => 'selectedRoom',
+							'ng-change' => 'debugShow()',
+						));
+
+
+					?>
+
+					<?php
 					$this->NetCommonsForm->unlockField('ReservationActionPlan.plan_room_id');
-					echo $this->NetCommonsForm->hidden('ReservationActionPlan.plan_room_id', ['ng-value' => 'data.ReservationActionPlan.plan_room_id']);
 					?>
 					<?php echo $this->NetCommonsForm->error('ReservationActionPlan.plan_room_id'); ?>
 				</div>

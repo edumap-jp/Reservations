@@ -65,6 +65,7 @@ class ReservationPlansController extends ReservationsAppController {
 		'Reservations.ReservationSetting',
 		'Reservations.ReservationWorkflow',
 		'Reservations.ReservationLocation',
+		'Reservations.ReservationLocationsRoom',
 		'Holidays.Holiday',
 		'Rooms.Room',
 		'Reservations.ReservationActionPlan',	//予定追加変更action専用
@@ -286,6 +287,24 @@ class ReservationPlansController extends ReservationsAppController {
 		$locations = $this->ReservationLocation->getReservableLocations();
 		$this->set('locations', $locations);
 
+		$userId = Current::read('User.id');
+		$defaultLocation = current($locations);
+
+		// デフォルト施設だけ公開対象ルーム情報を取得しておく
+		$publishableRooms = $this->ReservationLocationsRoom->getReservableRoomsByLocationAndUserId(
+			$defaultLocation,
+			$userId
+		);
+		$defaultRooms = [];
+		foreach ($publishableRooms as $room) {
+			$defaultRooms[] = [
+				'roomId' => $room['Room']['id'],
+				'name' => $room['RoomsLanguage'][0]['name']
+			];
+		}
+		$this->set('defaultPublishableRooms', json_encode($defaultRooms));
+		$this->set('selectedRoom', '{}');
+
 		$frameId = Current::read('Frame.id');
 		if (! $frameId) {
 			$this->setAction('can_not_edit');
@@ -306,15 +325,6 @@ class ReservationPlansController extends ReservationsAppController {
  * @return void
  */
 	public function edit() {
-		//Current::write('Frame.id', 0);
-		//$frameId = Current::read('Frame.id');
-		//if(!$frameId){
-			//Current::write('Frame.id', 0);
-		//}
-		//if (! $frameId) {
-		//	$this->setAction('can_not_edit');
-		//	return;
-		//}
 		if ($this->request->is('post')) {
 			$this->_reservationPost();
 		}
@@ -330,6 +340,30 @@ class ReservationPlansController extends ReservationsAppController {
 		// 施設情報
 		$locations = $this->ReservationLocation->getReservableLocations();
 		$this->set('locations', $locations);
+
+		// 公開対象選択肢
+		$userId = Current::read('User.id');
+		$defaultLocationKey = $this->request->data['ReservationActionPlan']['location_key'];
+		// デフォルト施設だけ公開対象ルーム情報を取得しておく
+		$publishableRooms = $this->ReservationLocationsRoom->getReservableRoomsByLocationKey(
+			$defaultLocationKey,
+			$userId
+		);
+		$defaultRooms = [];
+		foreach ($publishableRooms as $room) {
+			$defaultRooms[] = [
+				'roomId' => $room['Room']['id'],
+				'name' => $room['RoomsLanguage'][0]['name']
+			];
+		}
+		$this->set('defaultPublishableRooms', json_encode($defaultRooms));
+
+		// 選択済みルーム
+		$roomIds = array_column($defaultRooms, 'roomId');
+		$selectedRoomId = $this->request->data['ReservationActionPlan']['plan_room_id'];
+		$arrayIndex = array_search($selectedRoomId, $roomIds);
+		$selectedRoom = $defaultRooms[$arrayIndex];
+		$this->set('selectedRoom', json_encode($selectedRoom));
 	}
 
 /**

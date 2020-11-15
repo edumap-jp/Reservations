@@ -833,13 +833,13 @@ class ReservationActionPlan extends ReservationsAppModel {
 			// 公開先指定無し
 			return true;
 		}
-		$locations = $this->_getLocations();
-		$locationRooms = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservableRoom');
-
+		$this->loadModels([
+			'ReservationLocationsRoom' => 'Reservations.ReservationLocationsRoom',
+		]);
 		$locationKey = $this->data[$this->alias]['location_key'];
-		$rooms = $locationRooms[$locationKey];
-
-		$reservableRoomIds = Hash::combine($rooms, '{n}.Room.id', '{n}.Room.id');
+		$userId = Current::read('User.id');
+		$rooms = $this->ReservationLocationsRoom->getReservableRoomsByLocationKey($locationKey, $userId);
+		$reservableRoomIds = array_column(array_column($rooms, 'Room'), 'id');
 		return in_array($roomId, $reservableRoomIds);
 	}
 

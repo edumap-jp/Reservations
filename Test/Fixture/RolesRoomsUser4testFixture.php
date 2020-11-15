@@ -152,6 +152,38 @@ class RolesRoomsUser4testFixture extends RolesRoomsUserFixture {
 		//	'room_id' => '8', //プライベート
 		//),
 		//---add end-----
+		[
+			'id' => '20',
+			'roles_room_id' => '20', // chief_editor
+			'user_id' => '10',
+			'room_id' => '11',
+		],
+		[
+			'id' => '21',
+			'roles_room_id' => '31', // general_user
+			'user_id' => '10',
+			'room_id' => '12',
+		],
+
+		// user_id:40
+		[
+			//'id' => '22',
+			'roles_room_id' => '40', // chief_editor
+			'user_id' => '40',
+			'room_id' => '40',
+		],
+		[
+			//'id' => '21',
+			'roles_room_id' => '41', // general_user
+			'user_id' => '40',
+			'room_id' => '41',
+		],
+		[
+			//'id' => '21',
+			'roles_room_id' => '42', // プライベートルーム room_administrator
+			'user_id' => '40',
+			'room_id' => '42',
+		],
 	);
 
 }

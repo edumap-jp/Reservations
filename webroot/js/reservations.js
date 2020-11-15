@@ -767,8 +767,14 @@ NetCommonsApp.controller('ReservationsDetailEdit',
 
        };
 
+       // デフォルトの「公開対象セット」
+       $scope.initReservableRooms = function(rooms, selectedRoom) {
+         $scope.roomList = rooms;
+         $scope.selectedRoom = selectedRoom;
+       };
+
         $scope.setupButtons = function() {
-          console.log($scope.selectLocation);
+          // console.log($scope.selectLocation);
           //    承認不要のケースもあるな
           if ($scope.selectLocation.ReservationLocation.use_workflow) {
             if ($scope.selectLocation.approvalUserIds.hasOwnProperty(Number($scope.data.userId))) {
@@ -828,14 +834,21 @@ NetCommonsApp.controller('ReservationsDetailEdit',
        };
        $scope.changeLocation = function() {
          $scope.setupButtons();
-         // console.log($scope.selectLocation);
-         // console.log($scope.current);
-         // $scope.selectLocation = filterFilter($scope.data.locations, {
-         //     ReservationLocation: {key: $scope.ReservationActionPlan.location_key}}
-         // )[0];
-         // console.log($scope.ReservationActionPlan.location_key);
-         // console.log($scope.selectLocation);
 
+         var url = NC3_URL + '/reservations/reservations/fetch_rooms_to_publish_reservation.json';
+         let locationKey = $scope.selectLocation.ReservationLocation.key;
+         $('#ReservationActionPlanPlanRoomId').prop('disabled', true);
+         $('#ReservationActionPlanPlanRoomId').addClass('reservation-loading-dropdown');
+         $http.get(url,
+             {params: {location_key: locationKey}})
+             .then(function(response) {
+               var data = response.data;
+               // ルームドロップダウン変更
+               $scope.roomList = data.rooms;
+               $('#ReservationActionPlanPlanRoomId').removeClass('reservation-loading-dropdown');
+               $('#ReservationActionPlanPlanRoomId').prop('disabled', false);
+             }, function(response) {
+             });
        };
 
        $scope.changeEditRrule = function(frameId, firstSibEditLink) {

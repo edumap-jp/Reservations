@@ -31,9 +31,21 @@ class ReservationsAppModel extends AppModel {
 /**
  * getReadableRoomIdsWithOutPrivate()が何度も繰り返し呼び出された時のための保持変数
  *
- * @var array
+ * @var array|null
  */
 	protected $_notPrivateRoomIds = null;
+
+/**
+ * @var array|null アクセスユーザの参加るーむごとのrole_key [room.id => role_key, ...] プライベートルームは含まない
+ * @see self::__loadJoinRoomsAndRole
+ */
+	protected $_roleKeysWithRoomId = null;
+
+/**
+ * @var array 参加ルーム プライベートルーム含む
+ * @see self::__loadJoinRoomsAndRole
+ */
+	private $__joinRooms;
 
 /**
  * getReadableRoomIds
@@ -49,20 +61,10 @@ class ReservationsAppModel extends AppModel {
 		if (! is_null($this->_readableRoomIds)) {
 			return $this->_readableRoomIds;
 		}
-		$this->Room = ClassRegistry::init('Rooms.Room', true);
-		$condition = $this->Room->getReadableRoomsConditions();
-		$roomBase = $this->Room->find('all', $condition);
-		$roomIds = Hash::combine($roomBase, '{n}.Room.id', '{n}.Room.id');
-		// 施設予約は特別にプライベートスペースIDを入れる
-		// 施設予約は特別に全会員向けルームIDを入れる
-		if (Current::read('User.id')) {
-			if (Hash::extract($roomBase, '{n}.Room[space_id=' . Space::PRIVATE_SPACE_ID . ']')) {
-				$privateRoomId = Space::getRoomIdRoot(Space::PRIVATE_SPACE_ID);
-				$roomIds[$privateRoomId] = $privateRoomId;
-			}
-			$communityRoomId = Space::getRoomIdRoot(Space::COMMUNITY_SPACE_ID);
-			$roomIds[$communityRoomId] = $communityRoomId;
-		}
+
+		$rooms = $this->__loadJoinRoomsAndRole();
+
+		$roomIds = array_column(array_column($rooms, 'Room'), 'id');
 		$this->_readableRoomIds = $roomIds;
 		return $roomIds;
 	}
@@ -77,9 +79,8 @@ class ReservationsAppModel extends AppModel {
 			return $this->_notPrivateRoomIds;
 		}
 
-		$this->Room = ClassRegistry::init('Rooms.Room', true);
-		$condition = $this->Room->getReadableRoomsConditions();
-		$rooms = $this->Room->find('all', $condition);
+		$rooms = $this->__loadJoinRoomsAndRole();
+
 		$roomIds = [];
 		foreach ($rooms as $room) {
 			if ($room['Room']['space_id'] !== Space::PRIVATE_SPACE_ID) {
@@ -89,6 +90,29 @@ class ReservationsAppModel extends AppModel {
 		$this->_notPrivateRoomIds = $roomIds;
 
 		return $roomIds;
+	}
+
+/**
+ * __findJoinRooms
+ *
+ * @see self::_roleKeysWithRoomId
+ * @see self::__joinRooms
+ *
+ * @return array|int|null 参加しているルームを返す（プライベートルーム含む）
+ */
+	private function __loadJoinRoomsAndRole() {
+		if ($this->__joinRooms === null) {
+			$this->Room = ClassRegistry::init('Rooms.Room', true);
+			$condition = $this->Room->getReadableRoomsConditions();
+			$this->__joinRooms = $this->Room->find('all', $condition);
+			foreach ($this->__joinRooms as $room) {
+				if ($room['Room']['space_id'] !== Space::PRIVATE_SPACE_ID) {
+					$roomId = $room['Room']['id'];
+					$this->_roleKeysWithRoomId[$roomId] = $room['RolesRoom']['role_key'];
+				}
+			}
+		}
+		return $this->__joinRooms;
 	}
 
 /**
@@ -436,4 +460,5 @@ class ReservationsAppModel extends AppModel {
 		}
 		return false;
 	}
+
 }

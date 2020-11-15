@@ -17,6 +17,10 @@ App::uses('ReservationLocationOpenText', 'Reservations.Lib');
 
 /**
  * Summary for ReservationLocation Model
+ *
+ * @property ReservationLocationsRoom $ReservationLocationsRoom
+ * @property ReservationLocationsApprovalUser $ReservationLocationsApprovalUser
+ * @property ReservationLocationReservable $ReservationLocationReservable
  */
 class ReservationLocation extends ReservationsAppModel {
 
@@ -460,34 +464,26 @@ class ReservationLocation extends ReservationsAppModel {
 		);
 		$locations = $this->getLocations($categoryId);
 
-		// ルーム情報、承認者情報を locationにまぜこむ
-		$condition = $this->Room->getReadableRoomsConditions([], $userId);
-		$roomBase = $this->Room->find('all', $condition);
+		// あらかじめ承認ユーザ取得する
+		$approvalUsers = $this->ReservationLocationsApprovalUser->findApprovalUserIdsByLocations(
+			$locations
+		);
 		foreach ($locations as $key => $location) {
-			$thisLocationRooms =
-				$this->ReservationLocationsRoom->getReservableRoomsByLocation($location, $roomBase);
+			$locationKey = $location['ReservationLocation']['key'];
 
-			$locations[$key]['ReservableRoom'] = $thisLocationRooms;
-			// 承認ユーザ取得
-			$locations[$key]['approvalUserIds'] =
-				$this->ReservationLocationsApprovalUser->getApprovalUserIdsByLocation($location);
+			// 承認ユーザを配列にセット
+			$locations[$key]['approvalUserIds'] = $approvalUsers[$locationKey] ?? [];
 		}
 		// プライベートルームを除外したルームIDで予約可能かチェック
 		$roomIds = $this->getReadableRoomIdsWithOutPrivate();
 		$reservableLocations = [];
+
+		// 予め予約可能なロール情報をロードしておく
+		$this->ReservationLocationReservable->loadAll($roomIds);
+
 		foreach ($locations as $location) {
-			$reservable = false;
 			// いずれかのルームで予約できるなら予約可能な施設とする
-			foreach ($roomIds as $roomId) {
-				if ($this->ReservationLocationReservable->isReservableByLocation(
-					$location,
-					$roomId
-				)
-				) {
-					$reservable = true;
-				}
-			}
-			if ($reservable) {
+			if ($this->ReservationLocationReservable->isReservableByLocation($location)) {
 				$reservableLocations[] = $location;
 			}
 		}
@@ -520,6 +516,9 @@ class ReservationLocation extends ReservationsAppModel {
 						$conditions
 				]
 			);
+			if (!$location) {
+				return [];
+			}
 			$location['approvalUserIds'] =
 				$this->ReservationLocationsApprovalUser->getApprovalUserIdsByLocation($location);
 			$this->_locations[$locationKey] = $location;

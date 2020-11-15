@@ -10,6 +10,7 @@
  */
 
 App::uses('RoomFixture', 'Rooms.Test/Fixture');
+App::uses('Space', 'Rooms.Model');
 
 /**
  * Room4testFixture
@@ -182,6 +183,52 @@ class Room4testFixture extends RoomFixture {
 			'page_layout_permitted' => true,
 			'theme' => null,
 		),
+
+		// プライベート
+		[
+			'id' => 10,
+			'space_id' => Space::PRIVATE_SPACE_ID,
+			'page_id_top' => '10',
+			'active' => '1',
+			'in_draft' => '0',
+		],
+		[
+			'id' => 11,
+			'space_id' => Space::COMMUNITY_SPACE_ID,
+			'page_id_top' => '11',
+			'active' => '1',
+			'in_draft' => '0',
+		],
+		[
+			'id' => 12,
+			'space_id' => Space::COMMUNITY_SPACE_ID,
+			'page_id_top' => '12',
+			'active' => '1',
+			'in_draft' => '0',
+		],
+
+		// @see ReservationAppModelTest
+		[
+			'id' => 40,
+			'space_id' => Space::COMMUNITY_SPACE_ID,
+			'page_id_top' => '4',
+			'active' => '1',
+			'in_draft' => '0',
+		],
+		[
+			'id' => 41,
+			'space_id' => Space::COMMUNITY_SPACE_ID,
+			'page_id_top' => '4',
+			'active' => '1',
+			'in_draft' => '0',
+		],
+		[
+			'id' => 42,
+			'space_id' => Space::PRIVATE_SPACE_ID,
+			'page_id_top' => '10',
+			'active' => '1',
+			'in_draft' => '0',
+		],
 	);
 
 }

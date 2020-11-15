@@ -142,4 +142,64 @@ class ReservationLocationsApprovalUser extends ReservationsAppModel {
 		return $this->_approvalUserIds[$locationKey];
 	}
 
+/**
+ * findApprovalUserIdsByLocations
+ *
+ * @param array $locations 施設リスト
+ * @return array
+ */
+	public function findApprovalUserIdsByLocations(array $locations) {
+		// 承認が必要な施設のキーだけを抜き出す
+		$locationKeys = [];
+		foreach ($locations as $location) {
+			$useWorkflow = $location['ReservationLocation']['use_workflow'];
+			if ($useWorkflow) {
+				$locationKey = $location['ReservationLocation']['key'];
+				$locationKeys[] = $locationKey;
+			}
+		}
+		//  取得済みならFINDしない
+		$needFind = false;
+		foreach ($locationKeys as $locationKey) {
+			if (!isset($this->_approvalUserIds[$locationKey])) {
+				$needFind = true;
+				break;
+			}
+		}
+		if ($needFind === false) {
+			// 全部キャッシュ済みなら改めて取得しなおさない
+			return $this->_approvalUserIds;
+		}
+
+		// Find
+		$condition = [
+			'ReservationLocationsApprovalUser.location_key' =>
+				$locationKeys,
+		];
+		$approvalUsers = $this->find(
+			'all',
+			[
+				'conditions' => $condition,
+				'recursive' => -1,
+				'fields' => [
+					'ReservationLocationsApprovalUser.location_key',
+					'ReservationLocationsApprovalUser.user_id'
+				]
+			]
+		);
+		// [location_key => [user_id,...],  ...] 形式にする
+		$approvalUserIds = [];
+		foreach ($approvalUsers as $approvalUser) {
+			$locationKey = $approvalUser['ReservationLocationsApprovalUser']['location_key'];
+			$userId = $approvalUser['ReservationLocationsApprovalUser']['user_id'];
+			$approvalUserIds[$locationKey][] = $userId;
+		}
+		// _approvalUserIdsにmergeする
+		$this->_approvalUserIds = array_merge(
+			$this->_approvalUserIds,
+			$approvalUserIds
+		);
+		return $this->_approvalUserIds;
+	}
+
 }

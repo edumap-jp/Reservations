@@ -120,6 +120,44 @@ class ReservationLocationsRoom extends ReservationsAppModel {
 	}
 
 /**
+ * getReservableRoomsByLocationKey
+ *
+ * @param string $locationKey 施設キー
+ * @param int|string $userId User.id
+ * @return array Room data
+ */
+	public function getReservableRoomsByLocationKey($locationKey, $userId) : array {
+		$this->loadModels([
+			'ReservationLocation' => 'Reservations.ReservationLocation'
+		]);
+		// location取得
+		$location = $this->ReservationLocation->getByKey($locationKey);
+
+		if ($location) {
+			return $this->getReservableRoomsByLocationAndUserId($location, $userId);
+		}
+		return [];
+	}
+
+/**
+ * getReservableRoomsByLocationAndUserId
+ *
+ * @param array $location 施設
+ * @param int|string $userId User.id
+ * @return array
+ */
+	public function getReservableRoomsByLocationAndUserId(array $location, $userId) : array {
+		// roomBase取得
+		$this->loadModels([
+			'Room' => 'Rooms.Room',
+		]);
+		$condition = $this->Room->getReadableRoomsConditions([], $userId);
+		$roomBase = $this->Room->find('all', $condition);
+
+		return $this->getReservableRoomsByLocation($location, $roomBase);
+	}
+
+/**
  * 施設で予約を受け付けるルームを返す
  *
  * @param array $location ReservationLocation data
@@ -137,8 +175,9 @@ class ReservationLocationsRoom extends ReservationsAppModel {
 					]
 				]
 			);
-			$reservableRoomIds = array_keys(
-				Hash::combine($locationRooms, 'ReservationLocationsRoom.id')
+			$reservableRoomIds = array_column(
+				array_column($locationRooms, 'ReservationLocationsRoom'),
+				'room_id'
 			);
 		}
 
@@ -163,5 +202,5 @@ class ReservationLocationsRoom extends ReservationsAppModel {
 		}
 		return $thisLocationRooms;
 	}
-
 }
+

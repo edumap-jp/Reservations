@@ -383,10 +383,11 @@ class ReservationMonthlyHelper extends AppHelper {
 					'block_id' => '',
 					'frame_id' => Current::read('Frame.id'),
 					'?' => array(
-						'style' => 'weekly',
+						'style' => 'weekly_by_location',
 						'year' => sprintf("%04d", $vars['mInfo']['year']),
 						'month' => sprintf("%02d", $vars['mInfo']['month']),
 						'week' => $week,
+						'location_key' => $vars['location_key']
 					)
 				));
 				//$html .= "<tr><th rowspan='2' class='reservation-col-week hidden-xs' data-url='" . $url . "'>";
