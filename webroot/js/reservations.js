@@ -673,7 +673,10 @@ NetCommonsApp.controller('Reservations.selectLocation',
           // $scope.locationOptions = $scope.data.locations;
         };
 
-        $scope.changeLocation = function(displayStyle = 'largemonthly') {
+        $scope.changeLocation = function(displayStyle) {
+          // if (displayStyle === undefined) {
+          //   displayStyle = 'largemonthly';
+          // }
           $scope.selectLocation =
               filterFilter($scope.data.locations,
                   {ReservationLocation: {key: $scope.selectedLocation}})[0];
