@@ -742,9 +742,6 @@ class ReservationActionPlan extends ReservationsAppModel {
  * @return bool
  */
 	public function validateStatus($check) {
-		// 選ばれた施設による
-		$locations = $this->_getLocations();
-
 		$statusesForEditor = array(
 			WorkflowComponent::STATUS_APPROVAL_WAITING,
 			WorkflowComponent::STATUS_IN_DRAFT
@@ -755,29 +752,27 @@ class ReservationActionPlan extends ReservationsAppModel {
 			WorkflowComponent::STATUS_DISAPPROVED
 		);
 
-		foreach ($locations as $location) {
-			if ($this->data['ReservationActionPlan']['location_key'] ==
-				$location['ReservationLocation']['key']) {
-				// 承認必要か
-				if ($location['ReservationLocation']['use_workflow']) {
-					// 承認必要
-					// 承認者か
-					if (in_array(Current::read('User.id'), $location['approvalUserIds'])) {
-						//承認者
-						$allowList = $statusesForPublisher;
-					} else {
-						//承認権限無し
-						$allowList = $statusesForEditor;
-					}
-				} else {
-					// 承認不要
-					$allowList = $statusesForPublisher;
-				}
-
-				$stauts = $check['status'];
-				return in_array($stauts, $allowList);
+		$locationKey = $this->data['ReservationActionPlan']['location_key'];
+		/** @var ReservationLocation $locationModel */
+		$locationModel = ClassRegistry::init('Reservations.ReservationLocation');
+		$location = $locationModel->getByKey($locationKey);
+		if ($location['ReservationLocation']['use_workflow']) {
+			// 承認必要
+			// 承認者か
+			if (in_array(Current::read('User.id'), $location['approvalUserIds'])) {
+				//承認者
+				$allowList = $statusesForPublisher;
+			} else {
+				//承認権限無し
+				$allowList = $statusesForEditor;
 			}
+		} else {
+			// 承認不要
+			$allowList = $statusesForPublisher;
 		}
+
+		$stauts = $check['status'];
+		return in_array($stauts, $allowList);
 	}
 
 /**
