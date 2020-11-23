@@ -240,7 +240,6 @@ echo $this->element('Reservations.scripts');
 							'data-myself' => $myself, // プライベートルーム
 							'escape' => false,
 							'ng-model' => 'selectedRoom',
-							'ng-change' => 'debugShow()',
 						));
 
 

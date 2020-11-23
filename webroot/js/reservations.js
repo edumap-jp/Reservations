@@ -846,6 +846,15 @@ NetCommonsApp.controller('ReservationsDetailEdit',
              {params: {location_key: locationKey}})
              .then(function(response) {
                var data = response.data;
+               // 取得したルーム一覧に現在選択中のルームがなければ1番目のルーム（無指定のはず）にする
+               if (!data.rooms.some(
+                   function(room) {
+                     return room.roomId === $scope.selectedRoom.roomId;
+                   }
+                   // room => room.roomId === $scope.selectedRoom.roomId
+               )) {
+                 $scope.selectedRoom = data.rooms[0];
+               }
                // ルームドロップダウン変更
                $scope.roomList = data.rooms;
                $('#ReservationActionPlanPlanRoomId').removeClass('reservation-loading-dropdown');

@@ -296,6 +296,11 @@ class ReservationPlansController extends ReservationsAppController {
 			$userId
 		);
 		$defaultRooms = [];
+		$notSpecified = [
+			'roomId' => 0,
+			'name' => __d('reservations', '-- not specified --')
+		];
+		$defaultRooms[] = $notSpecified;
 		foreach ($publishableRooms as $room) {
 			$defaultRooms[] = [
 				'roomId' => $room['Room']['id'],
@@ -303,7 +308,7 @@ class ReservationPlansController extends ReservationsAppController {
 			];
 		}
 		$this->set('defaultPublishableRooms', json_encode($defaultRooms));
-		$this->set('selectedRoom', '{}');
+		$this->set('selectedRoom', json_encode($notSpecified));
 
 		$frameId = Current::read('Frame.id');
 		if (! $frameId) {
@@ -350,6 +355,11 @@ class ReservationPlansController extends ReservationsAppController {
 			$userId
 		);
 		$defaultRooms = [];
+		$notSpecified = [
+			'roomId' => 0,
+			'name' => __d('reservations', '-- not specified --')
+		];
+		$defaultRooms[] = $notSpecified;
 		foreach ($publishableRooms as $room) {
 			$defaultRooms[] = [
 				'roomId' => $room['Room']['id'],
