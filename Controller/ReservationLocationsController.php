@@ -141,7 +141,10 @@ class ReservationLocationsController extends ReservationsAppController {
 		$roomConditions = [
 			//'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
 		];
-		$this->RoomsForm->setRoomsForCheckbox($roomConditions, ['limit' => self::MAX_ROOMS, 'maxLimit' => self::MAX_ROOMS]);
+		$this->RoomsForm->setRoomsForCheckbox(
+			$roomConditions,
+			['limit' => self::MAX_ROOMS, 'maxLimit' => self::MAX_ROOMS]
+		);
 
 		$this->view = 'form';
 	}
@@ -301,7 +304,10 @@ class ReservationLocationsController extends ReservationsAppController {
 		$roomConditions = [
 			//'Room.space_id !=' => Space::PRIVATE_SPACE_ID,
 		];
-		$this->RoomsForm->setRoomsForCheckbox($roomConditions, ['limit' => self::MAX_ROOMS, 'maxLimit' => self::MAX_ROOMS]);
+		$this->RoomsForm->setRoomsForCheckbox(
+			$roomConditions,
+			['limit' => self::MAX_ROOMS, 'maxLimit' => self::MAX_ROOMS]
+		);
 
 		$this->view = 'form';
 	}
