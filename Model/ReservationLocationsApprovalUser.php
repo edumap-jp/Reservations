@@ -146,7 +146,8 @@ class ReservationLocationsApprovalUser extends ReservationsAppModel {
  * findApprovalUserIdsByLocations
  *
  * @param array $locations 施設リスト
- * @return array
+ * @return array [承認者ユーザID => 承認者ユーザID, ...]
+ *              （配列のキーの承認者ユーザIDはJavaScriptで利用している）
  */
 	public function findApprovalUserIdsByLocations(array $locations) {
 		// 承認が必要な施設のキーだけを抜き出す
@@ -192,7 +193,8 @@ class ReservationLocationsApprovalUser extends ReservationsAppModel {
 		foreach ($approvalUsers as $approvalUser) {
 			$locationKey = $approvalUser['ReservationLocationsApprovalUser']['location_key'];
 			$userId = $approvalUser['ReservationLocationsApprovalUser']['user_id'];
-			$approvalUserIds[$locationKey][] = $userId;
+			// JavaScript側でキーにuserIdが入ってることを期待しているのでキーにもセットする
+			$approvalUserIds[$locationKey][$userId] = $userId;
 		}
 		// _approvalUserIdsにmergeする
 		$this->_approvalUserIds = array_merge(

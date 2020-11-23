@@ -78,12 +78,13 @@ class ReservationLocationsApprovalUserTest extends CakeTestCase {
 		];
 
 		$userIds = $this->ReservationLocationsApprovalUser->findApprovalUserIdsByLocations($locations);
+		// 配列のキーもUserIdが入る（JavaScriptで利用しているので）
 		$expected = [
 			'location_4' => [
-				'1'
+				1 => '1'
 			],
 			'location_6' => [
-				'2'
+				2 => '2'
 			]
 		];
 		self::assertSame($expected, $userIds);
