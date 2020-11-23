@@ -191,22 +191,32 @@ echo $this->element('Reservations.scripts');
 							);
 						?>
                         <?php echo __d('reservations', '[Available]'); ?>
-                        {{selectLocation.ReservationLocation.openText}}
-                        <a href="" data-toggle="popover" data-placement="bottom" title="" data-trigger="focus" data-content="
-                        <dl>
-                        <dt><?php echo __d('reservations', 'Available'); ?></dt><dd>{{selectLocation.ReservationLocation.openText}}</dd>
-                        <dt><?php echo __d('reservations', 'Approver'); ?></dt><dd>{{selectLocation.ReservationLocation.contact}}</dd>
-                        <dt><?php echo __d('reservations', 'Description'); ?></dt><dd>{{selectLocation
-                        .ReservationLocation.detail}}</dd>
-                        </dl>
-                        <p>{{selectLocation.ReservationLocation.description}}</p>
-						" data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d('reservations', '詳細'); ?></a>
-                        <?php
-							$html = '<script type="text/javascript">' .
-							'$(function () { $(\'[data-toggle="popover"]\').popover({html: true}) });</script>';
-							echo $html;
-						?>
-                    </div>
+						{{selectLocation.ReservationLocation.openText}}
+                        <a href="" id="reservation-location-detail-popover-link" data-toggle="popover" data-placement="bottom" title="" data-trigger="focus"
+							data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d('reservations', '詳細'); ?></a>
+
+						<?php // 施設詳細popover ?>
+						<div id="reservation-location-popover" class="hide">
+							<strong><?php echo __d('reservations', 'Available'); ?></strong> {{selectLocation.ReservationLocation.openText}}<br>
+							<strong><?php echo __d('reservations', 'Approver'); ?></strong><br>
+							<ul>
+								<li ng-repeat="userName in selectLocation.approvalUserNames">{{userName}}</li>
+							</ul>
+							<div ng-bind-html="selectLocation.ReservationLocation.detail|ncHtmlContent"></div>
+						</div>
+						<script type="text/javascript">
+                          $(function() {
+                            $('#reservation-location-detail-popover-link').popover({
+                              html:true,
+                              content:function() {
+                                return $('#reservation-location-popover').html();
+                              }
+
+                            })
+                          })
+						</script>
+
+					</div>
                 </div>
             </div><!-- form-group name="inputStartEndDateTime"おわり -->
 

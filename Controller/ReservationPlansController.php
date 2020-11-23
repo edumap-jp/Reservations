@@ -285,6 +285,7 @@ class ReservationPlansController extends ReservationsAppController {
 	public function add() {
 		// 施設情報
 		$locations = $this->ReservationLocation->getReservableLocations();
+		$locations = $this->__mergeApprovalUserName($locations);
 		$this->set('locations', $locations);
 
 		$userId = Current::read('User.id');
@@ -344,6 +345,7 @@ class ReservationPlansController extends ReservationsAppController {
 
 		// 施設情報
 		$locations = $this->ReservationLocation->getReservableLocations();
+		$locations = $this->__mergeApprovalUserName($locations);
 		$this->set('locations', $locations);
 
 		// 公開対象選択肢
@@ -723,5 +725,36 @@ class ReservationPlansController extends ReservationsAppController {
 			}
 		}
 		return $createdUserWhenUpd;
+	}
+
+/**
+ * 承認者のハンドル名をセットする
+ *
+ * @param array $locations 施設リスト
+ * @return array
+ */
+	private function __mergeApprovalUserName(array $locations) : array {
+		$userIds = array_column($locations, 'approvalUserIds');
+		$userIds = array_merge(...$userIds);
+		$userIds = array_unique($userIds);
+		$result = $this->User->find('all', [
+			'conditions' => [
+				'id' => $userIds
+			],
+			'recursive' => -1,
+			'fields' => ['id', 'handlename']
+		]);
+		$nameWithId = [];
+		foreach ($result as $user) {
+			$nameWithId[$user['User']['id']] = $user['User']['handlename'];
+		}
+		foreach ($locations as $key => $location) {
+			foreach ($location['approvalUserIds'] as $userId) {
+				$location['approvalUserNames'][] = $nameWithId[$userId];
+			}
+			$locations[$key] = $location;
+		}
+
+		return $locations;
 	}
 }
