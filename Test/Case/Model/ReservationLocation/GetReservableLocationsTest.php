@@ -166,7 +166,10 @@ class ReservationLocationGetReservableLocationsTest extends ReservationsGetTest 
 		$locations = $this->ReservationLocation->getReservableLocations($categoryId, $userId);
 		$idIndexes = array_column(array_column($locations, 'ReservationLocation'), 'id');
 		$id4index = array_search('4', $idIndexes);
-		$expected = ['1'];
+		// 配列のキーもUserIdになる（JavaScriptで利用しているので）
+		$expected = [
+			1 => '1'
+		];
 		self::assertSame($expected, $locations[$id4index]['approvalUserIds']);
 	}
 
