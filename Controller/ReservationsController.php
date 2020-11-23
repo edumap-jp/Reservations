@@ -522,6 +522,11 @@ class ReservationsController extends ReservationsAppController {
  */
 	private function __jsonResponse(array $rooms) {
 		$result = [];
+		$notSpecified = [
+			'roomId' => 0,
+			'name' => __d('reservations', '-- not specified --')
+		];
+		$result[] = $notSpecified;
 		foreach ($rooms as $room) {
 			$result[] = [
 				'room_id' => $room['Room']['id'],
