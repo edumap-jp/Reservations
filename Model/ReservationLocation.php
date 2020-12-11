@@ -247,7 +247,7 @@ class ReservationLocation extends ReservationsAppModel {
 				return false;
 			}
 
-			$savedData = $this->save($data, false);
+			$savedData = $this->save(null, false);
 			if (! $savedData) {
 				//このsaveで失敗するならvalidate以外なので例外なげる
 				throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));

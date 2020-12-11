@@ -398,7 +398,7 @@ class ReservationUpdatePlanBehavior extends ReservationAppBehavior {
 		//is_active調整処理を行う。（eventDataの値が一部変更されます）
 		$model->ReservationEvent->prepareActiveForUpd($eventData);
 
-		if (!$model->ReservationEvent->save($eventData,
+		if (!$model->ReservationEvent->save(null,
 			array(
 				'validate' => false,
 				'callbacks' => true,

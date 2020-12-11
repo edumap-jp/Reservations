@@ -250,7 +250,7 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
 		$model->ReservationEvent->prepareLatestCreatedForIns($eventData, $createdUserWhenUpd);
 
 		//子もsave（）で返ってくる。
-		$eventData = $model->ReservationEvent->save($eventData, false); //aaaaaaaaaaaaa
+		$eventData = $model->ReservationEvent->save(null, false); //aaaaaaaaaaaaa
 		if (!$eventData) { //保存のみ
 			CakeLog::error("変更時に指定された元イベント(reservation_event_id=[" .
 				$originEventId . "])のCOPYに失敗");

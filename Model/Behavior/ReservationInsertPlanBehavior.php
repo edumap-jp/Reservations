@@ -148,7 +148,7 @@ class ReservationInsertPlanBehavior extends ReservationAppBehavior {
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
 		}
 
-		if (!$model->ReservationEvent->save($eventData, false)) {	//保存のみ
+		if (!$model->ReservationEvent->save(null, false)) {	//保存のみ
 			$model->validationErrors = Hash::merge(
 				$model->validationErrors, $model->ReservationEvent->validationErrors);
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));

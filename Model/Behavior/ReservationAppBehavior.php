@@ -158,7 +158,7 @@ class ReservationAppBehavior extends ModelBehavior {
 		//eventの保存。
 		//なお、追加情報(workflowcomment)は WFCのafterSave()で自動セットされる。
 		//
-		if (!$model->ReservationEvent->save($rEventData, false)) { //保存のみ
+		if (!$model->ReservationEvent->save(null, false)) { //保存のみ
 			$model->validationErrors = Hash::merge(
 				$model->validationErrors, $model->ReservationEvent->validationErrors);
 			throw new InternalErrorException(__d('net_commons', 'Internal Server Error'));
