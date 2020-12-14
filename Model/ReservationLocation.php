@@ -259,8 +259,18 @@ class ReservationLocation extends ReservationsAppModel {
 		// Wysiwygでアップロードされた画像やファイルの持ち主は、各ルームではなく、
 		// パブリックルームであるべき
 		// 各ルームが削除された場合でも、画像やファイルは残しておくため
+		// （このroom_idは、Wysiwygでアップロードした画像やファイルの持ち主を決めるための値であり、
+		// block_keyの検索条件には使用しない）
 		$roomId = Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID);
-		$blockKey = $this->Block->findByRoomIdAndPluginKey($roomId, 'reservations', ['key'], null, -1);
+		// block_keyを取得
+		// 施設予約のBlockは「パブリックルームに固定で１つ」なので、room_idの検索条件はパブリックルーム固定にしておく
+		$blockKey = $this->Block->findByRoomIdAndPluginKey(
+			Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID),
+			'reservations',
+			['key'],
+			null,
+			-1
+		);
 		$updateDetail = [
 			'content_key' => isset($this->data['ReservationLocation']['key'])
 				? $this->data['ReservationLocation']['key']
