@@ -260,7 +260,7 @@ class ReservationLocation extends ReservationsAppModel {
 		// パブリックルームであるべき
 		// 各ルームが削除された場合でも、画像やファイルは残しておくため
 		$roomId = Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID);
-		$blockKey = $this->Block->findByRoomIdAndPluginKey($roomId, 'registrations', ['key'], null, -1);
+		$blockKey = $this->Block->findByRoomIdAndPluginKey($roomId, 'reservations', ['key'], null, -1);
 		$updateDetail = [
 			'content_key' => isset($this->data['ReservationLocation']['key'])
 				? $this->data['ReservationLocation']['key']

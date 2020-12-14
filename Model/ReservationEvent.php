@@ -365,7 +365,7 @@ class ReservationEvent extends ReservationsAppModel {
 		$roomId = isset($this->data['ReservationEvent']['room_id'])
 			? $this->__convertCanSaveUploadFileRoomId($this->data['ReservationEvent']['room_id'])
 			: null;
-		$blockKey = $this->Block->findByRoomIdAndPluginKey($roomId, 'registrations', ['key'], null, -1);
+		$blockKey = $this->Block->findByRoomIdAndPluginKey($roomId, 'reservations', ['key'], null, -1);
 		$updateDescription = [
 			'content_key' => isset($this->data['ReservationEvent']['key'])
 				? $this->data['ReservationEvent']['key']
