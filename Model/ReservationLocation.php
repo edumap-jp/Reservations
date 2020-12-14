@@ -661,4 +661,18 @@ class ReservationLocation extends ReservationsAppModel {
 		return $data;
 	}
 
+/**
+ * getAliveCondition
+ * 現在使用中状態であるか判断する。CleanUpプラグインで使用
+ *
+ * @param array $key 
+ * @return array
+ */
+	public function getAliveCondition($key) {
+		return array(
+			'conditions' => array(
+				'ReservationLocation.key' => $key,
+			),
+		);
+	}
 }
