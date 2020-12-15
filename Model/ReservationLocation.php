@@ -21,6 +21,7 @@ App::uses('ReservationLocationOpenText', 'Reservations.Lib');
  * @property ReservationLocationsRoom $ReservationLocationsRoom
  * @property ReservationLocationsApprovalUser $ReservationLocationsApprovalUser
  * @property ReservationLocationReservable $ReservationLocationReservable
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ReservationLocation extends ReservationsAppModel {
 
