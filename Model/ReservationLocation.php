@@ -21,6 +21,7 @@ App::uses('ReservationLocationOpenText', 'Reservations.Lib');
  * @property ReservationLocationsRoom $ReservationLocationsRoom
  * @property ReservationLocationsApprovalUser $ReservationLocationsApprovalUser
  * @property ReservationLocationReservable $ReservationLocationReservable
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ReservationLocation extends ReservationsAppModel {
 
@@ -75,6 +76,23 @@ class ReservationLocation extends ReservationsAppModel {
  * @var array
  */
 	protected $_locations = [];
+
+/**
+ * Constructor. Binds the model's database table to the object.
+ *
+ * @param bool|int|string|array $id Set this ID for this model on startup,
+ * can also be an array of options, see above.
+ * @param string $table Name of database table to use.
+ * @param string $ds DataSource connection name.
+ * @see Model::__construct()
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ */
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->loadModels([
+			'Block' => 'Blocks.Block',
+		]);
+	}
 
 /**
  * Called during validation operations, before validation. Please note that custom
@@ -194,6 +212,77 @@ class ReservationLocation extends ReservationsAppModel {
 			}
 		}
 		return $results;
+	}
+
+/**
+ * Called before each save operation, after validation. Return a non-true result
+ * to halt the save.
+ *
+ * @param array $options Options passed from Model::save().
+ * @return bool True if the operation should continue, false if it should abort
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforesave
+ * @see Model::save()
+ */
+	public function beforeSave($options = array()) {
+		$content = isset($this->data['ReservationLocation']['detail'])
+			? $this->data['ReservationLocation']['detail']
+			: null;
+		if (empty($content)) {
+			return true;
+		}
+
+		// Wysiwygでアップロードされた画像やファイルの持ち主は、各ルームではなく、
+		// パブリックルームであるべき
+		// 各ルームが削除された場合でも、画像やファイルは残しておくため
+		$roomId = Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID);
+		$newDetail = $this->consistentContent($content, $roomId);
+		if ($content != $newDetail) {
+			$this->data['ReservationLocation']['detail'] = $newDetail;
+		}
+
+		return true;
+	}
+
+/**
+ * Called after each successful save operation.
+ *
+ * @param bool $created True if this save created a new record
+ * @param array $options Options passed from Model::save().
+ * @return void
+ * @throws InternalErrorException
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#aftersave
+ * @see Model::save()
+ */
+	public function afterSave($created, $options = array()) {
+		$content = isset($this->data['ReservationLocation']['detail'])
+			? $this->data['ReservationLocation']['detail']
+			: null;
+		// Wysiwygでアップロードされた画像やファイルの持ち主は、各ルームではなく、
+		// パブリックルームであるべき
+		// 各ルームが削除された場合でも、画像やファイルは残しておくため
+		// （このroom_idは、Wysiwygでアップロードした画像やファイルの持ち主を決めるための値であり、
+		// block_keyの検索条件には使用しない）
+		$roomId = Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID);
+		// block_keyを取得
+		// 施設予約のBlockは「パブリックルームに固定で１つ」なので、room_idの検索条件はパブリックルーム固定にしておく
+		$blockKey = $this->Block->findByRoomIdAndPluginKey(
+			Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID),
+			'reservations',
+			['key'],
+			null,
+			-1
+		);
+		$updateDetail = [
+			'content_key' => isset($this->data['ReservationLocation']['key'])
+				? $this->data['ReservationLocation']['key']
+				: null,
+			'block_key' => isset($blockKey['Block']['key'])
+				? $blockKey['Block']['key']
+				: null,
+			'room_id' => $roomId
+		];
+
+		$this->updateUploadFile($content, $updateDetail);
 	}
 
 /**
@@ -573,4 +662,18 @@ class ReservationLocation extends ReservationsAppModel {
 		return $data;
 	}
 
+/**
+ * getAliveCondition
+ * 現在使用中状態であるか判断する。CleanUpプラグインで使用
+ *
+ * @param array $key 判断対象のデータのキー
+ * @return array
+ */
+	public function getAliveCondition($key) {
+		return array(
+			'conditions' => array(
+				'ReservationLocation.key' => $key,
+			),
+		);
+	}
 }

@@ -146,12 +146,36 @@ class ReservationEvent extends ReservationsAppModel {
  */
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
+		$this->loadModels([
+			'Block' => 'Blocks.Block',
+		]);
+
 		// すぐはずす
 		//$this->Behaviors->unload('Mails.MailQueue');
 		$this->Behaviors->unload('Reservations.ReservationMailQueue');
 		$this->Behaviors->unload('Mails.MailQueueDelete');
 		$this->Behaviors->unload('Topics.Topics');
 	}
+
+/**
+ * UploadFilesテーブルのroom_id及び、Wysiwygの画像・ファイルダウンロードURLに
+ * 保存できるroom_idに変換する
+ *
+ * @param string|int $roomId 「公開対象」で選択されたルームID
+ * @return string|int 変換されたルームID
+ */
+	private function __convertCanSaveUploadFileRoomId($roomId) {
+		// 「-- 指定しない -- 」が選ばれたら、パブリックルームのルームIDに変換して、
+		// Wysiwygにアップロードされた画像・ファイルは、パブリックルームの持ち物とする
+
+		// 「-- 指定しない -- 」を示す定数はなく、直接、0と比較していいみたい
+		// @see Reservations/Model/ReservationActionPlan::allowedRoomId()
+		// @see Reservations/View/Helper/ReservationCommonHelper::getPlanMarkClassName()
+		return $roomId == 0
+			? Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID)
+			: $roomId; // 「-- 指定しない --」以外ならば、そのままとする
+	}
+
 /**
  * _doMergeWorkflowParamValidate
  *
@@ -296,6 +320,73 @@ class ReservationEvent extends ReservationsAppModel {
 		));
 		$this->_doMergeWorkflowParamValidate(); //Workflowパラメータ関連validation
 		return parent::beforeValidate($options);
+	}
+
+/**
+ * Called before each save operation, after validation. Return a non-true result
+ * to halt the save.
+ *
+ * @param array $options Options passed from Model::save().
+ * @return bool True if the operation should continue, false if it should abort
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#beforesave
+ * @see Model::save()
+ */
+	public function beforeSave($options = array()) {
+		$content = isset($this->data['ReservationEvent']['description'])
+			? $this->data['ReservationEvent']['description']
+			: null;
+		if (empty($content)) {
+			return true;
+		}
+
+		$roomId = $this->__convertCanSaveUploadFileRoomId($this->data['ReservationEvent']['room_id']);
+		$newDescription = $this->consistentContent($content, $roomId);
+		if ($content != $newDescription) {
+			$this->data['ReservationEvent']['description'] = $newDescription;
+		}
+
+		return true;
+	}
+
+/**
+ * Called after each successful save operation.
+ *
+ * @param bool $created True if this save created a new record
+ * @param array $options Options passed from Model::save().
+ * @return void
+ * @throws InternalErrorException
+ * @link http://book.cakephp.org/2.0/en/models/callback-methods.html#aftersave
+ * @see Model::save()
+ */
+	public function afterSave($created, $options = array()) {
+		$content = isset($this->data['ReservationEvent']['description'])
+			? $this->data['ReservationEvent']['description']
+			: null;
+		// このroom_idは、Wysiwygでアップロードした画像やファイルの持ち主を決めるための値であり、
+		// block_keyの検索条件には使用しない
+		$roomId = isset($this->data['ReservationEvent']['room_id'])
+			? $this->__convertCanSaveUploadFileRoomId($this->data['ReservationEvent']['room_id'])
+			: null;
+		// block_keyを取得
+		// 施設予約のBlockは「パブリックルームに固定で１つ」なので、room_idの検索条件はパブリックルーム固定にしておく
+		$blockKey = $this->Block->findByRoomIdAndPluginKey(
+			Space::getRoomIdRoot(Space::PUBLIC_SPACE_ID),
+			'reservations',
+			['key'],
+			null,
+			-1
+		);
+		$updateDescription = [
+			'content_key' => isset($this->data['ReservationEvent']['key'])
+				? $this->data['ReservationEvent']['key']
+				: null,
+			'block_key' => isset($blockKey['Block']['key'])
+				? $blockKey['Block']['key']
+				: null,
+			'room_id' => $roomId
+		];
+
+		$this->updateUploadFile($content, $updateDescription);
 	}
 
 /**
