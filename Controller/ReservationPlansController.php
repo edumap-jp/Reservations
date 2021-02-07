@@ -19,6 +19,8 @@ App::uses('ReservationPermissiveRooms', 'Reservations.Utility');
 /**
  * ReservationPlansController
  *
+ * @property ReservationSelectRoomComponent $ReservationSelectRoom
+ *
  * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @package NetCommons\Reservations\Controller
  */
@@ -93,6 +95,7 @@ class ReservationPlansController extends ReservationsAppController {
 			),
 		),*/
 		'Reservations.ReservationPermission',
+		'Reservations.ReservationSelectRoom',
 		'Paginator',
 		'Reservations.ReservationsDaily',
 		'Reservations.ReservationWorks',
@@ -289,27 +292,22 @@ class ReservationPlansController extends ReservationsAppController {
 		$this->set('locations', $locations);
 
 		$userId = Current::read('User.id');
-		$defaultLocation = current($locations);
+		$defaultLocationKey = $this->request->data['ReservationActionPlan']['location_key'] ?? null;
 
-		// デフォルト施設だけ公開対象ルーム情報を取得しておく
-		$publishableRooms = $this->ReservationLocationsRoom->getReservableRoomsByLocationAndUserId(
-			$defaultLocation,
+		$defaultRooms = $this->ReservationSelectRoom->getDefaultPublishableRooms(
+			$locations,
+			$defaultLocationKey,
 			$userId
 		);
-		$defaultRooms = [];
-		$notSpecified = [
-			'roomId' => 0,
-			'name' => __d('reservations', '-- not specified --')
-		];
-		$defaultRooms[] = $notSpecified;
-		foreach ($publishableRooms as $room) {
-			$defaultRooms[] = [
-				'roomId' => $room['Room']['id'],
-				'name' => $room['RoomsLanguage'][0]['name']
-			];
-		}
 		$this->set('defaultPublishableRooms', json_encode($defaultRooms));
-		$this->set('selectedRoom', json_encode($notSpecified));
+
+		// 選択済みルーム
+		$selectedRoomId = $this->request->data['ReservationActionPlan']['plan_room_id'] ?? 0;
+		$selectedRoom = $this->ReservationSelectRoom->getSelectedRoom(
+			$defaultRooms,
+			$selectedRoomId
+		);
+		$this->set('selectedRoom', json_encode($selectedRoom));
 
 		$frameId = Current::read('Frame.id');
 		if (! $frameId) {
@@ -351,30 +349,19 @@ class ReservationPlansController extends ReservationsAppController {
 		// 公開対象選択肢
 		$userId = Current::read('User.id');
 		$defaultLocationKey = $this->request->data['ReservationActionPlan']['location_key'];
-		// デフォルト施設だけ公開対象ルーム情報を取得しておく
-		$publishableRooms = $this->ReservationLocationsRoom->getReservableRoomsByLocationKey(
+		$defaultRooms = $this->ReservationSelectRoom->getDefaultPublishableRooms(
+			$locations,
 			$defaultLocationKey,
 			$userId
 		);
-		$defaultRooms = [];
-		$notSpecified = [
-			'roomId' => 0,
-			'name' => __d('reservations', '-- not specified --')
-		];
-		$defaultRooms[] = $notSpecified;
-		foreach ($publishableRooms as $room) {
-			$defaultRooms[] = [
-				'roomId' => $room['Room']['id'],
-				'name' => $room['RoomsLanguage'][0]['name']
-			];
-		}
 		$this->set('defaultPublishableRooms', json_encode($defaultRooms));
 
 		// 選択済みルーム
-		$roomIds = array_column($defaultRooms, 'roomId');
 		$selectedRoomId = $this->request->data['ReservationActionPlan']['plan_room_id'];
-		$arrayIndex = array_search($selectedRoomId, $roomIds);
-		$selectedRoom = $defaultRooms[$arrayIndex];
+		$selectedRoom = $this->ReservationSelectRoom->getSelectedRoom(
+			$defaultRooms,
+			$selectedRoomId
+		);
 		$this->set('selectedRoom', json_encode($selectedRoom));
 	}
 

@@ -15,6 +15,8 @@ App::uses('CsvFileReader', 'Files.Utility');
 /**
  * 予約のインポート Controller
  *
+ * @property ReservationSelectRoomComponent $ReservationSelectRoom
+ *
  * @author Ryuji AMANO <ryuji@ryus.co.jp>
  * @package NetCommons\Reservations\Controller
  */
@@ -56,6 +58,7 @@ class ReservationImportController extends ReservationsAppController {
 		'Reservations.ReservationActionPlan',
 		'Reservations.ReservationCsvRecord',
 		'Reservations.ReservationEvent',
+		'Reservations.ReservationLocationsRoom',
 		//'Workflow.WorkflowComment',
 	);
 
@@ -72,6 +75,7 @@ class ReservationImportController extends ReservationsAppController {
 		'Rooms.RoomsForm',
 		'Reservations.ReservationSettings', //NetCommons.Permissionは使わず、独自でやる
 		'Reservations.ReservationWorks',
+		'Reservations.ReservationSelectRoom',
 	);
 
 /**
@@ -142,6 +146,24 @@ class ReservationImportController extends ReservationsAppController {
 			$this->request->data['ReservationActionPlan']['timezone'] = 'Asia/Tokyo';
 		}
 		$this->_reservationGet(ReservationsComponent::PLAN_ADD);
+
+		$userId = Current::read('User.id');
+		$defaultLocationKey = $this->request->data['ReservationActionPlan']['location_key'] ?? null;
+
+		$defaultRooms = $this->ReservationSelectRoom->getDefaultPublishableRooms(
+			$locations,
+			$defaultLocationKey,
+			$userId
+		);
+		$this->set('defaultPublishableRooms', json_encode($defaultRooms));
+
+		// 選択済みルーム
+		$selectedRoomId = $this->request->data['ReservationActionPlan']['plan_room_id'] ?? 0;
+		$selectedRoom = $this->ReservationSelectRoom->getSelectedRoom(
+			$defaultRooms,
+			$selectedRoomId
+		);
+		$this->set('selectedRoom', json_encode($selectedRoom));
 	}
 
 /**
