@@ -15,7 +15,7 @@ App::uses('Component', 'Controller');
 class ReservationSelectRoomComponent extends Component {
 
 /**
- * @var $__reservationLocationsRoom
+ * @var ReservationLocationsRoom
  */
 	private $__reservationLocationsRoom;
 
