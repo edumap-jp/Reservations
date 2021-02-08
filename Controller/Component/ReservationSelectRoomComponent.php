@@ -15,7 +15,7 @@ App::uses('Component', 'Controller');
 class ReservationSelectRoomComponent extends Component {
 
 /**
- * @var ReservationLocationsRoom
+ * @var ReservationLocationsRoom 施設の公開対象ルームモデル
  */
 	private $__reservationLocationsRoom;
 
