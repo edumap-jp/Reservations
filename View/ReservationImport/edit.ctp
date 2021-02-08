@@ -126,18 +126,11 @@ echo $this->element('Reservations.scripts');
 
 									<?php
 									//  カテゴリ絞り込み
-									$locationCategories = Hash::combine(
-										$categories,
-										'{n}.Category.id',
-										'{n}.CategoriesLanguage.name'
-									);
+									$locationCategories = Hash::combine($categories, '{n}.Category.id', '{n}.CategoriesLanguage.name');
 									// 施設の絞り込み, カテゴリなし　を追加
 									$locationCategories = Hash::merge(
 										[
-											'all' => __d(
-												'reservations',
-												'-- search for institutions --'
-											),
+											'all' => __d('reservations', '-- search for institutions --'),
 											'' => __d('reservations', 'no category')
 										],
 										$locationCategories
@@ -146,14 +139,9 @@ echo $this->element('Reservations.scripts');
 									//        0 => 'カテゴリ無し',
 									//        1 => '会議室',
 									//];
-									$this->NetCommonsForm->unlockField(
-										'ReservationLocation.category_id'
-									);
-									$this->NetCommonsForm->unlockField(
-										'ReservationActionPlan.location_key'
-									);
-									echo $this->NetCommonsForm->input(
-										'ReservationLocation.category_id',
+									$this->NetCommonsForm->unlockField('ReservationLocation.category_id');
+									$this->NetCommonsForm->unlockField('ReservationActionPlan.location_key');
+									echo $this->NetCommonsForm->input('ReservationLocation.category_id',
 										[
 											'label' => false,
 											'options' => $locationCategories,
@@ -163,11 +151,7 @@ echo $this->element('Reservations.scripts');
 									);
 									?>
 									<!--施設選択-->
-									<?php $locationOptions = Hash::combine(
-										$locations,
-										'{n}.ReservationLocation.key',
-										'{n}.ReservationLocation.location_name'
-									); ?>
+									<?php $locationOptions = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservationLocation.location_name'); ?>
 									<?php
 									echo $this->NetCommonsForm->input(
 										'ReservationActionPlan.location_key',
@@ -192,23 +176,30 @@ echo $this->element('Reservations.scripts');
 									?>
 									<?php echo __d('reservations', '[Available]'); ?>
 									{{selectLocation.ReservationLocation.openText}}
-									<a href="" data-toggle="popover" data-placement="bottom"
-											title="" data-trigger="focus" data-content="
-                        <dl>
-                        <dt><?php echo __d('reservations', 'Available'); ?></dt><dd>{{selectLocation.ReservationLocation.openText}}</dd>
-                        <dt><?php echo __d('reservations', 'Approver'); ?></dt><dd>{{selectLocation.ReservationLocation.contact}}</dd>
-                        </dl>
-                        <p>{{selectLocation.ReservationLocation.description}}</p>
-						"
-											data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d(
-											'reservations',
-											'詳細'
-										); ?></a>
-									<?php
-									$html = '<script type="text/javascript">' .
-										'$(function () { $(\'[data-toggle="popover"]\').popover({html: true}) });</script>';
-									echo $html;
-									?>
+									<a href="" id="reservation-location-detail-popover-link" data-toggle="popover" data-placement="bottom" title="" data-trigger="focus"
+											data-original-title="{{selectLocation.ReservationLocation.location_name}}"><?php echo __d('reservations', '詳細'); ?></a>
+
+									<?php // 施設詳細popover ?>
+									<div id="reservation-location-popover" class="hide">
+										<strong><?php echo __d('reservations', 'Available'); ?></strong> {{selectLocation.ReservationLocation.openText}}<br>
+										<strong><?php echo __d('reservations', 'Approver'); ?></strong><br>
+										<ul>
+											<li ng-repeat="userName in selectLocation.approvalUserNames">{{userName}}</li>
+										</ul>
+										<div ng-bind-html="selectLocation.ReservationLocation.detail|ncHtmlContent"></div>
+									</div>
+									<script type="text/javascript">
+                                      $(function() {
+                                        $('#reservation-location-detail-popover-link').popover({
+                                          html:true,
+                                          content:function() {
+                                            return $('#reservation-location-popover').html();
+                                          }
+
+                                        })
+                                      })
+									</script>
+
 								</div>
 							</div>
 						</div><!-- form-group name="inputStartEndDateTime"おわり -->
@@ -219,54 +210,39 @@ echo $this->element('Reservations.scripts');
 						<div class="form-group" data-reservation-name="selectRoomForOpen">
 							<div class="col-xs-12" ng-cloak="">
 								<?php
-								//echo $this->ReservationExposeTarget->makeSelectExposeTargetHtml($event, $frameId, $vars, $exposeRoomOptions, $myself);
 								echo $this->NetCommonsForm->label(
-									'ReservationActionPlan.plan_room_id' . Inflector::camelize(
-										'room_id'
-									),
-									__d('reservations', 'Category') . $this->element(
-										'NetCommons.required'
-									)
-								);
-								//debug($exposeRoomOptions);
+									'ReservationActionPlan.plan_room_id' . Inflector::camelize('room_id'),
+									__d('reservations', 'Category') . $this->element('NetCommons.required'));
 								?>
+
 								<?php
-								foreach ($locations as $location) {
-									$options = Hash::combine(
-										$location['ReservableRoom'],
-										'{n}.Room.id',
-										'{n}.RoomsLanguage.0.name'
-									);
-									echo $this->NetCommonsForm->select(
-										'ReservationActionPlan.plan_room_id',
-										$options,
-										array(
-											'class' => 'form-control select-expose-target',
-											'empty' => false,
-											'required' => true,
-											//value値のoption要素がselectedになる。
-											'value' => $this->request->data['ReservationActionPlan']['plan_room_id'],
-											'data-frame-id' => $frameId,
-											'data-myself' => $myself, // プライベートルーム
-											'escape' => false,
-											'ng-model' => 'data.ReservationActionPlan.plan_room_id',
-											//'ng-change' => 'debugShow()',
-											'ng-show' => 'selectLocation.ReservationLocation.id == ' .
-												$location['ReservationLocation']['id']
-										)
-									);
-								}
-								$this->NetCommonsForm->unlockField(
-									'ReservationActionPlan.plan_room_id'
-								);
-								echo $this->NetCommonsForm->hidden(
-									'ReservationActionPlan.plan_room_id',
-									['ng-value' => 'data.ReservationActionPlan.plan_room_id']
-								);
+								echo $this->NetCommonsForm->select('ReservationActionPlan.plan_room_id',
+									[], array(
+										'ng-init' => sprintf(
+											'initReservableRooms(%s, %s)',
+											$defaultPublishableRooms,
+											$selectedRoom
+										),
+										'ng-options' =>
+											'room.name for room in roomList track by room.roomId',
+										'class' => 'form-control select-expose-target',
+										'empty' => false,
+										'required' => true,
+										//value値のoption要素がselectedになる。
+										//'value' => $this->request->data['ReservationActionPlan']['plan_room_id'],
+										'data-frame-id' => $frameId,
+										'data-myself' => $myself, // プライベートルーム
+										'escape' => false,
+										'ng-model' => 'selectedRoom',
+									));
+
+
 								?>
-								<?php echo $this->NetCommonsForm->error(
-									'ReservationActionPlan.plan_room_id'
-								); ?>
+
+								<?php
+								$this->NetCommonsForm->unlockField('ReservationActionPlan.plan_room_id');
+								?>
+								<?php echo $this->NetCommonsForm->error('ReservationActionPlan.plan_room_id'); ?>
 							</div>
 						</div><!-- end form-group-->
 

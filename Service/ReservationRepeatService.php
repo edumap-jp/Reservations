@@ -33,7 +33,7 @@ class ReservationRepeatService {
  * @return array Y-m-d日付のリスト
  */
 	public function getRepeatDateSet($rrule, $startDate) {
-		switch ($rrule['FREQ']) {
+		switch ($rrule['FREQ'] ?? null) {
 			case 'DAILY':
 				$dateSet = $this->_getRepeatDateSetByDaily($rrule, $startDate);
 				break;
