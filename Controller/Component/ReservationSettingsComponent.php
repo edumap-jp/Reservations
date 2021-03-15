@@ -154,7 +154,7 @@ class ReservationSettingsComponent extends Component {
  */
 	public function startup(Controller $controller) {
 		//サイト管理者のみ編集可＝ページ編集権限があり、サイト管理が使えるユーザ
-		$isAdmin = Current::permission('page_editable') && Current::allowSystemPlugin('site_manager');
+		$isAdmin = Current::permission('page_editable');
 		$controller->set('isAdmin', $isAdmin);
 
 		if ($isAdmin) {
