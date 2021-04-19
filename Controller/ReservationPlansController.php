@@ -302,7 +302,8 @@ class ReservationPlansController extends ReservationsAppController {
 		$this->set('defaultPublishableRooms', json_encode($defaultRooms));
 
 		// 選択済みルーム
-		$selectedRoomId = $this->request->data['ReservationActionPlan']['plan_room_id'] ?? 0;
+		$selectedRoomId = $this->request->data['ReservationActionPlan']['plan_room_id'] ??
+							CurrentLib::read('Room.id', 0);
 		$selectedRoom = $this->ReservationSelectRoom->getSelectedRoom(
 			$defaultRooms,
 			$selectedRoomId
