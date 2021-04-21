@@ -779,7 +779,14 @@ NetCommonsApp.controller('ReservationsDetailEdit',
         $scope.setupButtons = function() {
           // console.log($scope.selectLocation);
           //    承認不要のケースもあるな
-          if ($scope.selectLocation.ReservationLocation.use_workflow) {
+          if (! $scope.selectLocation) {
+            $scope.buttons = {
+              draft: false,
+              disapproved: false,
+              approvalWaiting: false,
+              published: false
+            };
+          } else if ($scope.selectLocation.ReservationLocation.use_workflow) {
             if ($scope.selectLocation.approvalUserIds.hasOwnProperty(Number($scope.data.userId))) {
               // 承認ユーザ
               // 要承認　承認権限ありなら　一時保存と公開　ただしステータスが公開待ち(2)の時だけ一時保存→差し戻し
@@ -838,6 +845,10 @@ NetCommonsApp.controller('ReservationsDetailEdit',
        $scope.changeLocation = function() {
          $scope.setupButtons();
 
+         if (! $scope.selectLocation) {
+           $scope.selectedRoom = [];
+           return;
+         }
          var url = NC3_URL + '/reservations/reservations/fetch_rooms_to_publish_reservation.json';
          let locationKey = $scope.selectLocation.ReservationLocation.key;
          $('#ReservationActionPlanPlanRoomId').prop('disabled', true);
