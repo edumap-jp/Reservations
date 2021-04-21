@@ -684,7 +684,7 @@ NetCommonsApp.controller('Reservations.selectLocation',
           var url = NC3_URL + '/reservations/reservations/index' +
                         '?style=' + displayStyle + '&frame_id=' + $scope.frameId;
           url = url + '&location_key=' + $scope.selectLocation.ReservationLocation.key;
-          console.log(url);
+          //console.log(url);
           // $location.path(url);
           // $location.html5Mode(true);
           // console.log($location.search());
