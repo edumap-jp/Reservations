@@ -131,6 +131,8 @@ class ReservationLocationsController extends ReservationsAppController {
 		} else {
 			$newLocation = $this->ReservationLocation->createLocation();
 			$this->request->data['ReservationLocation'] = $newLocation['ReservationLocation'];
+			$this->request->data['ReservationLocationsRoom'] =
+					$newLocation['ReservationLocationsRoom'] ?? ['room_id' => []];
 			$isMyUser = true;
 		}
 
