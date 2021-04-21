@@ -466,6 +466,9 @@ class ReservationActionPlan extends ReservationsAppModel {
 			$locationKey,
 			Current::read('Language.id')
 		);
+		if (! $location) {
+			return false;
+		}
 		$reservableTimeTable = explode('|', $location['ReservationLocation']['time_table']);
 		$locationTimeZone = new DateTimeZone($location['ReservationLocation']['timezone']);
 
@@ -756,6 +759,9 @@ class ReservationActionPlan extends ReservationsAppModel {
 		/** @var ReservationLocation $locationModel */
 		$locationModel = ClassRegistry::init('Reservations.ReservationLocation');
 		$location = $locationModel->getByKey($locationKey);
+		if (! $location) {
+			return false;
+		}
 		if ($location['ReservationLocation']['use_workflow']) {
 			// 承認必要
 			// 承認者か

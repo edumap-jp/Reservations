@@ -86,7 +86,7 @@ echo $this->element('Reservations.scripts');
 				<div class='col-xs-12'>
 					<?php echo $this->element('Reservations.ReservationPlans/edit_title'); ?>
 				</div>
-			</div><!-- end form-group-->
+			</div>
 
 			<?php /* 期日指定ラベル＋期間・時間指定のチェックボックス */ ?>
 			<div class="form-group" data-reservation-name="checkTime">
@@ -113,21 +113,21 @@ echo $this->element('Reservations.scripts');
 						//));
 					?>
 				</div>
- 			</div><!-- end form-group-->
+ 			</div>
 
 			<?php /* 期日入力（終日／開始、終了）*/ ?>
 			<div class='form-group' data-reservation-name='inputStartEndDateTime'>
 				<div class='col-xs-12'>
 					<?php echo $this->element('Reservations.ReservationPlans/detail_edit_datetime', array('useTime' => $useTime)); ?>
 				</div>
-			</div><!-- form-group name="inputStartEndDateTime"おわり -->
+			</div>
 
 			<?php /* 繰り返し設定 （この予定のみ変更のときは出さない）*/ ?>
 			<div class="form-group" data-reservation-name="inputRruleInfo" ng-hide="editRrule==0">
 				<div class="col-xs-12">
 					<?php echo $this->element('Reservations.ReservationPlans/detail_edit_repeat_items', array('useTime' => $useTime)); ?>
 				</div>
-			</div><!-- end form-group-->
+			</div>
 
 			<?php if (empty($event) ||
 				$event['ReservationEvent']['created_user'] == Current::read('User.id')): ?>
@@ -166,7 +166,7 @@ echo $this->element('Reservations.scripts');
 								]
 							);
 						?>
-						<!--施設選択-->
+
                         <?php $locationOptions = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservationLocation.location_name'); ?>
 						<?php
 							echo $this->NetCommonsForm->input(
@@ -218,7 +218,7 @@ echo $this->element('Reservations.scripts');
 
 					</div>
                 </div>
-            </div><!-- form-group name="inputStartEndDateTime"おわり -->
+            </div>
 
 			<?php //echo $this->element('Reservations.ReservationPlans/detail_edit_location') ?>
 
@@ -260,7 +260,7 @@ echo $this->element('Reservations.scripts');
 					?>
 					<?php echo $this->NetCommonsForm->error('ReservationActionPlan.plan_room_id'); ?>
 				</div>
-			</div><!-- end form-group-->
+			</div>
 
 			<?php /* 予定の共有設定 */ ?>
 			<?php
@@ -281,9 +281,9 @@ echo $this->element('Reservations.scripts');
 				 style="display: <?php //echo $dispValue; ?>; margin-top:0.5em;">
 				<div class="col-xs-12 col-sm-10 col-sm-offset-2">
 					<?php //echo $this->element('Reservations.ReservationPlans/edit_plan_share', array('shareUsers', $shareUsers)); ?>
-				</div><!-- col-sm-10おわり -->
+				</div>
 			</div>
-			<!-- form-groupおわり-->
+
 
 			<?php else: // 編集中のユーザと作成者が異なる（つまり承認者による編集）?>
 				<div class="col-xs-12 col-sm-12">
@@ -340,16 +340,16 @@ echo $this->element('Reservations.scripts');
 			<div data-reservation-name="inputCommentArea">
 				<div class="col-xs-12">
 					<?php echo $this->Workflow->inputComment('ReservationEvent.status'); ?>
-				</div><!-- col-xs-12おわり -->
-			</div><!-- inputCommentAreaおわり -->
+				</div>
+			</div>
 
-		</div><!-- panel-bodyを閉じる -->
+		</div>
 
 		<div class="panel-footer text-center" ng-cloak="">
 
 			<?php echo $this->ReservationPlan->makeEditButtonHtml('ReservationActionPlan.status', $vars, $event); ?>
 
-		</div><!--panel-footerの閉じるタグ-->
+		</div>
 	<?php echo $this->NetCommonsForm->end(); ?>
 
 	<?php if (isset($event['ReservationEvent']) && ($this->request->params['action'] === 'edit' && $this->ReservationWorkflow->canDelete($event))) : ?>
@@ -372,7 +372,7 @@ echo $this->element('Reservations.scripts');
 		</div>
 	<?php endif; ?>
 
-	</div><!--end panel-->
+	</div>
 
 	<?php /* コメント一覧 */
 		echo $this->Workflow->comments();

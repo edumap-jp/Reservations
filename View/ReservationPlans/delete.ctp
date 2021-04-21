@@ -82,7 +82,7 @@ echo $this->element('Reservations.scripts');
 				}
 			?>
 			</fieldset>
-		</div><!--end panel-body-->
+		</div>
 
 		<?php
 			//エラー表示。 便宜的に、is_repeatを指定しておく。
@@ -108,8 +108,8 @@ echo $this->element('Reservations.scripts');
 			);
 			echo $this->Button->delete(__d('net_commons', 'Delete'), '', $deleteOptions);
 		?>
-		</div><!-- end panel footer -->
+		</div>
 		<?php echo $this->NetCommonsForm->end() ?>
-	</div><!-- end panel-->
+	</div>
 </article>
 
