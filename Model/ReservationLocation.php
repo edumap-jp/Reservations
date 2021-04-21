@@ -299,7 +299,7 @@ class ReservationLocation extends ReservationsAppModel {
 				'end_time' => '18:00',
 				'time_table' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
 				'use_all_rooms' => '0',
-				'use_workflow' => '1',
+				'use_workflow' => Current::read('Room.need_approval', '1'),
 				'timezone' => Current::read('User.timezone'),
 			]
 		);
