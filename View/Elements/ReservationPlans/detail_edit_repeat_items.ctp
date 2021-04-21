@@ -27,10 +27,10 @@ App::uses('ReservationSupport', 'Reservations.Utility');
 		));
 		?>
 	</div>
-</div><!-- end form-group-->
+</div>
 
 <div class="row" ng-cloak>
-	<div class="col-xs-11 col-xs-offset-1 form-horizontal reservation-repeat-a-plan-detail_<?php echo $frameId; ?>" 
+	<div class="col-xs-11 col-xs-offset-1 form-horizontal reservation-repeat-a-plan-detail_<?php echo $frameId; ?>"
 		ng-show="repeatArray[<?php echo $frameId; ?>]==1">
 		<?php /* 繰り返しのタイプ選択 */ ?>
 		<div class="form-group" name="selectRepeatType">
@@ -59,7 +59,7 @@ App::uses('ReservationSupport', 'Reservations.Utility');
 				));
 			?>
 			<?php echo $this->NetCommonsForm->error('ReservationActionPlan.rrule_interval.DAILY'); ?>
-		</div><!-- form-group終わり-->
+		</div>
 
 		<?php /* 繰り返しが「日」単位指定の場合の詳細設定 */ ?>
 		<div class="form-group reservation-daily-info_<?php echo $frameId; ?>"
@@ -93,7 +93,7 @@ App::uses('ReservationSupport', 'Reservations.Utility');
 			//echo $this->NetCommonsForm->error( 重複になるためコメントアウト
 			//	'ReservationActionPlan.rrule_interval.' . ReservationsComponent::CALENDAR_REPEAT_FREQ_DAILY, null, array('div' => true));
 			?>
-		</div><!-- en daily repeat setting form-group-->
+		</div>
 
 		<?php /* 繰り返しが「週」単位指定の場合の詳細設定 */ ?>
 		<div class="form-group reservation-weekly-info_<?php echo $frameId; ?>"
@@ -139,7 +139,7 @@ App::uses('ReservationSupport', 'Reservations.Utility');
 				));
 				?>
 			</div>
-		</div><!-- end form-group weekly setting-->
+		</div>
 
 		<?php /* 繰り返しが「月」単位指定の場合の詳細設定 */ ?>
 		<div class="form-group reservation-monthly-info_<?php echo $frameId; ?>"
@@ -193,7 +193,7 @@ App::uses('ReservationSupport', 'Reservations.Utility');
 				<div class="form-group reservation-plan-rrule-freq-select-one">
 				<?php echo __d('reservations', 'or'); ?>
 				</div>
-			</div><!--end 'or' col-->
+			</div>
 			<div class="col-xs-8 col-sm-4">
 			<?php
 				$options = array();
@@ -214,7 +214,7 @@ App::uses('ReservationSupport', 'Reservations.Utility');
 				));
 			?>
 			</div>
-		</div><!-- end form-group weekly repeat setting-->
+		</div>
 
 		<?php /* 繰り返しが「年」単位指定の場合の詳細設定 */ ?>
 		<div class="form-group reservation-yearly-info_<?php echo $frameId; ?>"
@@ -280,7 +280,7 @@ App::uses('ReservationSupport', 'Reservations.Utility');
 					'ng-init' => 'yearlyDayOfTheWeek[' . $frameId . "] = '" . $yearlyDayOfTheWeekVal . "'",
 				));
 			?>
-		</div><!-- end form-group yearly repeat settin -->
+		</div>
 
 		<?php /* 終了時指定 */ ?>
 		<div class="form-group reservation-repeat-limit_<?php echo $frameId; ?>" data-reservation-name="reservationRepeatLimit">
@@ -332,7 +332,7 @@ App::uses('ReservationSupport', 'Reservations.Utility');
 					//echo $this->NetCommonsForm->error('ReservationActionPlan.rrule_count');
 				?>
 				</div>
-				
+
 				<div class="col-xs-6 col-sm-1 reservation-detailedit-addchar">
 					<?php echo __d('reservations', 'times'); ?>
 				</div>
@@ -367,9 +367,9 @@ App::uses('ReservationSupport', 'Reservations.Utility');
 					));
 				?>
 			</div>
-		</div><!-- form-group name=reservationRepeatLimitおわり -->
+		</div>
 
 		<div class="clearfix"></div>
-	</div><!-- 繰返しの選択詳細 END -->
+	</div>
 
 </div>
