@@ -305,7 +305,7 @@ class ReservationPlansController extends ReservationsAppController {
 		$selectedRoomId = $this->request->data['ReservationActionPlan']['plan_room_id'] ?? 0;
 		$selectedRoom = $this->ReservationSelectRoom->getSelectedRoom(
 			$defaultRooms,
-			$selectedRoomId
+			(int)$selectedRoomId
 		);
 		$this->set('selectedRoom', json_encode($selectedRoom));
 
@@ -360,7 +360,7 @@ class ReservationPlansController extends ReservationsAppController {
 		$selectedRoomId = $this->request->data['ReservationActionPlan']['plan_room_id'];
 		$selectedRoom = $this->ReservationSelectRoom->getSelectedRoom(
 			$defaultRooms,
-			$selectedRoomId
+			(int)$selectedRoomId
 		);
 		$this->set('selectedRoom', json_encode($selectedRoom));
 	}

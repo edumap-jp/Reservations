@@ -19,7 +19,6 @@
 
 		<?php /* 場所 */ ?>
 		<div class="form-group" data-reservation-name="inputLocation" ng-cloak>
-		<!--<div class="form-group" >-->
 			<div class="col-xs-12">
 				<?php echo $this->NetCommonsForm->input('ReservationActionPlan.location', array(
 				'type' => 'hidden',
@@ -86,7 +85,7 @@
 				//echo $this->NetCommonsForm->error('ReservationActionPlan.timezone');
 			?>
 			</div>
-		</div><!-- form-groupおわり-->
+		</div>
 	</div>
 
 </div>

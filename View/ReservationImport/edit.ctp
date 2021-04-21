@@ -150,7 +150,6 @@ echo $this->element('Reservations.scripts');
 										]
 									);
 									?>
-									<!--施設選択-->
 									<?php $locationOptions = Hash::combine($locations, '{n}.ReservationLocation.key', '{n}.ReservationLocation.location_name'); ?>
 									<?php
 									echo $this->NetCommonsForm->input(
@@ -202,7 +201,7 @@ echo $this->element('Reservations.scripts');
 
 								</div>
 							</div>
-						</div><!-- form-group name="inputStartEndDateTime"おわり -->
+						</div>
 
 						<?php //echo $this->element('Reservations.ReservationPlans/detail_edit_location') ?>
 
@@ -244,7 +243,7 @@ echo $this->element('Reservations.scripts');
 								?>
 								<?php echo $this->NetCommonsForm->error('ReservationActionPlan.plan_room_id'); ?>
 							</div>
-						</div><!-- end form-group-->
+						</div>
 
 						<?php /* 予定の共有設定 */ ?>
 						<?php
@@ -266,9 +265,8 @@ echo $this->element('Reservations.scripts');
 								style="display: <?php //echo $dispValue; ?>; margin-top:0.5em;">
 							<div class="col-xs-12 col-sm-10 col-sm-offset-2">
 								<?php //echo $this->element('Reservations.ReservationPlans/edit_plan_share', array('shareUsers', $shareUsers)); ?>
-							</div><!-- col-sm-10おわり -->
+							</div>
 						</div>
-						<!-- form-groupおわり-->
 					</div>
 
 
@@ -323,8 +321,8 @@ echo $this->element('Reservations.scripts');
 							__d('reservations', '/reservations/locale/eng/reservation_import.csv'),
 							[
 								'class' =>
-									'btn 
-						btn-default 
+									'btn
+						btn-default
 						btn-sm'
 							]
 						); ?>
@@ -334,7 +332,7 @@ echo $this->element('Reservations.scripts');
 						</button>
 					</div>
 
-				</div><!-- panel-bodyを閉じる -->
+				</div>
 
 				<div class="panel-footer text-center" ng-cloak="">
 
@@ -344,10 +342,10 @@ echo $this->element('Reservations.scripts');
 
 					); ?>
 
-				</div><!--panel-footerの閉じるタグ-->
+				</div>
 				<?php echo $this->NetCommonsForm->end(); ?>
 
-			</div><!--end panel-->
+			</div>
 
 			<?php /* コメント一覧 */
 			//echo $this->Workflow->comments();
@@ -356,14 +354,9 @@ echo $this->element('Reservations.scripts');
 		</article>
 
 
-	</div><!--end tab-content-->
+	</div>
 </article>
 
-
-<!-- Button trigger modal -->
-
-
-<!-- Modal -->
 <div class="modal fade" id="reservationsExplanationsOfItems" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">

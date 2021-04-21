@@ -79,14 +79,14 @@ echo $this->element('Reservations.scripts');
 				<label><?php echo __d('reservations', 'Repeat the event:'); ?></label>
 				<?php /* getStringRrule()で表示するものは直接入力値はつかわない。よってh()は不要 */ ?>
 				<span><?php echo $this->ReservationPlanRrule->getStringRrule($event['ReservationRrule']['rrule']); ?></span>
-			</div><!-- おわり-->
+			</div>
 			<?php endif; ?>
 
 			<?php /* 公開対象 */ ?>
 			<div data-reservation-name="dispRoomForOpen" class="reservation-eachplan-box">
 				<h3><?php echo __d('reservations', 'Category'); ?></h3>
 				<p><?php echo $this->ReservationCategory->getCategoryName($vars, $event); ?></p>
-			</div><!-- おわり-->
+			</div>
 
 			<?php /* 共有者 */ ?>
 			<?php if ($this->ReservationShareUsers->isShareEvent($event)): ?>
@@ -100,14 +100,14 @@ echo $this->element('Reservations.scripts');
 			<div data-reservation-name="showLocation" class="reservation-eachplan-box">
 				<h3><?php echo __d('reservations', 'Location'); ?></h3>
 				<p><?php echo h($event['ReservationEvent']['location']); ?></p>
-			</div><!-- おわり-->
+			</div>
 			<?php endif; ?>
 
 			<?php if ($event['ReservationEvent']['contact'] !== '') : ?>
 			<div data-reservation-name="showContact" class="reservation-eachplan-box">
 				<h3><?php echo __d('reservations', 'Contact'); ?></h3>
 				<p><?php echo h($event['ReservationEvent']['contact']); ?></p>
-			</div><!-- おわり-->
+			</div>
 			<?php endif; ?>
 
 			<?php if ($event['ReservationEvent']['description'] !== '') : ?>
@@ -115,18 +115,18 @@ echo $this->element('Reservations.scripts');
 				<h3><?php echo __d('reservations', 'Details'); ?></h3>
 				<?php /* ここにwysiwyigの内容がきます wysiwygの内容は下手にPタグでくくれない */ ?>
 				<?php echo $event['ReservationEvent']['description']; ?>
-			</div><!-- おわり-->
+			</div>
 			<?php endif; ?>
 
 			<div data-reservation-name="writer" class="reservation-eachplan-box">
 				<h3><?php echo __d('reservations', 'Author'); ?></h3>
 				<p><?php echo $this->DisplayUser->handleLink($event, array('avatar' => true)); ?></p>
-			</div><!-- おわり-->
+			</div>
 
 			<div data-reservation-name="updateDate" class="reservation-eachplan-box">
 				<h3><?php echo __d('reservations', 'Date'); ?></h3>
 				<p><?php echo h((new NetCommonsTime())->toUserDatetime($event['ReservationEvent']['modified'])); ?></p>
-			</div><!-- おわり-->
+			</div>
 		</div>
 	</div>
 </article>

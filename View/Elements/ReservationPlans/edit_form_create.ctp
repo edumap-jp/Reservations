@@ -17,4 +17,4 @@
 		),
 		'class' => 'form-horizontal',
 	);
-	echo $this->NetCommonsForm->create('ReservationActionPlan', $options);	//<!-- <form class="form-horizontal"> --> <!-- これで<div class-"form-group row"のrowを省略できる -->
+	echo $this->NetCommonsForm->create('ReservationActionPlan', $options);
