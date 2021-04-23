@@ -1088,7 +1088,6 @@ class ReservationActionPlan extends ReservationsAppModel {
 			CakeLog::error($ex->getMessage());
 			throw($ex);	//再throw
 		}
-		CakeLog::debug(var_export($planParam, true));
 		return $planParam;
 	}
 
