@@ -9,23 +9,19 @@
  * @copyright Copyright 2014, NetCommons Project
  */
 ?>
-<?php
-	$checkMailStyle = '';
-	if (!isset($mailSettingInfo['MailSetting']['is_mail_send']) ||
-		$mailSettingInfo['MailSetting']['is_mail_send'] == 0) {
-		$checkMailStyle = "style='display: none;'";
-	}
-?>
 <div class="col-xs-12 col-sm-12">
-	<?php
+<?php
+if (isset($mailSettingInfo['MailSetting']['is_mail_send']) &&
+		$mailSettingInfo['MailSetting']['is_mail_send']) {
 	echo $this->NetCommonsForm->inlineCheckbox('ReservationActionPlan.enable_email', ['label' =>
 	__d(
 		'reservations',
 		'Inform other members by e-mail?'
 	)]);
+} else {
+	echo $this->NetCommonsForm->hidden('ReservationActionPlan.enable_email', array('value' => false));
+}
 
-	//echo $this->NetCommonsForm->hidden('ReservationActionPlan.enable_email', array('value' => false));
-	echo $this->NetCommonsForm->hidden('ReservationActionPlan.email_send_timing', array('value' => 5));
-	?>
-
+echo $this->NetCommonsForm->hidden('ReservationActionPlan.email_send_timing', array('value' => 5));
+?>
 </div>
