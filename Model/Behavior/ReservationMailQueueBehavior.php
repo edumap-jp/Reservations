@@ -48,8 +48,11 @@ class ReservationMailQueueBehavior extends MailQueueBehavior {
 			// --- ワークフローのstatusによって送信内容を変える
 			// 各プラグインが承認機能=ONかどうかは、気にしなくてＯＫ。承認機能=OFFなら status=公開が飛んでくるため。
 
-			// 承認依頼通知, 差戻し通知, 承認完了通知メール(即時)
-			$this->_saveQueueNoticeMail($model, $languageId, $typeKey);
+			//承認ワークフローを使うときのみ承認関連のメールは送らない
+			if ($model->data['ReservationLocation']['use_workflow']) {
+				// 承認依頼通知, 差戻し通知, 承認完了通知メール(即時)
+				$this->_saveQueueNoticeMail($model, $languageId, $typeKey);
+			}
 
 			$mailSettingPlugin = $this->__getMailSettingPlugin($model, $languageId, $typeKey);
 			$isMailSend = Hash::get($mailSettingPlugin, 'MailSetting.is_mail_send');
