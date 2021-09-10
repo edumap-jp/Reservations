@@ -175,7 +175,7 @@ class ReservationAppBehavior extends ModelBehavior {
 		if ($model->ReservationEvent->id > 0 && $createdUserWhenUpd !== null) {
 			//saveが成功し、かつ、createdUserWhenUpd がnull以外なら、created_userを更新しておく。
 			//modifiedも更新されるが、saveの直後なので誤差の範囲として了とする。
-			$model->ReservationEvent->saveField('created_user', $createdUserWhenUpd);
+			$model->ReservationEvent->saveField('created_user', $createdUserWhenUpd, ['callbacks' => false]);
 			//UPDATEでセットしたcreatedUserWhenUpdの値をeventDataに記録しておく
 			$rEventData['ReservationEvent']['created_user'] = $createdUserWhenUpd;
 		}
