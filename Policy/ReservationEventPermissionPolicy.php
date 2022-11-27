@@ -32,12 +32,18 @@ class ReservationEventPermissionPolicy {
 	protected $_readableRoomIds = [];
 
 /**
+ * @var ReservationLocationReservable
+ */
+	private $__researvationLocationReservable;
+
+	/**
  * ReservationEventPermissionPolicy constructor.
  *
  * @param array $event ReservationEvnet Data
  */
 	public function __construct($event) {
 		$this->_event = $event;
+		$this->__researvationLocationReservable = ClassRegistry::init('Reservations.ReservationLocationReservable');
 	}
 
 /**
@@ -48,9 +54,10 @@ class ReservationEventPermissionPolicy {
  */
 	public function canEdit($userId) {
 		$data = $this->_event;
+		$location = $this->_getLocationByKey($data['ReservationEvent']['location_key']);
 		if ($userId == $data['ReservationEvent']['created_user']) {
-			// 自分の予約は無条件に編集可能
-			return true;
+			// 予約権限があれば編集可
+			return $this->__researvationLocationReservable->isReservableByLocation($location);
 		} else {
 			// 他の人の予約
 			// ルーム管理者なら編集可能にしていたが、システム管理者、サイト管理者のみ編集可能にする。
@@ -65,7 +72,6 @@ class ReservationEventPermissionPolicy {
 			//	}
 			//}
 
-			$location = $this->_getLocationByKey($data['ReservationEvent']['location_key']);
 			$approvalUserIds = $location['approvalUserIds'];
 
 			if (in_array($userId, $approvalUserIds)) {
