@@ -23,10 +23,11 @@ class ReservationMailQueueBehavior extends MailQueueBehavior {
  * @param Model $model モデル
  * @param array $sendTimes メール送信日時 配列
  * @param string $typeKey メールの種類
+ * @param string $sendRoomPermission 送信するルームの役割。ルームでないときは無視される
  * @return void
  */
 	public function saveQueue(Model $model, $sendTimes = null,
-		$typeKey = MailSettingFixedPhrase::DEFAULT_TYPE) {
+		$typeKey = MailSettingFixedPhrase::DEFAULT_TYPE, $sendRoomPermission = null) {
 		$model->Behaviors->load('Mails.IsMailSend', $this->settings[$model->alias]);
 
 		$languageId = Current::read('Language.id');
