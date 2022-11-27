@@ -32,9 +32,9 @@ class ReservationEventPermissionPolicy {
 	protected $_readableRoomIds = [];
 
 /**
- * @var ReservationLocationReservable
+ * @var ReservationLocationReservable ReadableLocationReservable model
  */
-	private $__researvationLocationReservable;
+	private $__reservationLocationReservable;
 
 /**
  * ReservationEventPermissionPolicy constructor.
@@ -43,7 +43,7 @@ class ReservationEventPermissionPolicy {
  */
 	public function __construct($event) {
 		$this->_event = $event;
-		$this->__researvationLocationReservable = ClassRegistry::init(
+		$this->__reservationLocationReservable = ClassRegistry::init(
 			'Reservations.ReservationLocationReservable'
 		);
 	}
@@ -59,7 +59,7 @@ class ReservationEventPermissionPolicy {
 		$location = $this->_getLocationByKey($data['ReservationEvent']['location_key']);
 		if ($userId == $data['ReservationEvent']['created_user']) {
 			// 予約権限があれば編集可
-			return $this->__researvationLocationReservable->isReservableByLocation($location);
+			return $this->__reservationLocationReservable->isReservableByLocation($location);
 		} else {
 			// 他の人の予約
 			// ルーム管理者なら編集可能にしていたが、システム管理者、サイト管理者のみ編集可能にする。
