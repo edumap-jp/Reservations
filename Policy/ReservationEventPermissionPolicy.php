@@ -53,12 +53,17 @@ class ReservationEventPermissionPolicy {
 			return true;
 		} else {
 			// 他の人の予約
-			// block_permission_editable なら見られる
-			if (Current::read('Room.space_id') != Space::PRIVATE_SPACE_ID) {
-				if (Current::read('Permission.block_permission_editable.value')) {
-					return true;
-				}
+			// ルーム管理者なら編集可能にしていたが、システム管理者、サイト管理者のみ編集可能にする。
+			// サイト管理を使えるユーザなら編集可能。
+			if (Current::allowSystemPlugin('site_manager')) {
+				return true;
 			}
+			//// block_permission_editable なら見られる
+			//if (Current::read('Room.space_id') != Space::PRIVATE_SPACE_ID) {
+			//	if (Current::read('Permission.block_permission_editable.value')) {
+			//		return true;
+			//	}
+			//}
 
 			$location = $this->_getLocationByKey($data['ReservationEvent']['location_key']);
 			$approvalUserIds = $location['approvalUserIds'];
