@@ -36,14 +36,16 @@ class ReservationEventPermissionPolicy {
  */
 	private $__researvationLocationReservable;
 
-	/**
+/**
  * ReservationEventPermissionPolicy constructor.
  *
  * @param array $event ReservationEvnet Data
  */
 	public function __construct($event) {
 		$this->_event = $event;
-		$this->__researvationLocationReservable = ClassRegistry::init('Reservations.ReservationLocationReservable');
+		$this->__researvationLocationReservable = ClassRegistry::init(
+			'Reservations.ReservationLocationReservable'
+		);
 	}
 
 /**
