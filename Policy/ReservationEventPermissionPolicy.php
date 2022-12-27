@@ -32,12 +32,20 @@ class ReservationEventPermissionPolicy {
 	protected $_readableRoomIds = [];
 
 /**
+ * @var ReservationLocationReservable ReadableLocationReservable model
+ */
+	private $__reservationLocationReservable;
+
+/**
  * ReservationEventPermissionPolicy constructor.
  *
  * @param array $event ReservationEvnet Data
  */
 	public function __construct($event) {
 		$this->_event = $event;
+		$this->__reservationLocationReservable = ClassRegistry::init(
+			'Reservations.ReservationLocationReservable'
+		);
 	}
 
 /**
@@ -48,19 +56,24 @@ class ReservationEventPermissionPolicy {
  */
 	public function canEdit($userId) {
 		$data = $this->_event;
+		$location = $this->_getLocationByKey($data['ReservationEvent']['location_key']);
 		if ($userId == $data['ReservationEvent']['created_user']) {
-			// 自分の予約は無条件に編集可能
-			return true;
+			// 予約権限があれば編集可
+			return $this->__reservationLocationReservable->isReservableByLocation($location);
 		} else {
 			// 他の人の予約
-			// block_permission_editable なら見られる
-			if (Current::read('Room.space_id') != Space::PRIVATE_SPACE_ID) {
-				if (Current::read('Permission.block_permission_editable.value')) {
-					return true;
-				}
+			// ルーム管理者なら編集可能にしていたが、システム管理者、サイト管理者のみ編集可能にする。
+			// サイト管理を使えるユーザなら編集可能。
+			if (Current::allowSystemPlugin('site_manager')) {
+				return true;
 			}
+			//// block_permission_editable なら見られる
+			//if (Current::read('Room.space_id') != Space::PRIVATE_SPACE_ID) {
+			//	if (Current::read('Permission.block_permission_editable.value')) {
+			//		return true;
+			//	}
+			//}
 
-			$location = $this->_getLocationByKey($data['ReservationEvent']['location_key']);
 			$approvalUserIds = $location['approvalUserIds'];
 
 			if (in_array($userId, $approvalUserIds)) {
