@@ -119,6 +119,11 @@ class ReservationsController extends ReservationsAppController {
 		}
 
 		$categoryId = Hash::get($this->request->params['named'], 'category_id');
+		if ($categoryId === '') {
+			// タブ切り替えや前後ページングで'カテゴリ選択'だとcategory_idが空文字になるので
+			// そのときはnull（カテゴリの指定無し）にする
+			$categoryId = null;
+		}
 
 		$locations = $this->ReservationLocation->getLocations($categoryId);
 
