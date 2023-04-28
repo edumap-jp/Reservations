@@ -249,6 +249,8 @@ class ReservationPlanGenerationBehavior extends ReservationAppBehavior {
 		//セットするようにした。
 		$model->ReservationEvent->prepareLatestCreatedForIns($eventData, $createdUserWhenUpd);
 
+		// $eventDataがprepareLatestCreatedForIns()で変更されるので、再度setする
+		$model->ReservationEvent->set($eventData);
 		//子もsave（）で返ってくる。
 		$eventData = $model->ReservationEvent->save(null, false); //aaaaaaaaaaaaa
 		if (!$eventData) { //保存のみ
