@@ -237,7 +237,7 @@ class ReservationsController extends ReservationsAppController {
  * @param array $vars カレンンダー情報
  * @return array $vars 日単位（一覧）データ
  */
-	public function getDailyListVars($vars) {
+	protected function _getDailyListVars($vars) {
 		$this->setReservationCommonVars($vars);
 		$vars['tab'] = 'list';
 		return $vars;
@@ -266,7 +266,7 @@ class ReservationsController extends ReservationsAppController {
 		//if ($tab === 'timeline') {
 		$vars = $this->_getDailyTimelineVars($vars);
 		//} else {
-		//	$vars = $this->getDailyListVars($vars);
+		//	$vars = $this->_getDailyListVars($vars);
 		//}
 
 		$vars['selectRooms'] = array();	//マージ前の暫定
