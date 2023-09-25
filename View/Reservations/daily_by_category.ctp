@@ -15,27 +15,11 @@ echo $this->NetCommonsHtml->script(array(
 ));
 
 ?>
-<script>
-  $(function(){
-    // タイムライン幅を画面サイズにあわせて調整する
-	var timeTableWidth = $('.reservation-daily-locations-table').width();
-	console.log(timeTableWidth);
-	var headWidth = $('.reservation-row-head').width();
-    console.log(headWidth);
-    // -1する事でFireFox,IE,Eageでの罫線ずれを防ぐ
-    var timelineWidth = timeTableWidth - headWidth - 1;
-    console.log(timelineWidth);
-	$('.reservation-horizon-timeline').width(timelineWidth);
-	//pull-left reservation-row-head
-	//text-center table-responsive pull-right reservation-horizon-timeline ng-scope
-  });
-</script>
 <style>
 	.reservation-horizon-timeline{
 		border: none;
 	}
 </style>
-
 
 <article ng-controller="ReservationsDetailEdit" class="block-setting-body">
 	<?php
@@ -92,6 +76,7 @@ echo $this->NetCommonsHtml->script(array(
 		?>
 		<div ng-controller="ReservationsHorizonTimeline"
 				class="text-center table-responsive pull-right reservation-horizon-timeline"
+				ng-init="initialize('<?php echo h(CurrentLib::read('Frame.id')); ?>')"
 				data-daily-start-time-idx="<?php echo $startTime ?>">
 			<table class="reservation-row-data">
 				<thead>
@@ -174,3 +159,15 @@ echo $this->NetCommonsHtml->script(array(
 		</div>
 	</div>
 </article>
+<script>
+  $(function(){
+    // タイムライン幅を画面サイズにあわせて調整する
+	var timeTableWidth = $('#frame-<?php echo h(CurrentLib::read('Frame.id')); ?> .reservation-daily-locations-table').width();
+	var headWidth = $('#frame-<?php echo h(CurrentLib::read('Frame.id')); ?> .reservation-row-head').width();
+    // -1する事でFireFox,IE,Eageでの罫線ずれを防ぐ
+    var timelineWidth = timeTableWidth - headWidth - 1;
+	$('#frame-<?php echo h(CurrentLib::read('Frame.id')); ?> .reservation-horizon-timeline').width(timelineWidth);
+	//pull-left reservation-row-head
+	//text-center table-responsive pull-right reservation-horizon-timeline ng-scope
+  });
+</script>
