@@ -9,56 +9,64 @@
  *
  */
 NetCommonsApp.controller('ReservationsHorizonTimeline', ['$scope', function($scope) {
-  //タイムラインdiv
-  var coordinateOrigins = $('.reservation-horizon-timeline');
+  /**
+   * イニシャライズ処理
+   *
+   * @param {string} frameId
+   * @return {void}
+   */
+  $scope.initialize = function(frameId) {
+    //タイムラインdiv
+    var coordinateOrigins = $('#frame-' + frameId + ' .reservation-horizon-timeline');
 
-  //指定時間のindex値を、タイムラインdivの属性から取り出し
-  var idx = $(coordinateOrigins[0]).attr('data-daily-start-time-idx') - 0;
+    //指定時間のindex値を、タイムラインdivの属性から取り出し
+    var idx = $(coordinateOrigins[0]).attr('data-daily-start-time-idx') - 0;
 
-  //00:00の行のtop 誤差をなくすため2300に変更
-  //var row0 = $('.reservation-daily-timeline-0000');
-  //var row0Top = row0[0].getBoundingClientRect().top;
+    //00:00の行のtop 誤差をなくすため2300に変更
+    //var row0 = $('.reservation-daily-timeline-0000');
+    //var row0Top = row0[0].getBoundingClientRect().top;
 
-  //01:00の行のtop
-  var row1 = $('.reservation-daily-timeline-0100');
-  var row1Top = row1[0].getBoundingClientRect().top;
-  var row1Left = row1[0].getBoundingClientRect().left;
+    //01:00の行のtop
+    var row1 = $('#frame-' + frameId + ' .reservation-daily-timeline-0100');
+    var row1Top = row1[0].getBoundingClientRect().top;
+    var row1Left = row1[0].getBoundingClientRect().left;
 
-  //23:00の行のtop
-  var row23 = $('.reservation-daily-timeline-2300');
-  var row23Top = row23[0].getBoundingClientRect().top;
-  var row23Left = row23[0].getBoundingClientRect().left;
+    //23:00の行のtop
+    var row23 = $('#frame-' + frameId + ' .reservation-daily-timeline-2300');
+    var row23Top = row23[0].getBoundingClientRect().top;
+    var row23Left = row23[0].getBoundingClientRect().left;
 
-  //1列(1時間)の幅
-  var rowWidth = (row23Left - row1Left) / 22;
+    //1列(1時間)の幅
+    var rowWidth = (row23Left - row1Left) / 22;
 
-  ////1行(=１時間)の高さ
-  ////var rowHeight = row1Top - row0Top;
-  //var rowHeight = (row23Top - row1Top) / 22;
+    ////1行(=１時間)の高さ
+    ////var rowHeight = row1Top - row0Top;
+    //var rowHeight = (row23Top - row1Top) / 22;
 
-  //指定時間が最初になるよう、divの横スクロールを移動
-  coordinateOrigins[0].scrollLeft = rowWidth * idx;
+    //指定時間が最初になるよう、divの横スクロールを移動
+    coordinateOrigins[0].scrollLeft = rowWidth * idx;
 
-  ////指定時間が最初になるよう、divの縦スクロールを移動
-  //coordinateOrigins[0].scrollTop = rowHeight * idx;
+    ////指定時間が最初になるよう、divの縦スクロールを移動
+    //coordinateOrigins[0].scrollTop = rowHeight * idx;
 
-  //$scope.origin = coordinateOrigins[0].scrollTop;
-  //$scope.rowHeight = rowHeight;
-  $scope.rowWidth = rowWidth;
+    //$scope.origin = coordinateOrigins[0].scrollTop;
+    //$scope.rowHeight = rowHeight;
+    $scope.rowWidth = rowWidth;
 
-  //0:00幅固定
-  $('.reservation-timeline-data-area').width(rowWidth);
-  ////0:00高さ固定
-  //$('.reservation-timeline-data-area').height(rowHeight);
+    //0:00幅固定
+    $('#frame-' + frameId + ' .reservation-timeline-data-area').width(rowWidth);
+    ////0:00高さ固定
+    //$('.reservation-timeline-data-area').height(rowHeight);
 
-  var row1Top = row1[0].getBoundingClientRect().top;
-  $scope.rowTop = row1Top;
+    var row1Top = row1[0].getBoundingClientRect().top;
+    $scope.rowTop = row1Top;
 
-  //初期化
-  $scope.prevMargin = 0;
-  $scope.maxLineNum = 0;
-  $scope.Column = [];
-  $scope.Column[0] = [];
+    //初期化
+    $scope.prevMargin = 0;
+    $scope.maxLineNum = 0;
+    $scope.Column = [];
+    $scope.Column[0] = [];
+  };
 }]);
 
 

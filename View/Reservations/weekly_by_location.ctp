@@ -39,7 +39,8 @@ echo $this->element('Reservations.scripts');
 		$startTime = date('G', strtotime($userNow) - 60 * 60);
 	}
 	?>
-	<div ng-controller="ReservationsTimeline" class="text-center table-responsive">
+	<div ng-controller="ReservationsTimeline" class="text-center table-responsive"
+			ng-init="initialize('<?php echo h(CurrentLib::read('Frame.id')); ?>')">
 		<?php /*-- overflow-yのdivの始まり --*/?>
 		<div class="reservation-vertical-timeline"
 				data-daily-start-time-idx="<?php echo $startTime ?>">
