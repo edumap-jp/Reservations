@@ -48,6 +48,15 @@ class ReservationWeeklyTimelineHelper extends ReservationMonthlyHelper {
 	}
 
 /**
+ * TimelineDataをクリア
+ *
+ * @return array
+ */
+	public function clearTimelineData() {
+		$this->_timelineData = [];
+	}
+
+/**
  * getPlanSummariesHtml
  *
  * 予定概要群html取得
