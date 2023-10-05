@@ -3,12 +3,10 @@ on:
     branches:
       - main
       - master
-      - availability
   pull_request:
     branches:
       - main
       - master
-      - availability
 
 name: tests
 
