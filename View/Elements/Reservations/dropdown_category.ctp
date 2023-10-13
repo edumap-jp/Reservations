@@ -13,14 +13,9 @@
 // '' => 'カテゴリ選択'
 // '0' => カテゴリ無し
 // 　となるように事前準備
-$unselectedCategory = false;
-foreach ($locations as $location) {
-	if (empty($location['ReservationLocation']['category_id'])) {
-		$unselectedCategory = true;
-		break;
-	}
+if (! isset($unselectedCategory)) {
+	$unselectedCategory = true;
 }
-
 $categories = $this->get('categories');
 array_unshift($categories,
 	[
