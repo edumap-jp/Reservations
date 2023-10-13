@@ -663,6 +663,19 @@ class ReservationLocation extends ReservationsAppModel {
 	}
 
 /**
+ * カテゴリーをセットしていない施設件数を取得する
+ *
+ * @return int
+ */
+	public function getCountUnselectedCategory() {
+		$count = $this->find('count', [
+			'conditions' => ['category_id' => null],
+		]);
+
+		return $count;
+	}
+
+/**
  * getAliveCondition
  * 現在使用中状態であるか判断する。CleanUpプラグインで使用
  *

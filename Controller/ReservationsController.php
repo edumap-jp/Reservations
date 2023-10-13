@@ -168,6 +168,7 @@ class ReservationsController extends ReservationsAppController {
 		$frameId = Current::read('Frame.id');
 		$languageId = Current::read('Language.id');
 		$this->set(compact('frameId', 'languageId', 'vars'));
+		$this->set('unselectedCategory', $this->ReservationLocation->getCountUnselectedCategory());
 		$this->render($ctpName);
 
 		//$roomId = Current::read('Room.id');
