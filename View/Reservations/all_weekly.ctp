@@ -25,7 +25,7 @@ echo $this->element('Reservations.scripts');
 	<?php echo $this->ReservationTurnReservation->getTurnReservationOperationsWrap('week',
 		'top', $vars); ?>
 
-    <div class="row" ng-controller="ReservationsTimeline">
+    <div class="row" ng-controller="ReservationsTimeline" ng-init="initialize('<?php echo h(CurrentLib::read('Frame.id')); ?>')">
         <div class="col-xs-12 col-sm-12 text-center table-responsive">
 
             全施設週表示

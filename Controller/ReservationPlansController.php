@@ -153,7 +153,7 @@ class ReservationPlansController extends ReservationsAppController {
 		ReservationPermissiveRooms::setRoomPermRoles($this->roomPermRoles);
 
 		// 表示のための各種共通パラメータ設定
-		$this->_vars = $this->getVarsForShow();
+		$this->_vars = $this->__getVarsForShow();
 	}
 
 /**
@@ -618,7 +618,7 @@ class ReservationPlansController extends ReservationsAppController {
  * @return void
  * @throws InternalErrorException
  */
-	public function getVarsForShow() {
+	private function __getVarsForShow() {
 		$vars = array();
 		$this->setReservationCommonVars($vars);
 

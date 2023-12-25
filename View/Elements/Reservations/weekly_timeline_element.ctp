@@ -98,6 +98,7 @@
 				<div class="reservation-timeline-data-area"><?php /*-- 位置調整用 --*/ ?>
 					<?php
 						// 予約データの出力
+						$this->ReservationWeeklyTimeline->clearTimelineData();
 						echo $this->ReservationWeeklyTimeline->makeDailyBodyHtml($currentDayVars);
 						$reservationPlans = $this->ReservationWeeklyTimeline->getTimelineData();
 					?>

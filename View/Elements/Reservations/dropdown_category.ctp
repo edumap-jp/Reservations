@@ -13,6 +13,9 @@
 // '' => 'カテゴリ選択'
 // '0' => カテゴリ無し
 // 　となるように事前準備
+if (! isset($unselectedCategory)) {
+	$unselectedCategory = true;
+}
 $categories = $this->get('categories');
 array_unshift($categories,
 	[
@@ -23,15 +26,28 @@ array_unshift($categories,
 			'name' => __d('categories', 'Select Category')
 		]
 	],
-	[
-		'Category' => [
-			'id' => '0',
+);
+if ($unselectedCategory) {
+	array_unshift($categories,
+		[
+			'Category' => [
+				'id' => null,
+			],
+			'CategoriesLanguage' => [
+				'name' => __d('categories', 'Select Category')
+			]
 		],
-		'CategoriesLanguage' => [
-			'name' => __d('reservations', 'no category')
+		[
+			'Category' => [
+				'id' => '0',
+			],
+			'CategoriesLanguage' => [
+				'name' => __d('reservations', 'no category')
+			]
 		]
-	]
 	);
+}
+
 $this->set('categories', $categories);
 // CategoryHelper用にムリヤリcategory_id=""をセット
 if (!isset($this->request->params['named']['category_id'])) {
